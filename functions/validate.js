@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 
 const verifyTelegramWebAppData = (telegramInitData, botToken) => {
-    console.log(telegramInitData);
+    
     // The data is a query string, which is composed of a series of field-value pairs.
     const encoded = decodeURIComponent(telegramInitData);
 
