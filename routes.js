@@ -17,7 +17,7 @@ const codePath = path.join(__dirname, 'code');
 app.get("/validate-init", async (req, res) => {
     try {
         const decodedData = Object.fromEntries(Object.entries(req.query).map(([key, value]) => [key, unescape(value)]));
-        logger.info(decodedData);
+        logger.info(req.query);
         const hash = verifyTelegramWebAppData(decodedData, BOT_TOKEN);
 
         if (hash) {
@@ -55,7 +55,7 @@ app.get('/check', async (req, res) => {
 
         return res.json({ is_subscribed, is_authorized });
     } catch (error) {
-        logger.error(`An error occurred in check_subscription_and_authorization: ${error.message}`);
+        logger.error(`An error occurred in check: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
 });

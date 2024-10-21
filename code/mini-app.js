@@ -70,7 +70,6 @@ const checkSubscriptionAndAuthorization = async () => {
 };
 
 const fetchData = async () => {
-    console.log(tg.initData);
     try {
         const response = await fetch(`/validate-init?${tg.initData}`);
         const data = await response.json();
