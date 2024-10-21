@@ -31,9 +31,9 @@ const save = async (arr) => {
         const range = `${SHEETNAME}!A${values.length + 1}`;
 
         const { data } = await sheets.spreadsheets.values.update({
-            spreadsheetId: DB,
+            spreadsheetId: SPREADSHEETID,
             range,
-            valueInputOption: 'RAW',
+            valueInputOption: 'USER_ENTERED',
             requestBody,
         });
 
