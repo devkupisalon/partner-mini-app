@@ -49,7 +49,7 @@ app.get('/check', async (req, res) => {
         const { user_id, partner } = req.query;
 
         const is_authorized = await auth(user_id, partner);
-        const is_subscribed = await subscription();
+        const is_subscribed = await subscription(user_id);
 
         return res.json({ is_subscribed, is_authorized });
     } catch (error) {
