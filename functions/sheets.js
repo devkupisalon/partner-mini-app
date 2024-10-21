@@ -38,7 +38,7 @@ const save = async (arr) => {
         });
 
         if (data.spreadsheetId) {
-            logger.debug('User data saved successfully');
+            logger.info('User data saved successfully');
         }
     } catch (error) {
         logger.error(error.message);
@@ -54,10 +54,10 @@ const auth = async (user_id, partner) => {
         });
 
         const success = values.slice(1).filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7).every(Boolean));
-
+        logger.info(success);
         if (success != []) {
-            logger.debug("User is authorized");
-            return { success: success };
+            logger.info("User is authorized");
+            return { success: 'success' };
         }
     } catch (error) {
         logger.error(error.message);
