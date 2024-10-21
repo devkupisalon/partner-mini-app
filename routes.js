@@ -24,7 +24,7 @@ app.get("/validate-init", async (req, res) => {
             logger.info(`Validation successful: ${decodedData}`);
             return res.json(decodedData);
         } else {
-            logger.warning(`Validation failed: ${decodedData}`);
+            logger.warn(`Validation failed: ${decodedData}`);
             return res.status(401).json({});
         }
     } catch (error) {

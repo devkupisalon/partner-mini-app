@@ -14,6 +14,7 @@ if (!fs.existsSync(__dirname)) {
 const logFilePath = path.join(__dirname, 'app.log');
 
 const logger = pino({
+    level: 'debug',
     timestamp: customTimeFormat,
     transport: ({
         targets: [{
