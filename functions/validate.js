@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import logger from './logs/logger.js';
+import logger from '../logs/logger.js';
 
 const verifyTelegramWebAppData = (telegramInitData, botToken) => {
     // The data is a query string, which is composed of a series of field-value pairs.
