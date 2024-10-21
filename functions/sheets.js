@@ -59,7 +59,7 @@ const auth = async (user_id, partner) => {
                 .every(Boolean));
 
         if (success) {
-            logger.info("User is authorized");
+            logger.info(`User with id: ${user_id} is authorized`);
             return true;
         }
     } catch (error) {

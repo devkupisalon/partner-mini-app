@@ -7,7 +7,7 @@ import { save, get_values, auth } from './functions/sheets.js';
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
-const { BOT_TOKEN, HOME, AUTH } = constants;
+const { BOT_TOKEN, HOME, AUTH, SETTINGS } = constants;
 const app = express();
 
 const stylesPath = path.join(__dirname, 'styles');
@@ -31,8 +31,6 @@ app.get("/validate-init", async (req, res) => {
     }
 });
 
-app.get('/', (req, res) => res.sendFile(HOME));
-
 app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
 
 app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
@@ -42,7 +40,11 @@ app.use((error, req, res, next) => {
     res.status(500).send(error);
 });
 
+app.get('/', (req, res) => res.sendFile(HOME));
+
 app.get('/auth', (req, res) => res.sendFile(AUTH));
+
+app.get('/', (req, res) => res.sendFile(SETTINGS));
 
 app.get('/check', async (req, res) => {
     try {
