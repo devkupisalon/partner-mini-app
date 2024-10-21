@@ -23,7 +23,7 @@ const save = async (arr) => {
 
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: DB,
+            spreadsheetId: SPREADSHEETID,
             range: SHEETNAME, // Замените на нужный диапазон ячеек
         });
 
