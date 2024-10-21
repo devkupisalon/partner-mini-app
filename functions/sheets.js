@@ -56,13 +56,13 @@ const auth = async (user_id, partner) => {
         const success = values
             .slice(1)
             .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7)
-                .every(Boolean));
+                .every(Boolean)) != '';
 
-                logger.info(success);
+        logger.info(success);
 
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
-            return true;
+            return success;
         }
     } catch (error) {
         logger.error(error.message);
