@@ -17,7 +17,7 @@ const codePath = path.join(__dirname, 'code');
 app.get("/validate-init", async (req, res) => {
     try {
         const decodedData = Object.fromEntries(Object.entries(req.query).map(([key, value]) => [key, unescape(value)]));
-        logger.info(decodedData);
+        logger.info(req);
         const hash = verifyTelegramWebAppData(decodedData, BOT_TOKEN);
 
         if (hash) {
