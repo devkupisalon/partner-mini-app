@@ -53,16 +53,14 @@ const auth = async (user_id, partner) => {
             range: SHEETNAME, // Замените на нужный диапазон ячеек
         });
 
-        const success = Object
-            .values(values
-                .slice(1)
-                .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7)
-                    .every(Boolean)))[0];
-                    
-        logger.info(success);
-        if (success != []) {
+        const success = values
+            .slice(1)
+            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7)
+                .every(Boolean));
+
+        if (success) {
             logger.info("User is authorized");
-            return { success: 'success' };
+            return true;
         }
     } catch (error) {
         logger.error(error.message);

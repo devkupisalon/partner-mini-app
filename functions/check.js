@@ -7,6 +7,7 @@ const { KUPISALONID } = constants;
 // Функция для проверки подписки на канал
 const subscription = async (chatId) => {
     try {
+        logger.info(chatId);
         const chatMember = await bot.getChatMember(KUPISALONID, chatId);
         return ['member', 'creator', 'administrator'].includes(chatMember.status);
     } catch (error) {
