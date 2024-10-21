@@ -1,0 +1,32 @@
+{
+  "name": "partners-app-js",
+  "version": "1.0.0",
+  "main": "routes.js",
+  "scripts": {
+    "start": "node routes.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "partner-app"
+  },
+  "author": "hungrydev",
+  "license": "MIT",
+  "description": "",
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "fastify": "^5.0.0",
+    "fs": "^0.0.1-security",
+    "googleapis": "^144.0.0",
+    "node-telegram-bot-api": "^0.63.0",
+    "path": "^0.12.7",
+    "pino": "^9.5.0",
+    "url": "^0.11.4"
+  },
+  "devDependencies": {
+    "babel-plugin-module-resolver": "^5.0.2",
+    "pino-pretty": "^11.3.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

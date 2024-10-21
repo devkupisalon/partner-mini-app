@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="/styles/auth.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <form id="partner-form">
+
+            <div class="input-form">
+                <div class="input-label" id="manager-name-label">ФИО</div>
+                <input class="input" type="text" id="manager-name" placeholder="Name" required
+                    oninput="validateName(event.target)">
+                <div class="input-label" id="manager-phone-label">Телефон</div>
+                <input class="input" type="tel" id="manager-phone" placeholder="+79999999999" required
+                    oninput="formatPhoneNumber(this)">
+                <div class="input-label" id="manager-email-label">Email</div>
+                <input class="input" type="text" id="manager-email" placeholder="example@mail.com" required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}">
+                    <p id="fill-text">Вы можете заполнить ФИО и номер телефона, из телеграма</p>
+                <button class="fill-tg" id="'autofill-tg">Поделиться контактом</button>
+            </div>
+        </form>
+
+        <div class="multiselect_block">
+            <label for="select-1" class="field_multiselect">Сферы деятельности</label>
+            <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
+            <label for="checkbox-1" class="multiselect_label"></label>
+            <select id="field_select-type" class="field_select" multiple>
+                <!-- заполняем из таблицы -->
+            </select>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/scripts/auth-web-app.js"></script>
+
+</body>
+
+</html>
