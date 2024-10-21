@@ -1,4 +1,5 @@
 import crypto from 'crypto';
+import logger from './logs/logger.js';
 
 const verifyTelegramWebAppData = (telegramInitData, botToken) => {
     // The data is a query string, which is composed of a series of field-value pairs.
@@ -18,8 +19,10 @@ const verifyTelegramWebAppData = (telegramInitData, botToken) => {
     const dataCheckString = arr.join("\n");
 
     // console.log(dataCheckString)
-    console.log(secret.digest())
-    console.log(secret)
+    logger.info(secret.digest())
+    logger.info(secret)
+    logger.info(dataCheckString);
+    logger.info(botToken);
 
     // The hexadecimal representation of the HMAC-SHA-256 signature of the data-check-string with the secret key
     const _hash = crypto
