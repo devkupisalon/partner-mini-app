@@ -39,9 +39,11 @@ const save = async (arr) => {
 
         if (data.spreadsheetId) {
             logger.info('User data saved successfully');
+            return true;
         }
     } catch (error) {
         logger.error(error.stack);
+        return false;
     }
 
 }
