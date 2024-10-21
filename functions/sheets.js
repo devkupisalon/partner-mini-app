@@ -41,7 +41,7 @@ const save = async (arr) => {
             logger.info('User data saved successfully');
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(error.stack);
     }
 
 }
