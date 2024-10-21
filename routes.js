@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import { unescape } from 'querystring';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
@@ -16,8 +15,7 @@ const codePath = path.join(__dirname, 'code');
 
 app.get("/validate-init", async (req, res) => {
     try {
-        const decodedData = req.url.replace('/validate-init?', '');/* Object.fromEntries(Object.entries(req.query).map(([key, value]) => [key, unescape(value)])) */;
-        logger.info(decodedData);
+        const decodedData = req.url.replace('/validate-init?', '');
         const hash = verifyTelegramWebAppData(decodedData, BOT_TOKEN);
 
         if (hash) {

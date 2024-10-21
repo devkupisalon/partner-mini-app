@@ -1,5 +1,5 @@
 import { constants } from '../constants.js';
-import * as logger from '../logs/logger.js';
+import logger from '../logs/logger.js';
 import bot from '../functions/init-bot.js';
 
 const { KUPISALONID } = constants;
