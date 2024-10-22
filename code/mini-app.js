@@ -9,9 +9,9 @@ const calculate = document.getElementById("calculate-button");
 const auth_text = document.getElementById("auth-text");
 const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
-// const settings = document.getElementById("settings-button");
+const settings = document.getElementById("s-button");
 
-// console.log(settings);
+console.log(settings);
 console.log(auth);
 
 tg.enableClosingConfirmation();
@@ -90,20 +90,8 @@ auth.addEventListener('click', function () {
     window.location.href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
 });
 
-// settings.addEventListener('click', function () {
-//     window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`
-// });
-
-document.addEventListener("DOMContentLoaded", function() {
-    const settings = document.getElementById("settings-button");
-
-    if (settings) {
-        settings.addEventListener('click', function () {
-            window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`;
-        });
-    } else {
-        console.error('Элемент settings-button не был найден в DOM.');
-    }
+settings.addEventListener('click', function () {
+    window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`
 });
 
 calculate.addEventListener('click', function () {
