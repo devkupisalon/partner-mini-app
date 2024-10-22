@@ -18,12 +18,19 @@ const fields = {
     percent: '#percent'
 };
 
-$(document).ready(function(){
-    $('#partner-percent').inputmask({
-        alias: 'numeric',
-        suffix: ' %'
-    });
-});
+const maskOptions = {
+    mask: 'num %'
+};
+const mask = IMask(percent_input, maskOptions);
+element.classList.add('input');
+
+
+// $(document).ready(function(){
+//     $('#partner-percent').inputmask({
+//         alias: 'numeric',
+//         suffix: ' %'
+//     });
+// });
 
 function show(check) {
     let d = check ? 'flex' : 'none';

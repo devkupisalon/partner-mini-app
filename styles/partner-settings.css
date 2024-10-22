@@ -88,7 +88,6 @@ input[type="text"] {
     text-align: center;
 }
 
-.input::placeholder,
-.input.inputmask {
+.input::placeholder {
     text-align: center;
 }
