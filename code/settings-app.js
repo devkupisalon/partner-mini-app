@@ -1,7 +1,13 @@
 const tg = window.Telegram.WebApp;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+
 const partner = urlParams.get('partner');
+const percent_input = document.getElementById('partner-percent');
+const percent_text = document.getElementById('percent-text');
+const work_type_input = document.getElementById("field_select-type");
+const options = selectElement.getElementsByTagName("option");
+const partner_type = options[2].value;
 
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
@@ -11,10 +17,6 @@ tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить на
 const fields = {
     percent: '#percent'
 };
-
-const percent_input = document.getElementById('partner-percent')
-const work_type_input = document.getElementById("field_select-type");
-
 
 async function get_settings() {
 
@@ -40,6 +42,11 @@ async function get_settings() {
                         break;
                     }
                 }
+
+                if (work_type = partner_type) {
+                        percent_input.display = 'flex';
+                        percent_text.display = 'flex';
+                }
             }
 
             if (percent !== undefined) {
@@ -53,29 +60,6 @@ async function get_settings() {
 }
 
 get_settings();
-
-// let multiselect_block = document.querySelectorAll(".multiselect_block");
-// multiselect_block.forEach(parent => {
-//     let label = parent.querySelector(".field_multiselect");
-//     let select = parent.querySelector(".field_select");
-//     let text = label.innerHTML;
-//     select.addEventListener("change", function (element) {
-//         let selectedOptions = this.selectedOptions;
-//         label.innerHTML = "";
-//         for (let option of selectedOptions) {
-//             let button = document.createElement("button");
-//             button.type = "button";
-//             button.className = "btn_multiselect";
-//             button.textContent = option.value;
-//             button.onclick = _ => {
-//                 option.selected = false;
-//                 button.remove();
-//                 if (!select.selectedOptions.length) label.innerHTML = text
-//             };
-//             label.append(button);
-//         }
-//     });
-// });
 
 function getValues() {
 
