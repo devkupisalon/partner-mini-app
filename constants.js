@@ -14,8 +14,10 @@ const constants = {
     DB: process.env.DBPARTNERS,
     SHEETNAME: process.env.sheetName,
     GROUPSSHEETNAME: process.env.groups_sheetname,
+    DATASHEETNAME: process.env.datasheetname,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
+    SETTINGS: `${__dirname}/html/settings-web-app.html`
 };
 
 export { constants, __dirname };

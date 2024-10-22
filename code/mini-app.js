@@ -11,9 +11,6 @@ const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
 const settings = document.getElementById("s-button");
 
-console.log(settings);
-console.log(auth);
-
 tg.enableClosingConfirmation();
 
 const { user: { username, id }, start_param } = tg.initDataUnsafe;

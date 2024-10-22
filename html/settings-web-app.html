@@ -15,19 +15,19 @@
 
         <div class="settings-block">
             <p id="settings-text">Укажите, по какой схеме будете с нами работать</p>
-            <p id="description"> </p>
             <input class="input" type="text" id="partner-work-type" placeholder="Вид сотрудничества" required>
 
-            <p id="percent-text">2. Укажите процент наценки</p>
+            <p id="percent-text">Укажите процент наценки</p>
             <input class="input" type="text" id="partner-percent" placeholder="% наценки" required>
         </div>
 
         <div class="multiselect_block">
-            <label for="select-1" class="field_multiselect">Сферы деятельности</label>
+            <label for="select-1" class="field_multiselect">Тип сотрудничества</label>
             <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
             <label for="checkbox-1" class="multiselect_label"></label>
             <select id="field_select-type" class="field_select">
-                <!-- заполняем из таблицы -->
+                <option value="Агент (10% от суммы)">Агент (10% от суммы)</option>
+                <option value="Партнер (свой брендированный файл расчета и % наценки)">Партнер (свой брендированный файл расчета и % наценки)</option>
             </select>
         </div>
 
