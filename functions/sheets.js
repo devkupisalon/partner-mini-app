@@ -76,13 +76,16 @@ const save_settings = async (obj) => {
     let range;
 
     try {
-        const { partner, work_type, percent } = obj;
+        let { partner, work_type, percent } = obj;
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: DB,
-            range: DATASHEETNAME,
+            range: DATASHEETNAME
         });
 
-        logger.info({ partner, work_type, percent });
+        work_type = decodeURIComponent(work_type);
+        percent = percent !== undefined ? decodeURIComponent(percent): '';
+
+        logger.info(obj);
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
@@ -99,11 +102,13 @@ const save_settings = async (obj) => {
             return false;
         }
 
+        logger.info(range);
+
         const { data } = await sheets.spreadsheets.values.update({
             spreadsheetId: DB,
             range,
             valueInputOption: 'USER_ENTERED',
-            requestBody,
+            requestBody
         });
 
         if (data.spreadsheetId) {
@@ -121,7 +126,7 @@ const get_settings = async (partner) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: DB,
-            range: DATASHEETNAME, // Замените на нужный диапазон ячеек
+            range: DATASHEETNAME
         });
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
         const data = values.find(r => r[0] === partner);
