@@ -132,7 +132,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
     if (check1 || check2) {
 
         try {
-            const response = await fetch(`/savesettings?partner=${partner}&user_id=${id}&percent=${percent}&work_type=${work_type}`);
+            const response = await fetch(`/savesettings?partner=${partner}&percent=${percent}&work_type=${work_type}`);
             const { success } = await response.json();
             localStorage.setItem(partner, JSON.stringify({ work_type, percent }));
             if (success) {
