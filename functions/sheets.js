@@ -1,9 +1,10 @@
 import gauth from '../functions/google_auth.js';
 import { constants } from '../constants.js';
 import logger from '../logs/logger.js';
+import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js'
 
 const sheets = gauth();
-const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME } = constants;
+const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME } = constants;
 
 const get_values = async () => {
     try {
@@ -51,7 +52,7 @@ const save = async (arr) => {
 const auth = async (user_id, partner) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEETID,
+            spreadsheetId: DB,
             range: SHEETNAME, // Замените на нужный диапазон ячеек
         });
 
@@ -71,4 +72,64 @@ const auth = async (user_id, partner) => {
     }
 }
 
-export { get_values, save, auth };
+const save_settings = async (obj) => {
+    let range;
+
+    try {
+        const { partner, user_id, work_type, percent } = obj;
+        const { data: { values } } = await sheets.spreadsheets.values.get({
+            spreadsheetId: DB,
+            range: DATASHEETNAME, // Замените на нужный диапазон ячеек
+        });
+
+        const arr = [work_type, percent || ''];
+        const requestBody = { values: [arr] };
+        const column_index = getColumnNumberByValue(values[0]);
+        const column_letter = numberToColumn(column_index);
+
+        const index = values.findIndex(v => v[0] === partner);
+
+        if (index !== -1) {
+            range = `${DATASHEETNAME}!${column_letter}${index + 1}`;
+        } else {
+            logger.warn(`Partner with id: ${partner} not found in database`);
+            return false;
+        }
+
+        const { data } = await sheets.spreadsheets.values.update({
+            spreadsheetId: DB,
+            range,
+            valueInputOption: 'USER_ENTERED',
+            requestBody,
+        });
+
+        if (data.spreadsheetId) {
+            logger.info('Settings data saved successfully');
+            return true;
+        }
+    } catch (error) {
+        logger.error(error.stack);
+        return false;
+    }
+
+}
+
+const get_settings = async (partner) => {
+    try {
+        const { data: { values } } = await sheets.spreadsheets.values.get({
+            spreadsheetId: DB,
+            range: DATASHEETNAME, // Замените на нужный диапазон ячеек
+        });
+
+        const data = values.find(r => r[0] === partner).flat();
+        if (data !== '' ) {
+            logger.info(`Settings for partner with id: ${partner} finded`);
+            return data;
+        }
+    } catch (error) {
+        logger.error(error.stack);
+        return false;
+    }
+}
+
+export { get_values, save, auth, save_settings, get_settings };

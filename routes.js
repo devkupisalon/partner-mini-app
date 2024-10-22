@@ -3,7 +3,7 @@ import path from 'path';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
-import { save, get_values, auth } from './functions/sheets.js';
+import { save, get_values, auth, get_settings, save_settings } from './functions/sheets.js';
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
@@ -44,7 +44,7 @@ app.get('/', (req, res) => res.sendFile(HOME));
 
 app.get('/auth', (req, res) => res.sendFile(AUTH));
 
-app.get('/', (req, res) => res.sendFile(SETTINGS));
+app.get('/settings', (req, res) => res.sendFile(SETTINGS));
 
 app.get('/check', async (req, res) => {
     try {
@@ -67,6 +67,30 @@ app.get('/savedata', async (req, res) => {
         const success = await save(values_list);
 
         return res.json({ success });
+    } catch (error) {
+        logger.error(`An error occurred in save_data: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+app.get('/savesettings', async (req, res) => {
+    try {
+        const values_list = Object.values(req.query);
+        logger.info(`Data successfully received from mini-app: ${values_list}`);
+        const success = await save_settings(req.query);
+
+        return res.json({ success });
+    } catch (error) {
+        logger.error(`An error occurred in save_data: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+app.get('/getsettings', async (req, res) => {
+    try {
+        const data = await get_settings(req.query.partner);
+
+        return res.json({ data });
     } catch (error) {
         logger.error(`An error occurred in save_data: ${error.message}`);
         return res.status(500).json({ error: error.toString() });

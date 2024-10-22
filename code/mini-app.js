@@ -9,6 +9,7 @@ const calculate = document.getElementById("calculate-button");
 const auth_text = document.getElementById("auth-text");
 const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
+const settings = document.getElementById("settings-button");
 
 tg.enableClosingConfirmation();
 
@@ -90,6 +91,10 @@ subscribe.addEventListener('click', function () {
 auth.addEventListener('click', function () {
     window.location.href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
 });
+
+settings.addEventListener('click', function () {
+    window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`
+})
 
 calculate.addEventListener('click', function () {
 
