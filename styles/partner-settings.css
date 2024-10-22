@@ -51,12 +51,12 @@ body {
 }
 
 h3 {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     color: var(--tg-theme-section-header-text-color);
 }
 
 p {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: var(--tg-theme-hint-color);
 }
 
@@ -79,4 +79,7 @@ input[type="text"] {
     padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--tg-theme-bg-color);
+    width: 100%;
+    font-weight: bold;
+    font-size: 14px;
 }
