@@ -87,3 +87,7 @@ input[type="text"] {
     box-sizing: border-box;
     text-align: center; 
 }
+
+.input::placeholder {
+    text-align: center;
+}
