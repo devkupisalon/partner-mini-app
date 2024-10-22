@@ -57,9 +57,9 @@ h3 {
 }
 
 p {
-    margin: 0 auto;
     margin-bottom: 10px;
     color: var(--tg-theme-hint-color);
+    text-align: center;
 }
 
 
