@@ -21,10 +21,6 @@ body {
 }
 
 .auth-block {
-    /* display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center; */
     text-align: center;
 }
 
@@ -45,6 +41,7 @@ body {
 }
 
 h3 {
+    margin-top: 0;
     margin-bottom: 20px;
     color: var(--tg-theme-section-header-text-color);
 }
