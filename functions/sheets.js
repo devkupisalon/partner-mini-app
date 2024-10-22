@@ -84,7 +84,7 @@ const save_settings = async (obj) => {
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
-      
+
         const column_index = getColumnNumberByValue(values[0], VALUE);
         const column_letter = numberToColumn(column_index);
 
@@ -122,13 +122,21 @@ const get_settings = async (partner) => {
             range: DATASHEETNAME, // Замените на нужный диапазон ячеек
         });
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
-        
+
         logger.info(column_index);
-        const data = values.find(r => r[0] === partner).map(r => [r[column_index], r[column_index + 1]]).flat();
+        const data = values.find(r => r[0] === partner);
+
         if (data !== '') {
-            logger.info(`Settings for partner with id: ${partner} finded`);
-            logger.info(data);
-            return data;
+            const percent = data[column_index + 1];
+            const work_type = data[column_index];
+            if (work_type || work_type && percent) {
+                logger.info(`Settings for partner with id: ${partner} finded`);
+                logger.info({ work_type, percent });
+                return { work_type, percent };
+            } else {
+                logger.warn(`Settings for partner with id: ${partner} not found`);
+                return false;
+            }
         }
     } catch (error) {
         logger.error(error.stack);

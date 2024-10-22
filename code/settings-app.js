@@ -28,9 +28,8 @@ async function get_settings() {
         const res = await response.text();
 
         const { data } = JSON.parse(res);
-        const flatValues = data.flat();
-        const data_obj = flatValues.map(([work_type, percent]) => ({ work_type, percent }));
-        const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data_obj;
+        console.log(data);
+        const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
         const options = work_type_input.getElementsByTagName("option");
 
         for (let option of options) {
