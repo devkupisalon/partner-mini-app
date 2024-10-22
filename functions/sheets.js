@@ -122,8 +122,6 @@ const get_settings = async (partner) => {
             range: DATASHEETNAME, // Замените на нужный диапазон ячеек
         });
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
-
-        logger.info(column_index);
         const data = values.find(r => r[0] === partner);
 
         if (data !== '') {
