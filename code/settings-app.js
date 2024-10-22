@@ -32,7 +32,6 @@ async function get_settings() {
         if (data) {
             const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
             console.log({ work_type, percent });
-            const options = work_type_input.getElementsByTagName("option");
 
             if (work_type !== undefined) {
 
@@ -43,14 +42,12 @@ async function get_settings() {
                     }
                 }
 
-                if (work_type = partner_type) {
-                        percent_input.display = 'flex';
-                        percent_text.display = 'flex';
-                }
             }
 
             if (percent !== undefined) {
                 percent_input.value = percent;
+                percent_input.display = 'flex';
+                percent_text.display = 'flex';
             }
         }
 
