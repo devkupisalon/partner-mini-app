@@ -10,7 +10,7 @@ const get_values = async () => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: DB,
-            range: GROUPSSHEETNAME, 
+            range: GROUPSSHEETNAME,
         });
 
         logger.info('Data recieved successfully');
@@ -89,11 +89,12 @@ const save_settings = async (obj) => {
 
         const column_index = getColumnNumberByValue(values[0], VALUE);
         const column_letter = numberToColumn(column_index);
+        const second_col_letter = numberToColumn(column_index + 1);
 
         const index = values.findIndex(v => v[0] === partner);
 
         if (index !== -1) {
-            range = `${DATASHEETNAME}!${column_letter}${index + 1}`;
+            range = `${DATASHEETNAME}!${column_letter}${index + 1}:${second_col_letter}${index + 1}`;
         } else {
             logger.warn(`Partner with id: ${partner} not found in database`);
             return false;
@@ -104,7 +105,7 @@ const save_settings = async (obj) => {
         const { data } = await sheets.spreadsheets.values.update({
             spreadsheetId: DB,
             range,
-            valueInputOption: 'RAW',
+            valueInputOption: 'USER_ENTERED',
             requestBody
         });
 
