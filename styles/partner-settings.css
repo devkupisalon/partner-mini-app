@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     color: var(--tg-theme-text-color);
     background: var(--tg-theme-bg-color);
-    padding-top: 20px;
+    padding-top: 40px;
 }
 
 .container {
@@ -12,8 +12,9 @@ body {
     text-align: center;
     align-items: center;
     justify-content: center;
-    height: 700px;
-    padding: 10px 20px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
     border-radius: 20px;
     background-color: var(--tg-theme-header-bg-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -22,6 +23,10 @@ body {
 
 .auth-block {
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .field_select {
@@ -41,7 +46,6 @@ body {
 }
 
 h3 {
-    margin-top: 0;
     margin-bottom: 20px;
     color: var(--tg-theme-section-header-text-color);
 }
