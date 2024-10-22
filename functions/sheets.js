@@ -10,7 +10,7 @@ const get_values = async () => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: DB,
-            range: GROUPSSHEETNAME, // Замените на нужный диапазон ячеек
+            range: GROUPSSHEETNAME, 
         });
 
         logger.info('Data recieved successfully');
@@ -25,7 +25,7 @@ const save = async (arr) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEETID,
-            range: SHEETNAME, // Замените на нужный диапазон ячеек
+            range: SHEETNAME,
         });
 
         const requestBody = { values: [arr] };
@@ -53,7 +53,7 @@ const auth = async (user_id, partner) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: SPREADSHEETID,
-            range: SHEETNAME, // Замените на нужный диапазон ячеек
+            range: SHEETNAME,
         });
 
         const success = values
@@ -76,11 +76,13 @@ const save_settings = async (obj) => {
     let range;
 
     try {
-        const { partner, user_id, work_type, percent } = obj;
+        const { partner, work_type, percent } = obj;
         const { data: { values } } = await sheets.spreadsheets.values.get({
             spreadsheetId: DB,
-            range: DATASHEETNAME, // Замените на нужный диапазон ячеек
+            range: DATASHEETNAME,
         });
+
+        logger.info({ partner, work_type, percent });
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
