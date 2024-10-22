@@ -31,7 +31,7 @@ async function get_settings() {
         const flatValues = data.flat();
         const data_obj = flatValues.map(([work_type, percent]) => ({ work_type, percent }));
         const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data_obj;
-        const options = selectElement.getElementsByTagName("option");
+        const options = work_type_input.getElementsByTagName("option");
 
         for (let option of options) {
             if (option.value === work_type) {

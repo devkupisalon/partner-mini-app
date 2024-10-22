@@ -124,6 +124,7 @@ const get_settings = async (partner) => {
         const data = values.find(r => r[0] === partner).flat();
         if (data !== '' ) {
             logger.info(`Settings for partner with id: ${partner} finded`);
+            logger.info(data);
             return data;
         }
     } catch (error) {
