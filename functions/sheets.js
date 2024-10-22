@@ -82,12 +82,6 @@ const save_settings = async (obj) => {
             range: DATASHEETNAME
         });
 
-        logger.info(work_type);
-        logger.info(percent);
-
-        work_type = decodeURIComponent(work_type);
-        percent = percent !== undefined ? decodeURIComponent(percent): '';
-
         logger.info(obj);
 
         const arr = [work_type, percent || ''];
