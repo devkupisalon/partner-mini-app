@@ -50,6 +50,9 @@ body {
     white-space: pre-wrap;
     text-align: center;
 }
+.settings-block {
+    text-align: center;
+}
 
 h3 {
     margin-bottom: 20px;
