@@ -82,7 +82,7 @@ function show_percent() {
     }
 }
 
-selected_work_type.onchange = show_percent;
+work_type_input.onchange = show_percent;
 
 
 tg.onEvent('mainButtonClicked', async (event) => {
