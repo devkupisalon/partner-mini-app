@@ -52,7 +52,7 @@ const save = async (arr) => {
 const auth = async (user_id, partner) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: DB,
+            spreadsheetId: SPREADSHEETID,
             range: SHEETNAME, // Замените на нужный диапазон ячеек
         });
 
