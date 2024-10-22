@@ -21,6 +21,15 @@ body {
     overflow: hidden;
 }
 
+.auth-block {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .field_select {
     color: var(--tg-theme-button-text-color);
     background: var(--tg-theme-button-color);
