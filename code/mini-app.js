@@ -11,7 +11,7 @@ const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
 // const settings = document.getElementById("settings-button");
 
-console.log(settings);
+// console.log(settings);
 console.log(auth);
 
 tg.enableClosingConfirmation();
