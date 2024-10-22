@@ -11,6 +11,9 @@ const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
 const settings = document.getElementById("settings-button");
 
+console.log(settings);
+console.log(auth);
+
 tg.enableClosingConfirmation();
 
 const { user: { username, id }, start_param } = tg.initDataUnsafe;
@@ -87,16 +90,8 @@ auth.addEventListener('click', function () {
     window.location.href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
 });
 
-// settings.addEventListener('click', function () {
-//     window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`
-// });
-
-document.addEventListener("DOMContentLoaded", function() {
-    const settings = document.getElementById("settings-button");
-
-    settings.addEventListener('click', function () {
-        window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`;
-    });
+settings.addEventListener('click', function () {
+    window.location.href = `/settings?partner=${start_param}&user=${username}&id=${id}`
 });
 
 calculate.addEventListener('click', function () {
