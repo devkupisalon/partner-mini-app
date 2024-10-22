@@ -122,11 +122,12 @@ const get_settings = async (partner) => {
             range: DATASHEETNAME, // Замените на нужный диапазон ячеек
         });
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
-        logger.info(column_index);
+        
+        // logger.info(column_index);
         const data = values.find(r => r[0] === partner).map(r => [r[column_index], r[column_index + 1]]).flat();
         if (data !== '') {
             logger.info(`Settings for partner with id: ${partner} finded`);
-            logger.info(data);
+            // logger.info(data);
             return data;
         }
     } catch (error) {
