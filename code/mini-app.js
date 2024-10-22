@@ -79,11 +79,6 @@ const fetchData = async () => {
     }
 };
 
-// window.addEventListener('DOMContentLoaded', async () => {
-//     await fetchData();
-//     await checkSubscriptionAndAuthorization();
-// });
-
 subscribe.addEventListener('click', function () {
     tg.openTelegramLink(channel);
 });
