@@ -8,8 +8,7 @@ import logger from '../logs/logger.js';
  */
 function getColumnNumberByValue(values, value) {
     // const row = values.find(row => row.includes(value));
-    logger.info(values);
-    logger.info(value);
+    
     if (values) {
         const columnNumber = values.indexOf(value) + 1;
         return columnNumber;
