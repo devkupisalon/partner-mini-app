@@ -94,7 +94,7 @@ const save_settings = async (obj) => {
         const index = values.findIndex(v => v[0] === partner);
 
         if (index !== -1) {
-            range = `${DATASHEETNAME}!${column_letter}${index + 1}:${second_col_letter}${index + 1}`;
+            range = `${DATASHEETNAME}!${column_letter}${index + 1}`/* :${second_col_letter}${index + 1} */;
         } else {
             logger.warn(`Partner with id: ${partner} not found in database`);
             return false;
