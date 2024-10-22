@@ -198,10 +198,8 @@ input:valid {
 }
 
 input[type="text"] {
-    width: 100%;
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
     border-radius: 20px;
-    /* margin-bottom: 20px; */
     background-color: var(--tg-theme-bg-color);
 }
