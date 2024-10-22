@@ -82,25 +82,19 @@ const save_settings = async (obj) => {
             range: DATASHEETNAME
         });
 
-        logger.info(obj);
-
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
 
         const column_index = getColumnNumberByValue(values[0], VALUE);
         const column_letter = numberToColumn(column_index);
-        const second_col_letter = numberToColumn(column_index + 1);
-
         const index = values.findIndex(v => v[0] === partner);
 
         if (index !== -1) {
-            range = `${DATASHEETNAME}!${column_letter}${index + 1}`/* :${second_col_letter}${index + 1} */;
+            range = `${DATASHEETNAME}!${column_letter}${index + 1}`;
         } else {
             logger.warn(`Partner with id: ${partner} not found in database`);
             return false;
         }
-
-        logger.info(range);
 
         const { data } = await sheets.spreadsheets.values.update({
             spreadsheetId: DB,
