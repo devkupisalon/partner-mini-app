@@ -84,6 +84,7 @@ const save_settings = async (obj) => {
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
+        logger.info(values[0]);
         const column_index = getColumnNumberByValue(values[0], VALUE);
         const column_letter = numberToColumn(column_index);
 
