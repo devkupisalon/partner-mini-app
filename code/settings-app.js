@@ -18,6 +18,11 @@ const fields = {
     percent: '#percent'
 };
 
+function show() {
+    percent_input.display = 'flex';
+    percent_text.display = 'flex';
+}
+
 async function get_settings() {
 
     try {
@@ -46,8 +51,7 @@ async function get_settings() {
 
             if (percent !== undefined) {
                 percent_input.value = percent;
-                percent_input.display = 'flex';
-                percent_text.display = 'flex';
+                show();
             }
         }
 
@@ -64,11 +68,22 @@ function getValues() {
         Object.entries(fields).map(([key, selector]) => [key, document.querySelector(selector).value])
     );
 
-    // const button = document.querySelector('.btn_multiselect');
     const work_type = work_type_input.value;
 
     return { work_type, percent };
 }
+
+function show_percent() {
+    const selected_work_type = work_type_input.value;
+
+
+    if (selected_work_type === partner_type) {
+        show();
+    }
+}
+
+selected_work_type.onchange = show_percent;
+
 
 tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
