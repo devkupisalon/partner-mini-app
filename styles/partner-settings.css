@@ -13,7 +13,6 @@ body {
     align-items: center;
     justify-content: center;
     height: 700px;
-    /* margin: 0 auto; */
     padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--tg-theme-header-bg-color);
@@ -22,7 +21,6 @@ body {
 }
 
 .auth-block {
-    margin-top: 20px;
     display: flex;
     flex-direction: column;
     align-items: center;
