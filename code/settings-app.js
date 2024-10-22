@@ -19,8 +19,8 @@ const fields = {
 };
 
 function show() {
-    percent_input.display = 'flex';
-    percent_text.display = 'flex';
+    percent_input.style.display = 'flex';
+    percent_text.style.display = 'flex';
 }
 
 async function get_settings() {
