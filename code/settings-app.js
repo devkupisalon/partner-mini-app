@@ -23,16 +23,33 @@ async function get_settings() {
             throw new Error('Network response was not ok');
         }
 
-        const text = await response.text();
+        const res = await response.text();
 
-        const { data } = JSON.parse(text);
+        const { data } = JSON.parse(res);
         const flatValues = data.flat();
         const data_obj = flatValues.map(([work_type, percent]) => ({ work_type, percent }));
 
         const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || await data_obj;
-        work_type_input.value = work_type;
-        percent_input = percent;
-        
+
+        let label = parent.querySelector(".field_multiselect");
+        let select = parent.querySelector(".field_select");
+        let text = label.innerHTML;
+        let selectedOptions = this.selectedOptions;
+        label.innerHTML = "";
+        for (let option of selectedOptions) {
+            let button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn_multiselect";
+            button.textContent = work_type;
+            button.onclick = _ => {
+                option.selected = false;
+                button.remove();
+                if (!select.selectedOptions.length) label.innerHTML = text
+            };
+            label.append(button);
+        }
+        percent_input.value = percent;
+
     } catch (error) {
         console.error('Error fetching data:', error.message); // Вывод текста ошибки в консоль
     }
