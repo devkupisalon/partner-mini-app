@@ -104,7 +104,7 @@ const save_settings = async (obj) => {
         const { data } = await sheets.spreadsheets.values.update({
             spreadsheetId: DB,
             range,
-            valueInputOption: 'USER_ENTERED',
+            valueInputOption: 'RAW',
             requestBody
         });
 
