@@ -19,11 +19,9 @@ const fields = {
 };
 
 const maskOptions = {
-    mask: 'num %'
+    mask: '\d+ %'
 };
 const mask = IMask(percent_input, maskOptions);
-percent_input.classList.add('input');
-
 
 // $(document).ready(function(){
 //     $('#partner-percent').inputmask({
