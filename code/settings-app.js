@@ -18,9 +18,10 @@ const fields = {
     percent: '#percent'
 };
 
-function show() {
-    percent_input.style.display = 'flex';
-    percent_text.style.display = 'flex';
+function show(check) {
+    let d = check ? 'flex' : 'none';
+    percent_input.style.display = d;
+    percent_text.style.display = d;
 }
 
 async function get_settings() {
@@ -51,7 +52,7 @@ async function get_settings() {
 
             if (percent !== undefined) {
                 percent_input.value = percent;
-                show();
+                show(true);
             }
         }
 
@@ -76,14 +77,14 @@ function getValues() {
 function show_percent() {
     const selected_work_type = work_type_input.value;
 
-
     if (selected_work_type === partner_type) {
-        show();
+        show(true);
+    } else {
+        show(false);
     }
 }
 
 work_type_input.onchange = show_percent;
-
 
 tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
