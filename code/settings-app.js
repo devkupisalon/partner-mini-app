@@ -18,13 +18,20 @@ const fields = {
     percent: '#percent'
 };
 
-percent_input.addEventListener('input', function() {
-    let inputText = percent_input.value.trim(); 
-    percent_input.value = percent_input.value.replace(/[^\d]/g, '');
+// percent_input.addEventListener('input', function() {
+//     let inputText = percent_input.value.trim(); 
+//     percent_input.value = percent_input.value.replace(/[^\d]/g, '');
 
-    if (!isNaN(inputText)) {
-        percent_input.value = inputText + "%";
-    }
+//     if (!isNaN(inputText)) {
+//         percent_input.value = inputText + "%";
+//     }
+// });
+
+$(document).ready(function(){
+    $('#partner-percent').inputmask({
+        alias: 'numeric',
+        suffix: ' %'
+    });
 });
 
 function show(check) {

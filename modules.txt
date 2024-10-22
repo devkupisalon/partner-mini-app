@@ -7,3 +7,4 @@ url
 node-telegram-bot
 babel-plugin-module-resolver
 pino
+inputmask

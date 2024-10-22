@@ -76,10 +76,6 @@ input:valid {
     text-align: center;
 }
 
-#percent-text {
-    margin: 0 auto;
-}
-
 input[type="text"] {
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
