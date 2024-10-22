@@ -13,8 +13,6 @@ const fields = {
 const work_type_input = document.getElementById('partner-work-type');
 const percent_input = document.getElementById('partner-percent')
 
-const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || await get_settings();
-
 work_type_input.value = work_type;
 percent_input = percent;
 
@@ -38,6 +36,8 @@ async function get_settings() {
         console.error('Error fetching data:', error.message); // Вывод текста ошибки в консоль
     }
 }
+
+const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || await get_settings();
 
 let multiselect_block = document.querySelectorAll(".multiselect_block");
 multiselect_block.forEach(parent => {
