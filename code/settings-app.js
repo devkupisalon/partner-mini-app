@@ -12,8 +12,10 @@ const fields = {
     percent: '#percent'
 };
 
-const work_type_input = document.getElementById('partner-work-type');
+// const work_type = document.getElementById('partner-work-type');
 const percent_input = document.getElementById('partner-percent')
+const work_type_input = document.getElementById("field_select-type");
+
 
 async function get_settings() {
 
@@ -28,57 +30,47 @@ async function get_settings() {
         const { data } = JSON.parse(res);
         const flatValues = data.flat();
         const data_obj = flatValues.map(([work_type, percent]) => ({ work_type, percent }));
+        const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data_obj;
+        const options = selectElement.getElementsByTagName("option");
 
-        const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || await data_obj;
-
-        let label = parent.querySelector(".field_multiselect");
-        let select = parent.querySelector(".field_select");
-        let text = label.innerHTML;
-        let selectedOptions = this.selectedOptions;
-        label.innerHTML = "";
-        for (let option of selectedOptions) {
-            let button = document.createElement("button");
-            button.type = "button";
-            button.className = "btn_multiselect";
-            button.textContent = work_type;
-            button.onclick = _ => {
-                option.selected = false;
-                button.remove();
-                if (!select.selectedOptions.length) label.innerHTML = text
-            };
-            label.append(button);
+        for (let option of options) {
+            if (option.value === work_type) {
+                option.selected = true;
+                break; 
+            }
         }
+
         percent_input.value = percent;
 
     } catch (error) {
-        console.error('Error fetching data:', error.message); // Вывод текста ошибки в консоль
+        console.error('Error fetching data:', error.message);
     }
 }
 
 get_settings();
 
-let multiselect_block = document.querySelectorAll(".multiselect_block");
-multiselect_block.forEach(parent => {
-    let label = parent.querySelector(".field_multiselect");
-    let select = parent.querySelector(".field_select");
-    let text = label.innerHTML;
-    select.addEventListener("change", function (element) {
-        let selectedOptions = this.selectedOptions;
-        label.innerHTML = "";
-        for (let option of selectedOptions) {
-            let button = document.createElement("button");
-            button.type = "button";
-            button.className = "btn_multiselect";
-            button.textContent = option.value;
-            button.onclick = _ => {
-                option.selected = false;
-                button.remove();
-                if (!select.selectedOptions.length) label.innerHTML = text
-            };
-            label.append(button);
-        }
-    });
-});
+// let multiselect_block = document.querySelectorAll(".multiselect_block");
+// multiselect_block.forEach(parent => {
+//     let label = parent.querySelector(".field_multiselect");
+//     let select = parent.querySelector(".field_select");
+//     let text = label.innerHTML;
+//     select.addEventListener("change", function (element) {
+//         let selectedOptions = this.selectedOptions;
+//         label.innerHTML = "";
+//         for (let option of selectedOptions) {
+//             let button = document.createElement("button");
+//             button.type = "button";
+//             button.className = "btn_multiselect";
+//             button.textContent = option.value;
+//             button.onclick = _ => {
+//                 option.selected = false;
+//                 button.remove();
+//                 if (!select.selectedOptions.length) label.innerHTML = text
+//             };
+//             label.append(button);
+//         }
+//     });
+// });
 
 function getValues() {
 
@@ -86,8 +78,8 @@ function getValues() {
         Object.entries(fields).map(([key, selector]) => [key, document.querySelector(selector).value])
     );
 
-    const button = document.querySelector('.btn_multiselect');
-    const work_type = button.textContent.trim();
+    // const button = document.querySelector('.btn_multiselect');
+    const work_type = work_type_input.value;
 
     return { work_type, percent };
 }
