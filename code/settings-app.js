@@ -18,8 +18,8 @@ const fields = {
     percent: '#percent'
 };
 
-function mask(id){
-    const elm = document.getElementById(id);
+function mask(){
+    const elm = document.getElementById('partner-percent');
     const suffix = ' %';
     const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
     
@@ -53,7 +53,7 @@ function mask(id){
     });
   }
 
-  mask('percent_input');
+  mask();
 
 function show(check) {
     let d = check ? 'flex' : 'none';
