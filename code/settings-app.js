@@ -22,7 +22,7 @@ const maskOptions = {
     mask: 'num %'
 };
 const mask = IMask(percent_input, maskOptions);
-element.classList.add('input');
+percent_input.classList.add('input');
 
 
 // $(document).ready(function(){
