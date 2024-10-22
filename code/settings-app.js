@@ -18,6 +18,15 @@ const fields = {
     percent: '#percent'
 };
 
+percent_input.addEventListener('input', function() {
+    let inputText = percent_input.value.trim(); 
+    percent_input.value = percent_input.value.replace(/[^\d]/g, '');
+
+    if (!isNaN(inputText)) {
+        percent_input.value = inputText + "%";
+    }
+});
+
 function show(check) {
     let d = check ? 'flex' : 'none';
     percent_input.style.display = d;

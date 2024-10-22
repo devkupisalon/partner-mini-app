@@ -74,6 +74,9 @@ input:valid {
 #percent-text {
     display: none;
     text-align: center;
+}
+
+#percent-text {
     margin: 0 auto;
 }
 
