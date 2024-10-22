@@ -53,7 +53,7 @@ function mask(id){
     });
   }
 
-  mask(percent_input);
+  mask('percent_input');
 
 function show(check) {
     let d = check ? 'flex' : 'none';
