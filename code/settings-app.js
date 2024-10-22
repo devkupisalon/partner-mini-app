@@ -6,7 +6,7 @@ const partner = urlParams.get('partner');
 const percent_input = document.getElementById('partner-percent');
 const percent_text = document.getElementById('percent-text');
 const work_type_input = document.getElementById("field_select-type");
-const options = selectElement.getElementsByTagName("option");
+const options = work_type_input.getElementsByTagName("option");
 const partner_type = options[2].value;
 
 tg.BackButton.show();
