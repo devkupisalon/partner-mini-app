@@ -35,6 +35,8 @@ body {
 }
 
 .field_select {
+    color: var(--tg-theme-button-text-color);
+    background: var(--tg-theme-button-color);
     width: 100%;
     height: 50px;
     border: none;
