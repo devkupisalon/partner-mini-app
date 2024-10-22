@@ -18,47 +18,48 @@ const fields = {
     percent: '#partner-percent'
 };
 
-function mask(){
+function mask() {
     const elm = document.getElementById('partner-percent');
     const suffix = '%';
     const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
-    
-    const saveValue = (data) => {
-      elm.dataset.value = data;
-    };
-    
-    const pureValue = () => {
-      let value = elm.value.replace(/\D/g, '');
-      value = parseInt(value.replace(suffix, ''))
-      return value || '';
-    };
-    
-    const focusNumber = () => {
-      elm.setSelectionRange(elm.dataset.value.length, elm.dataset.value.length);
-    };
-    
-    elm.addEventListener('keyup', (e) => {
-      if (bypass.indexOf(e.keyCode) !== -1) return;
-      
-      const pure = pureValue();
-      saveValue(pure);
-      
-      if (!pure) {
-        elm.value = '';
-        return;
-      }
-  
-      elm.value = pure + suffix;
-      focusNumber();
-    });
-  }
 
-  mask();
+    const saveValue = (data) => {
+        elm.dataset.value = data;
+    };
+
+    const pureValue = () => {
+        let value = elm.value.replace(/\D/g, '');
+        value = parseInt(value.replace(suffix, ''))
+        return value || '';
+    };
+
+    const focusNumber = () => {
+        elm.setSelectionRange(elm.dataset.value.length, elm.dataset.value.length);
+    };
+
+    elm.addEventListener('keyup', (e) => {
+        if (bypass.indexOf(e.keyCode) !== -1) return;
+
+        const pure = pureValue();
+        saveValue(pure);
+
+        if (!pure) {
+            elm.value = '';
+            return;
+        }
+
+        elm.value = pure + suffix;
+        focusNumber();
+    });
+}
+
+mask();
 
 function show(check) {
     let d = check ? 'flex' : 'none';
     percent_input.style.display = d;
     percent_text.style.display = d;
+    if (!check) { percent_input.value = '' }
 }
 
 async function get_settings() {
