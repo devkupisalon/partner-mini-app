@@ -4,7 +4,7 @@ import logger from '../logs/logger.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js'
 
 const sheets = gauth();
-const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME } = constants;
+const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE } = constants;
 
 const get_values = async () => {
     try {
@@ -84,7 +84,7 @@ const save_settings = async (obj) => {
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
-        const column_index = getColumnNumberByValue(values[0]);
+        const column_index = getColumnNumberByValue(values[0], VALUE);
         const column_letter = numberToColumn(column_index);
 
         const index = values.findIndex(v => v[0] === partner);
@@ -120,9 +120,9 @@ const get_settings = async (partner) => {
             spreadsheetId: DB,
             range: DATASHEETNAME, // Замените на нужный диапазон ячеек
         });
-
-        const data = values.find(r => r[0] === partner).flat();
-        if (data !== '' ) {
+        const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
+        const data = values.find(r => r[0] === partner).map(r => [r[column_index], r[column_index + 1]]).flat();
+        if (data !== '') {
             logger.info(`Settings for partner with id: ${partner} finded`);
             logger.info(data);
             return data;
