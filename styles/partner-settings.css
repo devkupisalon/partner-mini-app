@@ -1,19 +1,18 @@
 body {
     font-family: Arial, sans-serif;
-    padding-top: 40px;
     color: var(--tg-theme-text-color);
     background: var(--tg-theme-bg-color);
+    padding-top: 40px;
 }
 
 .container {
+    width: fit-content;
     display: flex;
     flex-direction: column;
-    max-width: 400px;
-    margin: 0 auto;
-    align-items: center;
-    justify-content: center;
     text-align: center;
-    padding: 20px;
+    height: 700px;
+    margin: 0 auto;
+    padding: 10px 20px;
     border-radius: 20px;
     background-color: var(--tg-theme-header-bg-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
