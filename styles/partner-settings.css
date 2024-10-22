@@ -76,7 +76,7 @@ input:valid {
     text-align: center;
 }
 
-input[type="text"] {
+input[type="number"] {
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
     border-radius: 20px;
@@ -84,5 +84,6 @@ input[type="text"] {
     font-weight: bold;
     font-size: 14px;
     width: 100%;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+    text-align: center; 
 }
