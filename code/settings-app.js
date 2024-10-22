@@ -12,7 +12,6 @@ const fields = {
     percent: '#percent'
 };
 
-// const work_type = document.getElementById('partner-work-type');
 const percent_input = document.getElementById('partner-percent')
 const work_type_input = document.getElementById("field_select-type");
 
@@ -30,16 +29,22 @@ async function get_settings() {
         const { data } = JSON.parse(res);
         if (data) {
             const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
+            console.log({ work_type, percent });
             const options = work_type_input.getElementsByTagName("option");
 
-            for (let option of options) {
-                if (option.value === work_type) {
-                    option.selected = true;
-                    break;
+            if (work_type !== undefined) {
+
+                for (let option of options) {
+                    if (option.value === work_type) {
+                        option.selected = true;
+                        break;
+                    }
                 }
             }
 
-            percent_input.value = percent;
+            if (percent !== undefined) {
+                percent_input.value = percent;
+            }
         }
 
     } catch (error) {
