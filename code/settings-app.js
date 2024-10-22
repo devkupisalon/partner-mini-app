@@ -28,18 +28,19 @@ async function get_settings() {
         const res = await response.text();
 
         const { data } = JSON.parse(res);
-        console.log(data);
-        const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
-        const options = work_type_input.getElementsByTagName("option");
+        if (data) {
+            const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
+            const options = work_type_input.getElementsByTagName("option");
 
-        for (let option of options) {
-            if (option.value === work_type) {
-                option.selected = true;
-                break; 
+            for (let option of options) {
+                if (option.value === work_type) {
+                    option.selected = true;
+                    break;
+                }
             }
-        }
 
-        percent_input.value = percent;
+            percent_input.value = percent;
+        }
 
     } catch (error) {
         console.error('Error fetching data:', error.message);
