@@ -20,7 +20,7 @@ const fields = {
 
 function mask(){
     const elm = document.getElementById('partner-percent');
-    const suffix = ' %';
+    const suffix = '%';
     const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
     
     const saveValue = (data) => {
