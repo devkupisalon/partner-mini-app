@@ -78,10 +78,10 @@ const fetchData = async () => {
     }
 };
 
-window.addEventListener('DOMContentLoaded', async () => {
-    await fetchData();
-    await checkSubscriptionAndAuthorization();
-});
+// window.addEventListener('DOMContentLoaded', async () => {
+//     await fetchData();
+//     await checkSubscriptionAndAuthorization();
+// });
 
 subscribe.addEventListener('click', function () {
     tg.openTelegramLink(channel);
@@ -94,3 +94,15 @@ auth.addEventListener('click', function () {
 calculate.addEventListener('click', function () {
 
 });
+
+async function preload() {
+    const container = document.querySelector('.container');
+    container.style.display = "none";
+    await fetchData();
+    await checkSubscriptionAndAuthorization();
+    const preloader = document.querySelector('.c-car-spinner');
+    preloader.style.display = "none";
+    container.style.display = "flex";
+}
+
+preload();
