@@ -15,7 +15,7 @@ tg.MainButton.show();
 tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить настройки' });
 
 const fields = {
-    percent: '#percent'
+    percent: '#partner-percent'
 };
 
 function mask(){

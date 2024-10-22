@@ -57,6 +57,7 @@ h3 {
 }
 
 p {
+    margin: 0 auto;
     margin-bottom: 10px;
     color: var(--tg-theme-hint-color);
 }
@@ -73,7 +74,6 @@ input:valid {
 #partner-percent,
 #percent-text {
     display: none;
-    text-align: center;
 }
 
 input[type="text"] {
