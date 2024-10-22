@@ -1,4 +1,6 @@
 const tg = window.Telegram.WebApp;
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
 const partner = urlParams.get('partner');
 
 tg.BackButton.show();
