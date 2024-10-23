@@ -119,6 +119,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
     const { name, phone, brand, model, gosnum } = getValues();
+    console.log({ name, phone, brand, model, gosnum });
     if (name && phone && brand && model && gosnum) {
 
         try {

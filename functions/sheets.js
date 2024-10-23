@@ -157,7 +157,7 @@ const do_calc = async (params) => {
         });
 
         if (data.spreadsheetId) {
-            logger.info('Settings data saved successfully');
+            logger.info('Data for calculation saved successfully');
             return true;
         }
 
@@ -171,7 +171,7 @@ const get_partner_name_and_manager = async (partner_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const data = values.find(r => r[0] === partner_id);
-        const [, partner_name, , , , , , , , , , , , , , , manager] = data;
+        const [, partner_name, , , , , , , , , , , , , , , , , manager] = data;
         return { partner_name, manager };
     } catch (error) {
         logger.error(error.message);
