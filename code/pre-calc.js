@@ -8,7 +8,7 @@ tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
 
 const fields = {
-    name: '#сlient-name',
+    name: '#client-name',
     phone: '#client-phone',
     brand: '#car-brands-select',
     model: '#car-models-select',
@@ -51,9 +51,7 @@ function validateName(input) {
 function getValues() {
 
     const data = Object.fromEntries(
-        Object.entries(fields).map(([key, selector], i) =>  {
-            console.log(i);
-           return [key, document.querySelector(selector).value]})
+        Object.entries(fields).map(([key, selector], i) => [key, document.querySelector(selector).value])
     );
 
     return data;
