@@ -93,6 +93,7 @@ async function get_settings() {
         const { data } = JSON.parse(res);
         if (data) {
             const { work_type, percent } = JSON.parse(localStorage.getItem(start_param)) || data;
+            console.log({ work_type, percent });
             return { work_type, percent };
         }
 
