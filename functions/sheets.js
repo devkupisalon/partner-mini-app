@@ -128,7 +128,6 @@ const get_settings = async (partner) => {
             const work_type = data[column_index];
             if (work_type || work_type && percent) {
                 logger.info(`Settings for partner with id: ${partner} finded`);
-                logger.info({ work_type, percent });
                 return { work_type, percent };
             } else {
                 logger.warn(`Settings for partner with id: ${partner} not found`);
