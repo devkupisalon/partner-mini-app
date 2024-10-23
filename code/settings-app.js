@@ -11,8 +11,6 @@ const partner_type = options[2].value;
 
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
-tg.MainButton.show();
-tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить настройки' });
 
 tg.onEvent('backButtonClicked', (event) => {
     window.location.href = '/';
@@ -117,7 +115,7 @@ function getValues() {
     return { work_type, percent };
 }
 
-function show_percent() {
+async function show_percent() {
     const selected_work_type = work_type_input.value;
 
     if (selected_work_type === partner_type) {
@@ -125,9 +123,22 @@ function show_percent() {
     } else {
         show(false);
     }
+
+    work_type_input.onchange = show_percent;
 }
 
-work_type_input.onchange = show_percent;
+async function preload() {
+    tg.MainButton.hide();
+    const container = document.querySelector('.container');
+    container.style.display = "none";
+    await show_percent();
+    const preloader = document.querySelector('.c-car-spinner');
+    preloader.style.display = "none";
+    container.style.display = "flex";
+    tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить настройки' });
+}
+
+preload();
 
 tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
