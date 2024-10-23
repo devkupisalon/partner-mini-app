@@ -46,10 +46,8 @@ async function getCarBrandsAndModels() {
         const response = await fetch(`/get-cars`);
         const values = await response.json();
         car_values = Object.values(values);
-        // Обработка полученных данных
-        console.log(car_values);
+        console.log(car_values[0]);
     } catch (err) {
-        // Обработка ошибок
         console.error(err);
     }
 
@@ -57,7 +55,7 @@ async function getCarBrandsAndModels() {
     const carModelsSelect = document.getElementById("car-models-select");
 
     for (let row of car_values) {
-        const brand = row[0]; // Марка авто
+        const brand = row[0];
         const option = document.createElement("option");
         option.text = brand;
         carBrandsSelect.add(option);
