@@ -47,13 +47,11 @@ const checkout = {
 
 const check = async () => {
 
-    let is_settings;
-
     try {
         const response = await fetch(`/check?partner=${start_param}&user_id=${id}`);
         const { is_subscribed, is_authorized } = await response.json();
 
-        console.log({ is_subscribed, is_authorized, is_settings });
+        console.log({ is_subscribed, is_authorized });
 
         const checks = {
             a: is_authorized && !is_subscribed,
@@ -118,7 +116,7 @@ settings.addEventListener('click', function () {
 calculate.addEventListener('click', function () {
     const { work_type, percent } = get_settings();
     if (work_type || work_type && percent) {
-        window.location.href = `/pre-calc?partner=${partner}`;
+        window.location.href = `/pre-calc?partner=${start_param}`;
     } else {
         tg.showPopup({ message: 'Вначале заполните и сохраните настройки' });
     }
