@@ -139,7 +139,6 @@ tg.onEvent('mainButtonClicked', async (event) => {
             if (success) {
                 tg.showPopup({ message: 'Настройки сохранены' });
                 tg.MainButton.hideProgress();
-                tg.MainButton.hide();
             }
         } catch (error) {
             tg.showPopup({ title: 'Error', message: error });
