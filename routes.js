@@ -12,7 +12,7 @@ const app = express();
 
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
-const loaderPath = path.soin(__dirname, 'html', 'loader.html');
+const loaderPath = path.join(__dirname, 'html', 'loader.html');
 
 app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
 
