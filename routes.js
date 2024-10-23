@@ -18,7 +18,7 @@ app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.pa
 
 app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
 
-app.get('/loader', (req,res)=> res.sendFile(path.join(loaderPath)));
+app.get('/loader', (req,res)=> res.sendFile(loaderPath));
 
 app.get('/', (req, res) => res.sendFile(HOME));
 

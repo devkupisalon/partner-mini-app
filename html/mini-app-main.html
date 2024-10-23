@@ -63,7 +63,7 @@
 
     <div id='preloader'></div>
     <script>
-        fetch('./html/loader.html')
+        fetch('/loader')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('preloader').innerHTML = data;
