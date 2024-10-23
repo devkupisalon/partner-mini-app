@@ -83,6 +83,7 @@ const save_settings = async (obj) => {
         });
 
         const arr = [work_type, percent || ''];
+        logger.info(arr);
         const requestBody = { values: [arr] };
 
         const column_index = getColumnNumberByValue(values[0], VALUE);
