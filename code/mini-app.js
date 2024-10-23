@@ -92,7 +92,7 @@ async function get_settings() {
         const res = await response.text();
         const { data } = JSON.parse(res);
         if (data) {
-            const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
+            const { work_type, percent } = JSON.parse(localStorage.getItem(start_param)) || data;
             return { work_type, percent };
         }
 
