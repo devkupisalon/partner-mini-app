@@ -45,8 +45,8 @@ async function getCarBrandsAndModels() {
     try {
         const response = await fetch(`/get-cars`);
         const values = await response.json();
-        car_values = Object.values(values);
-        console.log(car_values[0]);
+        car_values = Object.values(values)[0];
+        console.log(car_values);
     } catch (err) {
         console.error(err);
     }
