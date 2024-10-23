@@ -79,7 +79,7 @@ p {
     display: block;
 }
 
-/* .c-car-spinner {
+.c-car-spinner {
     height: 120px;
     width: 120px;
     position: relative;
@@ -110,4 +110,4 @@ p {
 
 #car-picture-icon {
     stroke: var(--tg-theme-button-color);
-} */
+}

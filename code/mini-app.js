@@ -127,11 +127,12 @@ calculate.addEventListener('click', async function () {
 
 async function preload() {
     const container = document.querySelector('.container');
-    container.style.display = "none";
     await fetchData();
     await check();
     await get_settings();
-    const preloader = document.querySelector('.c-car-spinner');
+    // const preloader = document.querySelector('.c-car-spinner');
+    // preloader.style.display = "none";
+    const preloader = document.querySelector('.sk-circle');
     preloader.style.display = "none";
     container.style.display = "flex";
 }
