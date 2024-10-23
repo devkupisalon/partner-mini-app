@@ -146,7 +146,7 @@ const do_calc = async (params) => {
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum } = params;
-    logger.log(params);
+    logger.info(params);
     const { manager, partner_name } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, 'Партнер', partner_name, , , , , , , , , , , , , , , , , date];
 
