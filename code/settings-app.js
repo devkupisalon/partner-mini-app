@@ -102,8 +102,6 @@ async function get_settings() {
     }
 }
 
-get_settings();
-
 function getValues() {
 
     const { percent } = Object.fromEntries(
@@ -131,6 +129,7 @@ async function preload() {
     tg.MainButton.hide();
     const container = document.querySelector('.container');
     container.style.display = "none";
+    await get_settings();
     await show_percent();
     const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
