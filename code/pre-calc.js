@@ -22,7 +22,7 @@ tg.onEvent('backButtonClicked', (event) => {
 
   function formatPhoneNumber(input) {
     input.value = input.value.replace(/[^\d]/g, ''); 
-    input.value = input.value.slice(0, 10);
+    input.value = input.value.slice(0, 13);
 }
 
 function validateName(input) {
