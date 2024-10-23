@@ -12,6 +12,8 @@ const auth_block = document.querySelector(".auth-block")
 const settings = document.getElementById("s-button");
 const checkmark = "  &#9989";
 
+let work_type_partner, percent_partner;
+
 tg.enableClosingConfirmation();
 
 const { user: { username, id }, start_param } = tg.initDataUnsafe;
@@ -93,7 +95,8 @@ async function get_settings() {
         const { data } = JSON.parse(res);
         if (data) {
             const { work_type, percent } = JSON.parse(localStorage.getItem(start_param)) || data;
-            console.log({ work_type, percent });
+            work_type_partner = work_type;
+            percent_partner = percent;
             return { work_type, percent };
         }
 
@@ -115,9 +118,9 @@ settings.addEventListener('click', function () {
 });
 
 calculate.addEventListener('click', async function () {
-    const { work_type, percent } = await get_settings();
-    console.log({ work_type, percent });
-    if (work_type || work_type && percent) {
+    // const { work_type, percent } = await get_settings();
+    // console.log({ work_type, percent });
+    if (work_type_partner || work_type_partner && percent_partner) {
         window.location.href = `/pre-calc?partner=${start_param}`;
     } else {
         tg.showPopup({ message: 'Вначале заполните и сохраните настройки' });
@@ -129,6 +132,7 @@ async function preload() {
     container.style.display = "none";
     await fetchData();
     await check();
+    await get_settings();
     const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
