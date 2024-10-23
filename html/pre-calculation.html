@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="/styles/pre-calculation.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <form id="partner-form">
+            <h3 id="main-heading">Заполните пожалуйста данные для формирования файла расчета</h3>
+            <div class="input-form">
+                <div class="input-label" id="manager-name-label">ФИО</div>
+                <input class="input" type="text" id="manager-name" placeholder="Name" required
+                    oninput="validateName(event.target)">
+                <div class="input-label" id="manager-phone-label">Телефон</div>
+                <input class="input" type="tel" id="manager-phone" placeholder="+79999999999" required
+                    oninput="formatPhoneNumber(this)">
+                <div class="input-label" id="car-number-label">Госномер</div>
+                <input class="input" type="text" id="car-number" placeholder="А 777 АA 777"
+                    pattern="[А-Я] d{3} [А-Я]{2} d{2,3}|Без номеров" required>
+
+                <label for="car-brands" class="input-label">Марка</label>
+                <select id="car-brands-select" class="select" onchange="getCarModels()" required>
+                    <!-- опции будут добавлены динамически -->
+                </select>
+
+                <label for="car-models" class="input-label">Модель</label>
+                <select id="car-models-select" class="select" disabled required>
+                    <!-- опции моделей будут добавлены динамически -->
+                </select>
+
+            </div>
+
+        </form>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/scripts/pre-calc.js"></script>
+
+</body>
+
+</html>

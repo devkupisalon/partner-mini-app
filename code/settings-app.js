@@ -14,6 +14,11 @@ tg.setBottomBarColor("bottom_bar_bg_color");
 tg.MainButton.show();
 tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить настройки' });
 
+tg.onEvent('backButtonClicked', (event) => {
+    window.location.href = '/';
+    tg.MainButton.hide();
+});
+
 const fields = {
     percent: '#partner-percent'
 };

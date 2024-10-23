@@ -4,7 +4,7 @@ import logger from '../logs/logger.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js'
 
 const sheets = gauth();
-const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE } = constants;
+const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE, CARSSHEETNAME, CARSSPREADSHEET } = constants;
 
 const get_values = async () => {
     try {
@@ -83,7 +83,6 @@ const save_settings = async (obj) => {
         });
 
         const arr = [work_type, percent || ''];
-        logger.info(arr);
         const requestBody = { values: [arr] };
 
         const column_index = getColumnNumberByValue(values[0], VALUE);
@@ -142,4 +141,22 @@ const get_settings = async (partner) => {
     }
 }
 
-export { get_values, save, auth, save_settings, get_settings };
+const do_calc = async (params) => {
+    const {} = params;
+}
+
+const get_cars = async () => {
+    try {
+        const { data: { values } } = await sheets.spreadsheets.values.get({
+            spreadsheetId: CARSSPREADSHEET,
+            range: CARSSHEETNAME,
+        });
+
+        logger.info('Data recieved successfully');
+        return values;
+    } catch (error) {
+        logger.error(error.message);
+    }
+}
+
+export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc };

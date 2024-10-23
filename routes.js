@@ -3,15 +3,32 @@ import path from 'path';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
-import { save, get_values, auth, get_settings, save_settings } from './functions/sheets.js';
+import { save, get_values, auth, get_settings, save_settings, get_cars, do_calc } from './functions/sheets.js';
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
-const { BOT_TOKEN, HOME, AUTH, SETTINGS } = constants;
+const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC } = constants;
 const app = express();
 
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
+
+app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
+
+app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
+
+app.get('/', (req, res) => res.sendFile(HOME));
+
+app.get('/auth', (req, res) => res.sendFile(AUTH));
+
+app.get('/settings', (req, res) => res.sendFile(SETTINGS));
+
+app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
+
+app.use((error, req, res, next) => {
+    logger.error(`An error occurred: ${error.message}`);
+    res.status(500).send(error);
+});
 
 app.get("/validate-init", async (req, res) => {
     try {
@@ -31,21 +48,6 @@ app.get("/validate-init", async (req, res) => {
     }
 });
 
-app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
-
-app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
-
-app.use((error, req, res, next) => {
-    logger.error(`An error occurred: ${error.message}`);
-    res.status(500).send(error);
-});
-
-app.get('/', (req, res) => res.sendFile(HOME));
-
-app.get('/auth', (req, res) => res.sendFile(AUTH));
-
-app.get('/settings', (req, res) => res.sendFile(SETTINGS));
-
 app.get('/check', async (req, res) => {
     try {
         const { user_id, partner } = req.query;
@@ -56,6 +58,27 @@ app.get('/check', async (req, res) => {
         return res.json({ is_subscribed, is_authorized });
     } catch (error) {
         logger.error(`An error occurred in check: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+app.get('do-calculation', async (req, res) => {
+    try {
+        const data = await do_calc(req.query);
+
+    } catch (error) {
+        logger.error(`An error occurred in do_calc: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+})
+
+app.get('/get-cars', async (rea, res) => {
+    try {
+        const data = await get_cars();
+
+        return res.json({ data });
+    } catch (error) {
+        logger.error(`An error occurred in get_cars: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
 });

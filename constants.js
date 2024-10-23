@@ -16,9 +16,12 @@ const constants = {
     GROUPSSHEETNAME: process.env.groups_sheetname,
     DATASHEETNAME: process.env.datasheetname,
     VALUE: process.env.value,
+    CARSSHEETNAME: process.env.carssheetname,
+    CARSSPREADSHEET: process.env.CARSSPREADSHEET,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
-    SETTINGS: `${__dirname}/html/settings-web-app.html`
+    SETTINGS: `${__dirname}/html/settings-web-app.html`,
+    PRE_CALC: `${__dirname}/html/pre-calculation.html`
 };
 
 export { constants, __dirname };

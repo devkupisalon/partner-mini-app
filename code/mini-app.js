@@ -10,6 +10,7 @@ const auth_text = document.getElementById("auth-text");
 const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
 const settings = document.getElementById("s-button");
+const checkmark = "  &#9989";
 
 tg.enableClosingConfirmation();
 
@@ -24,7 +25,7 @@ const checkout = {
     as: () => {
         [auth, subscribe].forEach(s => {
             s.disabled = true;
-            s.innerHTML = s.innerText + "  &#9989";
+            s.innerHTML = s.innerText + checkmark;
             setCheckmark(s);
         });
     },
@@ -33,23 +34,26 @@ const checkout = {
         [auth, calculate].forEach(s => {
             setCheckmark(s);
         });
-        auth.innerHTML = auth.innerText + "  &#9989"
+        auth.innerHTML = auth.innerText + checkmark
     },
     s: () => {
         subscribe_text.style.opacity = "0.5";
         [subscribe, calculate].forEach(s => {
-           setCheckmark(s);
+            setCheckmark(s);
         });
-        subscribe.innerHTML = subscribe.innerText + "  &#9989"
+        subscribe.innerHTML = subscribe.innerText + checkmark
     }
 };
 
-const checkSubscriptionAndAuthorization = async () => {
+const check = async () => {
+
+    let is_settings;
+
     try {
         const response = await fetch(`/check?partner=${start_param}&user_id=${id}`);
         const { is_subscribed, is_authorized } = await response.json();
 
-        console.log({ is_subscribed, is_authorized });
+        console.log({ is_subscribed, is_authorized, is_settings });
 
         const checks = {
             a: is_authorized && !is_subscribed,
@@ -79,6 +83,23 @@ const fetchData = async () => {
     }
 };
 
+async function get_settings() {
+
+    try {
+        const response = await fetch(`/getsettings?partner=${partner}`);
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const res = await response.text();
+        const { data } = JSON.parse(res);
+        return data
+
+    } catch (error) {
+        console.error('Error fetching data:', error.message);
+    }
+}
+
 subscribe.addEventListener('click', function () {
     tg.openTelegramLink(channel);
 });
@@ -92,14 +113,19 @@ settings.addEventListener('click', function () {
 });
 
 calculate.addEventListener('click', function () {
-
+    const { work_type, percent } = get_settings();
+    if (work_type || work_type && percent) {
+        window.location.href = `/pre-calc?partner=${partner}`;
+    } else {
+        tg.showPopup({ message: 'Вначале заполните и сохраните настройки' });
+    }
 });
 
 async function preload() {
     const container = document.querySelector('.container');
     container.style.display = "none";
     await fetchData();
-    await checkSubscriptionAndAuthorization();
+    await check();
     const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
