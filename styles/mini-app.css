@@ -82,7 +82,7 @@ p {
     position: relative;
     margin: 0 auto;
     margin-top: 300px;
-    display: block;
+    display: flex;
 }
 
 

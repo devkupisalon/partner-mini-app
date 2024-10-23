@@ -118,7 +118,6 @@ settings.addEventListener('click', function () {
 });
 
 calculate.addEventListener('click', async function () {
-    console.log({ work_type_partner, percent_partner });
     if (work_type_partner || work_type_partner && percent_partner) {
         window.location.href = `/pre-calc?partner=${start_param}`;
     } else {
