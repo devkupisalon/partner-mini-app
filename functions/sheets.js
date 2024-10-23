@@ -1,7 +1,7 @@
 import gauth from '../functions/google_auth.js';
 import { constants } from '../constants.js';
 import logger from '../logs/logger.js';
-import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js'
+import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
