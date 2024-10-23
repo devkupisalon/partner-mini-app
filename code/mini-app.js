@@ -93,7 +93,10 @@ async function get_settings() {
 
         const res = await response.text();
         const { data } = JSON.parse(res);
-        return data
+        if (data) {
+            const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
+            return { work_type, percent };
+        }
 
     } catch (error) {
         console.error('Error fetching data:', error.message);
