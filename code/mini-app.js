@@ -130,9 +130,7 @@ async function preload() {
     await fetchData();
     await check();
     await get_settings();
-    // const preloader = document.querySelector('.c-car-spinner');
-    // preloader.style.display = "none";
-    const preloader = document.querySelector('.sk-circle');
+    const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
 }
