@@ -51,7 +51,9 @@ function validateName(input) {
 function getValues() {
 
     const data = Object.fromEntries(
-        Object.entries(fields).map(([key, selector]) => [key, document.querySelector(selector).value])
+        Object.entries(fields).map(([key, selector], i) =>  {
+            console.log(i);
+           return [key, document.querySelector(selector).value]})
     );
 
     return data;
