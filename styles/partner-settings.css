@@ -87,11 +87,11 @@ input[type="text"] {
 
 .c-car-spinner {
     height: 120px;
-    margin-top: 20px;
+    /* margin-top: 20px; */
     width: 120px;
     position: relative;
     margin: 0 auto;
-    margin-top: 300px;
+    /* margin-top: 300px; */
     display: block;
 }
 
