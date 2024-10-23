@@ -6,7 +6,7 @@ body {
 }
 
 .container {
-    visibility: hidden;
+    display: none;
     flex-direction: column;
     max-width: 400px;
     margin: 0 auto;
@@ -73,10 +73,6 @@ p {
     100% {
         transform: rotate(360deg);
     }
-}
-
-#preloader {
-    display: block;
 }
 
 .c-car-spinner {

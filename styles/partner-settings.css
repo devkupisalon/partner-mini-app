@@ -94,6 +94,7 @@ input[type="text"] {
     display: block;
 }
 
+
 .c-car-spinner__svg {
     animation: spinneriminen 1s linear infinite;
     position: absolute;
