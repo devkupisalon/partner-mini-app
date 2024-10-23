@@ -18,6 +18,8 @@ const constants = {
     VALUE: process.env.value,
     CARSSHEETNAME: process.env.carssheetname,
     CARSSPREADSHEET: process.env.CARSSPREADSHEET,
+    MONITORSHEETNAME: process.env.monitorsheetname,
+    MONITORSPREADSHEET: process.env.MONITORSPREADSHEET,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,

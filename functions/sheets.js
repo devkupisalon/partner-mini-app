@@ -2,16 +2,27 @@ import gauth from '../functions/google_auth.js';
 import { constants } from '../constants.js';
 import logger from '../logs/logger.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js'
+import { v4 as uuidv4 } from 'uuid';
 
 const sheets = gauth();
-const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE, CARSSHEETNAME, CARSSPREADSHEET } = constants;
+const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE, CARSSHEETNAME, CARSSPREADSHEET, MONITORSPREADSHEET,
+    MONITORSHEETNAME } = constants;
+
+const get_data = async (spreadsheetId, range) => {
+    try {
+        const { data: { values } } = await sheets.spreadsheets.values.get({
+            spreadsheetId,
+            range,
+        });
+        return values
+    } catch (error) {
+        logger.error(error.message);
+    }
+}
 
 const get_values = async () => {
     try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: DB,
-            range: GROUPSSHEETNAME,
-        });
+        const values = await get_data(DB, GROUPSSHEETNAME);
 
         logger.info('Data recieved successfully');
         return values;
@@ -23,10 +34,7 @@ const get_values = async () => {
 const save = async (arr) => {
 
     try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEETID,
-            range: SHEETNAME,
-        });
+        const values = await get_data(SPREADSHEETID, SHEETNAME);
 
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
@@ -51,10 +59,8 @@ const save = async (arr) => {
 
 const auth = async (user_id, partner) => {
     try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: SPREADSHEETID,
-            range: SHEETNAME,
-        });
+
+        const values = await get_data(SPREADSHEETID, SHEETNAME);
 
         const success = values
             .slice(1)
@@ -75,10 +81,7 @@ const save_settings = async (obj) => {
 
     try {
         let { partner, work_type, percent } = obj;
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: DB,
-            range: DATASHEETNAME
-        });
+        const values = await get_data(DB, DATASHEETNAME);
 
         const arr = [work_type, percent || ''];
         const requestBody = { values: [arr] };
@@ -106,7 +109,7 @@ const save_settings = async (obj) => {
             return true;
         }
     } catch (error) {
-        logger.error(error.stack);
+        logger.error(error.message);
         return false;
     }
 
@@ -114,10 +117,7 @@ const save_settings = async (obj) => {
 
 const get_settings = async (partner) => {
     try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: DB,
-            range: DATASHEETNAME
-        });
+        const values = await get_data(DB, DATASHEETNAME);
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
         const data = values.find(r => r[0] === partner);
 
@@ -139,16 +139,49 @@ const get_settings = async (partner) => {
 }
 
 const do_calc = async (params) => {
-    const {} = params;
+    const date = new Date();
+    const uid = uuidv4();
+    const { partner, name, phone, brand, model, gosnum } = params;
+    const { manager, partner_name } = await get_partner_name_and_manager(partner);
+    const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, 'Партнер', partner_name, , , , , , , , , , , , , , , , , date];
+    try {
+        const values = await get_data(MONITORSPREADSHEET, MONITORSHEETNAME);
+        const requestBody = { values: [arr] };
+        const range = `${MONITORSHEETNAME}!A${values.length + 1}`;
+
+        const { data } = await sheets.spreadsheets.values.update({
+            spreadsheetId: MONITORSPREADSHEET,
+            range,
+            valueInputOption: 'USER_ENTERED',
+            requestBody
+        });
+
+        if (data.spreadsheetId) {
+            logger.info('Settings data saved successfully');
+            return true;
+        }
+
+    } catch (error) {
+        logger.error(error.message);
+        return false;
+    }
+}
+
+const get_partner_name_and_manager = async (partner_id) => {
+    try {
+        const values = await get_data(DB, DATASHEETNAME);
+        const data = values.find(r => r[0] === partner_id);
+        const [, partner_name, , , , , , , , , , , , , , , manager] = data;
+        return { partner_name, manager };
+    } catch (error) {
+        logger.error(error.message);
+        return false;
+    }
 }
 
 const get_cars = async () => {
     try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId: CARSSPREADSHEET,
-            range: CARSSHEETNAME,
-        });
-
+        const values = await get_data(CARSSPREADSHEET, CARSSHEETNAME);
         logger.info('Data recieved successfully');
         return values;
     } catch (error) {
