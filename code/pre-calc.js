@@ -20,16 +20,33 @@ tg.onEvent('backButtonClicked', (event) => {
     tg.MainButton.hide();
   });
 
-function applyFIOFilter(elem) {
-    elem.addEventListener('keypress', function (e) {
-        var val = elem.value + e.key;
+function formatPhoneNumber(input) {
 
-        if (val.split(" ").length == 4) e.preventDefault();
-
-    });
+    if (!input.value.startsWith('+ ') && input.value.match(/^\d/)) {
+        input.value = '+ ' + input.value;
+    }
+    if (input.value === '+ ') {
+        input.value = ' ';
+    }
+    input.value = input.value.replace(/[^+d (\d)-]/, ' ');
+    if (input.value.startsWith('+ ')) {
+        input.value = input.value.substring(0, 4) + input.value.substring(4).replace(/[^0-9]/g, ' ').slice(0, 13);
+    } else {
+        input.value = input.value.replace(/[^0-9]/g, ' ').slice(0, 10);
+    }
 }
 
-applyFIOFilter(fio);
+function validateName(input) {
+    let value = input.value;
+    let pattern = /^[A-Za-zА-ЯЁа-яё]+([- ][A-Za-zА-ЯЁа-яё]+)*$/;
+    if (!value.match(pattern)) {
+        input.setCustomValidity("Имя должно содержать только буквы и может включать пробелы или дефисы.");
+    }
+
+    value = value.replaceAll(/\d+/g, ' ');
+    input.value = value;
+    input.setCustomValidity("");
+}
 
 function getValues() {
 
