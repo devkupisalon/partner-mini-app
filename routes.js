@@ -62,7 +62,7 @@ app.get('/check', async (req, res) => {
     }
 });
 
-app.get('do-calculation', async (req, res) => {
+app.get('/do-calculation', async (req, res) => {
     try {
         const data = await do_calc(req.query);
 
