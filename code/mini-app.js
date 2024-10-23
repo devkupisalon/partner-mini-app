@@ -115,6 +115,7 @@ settings.addEventListener('click', function () {
 
 calculate.addEventListener('click', function () {
     const { work_type, percent } = get_settings();
+    console.log({ work_type, percent });
     if (work_type || work_type && percent) {
         window.location.href = `/pre-calc?partner=${start_param}`;
     } else {
