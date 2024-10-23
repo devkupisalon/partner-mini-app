@@ -119,11 +119,10 @@ tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
     const { name, phone, brand, model, gosnum } = getValues();
-    console.log({ name, phone, brand, model, gosnum });
     if (name && phone && brand && model && gosnum) {
 
         try {
-            const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&=model${encodeURIComponent(model)}&=gosnum${encodeURIComponent(gosnum)}`);
+            const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}`);
             const { success } = await response.json();
             if (success) {
                 tg.showPopup({ message: 'Расчет сформирован' });

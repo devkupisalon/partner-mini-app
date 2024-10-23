@@ -64,8 +64,8 @@ app.get('/check', async (req, res) => {
 
 app.get('/do-calculation', async (req, res) => {
     try {
-        const data = await do_calc(req.query);
-
+        const link = await do_calc(req.query);
+        return res.json({ link });
     } catch (error) {
         logger.error(`An error occurred in do_calc: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
