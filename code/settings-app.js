@@ -134,6 +134,7 @@ async function preload() {
     const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
+    tg.MainButton.show();
     tg.MainButton.setParams({ has_shine_effect: true, text: 'Сохранить настройки' });
 }
 
