@@ -128,7 +128,6 @@ async function show_percent() {
 async function preload() {
     tg.MainButton.hide();
     const container = document.querySelector('.container');
-    container.style.display = "none";
     await get_settings();
     await show_percent();
     const preloader = document.querySelector('.c-car-spinner');

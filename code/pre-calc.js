@@ -84,7 +84,6 @@ async function getCarBrandsAndModels() {
 async function preload() {
     tg.MainButton.hide();
     const container = document.querySelector('.container');
-    container.style.display = "none";
     await getCarBrandsAndModels();
     const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";

@@ -67,6 +67,9 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('preloader').innerHTML = data;
+                window.onload = function () {
+                    document.querySelector('.c-car-spinner').style.visibility = 'visible';
+                };
             });
     </script>
 

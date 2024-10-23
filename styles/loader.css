@@ -3,8 +3,9 @@
     width: 120px;
     position: relative;
     margin: 0 auto;
-    margin-top: 300px;
-    display: block;
+    margin-top: 250px;
+    /* display: block; */
+    visibility: hidden;
 }
 
 .c-car-spinner__svg {
