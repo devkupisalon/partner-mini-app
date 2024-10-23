@@ -85,7 +85,6 @@ p {
     display: flex;
 }
 
-
 .c-car-spinner__svg {
     animation: spinneriminen 1s linear infinite;
     position: absolute;
@@ -98,8 +97,6 @@ p {
     transform-origin: center center;
     fill: transparent;
     stroke-width: 2px;
-
-
 }
 
 .c-car-spinner__svg-car {
