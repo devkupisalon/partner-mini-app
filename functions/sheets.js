@@ -146,13 +146,14 @@ const do_calc = async (params) => {
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum } = params;
-    const { manager, partner_name } = await get_partner_name_and_manager(partner);
+    const { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, 'Партнер', partner_name, , , , , , , , , , , , , , , , , date];
 
     try {
         const values = await get_data(MONITORSPREADSHEET, MONITORSHEETNAME);
         const requestBody = { values: [arr] };
-        const range = `${MONITORSHEETNAME}!A${values.length + 1}`;
+        const row = values.length + 1;
+        const range = `${MONITORSHEETNAME}!A${row}`;
 
         const { data } = await sheets.spreadsheets.values.update({
             spreadsheetId: MONITORSPREADSHEET,
@@ -161,13 +162,25 @@ const do_calc = async (params) => {
             requestBody
         });
 
-        // const link = fetch('')
-
         if (data.spreadsheetId) {
             logger.info('Data for calculation saved successfully');
-            return true;
         }
 
+        const link = await fetch('https://script.google.com/macros/s/AKfycbxiQtOVj9XnI5wp_VSkdK8ou4HLDyGX2u-IXlybNR-iu8SoLpSS2RWmvYgyJsRTrXOjOA/exec',
+            {
+                method: 'POST',
+                payload: JSON.stringify({
+                    row,
+                    work_type,
+                    percent,
+                    calculate_id,
+                    partner_folder
+                })
+            });
+        if (link) {
+            logger.info('Calcutaion successfull');
+            return link;
+        }
     } catch (error) {
         logger.error(error.message);
         return false;
@@ -178,8 +191,9 @@ const get_partner_name_and_manager = async (partner_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const data = values.find(r => r[0] === partner_id);
-        const [, partner_name, , , , , , , , , , , , , , , , , manager] = data;
-        return { partner_name, manager };
+        let [, partner_name, , , , , , , , , partner_folder, , , , , , work_type, percent, manager, calculate_id] = data;
+        partner_folder = partner_folder.split('/').pop();
+        return { partner_name, manager, work_type, percent, calculate_id, partner_folder };
     } catch (error) {
         logger.error(error.message);
         return false;

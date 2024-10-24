@@ -32,9 +32,8 @@ function validateName(input) {
         input.setCustomValidity("Имя должно содержать только буквы и может включать пробелы или дефисы.");
     }
 
-    value = value.replaceAll(/\d+/g, ' ');
+    value = value.replaceAll(/\d+/g, '');
     input.value = value;
-    input.setCustomValidity("");
 }
 
 function getValues() {
