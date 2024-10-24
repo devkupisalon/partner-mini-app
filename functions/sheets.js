@@ -181,7 +181,7 @@ const do_calc = async (params) => {
         });
 
         if (link) {
-            logger.info('Calcutaion successfull');
+            logger.info(link);
             return link;
         }
     } catch (error) {
