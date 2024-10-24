@@ -166,17 +166,20 @@ const do_calc = async (params) => {
             logger.info('Data for calculation saved successfully');
         }
 
-        const link = await fetch('https://script.google.com/macros/s/AKfycbxiQtOVj9XnI5wp_VSkdK8ou4HLDyGX2u-IXlybNR-iu8SoLpSS2RWmvYgyJsRTrXOjOA/exec',
-            {
-                method: 'POST',
-                payload: JSON.stringify({
-                    row,
-                    work_type,
-                    percent,
-                    calculate_id,
-                    partner_folder
-                })
-            });
+        const link = await fetch('https://script.google.com/macros/s/AKfycbxiQtOVj9XnI5wp_VSkdK8ou4HLDyGX2u-IXlybNR-iu8SoLpSS2RWmvYgyJsRTrXOjOA/exec', {
+            method: 'POST',
+            body: JSON.stringify({
+                row,
+                work_type,
+                percent,
+                calculate_id,
+                partner_folder
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
         if (link) {
             logger.info('Calcutaion successfull');
             return link;
