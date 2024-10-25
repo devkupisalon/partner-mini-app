@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 ExecStart=/usr/bin/node /root/mini-app/routes.js
-WorkingDirectory=/path/to/app
+WorkingDirectory=/root/mini-app
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
