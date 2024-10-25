@@ -115,14 +115,13 @@ tg.onEvent('mainButtonClicked', async (event) => {
             if (link) {
                 tg.showPopup({text: 'Расчет успешно сформирован'});
                 tg.MainButton.hideProgress();
-                tg.mainButton.setParams({
-                    has_shine_effect: true,
-                    text: 'Открыть расчет',
-                    click_action: {
-                        type: 'link',
-                        url: link
-                    }
-                })
+
+                event.openLink(link);
+                // tg.mainButton.setParams({
+                //     has_shine_effect: true,
+                //     text: 'Открыть расчет',
+                   
+                // });
             }
         } catch (error) {
             tg.showPopup({ title: 'Error', message: error });
