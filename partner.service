@@ -1,12 +1,14 @@
 [Unit]
-   Description=partners-app
-   After=network.target docker.service
-   Wants=docker.service
+Description=Run routes.js on server startup
+After=network.target
 
-   [Service]
-   ExecStart=/usr/bin/docker run --rm -p 8000:8000 partners-app
-   Restart=always
-   WorkingDirectory=/path/to/app
+[Service]
+ExecStart=/usr/bin/node /root/mini-app/routes.js
+WorkingDirectory=/path/to/app
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=routes
 
-   [Install]
-   WantedBy=multi-user.target
+[Install]
+WantedBy=multi-user.target
