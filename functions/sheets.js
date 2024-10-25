@@ -173,7 +173,8 @@ const do_calc = async (params) => {
                 work_type,
                 percent,
                 calculate_id,
-                partner_folder
+                partner_folder,
+                partner
             }),
             headers: {
                 'Content-Type': 'application/json'
@@ -182,7 +183,7 @@ const do_calc = async (params) => {
 
         if (linkResponse.ok) {
             const link = await linkResponse.text();
-            logger.info('Полученная ссылка:', link);
+            logger.info(`Recieved link: ${link}`);
             return link;
         } else {
             logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);

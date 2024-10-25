@@ -113,8 +113,16 @@ tg.onEvent('mainButtonClicked', async (event) => {
             const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}`);
             const { link } = await response.json();
             if (link) {
+                tg.showPopup({text: 'Расчет успешно сформирован'});
                 tg.MainButton.hideProgress();
-                tg.openLink(link);
+                tg.mainButton.setParams({
+                    has_shine_effect: true,
+                    text: 'Открыть расчет',
+                    click_action: {
+                        type: 'link',
+                        url: link
+                    }
+                })
             }
         } catch (error) {
             tg.showPopup({ title: 'Error', message: error });
