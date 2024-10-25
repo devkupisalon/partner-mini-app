@@ -18,10 +18,10 @@ const fields = {
 tg.onEvent('backButtonClicked', (event) => {
     window.location.href = '/';
     tg.MainButton.hide();
-  });
+});
 
-  function formatPhoneNumber(input) {
-    input.value = input.value.replace(/[^\d]/g, ''); 
+function formatPhoneNumber(input) {
+    input.value = input.value.replace(/[^\d]/g, '');
     input.value = input.value.slice(0, 13);
 }
 
@@ -111,10 +111,11 @@ tg.onEvent('mainButtonClicked', async (event) => {
 
         try {
             const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}`);
-            const { success } = await response.json();
-            if (success) {
+            const { link } = await response.json();
+            if (link) {
                 tg.showPopup({ message: 'Расчет сформирован' });
                 tg.MainButton.hideProgress();
+                tg.openLink(link, { try_instant_view: true });
             }
         } catch (error) {
             tg.showPopup({ title: 'Error', message: error });

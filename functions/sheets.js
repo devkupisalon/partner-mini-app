@@ -182,10 +182,10 @@ const do_calc = async (params) => {
 
         if (linkResponse.ok) {
             const link = await linkResponse.text();
-            console.log('Полученная ссылка:', link);
+            logger.info('Полученная ссылка:', link);
             return link;
         } else {
-            console.error('Ошибка получения ссылки:', linkResponse.status, linkResponse.statusText);
+            logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);
         }
     } catch (error) {
         logger.error(error.message);
