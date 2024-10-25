@@ -114,6 +114,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
             const { link } = await response.json();
             if (link) {
                 tg.showPopup({ title: 'Success', message: 'Расчет успешно сформирован' });
+
                 tg.MainButton.hideProgress();
 
                 event.openLink(link);
