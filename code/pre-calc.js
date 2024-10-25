@@ -115,7 +115,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
             if (link) {
                 tg.showPopup({ message: 'Расчет сформирован' });
                 tg.MainButton.hideProgress();
-                tg.openLink(link, { try_instant_view: true });
+                tg.openLink(link);
             }
         } catch (error) {
             tg.showPopup({ title: 'Error', message: error });
