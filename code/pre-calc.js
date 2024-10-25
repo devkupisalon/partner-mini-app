@@ -118,7 +118,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
                 tg.MainButton.hideProgress();
 
                 // event.openLink(link);
-                tg.mainButton.setParams({
+                tg.MainButton.setParams({
                     has_shine_effect: true,
                     text: 'Открыть расчет',
 
