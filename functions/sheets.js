@@ -198,7 +198,7 @@ const get_partner_name_and_manager = async (partner_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const data = values.find(r => r[0] === partner_id);
-        let [, partner_name, , , , , , , , , partner_folder, , , , , , work_type, percent, manager, calculate_id] = data;
+        let [, partner_name, , , , , , , , , , partner_folder, , , , , work_type, percent, manager, calculate_id] = data;
         partner_folder = partner_folder.split('/').pop();
         return { partner_name, manager, work_type, percent, calculate_id, partner_folder };
     } catch (error) {

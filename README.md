@@ -18,4 +18,5 @@ cat modules.txt | xargs npm install
 sudo systemctl daemon-reload
 sudo systemctl start partners-web-app
 sudo systemctl enable partners-web-app
+sudo systemctl status partners-web-app
 ```
