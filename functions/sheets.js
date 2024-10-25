@@ -166,7 +166,7 @@ const do_calc = async (params) => {
             logger.info('Data for calculation saved successfully');
         }
 
-        const link = await fetch('https://script.google.com/macros/s/AKfycbxHbbhuf_18A-n6t1Bk-2UdHJjUyM-1dq13Q_hUUZSwZ_gEtPKkaJxWFpSQpKMqbykBQA/exec', {
+        const linkResponse = await fetch('https://script.google.com/macros/s/AKfycbxHbbhuf_18A-n6t1Bk-2UdHJjUyM-1dq13Q_hUUZSwZ_gEtPKkaJxWFpSQpKMqbykBQA/exec', {
             method: 'POST',
             body: JSON.stringify({
                 row,
@@ -180,9 +180,12 @@ const do_calc = async (params) => {
             }
         });
 
-        if (link) {
-            logger.info(link);
+        if (linkResponse.ok) {
+            const link = await linkResponse.text();
+            console.log('Полученная ссылка:', link);
             return link;
+        } else {
+            console.error('Ошибка получения ссылки:', linkResponse.status, linkResponse.statusText);
         }
     } catch (error) {
         logger.error(error.message);
