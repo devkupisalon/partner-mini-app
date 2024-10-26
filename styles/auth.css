@@ -48,7 +48,7 @@ p {
     box-sizing: border-box;
     border-radius: 20px;
     font-size: 14px;
-    color: var(--tg-theme-button-text-color);
+    color: var(--tg-theme-text-color);
     margin-bottom: 20px;
     margin-top: 20px;
 
