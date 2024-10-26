@@ -80,7 +80,7 @@ async function fetchData() {
     });
 
   } catch (error) {
-    console.error('Error fetching data:', error.message); // Вывод текста ошибки в консоль
+    console.error('Error fetching data:', error.message);
   }
 }
 
@@ -89,19 +89,8 @@ window.addEventListener('DOMContentLoaded', async () => {
 });
 
 function formatPhoneNumber(input) {
-
-  if (!input.value.startsWith('+') && input.value.match(/^\d/)) {
-    input.value = '+' + input.value;
-  }
-  if (input.value === '+') {
-    input.value = '';
-  }
-  input.value = input.value.replace(/[^+d (\d)-]/, '');
-  if (input.value.startsWith('+')) {
-    input.value = input.value.substring(0, 4) + input.value.substring(4).replace(/[^0-9]/g, '').slice(0, 13);
-  } else {
-    input.value = input.value.replace(/[^0-9]/g, '').slice(0, 10);
-  }
+  input.value = input.value.replace(/[^\d]/g, '');
+  input.value = input.value.slice(0, 13);
 }
 
 function validateName(input) {
