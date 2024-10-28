@@ -2,7 +2,7 @@ body {
     font-family: Arial, sans-serif;
     color: var(--tg-theme-text-color);
     background: var(--tg-theme-bg-color);
-    padding-top: 40px;
+    padding-top: 10px;
 }
 
 .container {
@@ -29,7 +29,7 @@ body {
     justify-content: center;
 }
 
-.field_select {
+.field_select_one {
     color: var(--tg-theme-button-text-color);
     background: var(--tg-theme-button-color);
     width: 100%;
@@ -69,7 +69,7 @@ input:valid {
     display: none;
 }
 
-input[type="text"] {
+#partner-percent {
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
     border-radius: 20px;
