@@ -128,15 +128,15 @@ input[type="tel"],
     text-align: center;
 }
 
-.calculation-block {
+/* .calculation-block {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    /* padding: 10px 20px; */
-}
+    padding: 10px 20px;
+} */
 
 .button {
     width: 100%;
