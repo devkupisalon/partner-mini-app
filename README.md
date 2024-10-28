@@ -1,4 +1,4 @@
-#  partners (partners-web-app)
+# partners (partners-web-app)
 
 partners web app for kupisalon company
 

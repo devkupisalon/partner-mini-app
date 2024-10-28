@@ -8,7 +8,7 @@ WorkingDirectory=/root/mini-app
 Restart=always
 StandardOutput=syslog
 StandardError=syslog
-SyslogIdentifier=routes
+SyslogIdentifier=partners-web-app
 
 [Install]
 WantedBy=multi-user.target

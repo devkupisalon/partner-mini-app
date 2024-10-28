@@ -70,7 +70,7 @@ app.get('/do-calculation', async (req, res) => {
         logger.error(`An error occurred in do_calc: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
-})
+});
 
 app.get('/get-cars', async (rea, res) => {
     try {
