@@ -121,7 +121,6 @@ input[type="tel"],
 }
 
 .auth-block {
-    /* margin-top: 20px; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -136,7 +135,7 @@ input[type="tel"],
     align-items: center;
     justify-content: center;
     box-sizing: border-box;
-    padding: 10px 20px;
+    /* padding: 10px 20px; */
 }
 
 .button {
