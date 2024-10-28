@@ -26,7 +26,7 @@ p {
 }
 
 h3 {
-    margin-bottom: 30px;
+    margin-bottom: 10px;
     color: var(--tg-theme-section-header-text-color);
 }
 
@@ -46,7 +46,7 @@ input:valid {
 
 .input-label {
     text-align: center;
-    width: 75px;
+    width: calc(23% - 10px);
     font-weight: bold;
     margin-right: 10px;
     margin-bottom: 20px;
@@ -62,7 +62,7 @@ input[type="tel"],
 .input-date,
 .select {
     text-align: center;
-    width: 230px;
+    width: calc(55% - 10px);
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
     border-radius: 20px;
