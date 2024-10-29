@@ -128,31 +128,6 @@ input[type="tel"],
     text-align: center;
 }
 
-/* .calculation-block {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 10px 20px;
-} */
-
-.button {
-    width: 100%;
-    height: 50px;
-    border: none;
-    color: var(--tg-theme-button-text-color);
-    background: var(--tg-theme-button-color);
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 14px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-
 .button,
 .fill-tg {
     height: 50px;
@@ -165,6 +140,9 @@ input[type="tel"],
     background: var(--tg-theme-button-color);
     border-radius: 20px;
     border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 10px;
 }
 
 .field_multiselect {

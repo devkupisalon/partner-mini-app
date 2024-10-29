@@ -95,7 +95,6 @@ function formatPhoneNumber(input) {
 
 function validateName(input) {
   let value = input.value;
-  let pattern = /^[A-Za-zА-ЯЁа-яё]+([- ][A-Za-zА-ЯЁа-яё]+)*$/;
 
   value = value.replaceAll(/\d+/g, '');
   input.value = value;
