@@ -1,7 +1,7 @@
 const tg = window.Telegram.WebApp;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const user = urlParams.get('user');
+const username = urlParams.get('user');
 const id = urlParams.get('id');
 const fill_tg = document.querySelector('.fill-tg');
 const n = document.getElementById('partner-name');
@@ -63,6 +63,39 @@ document.getElementById('image-upload').addEventListener('change', function() {
     console.log(selectedImage);
     // Здесь можно обработать выбранное изображение, например, показать его предпросмотр или сохранить для последующей загрузки
 });
+
+if (id && username) {
+    tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
+  
+    tg.onEvent('mainButtonClicked', async (event) => {
+      tg.MainButton.showProgress(true);
+  
+      const { buttonValues, data: { name, phone, type, logo, your_type } } = getValues();
+  
+      if (buttonValues && name && phone && type && logo, your_type) {
+  
+        const timestamp = new Date().getTime();
+  
+        try {
+          const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
+  
+          const { success } = await response.json();
+          if (success) {
+            tg.showPopup({ message: 'Регистрация прошла успешно' });
+            tg.MainButton.hideProgress();
+            tg.MainButton.hide();
+            window.location.href = '/';
+          }
+        } catch (error) {
+          tg.showPopup({ title: 'Error', message: error });
+          tg.MainButton.hideProgress();
+        }
+      } else {
+        tg.showPopup({ message: 'Вначале заполните все данные' });
+        tg.MainButton.hideProgress();
+      }
+    });
+  }
 
 async function preload() {
     tg.MainButton.hide();
