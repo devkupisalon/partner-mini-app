@@ -52,9 +52,11 @@ function getValues() {
 }
 
 async function preload() {
+    tg.MainButton.hide();
     await fetchData();
     preloader.style.display = "none";
     container.style.display = "flex";
+    tg.MainButton.show();
 }
 
 preload();

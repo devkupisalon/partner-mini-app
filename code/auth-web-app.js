@@ -49,7 +49,7 @@ function getValues() {
 }
 
 if (id && username) {
-  tg.MainButton.show();
+  // tg.MainButton.show();
   tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
 
   tg.onEvent('mainButtonClicked', async (event) => {
@@ -83,9 +83,11 @@ if (id && username) {
 }
 
 async function preload() {
+  tg.MainButton.hide();
   await fetchData();
   preloader.style.display = "none";
   container.style.display = "flex";
+  tg.MainButton.show();
 }
 
 preload();
