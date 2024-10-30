@@ -52,6 +52,8 @@ function getValues() {
     return { buttonValues, data };
 }
 
+
+
 async function preload() {
     tg.MainButton.hide();
     await fetchData();
@@ -59,5 +61,11 @@ async function preload() {
     container.style.display = "flex";
     tg.MainButton.show();
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    const loaderContainer = document.createElement("div");
+    loaderContainer.innerHTML = `<object type="text/html" data="/loader/loader.html" ></object>`;
+    document.body.appendChild(loaderContainer);
+});
 
 preload();
