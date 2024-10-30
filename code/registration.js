@@ -52,7 +52,17 @@ function getValues() {
     return { buttonValues, data };
 }
 
+document.getElementById('partner-logo').addEventListener('click', function() {
+    document.getElementById('image-upload').click();
+});
 
+document.getElementById('image-upload').addEventListener('change', function() {
+
+    // Получаем выбранное изображение
+    const selectedImage = this.files[0];
+    console.log(selectedImage);
+    // Здесь можно обработать выбранное изображение, например, показать его предпросмотр или сохранить для последующей загрузки
+});
 
 async function preload() {
     tg.MainButton.hide();
