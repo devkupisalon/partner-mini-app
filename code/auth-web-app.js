@@ -85,10 +85,8 @@ function getValues() {
     buttonValues.push(buttonValue);
   });
 
-  const { manager_name, phone, email } = data;
-
   buttonValues = buttonValues.join(', ');
-  return { buttonValues, manager_name, phone, email };
+  return { buttonValues, data };
 }
 
 if (id && username) {
@@ -98,8 +96,8 @@ if (id && username) {
   tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
-    const { buttonValues, manager_name, phone, email } = getValues();
-    console.log({ buttonValues, manager_name, phone, email });
+    const { buttonValues, data: { manager_name, phone, email } } = getValues();
+
     if (buttonValues && manager_name && phone && email) {
 
       const timestamp = new Date().getTime();
