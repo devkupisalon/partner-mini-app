@@ -52,11 +52,11 @@ function getValues() {
     return { buttonValues, data };
 }
 
-document.getElementById('partner-logo').addEventListener('click', function() {
+document.getElementById('partner-logo').addEventListener('click', function () {
     document.getElementById('image-upload').click();
 });
 
-document.getElementById('image-upload').addEventListener('change', function() {
+document.getElementById('image-upload').addEventListener('change', function () {
 
     // Получаем выбранное изображение
     const selectedImage = this.files[0];
@@ -66,40 +66,41 @@ document.getElementById('image-upload').addEventListener('change', function() {
 
 if (id && username) {
     tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
-  
+
     tg.onEvent('mainButtonClicked', async (event) => {
-      tg.MainButton.showProgress(true);
-  
-      const { buttonValues, data: { name, phone, type, logo, your_type } } = getValues();
-  
-      if (buttonValues && name && phone && type && logo, your_type) {
-  
-        const timestamp = new Date().getTime();
-  
-        try {
-          const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
-  
-          const { success } = await response.json();
-          if (success) {
-            tg.showPopup({ message: 'Регистрация прошла успешно' });
+        tg.MainButton.showProgress(true);
+
+        const { buttonValues, data: { name, phone, type, logo, your_type } } = getValues();
+
+        if (buttonValues && name && phone && type && logo, your_type) {
+
+            const timestamp = new Date().getTime();
+
+            try {
+                const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
+
+                const { success } = await response.json();
+                if (success) {
+                    tg.showPopup({ message: 'Регистрация прошла успешно' });
+                    tg.MainButton.hideProgress();
+                    tg.MainButton.hide();
+                    window.location.href = '/';
+                }
+            } catch (error) {
+                tg.showPopup({ title: 'Error', message: error });
+                tg.MainButton.hideProgress();
+            }
+        } else {
+            tg.showPopup({ message: 'Вначале заполните все данные' });
             tg.MainButton.hideProgress();
-            tg.MainButton.hide();
-            window.location.href = '/';
-          }
-        } catch (error) {
-          tg.showPopup({ title: 'Error', message: error });
-          tg.MainButton.hideProgress();
         }
-      } else {
-        tg.showPopup({ message: 'Вначале заполните все данные' });
-        tg.MainButton.hideProgress();
-      }
     });
-  }
+}
 
 async function preload() {
     tg.MainButton.hide();
     await fetchData();
+    await select_all()
     preloader.style.display = "none";
     container.style.display = "flex";
     tg.MainButton.show();
