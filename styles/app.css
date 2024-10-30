@@ -72,7 +72,7 @@ input[type="file"],
     border-radius: 20px;
     margin-bottom: 10px;
     background-color: var(--tg-theme-bg-color);
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
 }
 
 #yandex-link,
@@ -91,6 +91,7 @@ input[type="file"],
     .select,
     .select-partner-type {
         width: 100%;
+        box-sizing: border-box;
     }
 }
 
