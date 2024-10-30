@@ -60,10 +60,11 @@ input:valid {
 
 input[type="text"],
 input[type="tel"],
+input[type="file"],
 .input-time,
 .input-date,
 .select,
-.select-partner_type {
+.select-partner-type {
     text-align: center;
     width: calc(60% - 10px);
     color: var(--tg-theme-text-color);

@@ -7,7 +7,6 @@ const fetchCheck = async (string) => {
     try {
         const response = await fetch(`/validate-init?${string}`);
         const data = await response.json();
-        console.log(data);
         return data ? true : false;
     } catch (error) {
         console.error('Error:', error);
