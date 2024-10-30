@@ -12,10 +12,13 @@ const app = express();
 
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
+const loaderPath = path.join(__dirname, 'loader');
 
 app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
 
 app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
+
+app.get('/loader/:path', (req,res)=> res.sendFile(path.join(loaderPath, req.params.path)));
 
 app.get('/', (req, res) => res.sendFile(HOME));
 
