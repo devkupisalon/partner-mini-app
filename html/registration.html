@@ -36,18 +36,17 @@
             <p>Укажите ссылку на Яндекс.Справочник организации, которую представляете, если есть</p>
             <input class="input" type="text" id="yandex-link" placeholder="https://yandex.ru/sprav/хххххх" required
                 oninput="validateName(event.target)">
-
-        <p>Здесь указаны виды деятельности. Оставьте те, по которым вы работаете.</p>
-        <div class="multiselect_block">
-            <label for="select-1" class="field_multiselect">Сферы деятельности</label>
-            <select id="field_select-type" class="field_select" multiple>
-                <!-- заполняем из таблицы -->
-            </select>
-        </div>
-        <p>Или укажите свой.</p>
-        <input class="input" type="text" id="your-type" placeholder="свой тип" required
-        oninput="validateName(event.target)">
-    </form>
+            <p>Здесь указаны виды деятельности. Оставьте те, по которым вы работаете.</p>
+            <div class="multiselect_block">
+                <label for="select-1" class="field_multiselect">Сферы деятельности</label>
+                <select id="field_select-type" class="field_select" multiple>
+                    <!-- заполняем из таблицы -->
+                </select>
+            </div>
+            <p>Или укажите свой.</p>
+            <input class="input" type="text" id="your-type" placeholder="свой тип" required
+                oninput="validateName(event.target)">
+        </form>
     </div>
     <div class='c-car-spinner'>
         <svg viewBox='0 0 80 80' class='c-car-spinner__svg '>
