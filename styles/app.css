@@ -75,6 +75,11 @@ input[type="file"],
     box-sizing: border-box;
 }
 
+#yandex-link,
+#your-type {
+    width: 100%;
+}
+
 @media screen and (max-width: 355px) {
 
     .input-label,
