@@ -24,7 +24,7 @@ let work_type_partner, percent_partner;
 tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
-start_param = start_param !== undefined ? start_param : partner;
+start_param = start_param !== null ? start_param : partner;
 
 console.log(`partner: ${partner}`);
 console.log(`start_param: ${start_param}`);
@@ -122,7 +122,7 @@ subscribe.addEventListener('click', function () {
 
 auth.addEventListener('click', function () {
     let href;
-    if (start_param !== undefined) {
+    if (start_param !== null) {
         href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
     } else {
         href = `/registration?&user=${username}&id=${id}`;
