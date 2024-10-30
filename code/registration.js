@@ -5,6 +5,8 @@ const id = urlParams.get('id');
 const fill_tg = document.querySelector('.fill-tg');
 const n = document.getElementById('partner-name');
 const ph = document.getElementById('partner-phone');
+const container = document.querySelector('.container');
+const preloader = document.querySelector('.c-car-spinner');
 
 let partner;
 
@@ -50,6 +52,7 @@ function getValues() {
 }
 
 async function preload() {
+    await fetchData();
     preloader.style.display = "none";
     container.style.display = "flex";
 }
