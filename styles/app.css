@@ -56,6 +56,7 @@ input:valid {
     color: var(--tg-theme-button-text-color);
     padding: 10px 20px;
     border-radius: 20px;
+    box-sizing: border-box;
 }
 
 input[type="text"],
@@ -72,7 +73,7 @@ input[type="file"],
     border-radius: 20px;
     margin-bottom: 10px;
     background-color: var(--tg-theme-bg-color);
-    /* box-sizing: border-box; */
+    box-sizing: border-box;
 }
 
 #yandex-link,
