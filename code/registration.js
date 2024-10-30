@@ -50,10 +50,6 @@ function getValues() {
 }
 
 async function preload() {
-    await fetchData();
-    if (start_param === null) {
-        el_arr.forEach(el => el.style.display = 'none');
-    }
     preloader.style.display = "none";
     container.style.display = "flex";
 }
