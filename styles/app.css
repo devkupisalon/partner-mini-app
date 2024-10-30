@@ -51,7 +51,7 @@ input:valid {
     width: calc(30% - 10px);
     font-weight: bold;
     margin-right: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: var(--tg-theme-button-color);
     color: var(--tg-theme-button-text-color);
     padding: 10px 20px;
@@ -70,7 +70,7 @@ input[type="file"],
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
     border-radius: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     background-color: var(--tg-theme-bg-color);
     box-sizing: border-box;
 }
