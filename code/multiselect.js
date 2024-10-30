@@ -1,14 +1,14 @@
-document.addEventListener("click", function (event) {
-    multiselects.forEach(multiselect => {
-        let select = multiselect.querySelector(".field_select");
-        let label = multiselect.querySelector(".field_multiselect");
+let multiselect = document.querySelector(".multiselect_block");
+let label = multiselect.querySelector(".field_multiselect");
+let select = multiselect.querySelector(".field_select");
+let text = label.innerHTML;
 
-        // Проверяем, содержит ли событие элемент выпадающего списка или его метки 
-        if (!select.contains(event.target) && !label.contains(event.target)) {
-            // Если событие не происходит внутри списка или его метки, скрываем список
-            select.style.display = "none";
-        }
-    });
+document.addEventListener("click", function (event) {
+    // Проверяем, содержит ли событие элемент выпадающего списка или его метки 
+    if (!select.contains(event.target) && !label.contains(event.target)) {
+        // Если событие не происходит внутри списка или его метки, скрываем список
+        select.style.display = "none";
+    }
 });
 
 function do_buttons(option, label, select, text) {
@@ -25,11 +25,6 @@ function do_buttons(option, label, select, text) {
     };
     label.append(button);
 }
-
-let multiselect = document.querySelector(".multiselect_block");
-let label = multiselect.querySelector(".field_multiselect");
-let select = multiselect.querySelector(".field_select");
-let text = label.innerHTML;
 
 label.addEventListener("click", () => {
     select.style.display = select.style.display === "block" ? "none" : "block";
@@ -53,7 +48,6 @@ multiselect.querySelectorAll(".btn_multiselect").forEach(button => {
         event.stopPropagation(); // Останавливаем распространение события
     });
 });
-
 
 async function select_all() {
     let options = select.options;
