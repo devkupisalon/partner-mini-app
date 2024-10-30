@@ -94,6 +94,10 @@ input[type="file"],
         width: 100%;
         margin-right: 0;
     }
+
+    .field_multiselect button {
+        margin-right: 0;
+    }
 }
 
 .input::placeholder {
