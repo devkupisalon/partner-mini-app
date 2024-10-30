@@ -51,8 +51,6 @@ function getValues() {
 
 async function preload() {
     await fetchData();
-    await check();
-    await get_settings();
     if (start_param === null) {
         el_arr.forEach(el => el.style.display = 'none');
     }

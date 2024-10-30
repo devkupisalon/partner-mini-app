@@ -23,17 +23,6 @@ const ph = document.getElementById('manager-phone');
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
 
-const fetchCheck = async (string) => {
-  try {
-    const response = await fetch(`/validate-init?${string}`);
-    const data = await response.json();
-    console.log(data);
-    return data ? true : false;
-  } catch (error) {
-    console.error('Error:', error);
-  }
-};
-
 tg.onEvent('backButtonClicked', (event) => {
   window.location.href = '/';
   tg.MainButton.hide();
