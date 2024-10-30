@@ -65,7 +65,7 @@ upload.addEventListener('change', function () {
     // Получаем выбранное изображение
     const selectedImage = this.files[0];
     console.log(selectedImage);
-    upload.innerHTML = upload.innerText + checkmark;
+    logo.innerHTML = logo.innerText + checkmark;
     // Здесь можно обработать выбранное изображение, например, показать его предпросмотр или сохранить для последующей загрузки
 });
 
