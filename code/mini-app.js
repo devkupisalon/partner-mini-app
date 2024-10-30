@@ -26,7 +26,7 @@ tg.enableClosingConfirmation();
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 start_param = start_param !== undefined ? start_param : partner;
 console.log(`partner: ${partner}`);
-console.log(`start_param: ${start_param}`);
+console.log(`start_param: ${typeof start_param}`);
 
 const setCheckmark = s => {
     s.style.pointerEvents = "none";
