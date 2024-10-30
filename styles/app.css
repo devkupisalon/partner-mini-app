@@ -147,7 +147,8 @@ input[type="file"],
 }
 
 .button,
-.fill-tg {
+.fill-tg,
+.upload-logo {
     height: 50px;
     font-weight: bold;
     width: 100%;
