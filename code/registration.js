@@ -62,10 +62,4 @@ async function preload() {
     tg.MainButton.show();
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-    const loaderContainer = document.createElement("div");
-    loaderContainer.innerHTML = `<object type="text/html" data="/loader/loader.html" ></object>`;
-    document.body.appendChild(loaderContainer);
-});
-
 preload();
