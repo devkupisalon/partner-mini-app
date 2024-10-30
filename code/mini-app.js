@@ -146,8 +146,7 @@ async function preload() {
     await check();
     await get_settings();
     if (start_param === null) {
-        console.log('test');
-        el_arr.forEach(el => el.style.diplay = 'none');
+        el_arr.forEach(el => el.style.display = 'none');
     }
     preloader.style.display = "none";
     container.style.display = "flex";
