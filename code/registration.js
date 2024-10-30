@@ -1,13 +1,18 @@
 const tg = window.Telegram.WebApp;
+
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const username = urlParams.get('user');
 const id = urlParams.get('id');
+
 const fill_tg = document.querySelector('.fill-tg');
 const n = document.getElementById('partner-name');
 const ph = document.getElementById('partner-phone');
 const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
+const logo = document.getElementById('partner-logo');
+const upload =  document.getElementById('image-upload');
+const checkmark = "  &#9989";
 
 let partner;
 
@@ -52,15 +57,15 @@ function getValues() {
     return { buttonValues, data };
 }
 
-document.getElementById('partner-logo').addEventListener('click', function () {
-    document.getElementById('image-upload').click();
+logo.addEventListener('click', function () {
+   upload.click();
 });
 
-document.getElementById('image-upload').addEventListener('change', function () {
-
+upload.addEventListener('change', function () {
     // Получаем выбранное изображение
     const selectedImage = this.files[0];
     console.log(selectedImage);
+    upload.innerHTML = s.innerText + checkmark;
     // Здесь можно обработать выбранное изображение, например, показать его предпросмотр или сохранить для последующей загрузки
 });
 
