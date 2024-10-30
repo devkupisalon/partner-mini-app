@@ -25,6 +25,8 @@ app.get('/settings', (req, res) => res.sendFile(SETTINGS));
 
 app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
 
+app.get('/registration', (req, res)=> res.sendFile(REGISTR));
+
 app.use((error, req, res, next) => {
     logger.error(`An error occurred: ${error.message}`);
     res.status(500).send(error);

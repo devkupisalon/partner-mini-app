@@ -2,7 +2,6 @@ const tg = window.Telegram.WebApp;
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const partner = urlParams.get('partner');
-const fio = document.getElementById('client-name');
 
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
@@ -19,22 +18,6 @@ tg.onEvent('backButtonClicked', (event) => {
     window.location.href = '/';
     tg.MainButton.hide();
 });
-
-function formatPhoneNumber(input) {
-    input.value = input.value.replace(/[^\d]/g, '');
-    input.value = input.value.slice(0, 13);
-}
-
-function validateName(input) {
-    let value = input.value;
-    let pattern = /^[A-Za-zА-ЯЁа-яё]+([- ][A-Za-zА-ЯЁа-яё]+)*$/;
-    if (!value.match(pattern)) {
-        input.setCustomValidity("Имя должно содержать только буквы и может включать пробелы или дефисы.");
-    }
-
-    value = value.replaceAll(/\d+/g, '');
-    input.value = value;
-}
 
 function getValues() {
 

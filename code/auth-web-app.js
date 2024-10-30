@@ -34,23 +34,6 @@ const fetchCheck = async (string) => {
   }
 };
 
-fill_tg.addEventListener('click', async () => {
-  await tg.requestContact(async (shared, callback) => {
-    if (shared && callback) {
-      const check = await fetchCheck(callback.response);
-      console.log(callback);
-      if (check) {
-        const contact = callback.responseUnsafe.contact;
-        n.value = `${contact.first_name} ${contact.last_name}`;
-        ph.value = contact.phone_number;
-        setCheckmark(fill_tg);
-      } else {
-        console.error('Data is not valid');
-      }
-    }
-  });
-});
-
 tg.onEvent('backButtonClicked', (event) => {
   window.location.href = '/';
   tg.MainButton.hide();
@@ -86,42 +69,6 @@ async function fetchData() {
 
 window.addEventListener('DOMContentLoaded', async () => {
   await fetchData();
-});
-
-function formatPhoneNumber(input) {
-  input.value = input.value.replace(/[^\d]/g, '');
-  input.value = input.value.slice(0, 13);
-}
-
-function validateName(input) {
-  let value = input.value;
-
-  value = value.replaceAll(/\d+/g, '');
-  input.value = value;
-  input.setCustomValidity("");
-}
-
-let multiselect_block = document.querySelectorAll(".multiselect_block");
-multiselect_block.forEach(parent => {
-  let label = parent.querySelector(".field_multiselect");
-  let select = parent.querySelector(".field_select");
-  let text = label.innerHTML;
-  select.addEventListener("change", function (element) {
-    let selectedOptions = this.selectedOptions;
-    label.innerHTML = "";
-    for (let option of selectedOptions) {
-      let button = document.createElement("button");
-      button.type = "button";
-      button.className = "btn_multiselect";
-      button.textContent = option.value;
-      button.onclick = _ => {
-        option.selected = false;
-        button.remove();
-        if (!select.selectedOptions.length) label.innerHTML = text
-      };
-      label.append(button);
-    }
-  });
 });
 
 function getValues() {

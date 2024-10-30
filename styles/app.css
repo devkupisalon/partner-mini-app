@@ -62,7 +62,8 @@ input[type="text"],
 input[type="tel"],
 .input-time,
 .input-date,
-.select {
+.select,
+.select-partner_type {
     text-align: center;
     width: calc(55% - 10px);
     color: var(--tg-theme-text-color);

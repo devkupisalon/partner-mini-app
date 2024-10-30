@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <link rel="stylesheet" href="/styles/app.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <form id="partner-form">
+            <h3>Пожалуйста заполните все данные для регистрации партнера</h3>
+            <div class="input-form">
+                <div class="input-label" id="partner-name-label">ФИО</div>
+                <input class="input" type="text" id="partner-name" placeholder="ФИО" required
+                    oninput="validateName(event.target)">
+                <div class="input-label" id="partner-phone">Телефон с whatsApp</div>
+                <input class="input" type="tel" id="partner-phone" placeholder="79999999999" required
+                    oninput="formatPhoneNumber(this)">
+                <p id="fill-text">Вы можете заполнить ФИО и номер телефона из телеграма</p>
+                <button class="fill-tg" id="'autofill-tg">Поделиться контактом</button>
+                <div class="input-label" id="partner-logo-label">Логотип</div>
+                <input class="input" type="file" id="partner-logo" accept="image/*" required>
+                <div class="input-label" id="partner-сoop-label">Тип сотрудничества</div>
+                <select id="select-type" class="select-partner_type">
+                    <option value="">тип сотрудничества</option>
+                    <option value="Агент">Агент</option>
+                    <option value="Партнер">Партнер</option>
+                </select>
+            </div>
+            <p>Укажите ссылку на Яндекс.Справочник организации, которую представляете, если есть</p>
+            <input class="input" type="text" id="yandex-link" placeholder="https://yandex.ru/sprav/хххххх" required
+                oninput="validateName(event.target)">
+        </form>
+
+        <p>Здесь указаны виды деятельности. Оставьте те, по которым вы работаете.</p>
+        <div class="multiselect_block">
+            <label for="select-1" class="field_multiselect">Сферы деятельности</label>
+            <input id="checkbox-1" class="multiselect_checkbox" type="checkbox">
+            <label for="checkbox-1" class="multiselect_label"></label>
+            <select id="field_select-type" class="field_select" multiple>
+                <!-- заполняем из таблицы -->
+            </select>
+        </div>
+        <p>Или укажите свой вид деятельности</p>
+        <input class="input" type="text" id="your-type" placeholder="свой тип " required
+        oninput="validateName(event.target)">
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/scripts/formatters.js"></script>
+    <script src="/scripts/registration.js"></script>
+    <script src="/scripts/fill-tg.js"></script>
+    <script src="/scripts/multiselect.js"></script>
+
+</body>
+
+</html>

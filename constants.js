@@ -23,7 +23,8 @@ const constants = {
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,
-    PRE_CALC: `${__dirname}/html/pre-calculation.html`
+    PRE_CALC: `${__dirname}/html/pre-calculation.html`,
+    REGISTR: `${__dirname}/html/registration.html`
 };
 
 export { constants, __dirname };

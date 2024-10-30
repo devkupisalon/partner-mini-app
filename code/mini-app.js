@@ -1,5 +1,8 @@
 const tg = window.Telegram.WebApp;
 const channel = 'https://t.me/kupi_salon';
+const queryString = window.location.search;
+const urlParams = new URLSearchParams(queryString);
+const partner = urlParams.get('startapp');
 
 tg.ready();
 
@@ -7,16 +10,21 @@ const subscribe = document.getElementById("subscribe-button");
 const auth = document.getElementById("auth-button");
 const calculate = document.getElementById("calculate-button");
 const auth_text = document.getElementById("auth-text");
+const settings_text = documnet.getElementById('settings-text');
 const subscribe_text = document.getElementById("subscribe-text");
 const auth_block = document.querySelector(".auth-block")
 const settings = document.getElementById("s-button");
+const container = document.querySelector('.container');
+const preloader = document.querySelector('.c-car-spinner');
 const checkmark = "  &#9989";
+const el_arr = [calculate, settings, settings_text];
 
 let work_type_partner, percent_partner;
 
 tg.enableClosingConfirmation();
 
-const { user: { username, id }, start_param } = tg.initDataUnsafe;
+let { user: { username, id }, start_param } = tg.initDataUnsafe;
+start_param = start_param !== undefined ? start_param : partner;
 
 const setCheckmark = s => {
     s.style.pointerEvents = "none";
@@ -110,7 +118,13 @@ subscribe.addEventListener('click', function () {
 });
 
 auth.addEventListener('click', function () {
-    window.location.href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
+    let href;
+    if (start_param !== undefined) {
+        href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
+    } else {
+        href = `registration?&user=${username}&id=${id}`;
+    }
+    window.location.href = href;
 });
 
 settings.addEventListener('click', function () {
@@ -126,12 +140,13 @@ calculate.addEventListener('click', async function () {
 });
 
 async function preload() {
-    const container = document.querySelector('.container');
     await fetchData();
     await check();
     await get_settings();
-    const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
+    if (start_param === undefined) {
+        el_arr.forEach(el => el.style.diplay = 'none');
+    }
     container.style.display = "flex";
 }
 
