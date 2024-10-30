@@ -7,7 +7,7 @@ import { save, get_values, auth, get_settings, save_settings, get_cars, do_calc 
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
-const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC } = constants;
+const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
 
 const stylesPath = path.join(__dirname, 'styles');
@@ -25,7 +25,7 @@ app.get('/settings', (req, res) => res.sendFile(SETTINGS));
 
 app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
 
-app.get('/registration', (req, res)=> res.sendFile(REGISTR));
+app.get('/registration', (req, res) => res.sendFile(REGISTR));
 
 app.use((error, req, res, next) => {
     logger.error(`An error occurred: ${error.message}`);

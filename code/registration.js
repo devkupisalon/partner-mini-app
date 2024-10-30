@@ -48,3 +48,16 @@ function getValues() {
     buttonValues = buttonValues.length > 0 ? buttonValues.join(', ') : undefined;
     return { buttonValues, data };
 }
+
+async function preload() {
+    await fetchData();
+    await check();
+    await get_settings();
+    if (start_param === null) {
+        el_arr.forEach(el => el.style.display = 'none');
+    }
+    preloader.style.display = "none";
+    container.style.display = "flex";
+}
+
+preload();
