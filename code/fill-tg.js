@@ -1,3 +1,8 @@
+const setCheckmark = s => {
+    s.style.pointerEvents = "none";
+    s.style.opacity = "0.5";
+  };
+
 const fetchCheck = async (string) => {
     try {
         const response = await fetch(`/validate-init?${string}`);

@@ -6,9 +6,9 @@ const id = urlParams.get('id');
 const partner = urlParams.get('partner');
 
 const fields = {
-  manager_name: '#manager-name',
-  phone: '#manager-phone',
-  email: '#manager-email',
+  name: '#partner-name',
+  phone: '#partner-phone',
+  email: '#partner-email',
 };
 
 const setCheckmark = s => {
@@ -17,8 +17,8 @@ const setCheckmark = s => {
 };
 
 const fill_tg = document.querySelector('.fill-tg');
-const n = document.getElementById('manager-name');
-const ph = document.getElementById('manager-phone');
+const n = document.getElementById('partner-name');
+const ph = document.getElementById('partner-phone');
 const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
 
@@ -49,20 +49,19 @@ function getValues() {
 }
 
 if (id && username) {
-  // tg.MainButton.show();
   tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
 
   tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
-    const { buttonValues, data: { manager_name, phone, email } } = getValues();
+    const { buttonValues, data: { name, phone, email } } = getValues();
 
-    if (buttonValues && manager_name && phone && email) {
+    if (buttonValues && name && phone && email) {
 
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${manager_name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
+        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
 
         const { success } = await response.json();
         if (success) {

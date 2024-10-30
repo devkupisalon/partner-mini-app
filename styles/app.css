@@ -79,10 +79,11 @@ input[type="tel"],
     .input-label,
     input[type="text"],
     input[type="tel"],
+    input[type="file"],
     .input-time,
     .input-date,
     .select,
-    .select-partner_type {
+    .select-partner-type {
         width: 100%;
     }
 }
