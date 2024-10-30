@@ -1,3 +1,16 @@
+document.addEventListener("click", function (event) {
+    multiselects.forEach(multiselect => {
+        let select = multiselect.querySelector(".field_select");
+        let label = multiselect.querySelector(".field_multiselect");
+
+        // Проверяем, содержит ли событие элемент выпадающего списка или его метки 
+        if (!select.contains(event.target) && !label.contains(event.target)) {
+            // Если событие не происходит внутри списка или его метки, скрываем список
+            select.style.display = "none";
+        }
+    });
+});
+
 let multiselects = document.querySelectorAll(".multiselect_block");
 
 multiselects.forEach(multiselect => {
