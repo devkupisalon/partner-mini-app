@@ -146,7 +146,7 @@ async function preload() {
     await check();
     await get_settings();
     preloader.style.display = "none";
-    if (start_param === undefined) {
+    if (start_param === null) {
         el_arr.forEach(el => el.style.diplay = 'none');
     }
     container.style.display = "flex";
