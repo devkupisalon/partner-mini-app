@@ -21,6 +21,9 @@ import { constants, __dirname } from './constants.js';
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
 
+pp.use(express.json());      
+app.use(express.urlencoded());
+
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
 
@@ -118,7 +121,7 @@ app.get('/save-new-partner', async (req, res) => {
 });
 
 app.post('/uplopad-logo', async (req, res) => {
-    logger.info(`Data successfully received from mini app: ${JSON.parse(req.body).name}`);
+    logger.info(`Data successfully received from mini app: ${req.body.name}`);
     await save_logo(req.body);
 });
 
