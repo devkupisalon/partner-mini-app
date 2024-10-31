@@ -65,6 +65,7 @@ logo.addEventListener('click', function () {
 
 upload.addEventListener('change', function () {
     const selectedFile = this.files[0];
+    
     const reader = new FileReader();
     reader.onload = function (event) {
         const base64String = event.target.result;

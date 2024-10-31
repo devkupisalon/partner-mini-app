@@ -1,6 +1,5 @@
 import express from 'express';
 import path from 'path';
-import multer from 'multer';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
