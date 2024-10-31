@@ -240,6 +240,17 @@ const create_folder = async (name) => {
 
         const { data: { id } } = response;
         const folderLink = `https://drive.google.com/drive/folders/${id}`;
+
+        // Добавление разрешения для домена kupisalon.ru
+        const permissionResponse = await drive.permissions.create({
+            fileId: id,
+            requestBody: {
+                role: 'writer', // Роль доступа (например, writer, reader, commenter)
+                type: 'domain', // Тип доступа (domain, user, group, anyone)
+                domain: 'kupisalon.ru' // Домен для разрешения
+            }
+        });
+
         logger.info('Folder created successfully');
         return folderLink;
     } catch (error) {
@@ -253,7 +264,7 @@ const save_new_partner = async (params) => {
     logger.info(params);
     const folder = await create_folder(org_name);
     try {
-        const arr = [uid, org_name, , , , link, address, , ,phone , categories || your_type, folder, , , , , type];
+        const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folder, , , , , type];
         const values = await get_data(DB, DATASHEETNAME);
         const row = values.length + 1;
         const range = `${DATASHEETNAME}!A${row}`;
