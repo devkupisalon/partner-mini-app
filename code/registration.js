@@ -89,7 +89,7 @@ if (id && username) {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&logo${logo}&link=${ya_link}&groups=${buttonValues}`);
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
                 if (partner_id && folder && obj_data) {
