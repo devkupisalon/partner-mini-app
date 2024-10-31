@@ -243,7 +243,7 @@ const create_folder = async (name) => {
         logger.info('Folder created successfully');
         return folderLink;
     } catch (error) {
-        logger.error(error.message);
+        logger.error(error.stack);
     }
 }
 
