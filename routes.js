@@ -123,10 +123,15 @@ app.get('/save-new-partner', async (req, res) => {
 });
 
 app.post('/upload-logo', upload.single('file'), async (req, res) => {
-    // const { body, file } = req;
-    // logger.info({ body, file });
-    logger.info(`Data successfully received from mini app: ${req}`);
-    await save_logo(req);
+    try {
+        const { body, file } = req;
+        logger.info(`Data successfully received from mini app: ${{ body, file }}`);
+        const { success } = await save_logo({ body, file });
+        return req.json(success);
+    } catch (error) {
+        logger.error(`An error occurred in save_logo: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
 });
 
 app.get('/savesettings', async (req, res) => {
@@ -137,7 +142,7 @@ app.get('/savesettings', async (req, res) => {
 
         return res.json({ success });
     } catch (error) {
-        logger.error(`An error occurred in save_data: ${error.message}`);
+        logger.error(`An error occurred in save_settings: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
 });
