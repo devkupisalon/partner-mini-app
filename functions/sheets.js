@@ -254,6 +254,7 @@ const create_folder = async (name) => {
 
         await drive.permissions.create({
             fileId: id,
+            transferOwnership: true,
             requestBody: {
                 role: 'owner', // Роль доступа owner
                 type: 'user', // Тип доступа (user, group, domain, anyone)
