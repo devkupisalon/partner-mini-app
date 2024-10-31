@@ -125,7 +125,7 @@ app.post('/upload-logo', upload.single('file'), async (req, res) => {
     const { body, file } = req;
     logger.info({ body, file });
     // logger.info(`Data successfully received from mini app: ${req.body}`);
-    await save_logo(req.body);
+    // await save_logo(req.body);
 });
 
 app.get('/savesettings', async (req, res) => {
