@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import multer from 'multer';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
@@ -21,7 +22,7 @@ import { constants, __dirname } from './constants.js';
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
 
-app.use(express.json());      
+app.use(express.json());
 app.use(express.urlencoded());
 
 const stylesPath = path.join(__dirname, 'styles');
@@ -120,8 +121,10 @@ app.get('/save-new-partner', async (req, res) => {
     }
 });
 
-app.post('/upload-logo', async (req, res) => {
-    logger.info(`Data successfully received from mini app: ${req.body}`);
+app.post('/upload-logo', upload.single('file'), async (req, res) => {
+    const { body, file } = req;
+    logger.info({ body, file });
+    // logger.info(`Data successfully received from mini app: ${req.body}`);
     await save_logo(req.body);
 });
 

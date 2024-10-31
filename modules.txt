@@ -11,3 +11,4 @@ inputmask
 spinkit
 uuid
 date-fns
+multer
