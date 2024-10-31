@@ -76,7 +76,9 @@ input[type="file"],
 }
 
 #yandex-link,
-#your-type {
+#your-type,
+#org_name,
+#address {
     width: 100%;
 }
 
