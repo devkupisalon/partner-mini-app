@@ -103,7 +103,7 @@ if (id && username) {
 
                     console.log(obj_data);
 
-                    const logo_response = await fetch('/uplopad-logo', {
+                    const logo_response = await fetch('/upload-logo', {
                         method: 'POST',
                         body: JSON.stringify(obj_data)
                     });
