@@ -21,6 +21,7 @@ import { constants, __dirname } from './constants.js';
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
+const upload = multer();
 
 app.use(express.json());
 app.use(express.urlencoded());
