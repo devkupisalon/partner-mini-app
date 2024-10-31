@@ -288,25 +288,28 @@ const save_new_partner = async (params) => {
 
 const save_logo = async (params) => {
     const { body: { name, folder }, file } = params;
-    logger.info(file.buffer.data);
     const filePath = path.join(__dirname, 'logos');
 
-    fs.mkdir(filePath, { recursive: true }, (err) => {
-        if (err) {
-            logger.error(err);
-            return;
-        }
-    });
+    const fileBuffer = Buffer.from(file.buffer.data);
+    const fileDataInBase64 = fileBuffer.toString('base64');
+    logger.info(fileDataInBase64);
 
-    fs.writeFile(path.join(filePath, name), Buffer.from(file), async (err) => {
-        if (err) {
-            logger.error(err);
-            return;
-        }
+    // fs.mkdir(filePath, { recursive: true }, (err) => {
+    //     if (err) {
+    //         logger.error(err);
+    //         return;
+    //     }
+    // });
+
+    // fs.writeFile(path.join(filePath, name), Buffer.from(file), async (err) => {
+    //     if (err) {
+    //         logger.error(err);
+    //         return;
+    //     }
 
         // Преобразование файла в формат base64
-        const fileContent = fs.readFileSync(path.join(filePath, name));
-        const fileData = Buffer.from(fileContent).toString('base64');
+        // const fileContent = fs.readFileSync(path.join(filePath, name));
+        // const fileData = Buffer.from(fileContent).toString('base64');
 
         const fileMetadata = {
             name,
@@ -314,7 +317,7 @@ const save_logo = async (params) => {
         };
         const media = {
             mimeType: 'image/png',
-            body: Buffer.from(fileData, 'base64'),
+            body: Buffer.from(fileDataInBase64, 'base64'),
         };
 
         const { data: { id } } = await drive.files.create({
@@ -324,19 +327,19 @@ const save_logo = async (params) => {
         });
 
         // Удаление файла с сервера
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                logger.error(err);
-                return;
-            }
-            logger.info('Logo successfully deleted from server');
-        });
+        // fs.unlink(filePath, (err) => {
+        //     if (err) {
+        //         logger.error(err);
+        //         return;
+        //     }
+        //     logger.info('Logo successfully deleted from server');
+        // });
 
         if (id) {
             logger.info(`Logo successfully uploaded to partner folder`);
             return { success: 'success' };
         }
-    });
+    // });
 }
 
 export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc, save_new_partner, save_logo };
