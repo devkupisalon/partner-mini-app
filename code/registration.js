@@ -67,11 +67,6 @@ upload.addEventListener('change', function () {
     const formData = new FormData();
     formData.append('file', selectedFile);
     obj_data = formData;
-    // Вывод содержимого FormData
-    obj_data.forEach(function (value, key) {
-        console.log(key, value);
-    });
-
     logo.innerHTML = logo.innerText + checkmark;
 });
 
@@ -93,6 +88,11 @@ if (id && username) {
                 const { partner_id, folder } = await reigistr_response.json();
 
                 if (partner_id && folder && obj_data) {
+                    console.log({ partner_id, folder });
+                    // Вывод содержимого FormData
+                    obj_data.forEach(function (value, key) {
+                        console.log(key, value);
+                    });
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
                     const logo_response = await fetch('/uplopad-logo', {
