@@ -90,6 +90,12 @@ if (id && username) {
                 if (partner_id && folder && obj_data) {
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
+
+                    // Вывод содержимого FormData
+                    obj_data.forEach(function (value, key) {
+                        console.log(key, value);
+                    });
+
                     const logo_response = await fetch('/uplopad-logo', {
                         method: 'POST',
                         body: obj_data
