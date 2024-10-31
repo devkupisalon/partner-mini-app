@@ -126,7 +126,7 @@ app.post('/upload-logo', upload.single('file'), async (req, res) => {
         const { body, file } = req;
         logger.info(`Data successfully received from mini app: ${JSON.stringify(body)}`);
         const { success } = await save_logo({ body, file });
-        return req.json(success);
+        return res.json(success);
     } catch (error) {
         logger.error(`An error occurred in save_logo: ${error.stack}`);
         return res.status(500).json({ error: error.toString() });
