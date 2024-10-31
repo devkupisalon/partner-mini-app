@@ -235,15 +235,7 @@ const create_folder = async (name) => {
             resource: {
                 name,
                 mimeType: 'application/vnd.google-apps.folder',
-                parents: [PARTNERSPARENT],
-                // Добавление разрешения для домена kupisalon.ru
-                permissions: [
-                    {
-                        role: 'writer', // Роль доступа
-                        type: 'domain', // Тип доступа
-                        domain: 'kupisalon.ru' // Домен для разрешения
-                    }
-                ]
+                parents: [PARTNERSPARENT]
             }
         });
 
@@ -253,11 +245,18 @@ const create_folder = async (name) => {
         // Добавление разрешения для другого пользователя как owner
         await drive.permissions.create({
             fileId: id,
-            requestBody: {
-                role: 'owner', // Роль доступа owner
-                type: 'user', // Тип доступа (user, group, domain, anyone)
-                emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
-            }
+            requestBody: [
+                {
+                    role: 'owner', // Роль доступа owner
+                    type: 'user', // Тип доступа (user, group, domain, anyone)
+                    emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
+                },
+                {
+                    role: 'writer', // Роль доступа
+                    type: 'domain', // Тип доступа
+                    domain: 'kupisalon.ru' // Домен для разрешения
+                }
+            ]
         });
 
         logger.info('Folder created successfully');
