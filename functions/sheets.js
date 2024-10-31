@@ -290,19 +290,20 @@ const save_logo = async (params) => {
     try {
         const { body: { name, folder }, file } = params;
         const fileBuffer = Buffer.from(file.buffer);
+        const mimeType = 'image/png';
         // const fileDataInBase64 = fileBuffer.toString('base64');
         // logger.info(fileDataInBase64);
 
         const fileMetadata = {
             name,
             parents: [folder],
-            mimeType: 'image/png'
+            mimeType
         };
 
         const { data: { id } } = await drive.files.create({
             requestBody: fileMetadata,
             media: {
-                mimeType: mimeType,
+                mimeType,
                 body: fs.createReadStream(fileBuffer)
             },
             fields: 'id',
