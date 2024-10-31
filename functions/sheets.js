@@ -6,7 +6,7 @@ import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
 import fs from 'fs';
-import path from 'path';
+import { Readable } from 'stream';
 
 
 const { sheets, drive } = gauth();
@@ -289,7 +289,6 @@ const save_new_partner = async (params) => {
 const save_logo = async (params) => {
     try {
         const { body: { name, folder }, file } = params;
-        const fileBuffer = [...new Int8Array(file.buffer)];
         const mimeType = 'image/png';
 
         const fileMetadata = {
@@ -298,11 +297,15 @@ const save_logo = async (params) => {
             mimeType
         };
 
+        const fileStream = new Readable();
+        fileStream.push(file.buffer);
+        fileStream.push(null);
+
         const { data: { id } } = await drive.files.create({
             requestBody: fileMetadata,
             media: {
                 mimeType,
-                body: fs.createReadStream(fileBuffer)
+                body: fileStream
             },
             fields: 'id',
         });

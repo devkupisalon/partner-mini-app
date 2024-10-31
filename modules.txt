@@ -12,3 +12,4 @@ spinkit
 uuid
 date-fns
 multer
+stream
