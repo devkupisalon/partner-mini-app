@@ -1,5 +1,6 @@
 import express from 'express';
 import path from 'path';
+import multer from 'multer';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
@@ -118,8 +119,7 @@ app.get('/save-new-partner', async (req, res) => {
 });
 
 app.post('/uplopad-logo', express.json(), async (req, res) => {
-    logger.info(`Data successfully received from mini app: ${JSON.stringify(req.body)}`);
-    logger.info(req.files);
+    logger.info(`Data successfully received from mini app: ${JSON.parse(req.body)}`);
     await save_logo(req.body);
 });
 

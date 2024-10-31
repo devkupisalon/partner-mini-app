@@ -14,7 +14,8 @@ const logo = document.getElementById('partner-logo');
 const upload = document.getElementById('image-upload');
 const checkmark = "  &#9989";
 
-let partner, obj_data;
+let partner;
+let obj_data = {};
 
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
@@ -64,10 +65,18 @@ logo.addEventListener('click', function () {
 
 upload.addEventListener('change', function () {
     const selectedFile = this.files[0];
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    obj_data = formData;
-    logo.innerHTML = logo.innerText + checkmark;
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const base64String = event.target.result;
+
+        // Сохранение base64 строки файла в объекте obj_data
+        obj_data = { file: base64String };
+
+        logo.innerHTML = logo.innerText + checkmark;
+    };
+
+    // Чтение выбранного файла как base64
+    reader.readAsDataURL(selectedFile);
 });
 
 if (id && username) {
@@ -88,17 +97,14 @@ if (id && username) {
                 const { partner_id, folder } = await reigistr_response.json();
 
                 if (partner_id && folder && obj_data) {
-                    obj_data.append('name', `${org_name}_logo`);
-                    obj_data.append('folder', folder);
+                    obj_data.name = `${org_name}_logo`;
+                    obj_data.folder = folder;
 
-                    // Вывод содержимого FormData
-                    obj_data.forEach(function (value, key) {
-                        console.log(key, value);
-                    });
+                    console.log(obj_data);
 
                     const logo_response = await fetch('/uplopad-logo', {
                         method: 'POST',
-                        body: obj_data
+                        body: JSON.stringify(obj_data)
                     });
 
                     const success = await logo_response.json();
