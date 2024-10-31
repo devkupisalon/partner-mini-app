@@ -289,10 +289,8 @@ const save_new_partner = async (params) => {
 const save_logo = async (params) => {
     try {
         const { body: { name, folder }, file } = params;
-        const fileBuffer = Buffer.from(file.buffer);
+        // const fileBuffer = Buffer.from(file.buffer);
         const mimeType = 'image/png';
-        // const fileDataInBase64 = fileBuffer.toString('base64');
-        // logger.info(fileDataInBase64);
 
         const fileMetadata = {
             name,
@@ -304,7 +302,7 @@ const save_logo = async (params) => {
             requestBody: fileMetadata,
             media: {
                 mimeType,
-                body: fs.createReadStream(fileBuffer)
+                body: fs.createReadStream(file.buffer)
             },
             fields: 'id',
         });
