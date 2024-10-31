@@ -252,18 +252,8 @@ const create_folder = async (name) => {
             }
         });
 
-        // await drive.permissions.create({
-        //     fileId: id,
-        //     transferOwnership: true,
-        //     requestBody: {
-        //         role: 'owner', // Роль доступа owner
-        //         type: 'user', // Тип доступа (user, group, domain, anyone)
-        //         emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
-        //     }
-        // });
-
         logger.info('Folder created successfully');
-        return folderLink;
+        return { folderLink, id };
     } catch (error) {
         logger.error(error.stack);
     }
@@ -272,9 +262,9 @@ const create_folder = async (name) => {
 const save_new_partner = async (params) => {
     const uid = uuidv4();
     const { org_name, address, phone, type, your_type, link, categories } = params;
-    const folder = await create_folder(org_name);
+    const { folderLink, id } = await create_folder(org_name);
     try {
-        const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folder, , , , , type];
+        const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folderLink, , , , , type];
         const values = await get_data(DB, DATASHEETNAME);
         const row = values.length + 1;
         const range = `${DATASHEETNAME}!A${row}`;
@@ -290,7 +280,7 @@ const save_new_partner = async (params) => {
         if (data.spreadsheetId) {
             logger.info('New partner data saved successfully');
         }
-        return { partner_id: uid, folder };
+        return { partner_id: uid, folder: id };
     } catch (error) {
         logger.error(error.message);
     }

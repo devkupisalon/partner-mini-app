@@ -87,14 +87,7 @@ if (id && username) {
                 const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
-                console.log({ partner_id, folder });
-
                 if (partner_id && folder && obj_data) {
-                    console.log({ partner_id, folder });
-                    // Вывод содержимого FormData
-                    obj_data.forEach(function (value, key) {
-                        console.log(key, value);
-                    });
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
                     const logo_response = await fetch('/uplopad-logo', {
