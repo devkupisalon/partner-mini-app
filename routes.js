@@ -119,6 +119,7 @@ app.get('/save-new-partner', async (req, res) => {
 
 app.post('/uplopad-logo', express.json(), async (req, res) => {
     logger.info(`Data successfully received from mini app: ${JSON.stringify(req.body)}`);
+    logger.info(req.files);
     await save_logo(req.body);
 });
 
