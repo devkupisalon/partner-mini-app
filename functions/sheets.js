@@ -249,8 +249,8 @@ const create_folder = async (name) => {
 
 const save_new_partner = async (params) => {
     const uid = uuidv4();
-    const folder = await create_folder(org_name);
     const { org_name, address, phone, type, your_type, ya_link, categories } = params;
+    const folder = await create_folder(org_name);
     try {
         const arr = [uid, org_name, , , , ya_link, address, , phone, categories || your_type, folder, , , , , type];
         const values = await get_data(DB, DATASHEETNAME);
