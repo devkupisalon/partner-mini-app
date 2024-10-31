@@ -124,7 +124,7 @@ app.get('/save-new-partner', async (req, res) => {
 app.post('/upload-logo', upload.single('file'), async (req, res) => {
     try {
         const { body, file } = req;
-        logger.info(`Data successfully received from mini app: ${{ body, file }}`);
+        logger.info(`Data successfully received from mini app: ${body}`);
         const { success } = await save_logo({ body, file });
         return req.json(success);
     } catch (error) {

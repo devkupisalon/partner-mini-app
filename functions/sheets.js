@@ -288,7 +288,6 @@ const save_new_partner = async (params) => {
 
 const save_logo = async (params) => {
     const { body: { name, folder }, file } = params;
-    logger.info(params);
     const filePath = path.join(__dirname, 'logos');
 
     fs.mkdir(filePath, { recursive: true }, (err) => {
@@ -298,7 +297,7 @@ const save_logo = async (params) => {
         }
     });
 
-    fs.writeFile(path.join(filePath, name), file, async (err) => {
+    fs.writeFile(path.join(filePath, name), Buffer.from(file), async (err) => {
         if (err) {
             logger.error(err);
             return;
