@@ -65,19 +65,10 @@ logo.addEventListener('click', function () {
 
 upload.addEventListener('change', function () {
     const selectedFile = this.files[0];
-
-    const reader = new FileReader();
-    reader.onload = function (event) {
-        const base64String = event.target.result;
-
-        // Сохранение base64 строки файла в объекте obj_data
-        obj_data = { file: base64String };
-
-        logo.innerHTML = logo.innerText + checkmark;
-    };
-
-    // Чтение выбранного файла как base64
-    reader.readAsDataURL(selectedFile);
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    obj_data = formData;
+    logo.innerHTML = logo.innerText + checkmark;
 });
 
 if (id && username) {
@@ -98,17 +89,15 @@ if (id && username) {
                 const { partner_id, folder } = await reigistr_response.json();
 
                 if (partner_id && folder && obj_data) {
-                    obj_data.name = `${org_name}_logo`;
-                    obj_data.folder = folder;
-
-                    console.log(obj_data);
+                    obj_data.append('name', `${org_name}_logo`);
+                    obj_data.append('folder', folder);
 
                     const logo_response = await fetch('/upload-logo', {
                         method: 'POST',
-                        body: JSON.stringify(obj_data),
+                        body: obj_data,
                         headers: {
                             'Content-Type': 'application/json'
-                          },
+                        },
                     });
 
                     const success = await logo_response.json();
