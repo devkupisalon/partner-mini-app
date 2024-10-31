@@ -20,6 +20,7 @@ const constants = {
     CARSSPREADSHEET: process.env.CARSSPREADSHEET,
     MONITORSHEETNAME: process.env.monitorsheetname,
     MONITORSPREADSHEET: process.env.MONITORSPREADSHEET,
+    PARTNERSPARENT: process.env.partnersparent,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,
