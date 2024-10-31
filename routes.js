@@ -108,9 +108,9 @@ app.get('/save-new-partner', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
         logger.info(`Data successfully received from mini-app: ${values_list}`);
-        const partner = await save_new_partner(req.query);
+        const data = await save_new_partner(req.query);
 
-        return res.json(partner);
+        return res.json(data);
     } catch (error) {
         logger.error(`An error occurred in save_new_partner: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
