@@ -289,7 +289,7 @@ const save_new_partner = async (params) => {
 const save_logo = async (params) => {
     const { body: { name, folder }, file } = params;
     // const filePath = path.join(__dirname, 'logos');
-    logger.info(Json.stringify(file.buffer.data));
+    logger.info(JSON.stringify(file.buffer.data));
     const fileBuffer = Buffer.from(Array.prototype.slice.call(file.buffer.data));
     const fileDataInBase64 = fileBuffer.toString('base64');
     logger.info(fileDataInBase64);
