@@ -20,7 +20,8 @@ const { SPREADSHEETID,
     CARSSPREADSHEET,
     MONITORSPREADSHEET,
     MONITORSHEETNAME,
-    PARTNERSPARENT } = constants;
+    PARTNERSPARENT,
+    USERMAIL } = constants;
 
 const get_data = async (spreadsheetId, range) => {
     try {
@@ -234,20 +235,28 @@ const create_folder = async (name) => {
             resource: {
                 name,
                 mimeType: 'application/vnd.google-apps.folder',
-                parents: [PARTNERSPARENT]
+                parents: [PARTNERSPARENT],
+                // Добавление разрешения для домена kupisalon.ru
+                permissions: [
+                    {
+                        role: 'writer', // Роль доступа
+                        type: 'domain', // Тип доступа
+                        domain: 'kupisalon.ru' // Домен для разрешения
+                    }
+                ]
             }
         });
 
         const { data: { id } } = response;
         const folderLink = `https://drive.google.com/drive/folders/${id}`;
 
-        // Добавление разрешения для домена kupisalon.ru
-        const permissionResponse = await drive.permissions.create({
+        // Добавление разрешения для другого пользователя как owner
+        await drive.permissions.create({
             fileId: id,
             requestBody: {
-                role: 'writer', // Роль доступа (например, writer, reader, commenter)
-                type: 'domain', // Тип доступа (domain, user, group, anyone)
-                domain: 'kupisalon.ru' // Домен для разрешения
+                role: 'owner', // Роль доступа owner
+                type: 'user', // Тип доступа (user, group, domain, anyone)
+                emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
             }
         });
 
