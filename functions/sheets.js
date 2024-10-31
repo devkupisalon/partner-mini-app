@@ -289,8 +289,8 @@ const save_new_partner = async (params) => {
 const save_logo = async (params) => {
     const { body: { name, folder }, file } = params;
     const filePath = path.join(__dirname, 'logos');
-    logger.info(file);
-    const fileBuffer = Buffer.from(Uint8Array.from(file.buffer.data));
+    logger.info(Json.stringify(file.buffer.data));
+    const fileBuffer = Buffer.from(Array.prototype.slice.call(file.buffer.data));
     const fileDataInBase64 = fileBuffer.toString('base64');
     logger.info(fileDataInBase64);
 
@@ -307,38 +307,38 @@ const save_logo = async (params) => {
     //         return;
     //     }
 
-        // Преобразование файла в формат base64
-        // const fileContent = fs.readFileSync(path.join(filePath, name));
-        // const fileData = Buffer.from(fileContent).toString('base64');
+    // Преобразование файла в формат base64
+    // const fileContent = fs.readFileSync(path.join(filePath, name));
+    // const fileData = Buffer.from(fileContent).toString('base64');
 
-        const fileMetadata = {
-            name,
-            parents: [folder]
-        };
-        const media = {
-            mimeType: 'image/png',
-            body: Buffer.from(fileDataInBase64, 'base64'),
-        };
+    const fileMetadata = {
+        name,
+        parents: [folder]
+    };
+    const media = {
+        mimeType: 'image/png',
+        body: Buffer.from(fileDataInBase64, 'base64'),
+    };
 
-        const { data: { id } } = await drive.files.create({
-            resource: fileMetadata,
-            media: media,
-            fields: 'id',
-        });
+    const { data: { id } } = await drive.files.create({
+        resource: fileMetadata,
+        media: media,
+        fields: 'id',
+    });
 
-        // Удаление файла с сервера
-        // fs.unlink(filePath, (err) => {
-        //     if (err) {
-        //         logger.error(err);
-        //         return;
-        //     }
-        //     logger.info('Logo successfully deleted from server');
-        // });
+    // Удаление файла с сервера
+    // fs.unlink(filePath, (err) => {
+    //     if (err) {
+    //         logger.error(err);
+    //         return;
+    //     }
+    //     logger.info('Logo successfully deleted from server');
+    // });
 
-        if (id) {
-            logger.info(`Logo successfully uploaded to partner folder`);
-            return { success: 'success' };
-        }
+    if (id) {
+        logger.info(`Logo successfully uploaded to partner folder`);
+        return { success: 'success' };
+    }
     // });
 }
 
