@@ -245,18 +245,20 @@ const create_folder = async (name) => {
         // Добавление разрешения для другого пользователя как owner
         await drive.permissions.create({
             fileId: id,
-            requestBody: [
-                {
-                    role: 'owner', // Роль доступа owner
-                    type: 'user', // Тип доступа (user, group, domain, anyone)
-                    emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
-                },
-                {
-                    role: 'writer', // Роль доступа
-                    type: 'domain', // Тип доступа
-                    domain: 'kupisalon.ru' // Домен для разрешения
-                }
-            ]
+            requestBody: {
+                role: 'writer', // Роль доступа
+                type: 'domain', // Тип доступа
+                domain: 'kupisalon.ru' // Домен для разрешения
+            }
+        });
+
+        await drive.permissions.create({
+            fileId: id,
+            requestBody: {
+                role: 'owner', // Роль доступа owner
+                type: 'user', // Тип доступа (user, group, domain, anyone)
+                emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
+            }
         });
 
         logger.info('Folder created successfully');
