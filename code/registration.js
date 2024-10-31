@@ -68,7 +68,12 @@ upload.addEventListener('change', function () {
     const formData = new FormData();
     formData.append('file', selectedFile);
     obj_data = formData;
-    console.log(obj_data);
+    // console.log(obj_data);
+     // Вывод содержимого FormData
+     obj_data.forEach(function(value, key) {
+        console.log(key, value);
+    });
+
     logo.innerHTML = logo.innerText + checkmark;
 });
 
