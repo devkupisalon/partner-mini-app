@@ -287,7 +287,7 @@ const save_new_partner = async (params) => {
 }
 
 const save_logo = async (params) => {
-    const { name, folder, file } = params;
+    const { body: { name, folder }, file } = params;
     logger.info(params);
     const filePath = path.join(__dirname, 'logos');
 

@@ -123,10 +123,10 @@ app.get('/save-new-partner', async (req, res) => {
 });
 
 app.post('/upload-logo', upload.single('file'), async (req, res) => {
-    const { body, file } = req;
-    logger.info({ body, file });
-    // logger.info(`Data successfully received from mini app: ${req.body}`);
-    // await save_logo(req.body);
+    // const { body, file } = req;
+    // logger.info({ body, file });
+    logger.info(`Data successfully received from mini app: ${req}`);
+    await save_logo(req);
 });
 
 app.get('/savesettings', async (req, res) => {
