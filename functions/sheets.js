@@ -288,6 +288,7 @@ const save_new_partner = async (params) => {
 
 const save_logo = async (params) => {
     const { body: { name, folder }, file } = params;
+    logger.info(file.buffer.data);
     const filePath = path.join(__dirname, 'logos');
 
     fs.mkdir(filePath, { recursive: true }, (err) => {
