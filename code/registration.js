@@ -113,7 +113,7 @@ if (id && username) {
 
                     const success = await logo_response.json();
                     if (success) {
-                        logger.info(`Logo for partner ${org_name} saved successfully`);
+                        console.log(`Logo for partner ${org_name} saved successfully`);
                     }
                 }
 
