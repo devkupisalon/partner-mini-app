@@ -118,6 +118,7 @@ app.get('/save-new-partner', async (req, res) => {
 });
 
 app.post('/uplopad-logo', async (req, res) => {
+    logger.info(`Data successfully received from mini app: ${req.body}`);
     await save_logo(req.body);
 });
 
