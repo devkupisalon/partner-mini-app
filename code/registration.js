@@ -71,7 +71,7 @@ upload.addEventListener('change', function () {
         const base64String = event.target.result;
 
         // Сохранение base64 строки файла в объекте obj_data
-        // obj_data = { file: base64String };
+        obj_data = { file: base64String };
 
         logo.innerHTML = logo.innerText + checkmark;
     };
