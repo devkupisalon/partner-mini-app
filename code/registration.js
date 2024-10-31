@@ -67,8 +67,8 @@ upload.addEventListener('change', function () {
     const formData = new FormData();
     formData.append('file', selectedFile);
     obj_data = formData;
-     // Вывод содержимого FormData
-     obj_data.forEach(function(value, key) {
+    // Вывод содержимого FormData
+    obj_data.forEach(function (value, key) {
         console.log(key, value);
     });
 
@@ -81,7 +81,7 @@ if (id && username) {
     tg.onEvent('mainButtonClicked', async (event) => {
         tg.MainButton.showProgress(true);
 
-        const { buttonValues, data: { name, phone, type, logo, your_type, ya_link, org_name, address } } = getValues();
+        const { buttonValues, data: { name, phone, type, your_type, ya_link, org_name, address } } = getValues();
 
         if (buttonValues && name && phone && type && org_name && address) {
 
@@ -89,7 +89,7 @@ if (id && username) {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
                 if (partner_id && folder && obj_data) {

@@ -250,9 +250,10 @@ const create_folder = async (name) => {
 const save_new_partner = async (params) => {
     const uid = uuidv4();
     const { org_name, address, phone, type, your_type, link, categories } = params;
+    logger.info(params);
     const folder = await create_folder(org_name);
     try {
-        const arr = [uid, org_name, , , , link, address, , phone, categories || your_type, folder, , , , , type];
+        const arr = [uid, org_name, , , , link, address, , ,phone , categories || your_type, folder, , , , , type];
         const values = await get_data(DB, DATASHEETNAME);
         const row = values.length + 1;
         const range = `${DATASHEETNAME}!A${row}`;
