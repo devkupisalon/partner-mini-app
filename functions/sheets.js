@@ -288,7 +288,7 @@ const save_new_partner = async (params) => {
         if (data.spreadsheetId) {
             logger.info('New partner data saved successfully');
         }
-        return { partner_id, folder };
+        return { partner_id: uid, folder };
     } catch (error) {
         logger.error(error.message);
     }
