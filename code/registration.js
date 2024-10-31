@@ -117,6 +117,7 @@ if (id && username) {
             } catch (error) {
                 tg.showPopup({ title: 'Error', message: error });
                 tg.MainButton.hideProgress();
+                tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
             }
         } else {
             tg.showPopup({ message: 'Вначале заполните все данные' });
