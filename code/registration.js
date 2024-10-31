@@ -23,7 +23,6 @@ const fields = {
     name: '#partner-name',
     phone: '#partner-phone',
     type: '#select-type',
-    logo: '#partner-logo',
     your_type: '#your-type',
     ya_link: '#yandex-link',
     org_name: '#org-name',
@@ -68,7 +67,6 @@ upload.addEventListener('change', function () {
     const formData = new FormData();
     formData.append('file', selectedFile);
     obj_data = formData;
-    // console.log(obj_data);
      // Вывод содержимого FormData
      obj_data.forEach(function(value, key) {
         console.log(key, value);
@@ -85,7 +83,7 @@ if (id && username) {
 
         const { buttonValues, data: { name, phone, type, logo, your_type, ya_link, org_name, address } } = getValues();
 
-        if (buttonValues && name && phone && type && logo && org_name && address) {
+        if (buttonValues && name && phone && type && org_name && address) {
 
             const timestamp = new Date().getTime();
 
@@ -94,7 +92,7 @@ if (id && username) {
                 const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&logo${logo}&link=${ya_link}&groups=${buttonValues}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
-                if (partner_id && folder) {
+                if (partner_id && folder && obj_data) {
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
                     const logo_response = await fetch('/uplopad-logo', {
@@ -104,7 +102,7 @@ if (id && username) {
 
                     const success = await logo_response.json();
                     if (success) {
-                        logger.info(`Logo for partner ${org_name} aved successfully`);
+                        logger.info(`Logo for partner ${org_name} saved successfully`);
                     }
                 }
 
