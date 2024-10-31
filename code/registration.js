@@ -105,7 +105,7 @@ if (id && username) {
 
                     const logo_response = await fetch('/upload-logo', {
                         method: 'POST',
-                        body: JSON.stringify(obj_data)
+                        body: obj_data
                     });
 
                     const success = await logo_response.json();
