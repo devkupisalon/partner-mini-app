@@ -7,8 +7,8 @@ const gauth = () => {
     });
 
     const sheets = google.sheets({ version: 'v4', auth });
-    return sheets;
+    const drive = google.drive({ version: 'v3', auth });
+    return { sheets, drive, access_token: auth.getCredentials.access_token };
 };
 
-export default gauth ;
-
+export default gauth;

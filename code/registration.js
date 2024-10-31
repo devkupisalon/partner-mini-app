@@ -11,10 +11,10 @@ const ph = document.getElementById('partner-phone');
 const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
 const logo = document.getElementById('partner-logo');
-const upload =  document.getElementById('image-upload');
+const upload = document.getElementById('image-upload');
 const checkmark = "  &#9989";
 
-let partner;
+let partner, obj_data;
 
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
@@ -25,7 +25,9 @@ const fields = {
     type: '#select-type',
     logo: '#partner-logo',
     your_type: '#your-type',
-    ya_link: '#yandex-link'
+    ya_link: '#yandex-link',
+    org_name: '#org-name',
+    address: '#address'
 };
 
 tg.onEvent('backButtonClicked', (event) => {
@@ -58,15 +60,16 @@ function getValues() {
 }
 
 logo.addEventListener('click', function () {
-   upload.click();
+    upload.click();
 });
 
 upload.addEventListener('change', function () {
-    // Получаем выбранное изображение
-    const selectedImage = this.files[0];
-    console.log(selectedImage);
+    const selectedFile = this.files[0];
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    obj_data = formData;
+    console.log(obj_data);
     logo.innerHTML = logo.innerText + checkmark;
-    // Здесь можно обработать выбранное изображение, например, показать его предпросмотр или сохранить для последующей загрузки
 });
 
 if (id && username) {
@@ -75,21 +78,41 @@ if (id && username) {
     tg.onEvent('mainButtonClicked', async (event) => {
         tg.MainButton.showProgress(true);
 
-        const { buttonValues, data: { name, phone, type, logo, your_type } } = getValues();
+        const { buttonValues, data: { name, phone, type, logo, your_type, ya_link, org_name, address } } = getValues();
 
-        if (buttonValues && name && phone && type && logo, your_type) {
+        if (buttonValues && name && phone && type && logo && org_name && address) {
 
             const timestamp = new Date().getTime();
 
             try {
-                const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
 
-                const { success } = await response.json();
-                if (success) {
-                    tg.showPopup({ message: 'Регистрация прошла успешно' });
-                    tg.MainButton.hideProgress();
-                    tg.MainButton.hide();
-                    window.location.href = '/';
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&logo${logo}&link=${ya_link}&groups=${buttonValues}`);
+                const { partner_id, folder } = await reigistr_response.json();
+
+                if (partner_id && folder) {
+                    obj_data.append('name', `${org_name}_logo`);
+                    obj_data.append('folder', folder);
+                    const logo_response = await fetch('/uplopad-logo', {
+                        method: 'POST',
+                        body: obj_data
+                    });
+
+                    const success = await logo_response.json();
+                    if (success) {
+                        logger.info(`Logo for partner ${org_name} aved successfully`);
+                    }
+                }
+
+                if (partner_id) {
+                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}`);
+
+                    const { success } = await response.json();
+                    if (success) {
+                        tg.showPopup({ message: 'Регистрация прошла успешно' });
+                        tg.MainButton.hideProgress();
+                        tg.MainButton.hide();
+                        window.location.href = '/';
+                    }
                 }
             } catch (error) {
                 tg.showPopup({ title: 'Error', message: error });

@@ -33,8 +33,13 @@
                     <option value="Партнер">Партнер</option>
                 </select>
             </div>
-            <p>Укажите ссылку на Яндекс.Справочник организации, которую представляете, если вы там зарегистрированны.
-                Или просто напишите наименование своей компании</p>
+            <p>Напишите наименование своей компании.</p>
+            <input class="input" type="text" id="org-name" placeholder="наименование" required
+                oninput="validateName(event.target)">
+                <p>Укажите адрес.</p>
+                <input class="input" type="text" id="address" placeholder="адрес" required
+                    oninput="validateName(event.target)">
+            <p>Укажите ссылку на Яндекс.Справочник организации, которую представляете, если вы там зарегистрированны.</p>
             <input class="input" type="text" id="yandex-link" placeholder="https://yandex.ru/sprav/хххххх" required
                 oninput="validateName(event.target)">
             <p>Здесь указаны виды деятельности. Оставьте те, по которым вы работаете,</p>

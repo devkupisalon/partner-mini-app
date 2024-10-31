@@ -3,7 +3,18 @@ import path from 'path';
 
 import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
-import { save, get_values, auth, get_settings, save_settings, get_cars, do_calc } from './functions/sheets.js';
+
+import {
+    save, get_values,
+    auth,
+    get_settings,
+    save_settings,
+    get_cars,
+    do_calc,
+    save_new_partner,
+    save_logo
+} from './functions/sheets.js';
+
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
@@ -91,6 +102,23 @@ app.get('/savedata', async (req, res) => {
         logger.error(`An error occurred in save_data: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
+});
+
+app.get('/save-new-partner', async (req, res) => {
+    try {
+        const values_list = Object.values(req.query);
+        logger.info(`Data successfully received from mini-app: ${values_list}`);
+        const partner = await save_new_partner(req.query);
+
+        return res.json(partner);
+    } catch (error) {
+        logger.error(`An error occurred in save_new_partner: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+app.post('/uplopad-logo', async (req, res) => {
+    await save_logo(req.body);
 });
 
 app.get('/savesettings', async (req, res) => {

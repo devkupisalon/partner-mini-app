@@ -18,7 +18,8 @@ tg.onEvent('backButtonClicked', (event) => {
 });
 
 const fields = {
-    percent: '#partner-percent'
+    percent: '#partner-percent',
+    work_type : '#field_select-type'
 };
 
 function mask() {
@@ -104,13 +105,11 @@ async function get_settings() {
 
 function getValues() {
 
-    const { percent } = Object.fromEntries(
+    const data = Object.fromEntries(
         Object.entries(fields).map(([key, selector]) => [key, document.querySelector(selector).value])
     );
 
-    const work_type = work_type_input.value;
-
-    return { work_type, percent };
+    return data;
 }
 
 async function show_percent() {

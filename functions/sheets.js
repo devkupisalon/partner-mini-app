@@ -1,15 +1,26 @@
 import gauth from '../functions/google_auth.js';
-import { constants } from '../constants.js';
+import { constants, __dirname } from '../constants.js';
 import logger from '../logs/logger.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
+import fs from 'fs';
+import path from 'path';
 
 
-const sheets = gauth();
-const { SPREADSHEETID, SHEETNAME, DB, GROUPSSHEETNAME, DATASHEETNAME, VALUE, CARSSHEETNAME, CARSSPREADSHEET, MONITORSPREADSHEET,
-    MONITORSHEETNAME } = constants;
+const { sheets, drive } = gauth();
+const { SPREADSHEETID,
+    SHEETNAME,
+    DB,
+    GROUPSSHEETNAME,
+    DATASHEETNAME,
+    VALUE,
+    CARSSHEETNAME,
+    CARSSPREADSHEET,
+    MONITORSPREADSHEET,
+    MONITORSHEETNAME,
+    PARTNERSPARENT } = constants;
 
 const get_data = async (spreadsheetId, range) => {
     try {
@@ -17,7 +28,7 @@ const get_data = async (spreadsheetId, range) => {
             spreadsheetId,
             range,
         });
-        return values
+        return values;
     } catch (error) {
         logger.error(error.message);
     }
@@ -217,4 +228,102 @@ const get_cars = async () => {
     }
 }
 
-export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc };
+const create_folder = async (name) => {
+    try {
+        const response = await drive.files.create({
+            resource: {
+                name,
+                mimeType: 'application/vnd.google-apps.folder',
+                parents: [PARTNERSPARENT]
+            }
+        });
+
+        const { data: { id } } = response;
+        const folderLink = `https://drive.google.com/drive/folders/${id}`;
+        logger.info('Folder created successfully');
+        return folderLink;
+    } catch (error) {
+        logger.error(error.message);
+    }
+}
+
+const save_new_partner = async (params) => {
+    const uid = uuidv4();
+    const folder = await create_folder(org_name);
+    const { org_name, address, phone, type, your_type, ya_link, categories } = params;
+    try {
+        const arr = [uid, org_name, , , , ya_link, address, , phone, categories || your_type, folder, , , , , type];
+        const values = await get_data(DB, DATASHEETNAME);
+        const row = values.length + 1;
+        const range = `${DATASHEETNAME}!A${row}`;
+        const requestBody = { values: [arr] };
+
+        const { data } = await sheets.spreadsheets.values.update({
+            spreadsheetId: DB,
+            range,
+            valueInputOption: 'USER_ENTERED',
+            requestBody
+        });
+
+        if (data.spreadsheetId) {
+            logger.info('New partner data saved successfully');
+        }
+        return { uid, folder };
+    } catch (error) {
+        logger.error(error.message);
+    }
+}
+
+const save_logo = async (params) => {
+    const { name, folder, file } = params;
+    const filePath = path.join(__dirname, 'logos');
+
+    fs.mkdir(filePath, { recursive: true }, (err) => {
+        if (err) {
+            logger.error(err);
+            return;
+        }
+    });
+
+    fs.writeFile(path.join(filePath, name), file, async (err) => {
+        if (err) {
+            logger.error(err);
+            return;
+        }
+
+        // Преобразование файла в формат base64
+        const fileContent = fs.readFileSync(path.join(filePath, name));
+        const fileData = Buffer.from(fileContent).toString('base64');
+
+        const fileMetadata = {
+            name,
+            parents: [folder]
+        };
+        const media = {
+            mimeType: 'image/png',
+            body: Buffer.from(fileData, 'base64'),
+        };
+
+        const { data: { id } } = await drive.files.create({
+            resource: fileMetadata,
+            media: media,
+            fields: 'id',
+        });
+
+        // Удаление файла с сервера
+        fs.unlink(filePath, (err) => {
+            if (err) {
+                logger.error(err);
+                return;
+            }
+            logger.info('Logo successfully deleted from server');
+        });
+
+        if (id) {
+            logger.info(`Logo successfully uploaded to partner folder`);
+            return { success: 'success' };
+        }
+    });
+}
+
+export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc, save_new_partner, save_logo };
