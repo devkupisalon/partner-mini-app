@@ -13,6 +13,9 @@ if (!fs.existsSync(__dirname)) {
 
 const logFilePath = path.join(__dirname, 'app.log');
 
+/**
+ * Инициализация логгера с указанием уровня логирования, формата времени, источников транспорта логов.
+ */
 const logger = pino({
     level: 'debug',
     timestamp: customTimeFormat,

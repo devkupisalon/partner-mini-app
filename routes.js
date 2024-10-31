@@ -25,23 +25,33 @@ const upload = multer();
 
 app.use(express.json());
 
+/** PATHS */
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
 
+/** styles */
 app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
+/** scripts */
 app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
 
+/** main page */
 app.get('/', (req, res) => res.sendFile(HOME));
+/** managers registration */
 app.get('/auth', (req, res) => res.sendFile(AUTH));
+/** settings */
 app.get('/settings', (req, res) => res.sendFile(SETTINGS));
+/** create pre-orders */
 app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
+/** init registration */
 app.get('/registration', (req, res) => res.sendFile(REGISTR));
 
+/** route errors */
 app.use((error, req, res, next) => {
     logger.error(`An error occurred: ${error.message}`);
     res.status(500).send(error);
 });
 
+/** validation */
 app.get("/validate-init", async (req, res) => {
     try {
         const decodedData = req.url.replace('/validate-init?', '');
@@ -60,6 +70,7 @@ app.get("/validate-init", async (req, res) => {
     }
 });
 
+/** check subscription and authorization */
 app.get('/check', async (req, res) => {
     try {
         const { user_id, partner } = req.query;
@@ -74,6 +85,7 @@ app.get('/check', async (req, res) => {
     }
 });
 
+/** create pre-orders */
 app.get('/do-calculation', async (req, res) => {
     try {
         const link = await do_calc(req.query);
@@ -84,6 +96,7 @@ app.get('/do-calculation', async (req, res) => {
     }
 });
 
+/** get cars data from cars database */
 app.get('/get-cars', async (rea, res) => {
     try {
         const data = await get_cars();
@@ -95,6 +108,7 @@ app.get('/get-cars', async (rea, res) => {
     }
 });
 
+/** save user data to spreadsheet */
 app.get('/savedata', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
@@ -108,6 +122,7 @@ app.get('/savedata', async (req, res) => {
     }
 });
 
+/** save new partner data */
 app.get('/save-new-partner', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
@@ -121,6 +136,7 @@ app.get('/save-new-partner', async (req, res) => {
     }
 });
 
+/** upload logo to partner folder in gdrive */
 app.post('/upload-logo', upload.single('file'), async (req, res) => {
     try {
         const { body, file } = req;
@@ -133,6 +149,7 @@ app.post('/upload-logo', upload.single('file'), async (req, res) => {
     }
 });
 
+/** save partner settings to spreadsheet */
 app.get('/savesettings', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
@@ -146,6 +163,7 @@ app.get('/savesettings', async (req, res) => {
     }
 });
 
+/** get partners settings from spreadsheet */
 app.get('/getsettings', async (req, res) => {
     try {
         const data = await get_settings(req.query.partner);
@@ -157,6 +175,7 @@ app.get('/getsettings', async (req, res) => {
     }
 });
 
+/** get groups */
 app.get('/getdata', async (req, res) => {
     try {
         const values = await get_values();
@@ -168,6 +187,7 @@ app.get('/getdata', async (req, res) => {
     }
 });
 
+/** init server */
 app.listen('8000', (err) => {
     if (err) {
         logger.error(err.message);

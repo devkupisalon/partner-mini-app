@@ -1,11 +1,11 @@
 import gauth from '../functions/google_auth.js';
-import { constants, __dirname } from '../constants.js';
 import logger from '../logs/logger.js';
+
+import { constants, __dirname } from '../constants.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
-import fs from 'fs';
 import { Readable } from 'stream';
 
 
@@ -21,8 +21,14 @@ const { SPREADSHEETID,
     MONITORSPREADSHEET,
     MONITORSHEETNAME,
     PARTNERSPARENT,
-    USERMAIL } = constants;
+    WEBAPPURL } = constants;
 
+/**
+ * Получить данные из указанного диапазона в таблице Google Sheets
+ * @param {string} spreadsheetId - Идентификатор таблицы Google Sheets
+ * @param {string} range - Диапазон данных для извлечения
+ * @returns {Array} - Массив значений из таблицы
+ */
 const get_data = async (spreadsheetId, range) => {
     try {
         const { data: { values } } = await sheets.spreadsheets.values.get({
@@ -35,19 +41,27 @@ const get_data = async (spreadsheetId, range) => {
     }
 }
 
+/**
+ * Получить значения из указанного документа Google Sheets
+ * @returns {Array} - Массив значений из указанной таблицы
+ */
 const get_values = async () => {
     try {
         const values = await get_data(DB, GROUPSSHEETNAME);
 
-        logger.info('Data recieved successfully');
+        logger.info('Data received successfully');
         return values;
     } catch (error) {
         logger.error(error.message);
     }
 }
 
+/**
+ * Сохранить данные в указанную таблицу Google Sheets
+ * @param {Array} arr - Массив данных для сохранения
+ * @returns {boolean} - Успешно ли сохранены данные
+ */
 const save = async (arr) => {
-
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
 
@@ -69,18 +83,21 @@ const save = async (arr) => {
         logger.error(error.stack);
         return false;
     }
-
 }
 
+/**
+ * Авторизация пользователя по ID и партнеру в таблице Google Sheets
+ * @param {string} user_id - ID пользователя для авторизации
+ * @param {string} partner - Партнер пользователя
+ * @returns {boolean} - Успешно ли пользователь авторизован
+ */
 const auth = async (user_id, partner) => {
     try {
-
         const values = await get_data(SPREADSHEETID, SHEETNAME);
 
         const success = values
             .slice(1)
-            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7)
-                .every(Boolean)) != '';
+            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7).every(Boolean)) != '';
 
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
@@ -91,6 +108,11 @@ const auth = async (user_id, partner) => {
     }
 }
 
+/**
+ * Сохранить настройки в таблице Google Sheets
+ * @param {object} obj - Объект с настройками для сохранения
+ * @returns {boolean} - Успешно ли сохранены настройки
+ */
 const save_settings = async (obj) => {
     let range;
 
@@ -127,9 +149,13 @@ const save_settings = async (obj) => {
         logger.error(error.message);
         return false;
     }
-
 }
 
+/**
+ * Получить настройки для указанного партнера
+ * @param {string} partner - Идентификатор партнера, для которого нужно получить настройки
+ * @returns {object|boolean} - Объект с настройками (work_type, percent) или false, если настройки не найдены
+ */
 const get_settings = async (partner) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
@@ -139,8 +165,8 @@ const get_settings = async (partner) => {
         if (data !== '') {
             const percent = data[column_index + 1];
             const work_type = data[column_index];
-            if (work_type || work_type && percent) {
-                logger.info(`Settings for partner with id: ${partner} finded`);
+            if (work_type || (work_type && percent)) {
+                logger.info(`Settings for partner with id: ${partner} found`);
                 return { work_type, percent };
             } else {
                 logger.warn(`Settings for partner with id: ${partner} not found`);
@@ -153,8 +179,12 @@ const get_settings = async (partner) => {
     }
 }
 
+/**
+ * Выполнить расчет и сохранить данные в мониторинг Google Sheets
+ * @param {object} params - Параметры для расчета и сохранения
+ * @returns {string|boolean} - Ссылка на результат или false в случае ошибки
+ */
 const do_calc = async (params) => {
-
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum } = params;
@@ -178,7 +208,7 @@ const do_calc = async (params) => {
             logger.info('Data for calculation saved successfully');
         }
 
-        const linkResponse = await fetch('https://script.google.com/macros/s/AKfycbxHbbhuf_18A-n6t1Bk-2UdHJjUyM-1dq13Q_hUUZSwZ_gEtPKkaJxWFpSQpKMqbykBQA/exec', {
+        const linkResponse = await fetch(WEBAPPURL, {
             method: 'POST',
             body: JSON.stringify({
                 row,
@@ -195,7 +225,7 @@ const do_calc = async (params) => {
 
         if (linkResponse.ok) {
             const link = await linkResponse.text();
-            logger.info(`Recieved link: ${link}`);
+            logger.info(`Received link: ${link}`);
             return link;
         } else {
             logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);
@@ -206,6 +236,11 @@ const do_calc = async (params) => {
     }
 }
 
+/**
+ * Получить наименование партнера, менеджера и другие данные по идентификатору партнера
+ * @param {string} partner_id - Идентификатор партнера для получения данных
+ * @returns {object|boolean} - Объект с данными партнера (partner_name, manager, work_type, percent, calculate_id, partner_folder) или false в случае ошибки
+ */
 const get_partner_name_and_manager = async (partner_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
@@ -219,16 +254,25 @@ const get_partner_name_and_manager = async (partner_id) => {
     }
 }
 
+/**
+ * Получить данные о машинах из Google Sheets
+ * @returns {Array} - Массив данных о машинах
+ */
 const get_cars = async () => {
     try {
         const values = await get_data(CARSSPREADSHEET, CARSSHEETNAME);
-        logger.info('Data recieved successfully');
+        logger.info('Data received successfully');
         return values;
     } catch (error) {
         logger.error(error.message);
     }
 }
 
+/**
+ * Создать новую папку в Google Drive
+ * @param {string} name - Имя новой папки
+ * @returns {object} - Объект с ссылкой на папку и её ID, если успешно создана, иначе логируется ошибка
+ */
 const create_folder = async (name) => {
     try {
         const response = await drive.files.create({
@@ -259,10 +303,16 @@ const create_folder = async (name) => {
     }
 }
 
+/**
+ * Сохранить данные о новом партнере
+ * @param {object} params - Параметры нового партнера (org_name, address, phone, type, your_type, link, categories)
+ * @returns {object} - Объект с идентификатором партнера и ссылкой на созданную папку, если данные сохранены успешно
+ */
 const save_new_partner = async (params) => {
     const uid = uuidv4();
     const { org_name, address, phone, type, your_type, link, categories } = params;
     const { folderLink, id } = await create_folder(org_name);
+
     try {
         const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folderLink, , , , , type];
         const values = await get_data(DB, DATASHEETNAME);
@@ -286,6 +336,11 @@ const save_new_partner = async (params) => {
     }
 }
 
+/**
+ * Сохранить логотип партнера в его папку на Google Drive
+ * @param {object} params - Параметры для сохранения логотипа (name, folder, file)
+ * @returns {object} - Объект успешности загрузки, если логотип успешно загружен
+ */
 const save_logo = async (params) => {
     try {
         const { body: { name, folder }, file } = params;
