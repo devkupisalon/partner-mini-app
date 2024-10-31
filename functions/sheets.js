@@ -252,15 +252,15 @@ const create_folder = async (name) => {
             }
         });
 
-        await drive.permissions.create({
-            fileId: id,
-            transferOwnership: true,
-            requestBody: {
-                role: 'owner', // Роль доступа owner
-                type: 'user', // Тип доступа (user, group, domain, anyone)
-                emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
-            }
-        });
+        // await drive.permissions.create({
+        //     fileId: id,
+        //     transferOwnership: true,
+        //     requestBody: {
+        //         role: 'owner', // Роль доступа owner
+        //         type: 'user', // Тип доступа (user, group, domain, anyone)
+        //         emailAddress: USERMAIL // Электронная почта пользователя, которому передаются права
+        //     }
+        // });
 
         logger.info('Folder created successfully');
         return folderLink;
