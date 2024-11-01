@@ -25,8 +25,9 @@ tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 const calc = start_param.toString().inclides('_calc_true');
-start_param = calc ? start_param.replace('_calc_true', '') : start_param;
+start_param = calc ? String(start_param).replace('_calc_true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
+console.log(start_param);
 
 /**
  * Установить галочку для элемента и отключить его
