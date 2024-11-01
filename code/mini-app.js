@@ -2,8 +2,9 @@ const tg = window.Telegram.WebApp;
 const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
+const url = window.location.href;
+const calc = url.includes('calc=true');
 const partner = urlParams.get('startapp');
-const calc = urlParams.get('calc');
 
 tg.ready();
 
@@ -27,6 +28,7 @@ tg.enableClosingConfirmation();
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 console.log(start_param);
 console.log(calc); 
+console.log(url);
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
