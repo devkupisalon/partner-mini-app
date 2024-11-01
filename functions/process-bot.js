@@ -49,7 +49,7 @@ bot.on('message', async (message) => {
         if (chatId) {
             const { partner_name, partner_id } = await get_partners_data(chatId);
             const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
-            bot.forwardMessage(String(GROUP_CHAT_ID), chatId, message.message_id)
+            bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id)
                 .then(() => {
                     logger.info(`User message successfully forwarded from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}`);
                 })
