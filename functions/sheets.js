@@ -95,8 +95,6 @@ const auth = async (user_id, partner) => {
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
 
-        logger.info(values);
-
         const success = values
             .slice(1)
             .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 6).every(Boolean)) != '';
@@ -105,10 +103,11 @@ const auth = async (user_id, partner) => {
             .slice(1)
             .filter(f => f[1] === partner && f[2] === user_id && f[7]) != '';
 
-        logger.info(root);
-
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
+            if (root) {
+                logger.info(`User with id: ${user_id} have root premissions`);
+            }
             return { success, root };
         } else {
             return { success: false, root: false };
