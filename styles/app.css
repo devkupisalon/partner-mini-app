@@ -269,6 +269,8 @@ input[type="file"],
 #percent-text {
     text-align: center;
     display: none;
+    align-items: center;
+    justify-content: center;
 }
 
 #partner-percent {
