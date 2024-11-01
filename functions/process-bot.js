@@ -33,6 +33,35 @@ const send_first_message = async (chat_id) => {
 }
 
 /**
+ * Функция для закрепления сообщения с кнопкой в чате
+ * 
+ * @param {number} chat_id - ID чата, куда отправить и закрепить сообщение
+ * @param {string} text - Текст сообщения для отправки
+ * @param {string} url - URL-адрес для кнопки в сообщении
+ */
+const pinned_message = async (chat_id, text, url) => {
+
+    // Отправить сообщение с кнопкой и закрепить его
+    const pinnedMessage = await bot.sendMessage(chat_id, text, {
+        reply_markup: {
+            inline_keyboard: [[
+                { text: 'Сделать расчет', url }
+            ]]
+        }
+    });
+
+    const messageId = pinnedMessage.message_id;
+
+    try {
+        await bot.pinChatMessage(chat_id, messageId);
+
+        logger.info(`Message successfully pinned in chat with ID: ${chat_id}`);
+    } catch (error) {
+        logger.error(`Error while pinned message in chat with ID ${chat_id}: ${error.message}`);
+    }
+}
+
+/**
  * Forward messages from user chats to managers groups chat and
  * send back responses from managers to user chats 
  */
@@ -67,7 +96,7 @@ bot.on('message', async (message) => {
                 const userChatId = message.reply_to_message.forward_from.id;
 
                 try {
-                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId, { disable_notification: true, from_background: true });
+                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId);
                     if (message_id) {
                         logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${userChatId}`);
                         await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
@@ -85,34 +114,5 @@ bot.on('message', async (message) => {
 bot.on('polling_error', (error) => {
     logger.error(error);
 });
-
-/**
- * Функция для закрепления сообщения с кнопкой в чате
- * 
- * @param {number} chat_id - ID чата, куда отправить и закрепить сообщение
- * @param {string} text - Текст сообщения для отправки
- * @param {string} url - URL-адрес для кнопки в сообщении
- */
-const pinned_message = async (chat_id, text, url) => {
-
-    // Отправить сообщение с кнопкой и закрепить его
-    const pinnedMessage = await bot.sendMessage(chat_id, text, {
-        reply_markup: {
-            inline_keyboard: [[
-                { text: 'Сделать расчет', url }
-            ]]
-        }
-    });
-
-    const messageId = pinnedMessage.message_id;
-
-    try {
-        await bot.pinChatMessage(chat_id, messageId);
-
-        logger.info(`Message successfully pinned in chat with ID: ${chat_id}`);
-    } catch (error) {
-        logger.error(`Error while pinned message in chat with ID ${chat_id}: ${error.message}`);
-    }
-}
 
 export { send_first_message, pinned_message };
