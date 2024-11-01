@@ -18,5 +18,5 @@ async function show_percent(logotype = undefined) {
         if (el && el !== undefined) el.style.display = "none";
     }
 
-    work_type_input.onchange = show_percent;
+    work_type_input.onchange = show_percent();
 }
