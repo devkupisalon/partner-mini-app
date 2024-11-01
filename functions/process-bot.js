@@ -37,6 +37,11 @@ const send_first_message = async (chat_id) => {
  * send back responses from managers to user chats 
  */
 bot.on('message', async (message) => {
+
+    if (message.contact) {
+        return;
+    }
+
     const chatId = message.chat.id;
 
     // Если сообщение от пользователя
