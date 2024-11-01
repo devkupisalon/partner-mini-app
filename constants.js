@@ -22,6 +22,8 @@ const constants = {
     MONITORSPREADSHEET: process.env.MONITORSPREADSHEET,
     PARTNERSPARENT: process.env.partnersparent,
     WEBAPPURL: process.env.webappurl,
+    DEV_CHAT_ID: process.env.DEV_CHAT_ID,
+    GROUP_CHAT_ID: process.env.GROUP_CHAT_ID,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,

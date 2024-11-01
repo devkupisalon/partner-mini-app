@@ -26,40 +26,67 @@ const send_first_message = async (chat_id) => {
         });
 }
 
-const process_callback = async () => {
+// Handler for callback_data "send_calculation_info"
+bot.on('callback_query', async (query) => {
+    const chatId = query.message.chat.id;
+    const { partner_name, partner_id } = await get_partners_data(chatId);
 
-    // Handler for callback_data "send_calculation_info"
-    bot.on('callback_query', async (query) => {
-        const chatId = query.message.chat.id;
-        const {partner_name, partner_id} = await get_partners_data(chatId);
+    if (query.data === send_data) {
+        bot.sendMessage(chatId, 'Пожалуйста, отправьте данные для расчета: фото/видео/текст/голосовое сообщение одним сообщением.')
+            .then(() => {
+                logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send data for calculation.`);
+            })
+            .catch((error) => {
+                logger.error(`Error sending request for data for calculation: ${error.message}`);
+            });
+    } else if (query.data === report_error) {
+        bot.sendMessage(chatId, 'Пожалуйста, отправьте фото/видео/текст/голосовой контент ошибки одним сообщением.')
+            .then(() => {
+                logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send an error message.`);
+            })
+            .catch((error) => {
+                logger.error(`Error sending request for error message: ${error.message}`);
+            });
+    }
 
-        if (query.data === send_data) {
-            bot.sendMessage(chatId, 'Пожалуйста, отправьте данные для расчета: фото/видео/текст/голосовое сообщение одним сообщением.')
-                .then(() => {
-                    logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send data for calculation.`);
-                })
-                .catch((error) => {
-                    logger.error(`Error sending request for data for calculation: ${error.message}`);
-                });
-        } else if (query.data === report_error) {
-            bot.sendMessage(chatId, 'Пожалуйста, отправьте фото/видео/текст/голосовой контент ошибки одним сообщением.')
-                .then(() => {
-                    logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send an error message.`);
-                })
-                .catch((error) => {
-                    logger.error(`Error sending request for error message: ${error.message}`);
-                });
-        }
-
-        // Handling received data and forwarding it to a specific chat ID (for "send_calculation_info" and "report_error")
-        bot.on('message', (message) => {
-            const targetChatId = (query.data === send_data) ? GROUP_CHAT_ID : DEV_CHAT_ID;
-            // Подготовка текста для простой пересылки сообщения с именем партнера и его ID
-            const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
-            // Пересылка сообщения с подгтовленным текстом и данными
-            bot.forwardMessage(targetChatId, chatId, message.message_id, forwardedMessage);
-        });
+    // Handling received data and forwarding it to a specific chat ID (for "send_calculation_info" and "report_error")
+    bot.on('message', (message) => {
+        const targetChatId = (query.data === send_data) ? GROUP_CHAT_ID : DEV_CHAT_ID;
+        // Подготовка текста для простой пересылки сообщения с именем партнера и его ID
+        const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
+        // Пересылка сообщения с подгтовленным текстом и данными
+        bot.forwardMessage(targetChatId, chatId, message.message_id, forwardedMessage);
     });
+});
+
+
+/**
+ * Функция для закрепления сообщения с кнопкой в чате
+ * 
+ * @param {number} chat_id - ID чата, куда отправить и закрепить сообщение
+ * @param {string} text - Текст сообщения для отправки
+ * @param {string} url - URL-адрес для кнопки в сообщении
+ */
+const pinned_message = async (chat_id, text, url) => {
+
+    // Отправить сообщение с кнопкой и закрепить его
+    const pinnedMessage = await bot.sendMessage(chat_id, text, {
+        reply_markup: {
+            inline_keyboard: [[
+                { text: 'Сформировать расчет', url }
+            ]]
+        }
+    });
+
+    const messageId = pinnedMessage.message_id;
+
+    try {
+        await bot.pinChatMessage(chat_id, messageId);
+
+        logger.info(`Message successfully pinned in chat with ID: ${chat_id}`);
+    } catch (error) {
+        logger.error(`Error while pinned message in chat with ID ${chat_id}: ${error.message}`);
+    }
 }
 
-export { send_first_message, process_callback };
+export { send_first_message, pinned_message };

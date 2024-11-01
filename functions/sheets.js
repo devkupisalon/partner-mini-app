@@ -3,6 +3,8 @@ import logger from '../logs/logger.js';
 
 import { constants, __dirname } from '../constants.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
+import { send_first_message, pinned_message } from './process-bot.js';
+import './process-bot.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
