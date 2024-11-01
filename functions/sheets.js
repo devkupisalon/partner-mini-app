@@ -180,6 +180,7 @@ const get_settings = async (partner) => {
         const values = await get_data(DB, DATASHEETNAME);
         const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
         const data = values.find(r => r[0] === partner);
+        logger.info(data);
 
         if (data !== '') {
             const percent = data[column_index + 1];
