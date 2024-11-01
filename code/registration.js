@@ -144,7 +144,7 @@ async function preload() {
     tg.MainButton.hide();
     await fetchData();
     await select_all();
-    await show_percent(logo);
+    await show_percent();
     preloader.style.display = "none";
     container.style.display = "flex";
     tg.MainButton.show();
