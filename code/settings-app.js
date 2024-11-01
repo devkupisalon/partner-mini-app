@@ -15,7 +15,7 @@ tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
 
 tg.onEvent('backButtonClicked', (event) => {
-    window.location.href = '/';
+    window.location.href = `/?startapp=${partner}`;
     tg.MainButton.hide();
 });
 
@@ -38,23 +38,17 @@ async function get_settings() {
         const { data } = JSON.parse(res);
         if (data) {
             const { work_type, percent } = JSON.parse(localStorage.getItem(partner)) || data;
-            console.log({ work_type, percent });
 
             if (work_type !== undefined) {
-                    console.log('test');
                 for (let option of options) {
                     if (option.value === work_type) {
                         option.selected = true;
                         break;
                     }
                 }
-
-                console.log(work_type_input.value);
-
             }
 
             if (percent !== undefined) {
-                console.log('test');
                 percent_input.value = percent;
                 show(true);
             }
