@@ -65,16 +65,14 @@ const save = async (params) => {
     try {
 
         const values = await get_data(SPREADSHEETID, SHEETNAME);
-        let { timestamp, partner, id, username, name, phone, groups, partner_NAME } = params;
+        let { timestamp, partner, user_id, username, name, phone, groups, partner_NAME, root } = params;
 
         if (partner_NAME === undefined) {
             const { partner_name } = await get_partner_name_and_manager(partner);
             partner_NAME = partner_name;
         }
 
-        const arr = [timestamp, partner, partner_NAME, id, username, name, phone, groups];
-        logger.info(arr);
-
+        const arr = [timestamp, partner, partner_NAME, user_id, username, name, phone, groups, root || ''];
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
 
