@@ -14,6 +14,9 @@ const logo = document.getElementById('partner-logo');
 const upload = document.getElementById('image-upload');
 const percent_input = document.getElementById('partner-percent');
 const percent_text = document.getElementById('percent-text');
+const work_type_input = document.getElementById("select-type");
+const options = work_type_input.getElementsByTagName("option");
+const partner_type = options[2].value;
 const checkmark = "  &#9989";
 
 let partner;
