@@ -182,6 +182,7 @@ const get_settings = async (partner) => {
         const data = values.find(r => r[0] === partner);
 
         if (data !== '') {
+            logger.info(data.length);
             const percent = data.length >= column_index + 1 ? data[column_index + 1] : undefined;
             const work_type = data[column_index];
             if (work_type || (work_type && percent)) {
