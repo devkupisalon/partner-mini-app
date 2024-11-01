@@ -105,6 +105,8 @@ const auth = async (user_id, partner) => {
             .slice(1)
             .filter(f => f[1] === partner && f[2] === user_id && f[7] && f[7] === true) != '';
 
+        logger.info(root);
+
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
             return { success, root };
