@@ -37,49 +37,47 @@ const send_first_message = async (chat_id) => {
  * send back responses from managers to user chats 
  */
 bot.on('message', async (message) => {
+    const { contact, chat: { id, type } } = message;
+    const messageId = message.message_id;
+    if (contact) return;
 
-    if (message.contact) {
-        return;
-    }
-
-    const chatId = message.chat.id;
-
-    // Если сообщение от пользователя
-    if (message.from.id === chatId) {
-        if (chatId) {
-            const { partner_name, partner_id } = await get_partners_data(chatId);
-            const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
+    if (message.from.id === id) {
+        if (id) {
+            const { partner_name, partner_id } = await get_partners_data(id);
+            // const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
             try {
-                const response = await bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id)
-                logger.info(response);
+                const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
+                if (message_id) {
+                    logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
+                    await bot.sendReaction(id, messageId, '❤️');
+                }
             } catch (error) {
-                logger.error(`Error forwarding user message from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
+                logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
             }
         }
     }
 
-    // Проверка, откуда получено сообщение (если из чата группы)
-    if (message.chat.type === 'group' || message.chat.type === 'supergroup') {
+    if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         logger.info(`Received a message from group chat with ID: ${groupId}`);
 
         if (groupId === GROUP_CHAT_ID) {
 
-            // Проверка на наличие пересланного сообщения от пользователя
             if (message.reply_to_message && message.reply_to_message.forward_from) {
                 const userChatId = message.reply_to_message.forward_from.id;
 
-                // Пересылка ответа от менеджера обратно пользователю
-                bot.forwardMessage(userChatId, chatId, message.message_id)
-                    .then(() => {
-                        logger.info(`Message successfully sent from manager in chat_id ${chatId} to user in chat_id ${userChatId}`);
-                    })
-                    .catch((error) => {
-                        logger.error(`Error sending message from manager in chat_id ${chatId} to user in chat_id ${userChatId}: ${error.message}`);
-                    });
+                try {
+                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId)
+                    if (message_id) {
+                        logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${userChatId}`);
+                        await bot.sendReaction(id, messageId, '❤️');
+                    }
+                } catch (error) {
+                    logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${userChatId}: ${error.stack}`);
+
+                }
             }
         }
-
     }
 });
 
