@@ -7,16 +7,15 @@ function show(check) {
 }
 
 /** Show or hide percent onChange work type input */
-async function show_percent(logo = undefined) {
+async function show_percent(logotype = undefined) {
     const selected_work_type = work_type_input.value;
-
+    let el = logotype !== undefined ? logotype: logo;
     if (selected_work_type === partner_type) {
         show(true);
-        console.log(logo);
-        if (logo && logo !== undefined) logo.style.display = "block";
+        if (el && el !== undefined) el.style.display = "block";
     } else {
         show(false);
-        if (logo && logo !== undefined) logo.style.display = "none";
+        if (el && el !== undefined) el.style.display = "none";
     }
 
     work_type_input.onchange = show_percent;
