@@ -3,7 +3,8 @@ import logger from '../logs/logger.js';
 import { constants } from '../constants.js';
 import { get_partners_data } from './sheets.js';
 
-const { GROUP_CHAT_ID } = constants;
+let { GROUP_CHAT_ID } = constants;
+GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
 const callback_data = {
     report_error: 'report_error',
     send_data: 'send_calculation_info'
