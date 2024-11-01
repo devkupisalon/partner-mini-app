@@ -3,6 +3,7 @@ const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const partner = urlParams.get('startapp');
+console.log(partner);
 
 tg.ready();
 
@@ -25,11 +26,8 @@ tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 const calc = start_param.includes('_calc_true');
-console.log(calc);
-console.log(start_param);
 start_param = calc ? String(start_param).replace('_calc_true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
-console.log(start_param);
 
 /**
  * Установить галочку для элемента и отключить его
@@ -165,7 +163,7 @@ async function preload() {
     await check();
     await get_settings();
 
-    if (calc) {
+    if (calc && !partner && partner === null) {
         window.location.href = `/pre-calc?partner=${start_param}`;
     }
 
