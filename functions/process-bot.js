@@ -41,7 +41,7 @@ bot.on('message', async (message) => {
 
     // Если сообщение от пользователя
     if (message.from.id === chatId) {
-        if (chat_id) {
+        if (chatId) {
 
             const { partner_name, partner_id } = await get_partners_data(chatId);
             const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
