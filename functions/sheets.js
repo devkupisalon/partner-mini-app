@@ -177,7 +177,8 @@ const save_settings = async (obj) => {
  */
 const get_settings = async (partner) => {
     try {
-        if (partner) {
+        logger.info(typeof partner);
+        if (partner !== null) {
             const values = await get_data(DB, DATASHEETNAME);
             const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
             const data = values.find(r => r[0] === partner);
@@ -193,7 +194,7 @@ const get_settings = async (partner) => {
                     return false;
                 }
             }
-        } else { 
+        } else {
             logger.warn(`First init partner`);
             return false;
         }
