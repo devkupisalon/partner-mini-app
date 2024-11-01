@@ -60,10 +60,10 @@ bot.on('message', async (message) => {
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         logger.info(`Received a message from group chat with ID: ${groupId}`);
+        logger.info(typeof groupId);
+        logger.info(typeof GROUP_CHAT_ID);
 
         if (groupId === GROUP_CHAT_ID) {
-
-            logger.info(groupId);
 
             if (message.reply_to_message && message.reply_to_message.forward_from) {
                 const userChatId = message.reply_to_message.forward_from.id;
