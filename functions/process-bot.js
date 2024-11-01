@@ -49,7 +49,7 @@ bot.on('message', async (message) => {
                 const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
                 if (message_id) {
                     logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
-                    await bot.setMessageReaction(id, messageId, '❤️');
+                    await bot.re(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
                 }
             } catch (error) {
                 logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
@@ -70,7 +70,7 @@ bot.on('message', async (message) => {
                     const { message_id } = await bot.forwardMessage(userChatId, id, messageId)
                     if (message_id) {
                         logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${userChatId}`);
-                        await bot.setMessageReaction(id, messageId, '❤️');
+                        await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
                     }
                 } catch (error) {
                     logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${userChatId}: ${error.stack}`);
