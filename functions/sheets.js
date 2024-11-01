@@ -427,10 +427,10 @@ const get_partners_data = async (chat_id) => {
             }, {});
 
         if (partner_name && partner_id) {
-            logger.info(`User with id: ${user_id} is authorized`);
+            logger.info(`User with id: ${chat_id} is authorized`);
             return { partner_name, partner_id };
         } else {
-            logger.warn(`User with id: ${user_id} is not authorized`);
+            logger.warn(`User with id: ${chat_id} is not authorized`);
             return { partner_name: undefined, partner_id: undefined };
         }
     } catch (error) {
