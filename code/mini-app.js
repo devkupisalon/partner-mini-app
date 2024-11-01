@@ -115,7 +115,10 @@ async function get_settings() {
             const { work_type, percent } = JSON.parse(localStorage.getItem(start_param)) || data;
             work_type_partner = work_type;
             percent_partner = percent;
-            return { work_type, percent };
+
+            if ((work_type_partner && percent_partner) || work_type_partner) {
+                settings.innerHTML = settings.innerText + checkmark;
+            }
         }
 
     } catch (error) {
