@@ -58,7 +58,7 @@ const get_values = async () => {
 
 /**
  * Сохранить данные в указанную таблицу Google Sheets
- * @param {Array} arr - Массив данных для сохранения
+ * @param {Object} params Объект с данными
  * @returns {boolean} - Успешно ли сохранены данные
  */
 const save = async (params) => {
@@ -73,6 +73,7 @@ const save = async (params) => {
         }
 
         const arr = [timestamp, partner, partner_NAME, id, username, name, phone, groups];
+        logger.info(arr);
 
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
