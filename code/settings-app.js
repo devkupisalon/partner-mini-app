@@ -49,6 +49,8 @@ async function get_settings() {
                     }
                 }
 
+                console.log(work_type_input.value);
+
             }
 
             if (percent !== undefined) {
