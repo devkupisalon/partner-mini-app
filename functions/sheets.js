@@ -103,7 +103,7 @@ const auth = async (user_id, partner) => {
 
         const root = values
             .slice(1)
-            .filter(f => f[1] === partner && f[2] === user_id && f[7] && f[7] === true) != '';
+            .filter(f => f[1] === partner && f[2] === user_id && f[7]) != '';
 
         logger.info(root);
 
