@@ -349,7 +349,7 @@ const save_new_partner = async (params) => {
         if (data.spreadsheetId) {
             logger.info('New partner data saved successfully');
             if (type === 'Агент') {
-                await process_agent(user_id);
+                await process_agent(user_id, uid);
             }
         }
         return { partner_id: uid, folder: id };
@@ -358,7 +358,7 @@ const save_new_partner = async (params) => {
     }
 }
 
-const process_agent = async (chat_id) => {
+const process_agent = async (chat_id, uid) => {
     try {
         const message_text = `Ниже нопка для формирования расчета`;
         const url = `${MINI_APP_LINK}${uid}`;
