@@ -7,7 +7,7 @@ function show(check) {
 }
 
 /** Show or hide percent onChange work type input */
-async function show_percent() {
+async function show_percent(logo = undefined) {
     const selected_work_type = work_type_input.value;
 
     if (selected_work_type === partner_type) {
