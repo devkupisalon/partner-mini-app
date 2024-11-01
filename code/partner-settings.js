@@ -12,12 +12,11 @@ async function show_percent(logo = undefined) {
 
     if (selected_work_type === partner_type) {
         show(true);
-        console.log(typeof logo);
         if (logo && logo !== undefined) logo.style.display = "block";
     } else {
         show(false);
         if (logo && logo !== undefined) logo.style.display = "none";
     }
 
-    work_type_input.onchange = show_percent;
+    work_type_input.onchange = show_percent(logo);
 }
