@@ -95,13 +95,15 @@ const auth = async (user_id, partner) => {
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
 
+        logger.info(values);
+
         const success = values
             .slice(1)
-            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7).every(Boolean)) != '';
+            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 6).every(Boolean)) != '';
 
-            logger.info(success);
-
-        const root = success.includes(true);
+        const root = values
+            .slice(1)
+            .filter(f => f[1] === partner && f[2] === user_id && f[7] && f[7] === true) != '';
 
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
