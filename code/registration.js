@@ -102,7 +102,7 @@ if (id && username) {
 
                 partner = partner_id;
 
-                if (partner_id && folder && obj_data) {
+                if (partner_id && folder && obj_data && type === 'Партнер') {
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
 
