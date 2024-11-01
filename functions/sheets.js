@@ -177,21 +177,25 @@ const save_settings = async (obj) => {
  */
 const get_settings = async (partner) => {
     try {
-        const values = await get_data(DB, DATASHEETNAME);
-        const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
-        const data = values.find(r => r[0] === partner);
+        if (partner !== undefined || partner !== null) {
+            const values = await get_data(DB, DATASHEETNAME);
+            const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
+            const data = values.find(r => r[0] === partner);
 
-        if (data !== '') {
-            logger.info(data.length);
-            const percent = data.length >= column_index + 1 ? data[column_index + 1] : undefined;
-            const work_type = data[column_index];
-            if (work_type || (work_type && percent)) {
-                logger.info(`Settings for partner with id: ${partner} found`);
-                return { work_type, percent };
-            } else {
-                logger.warn(`Settings for partner with id: ${partner} not found`);
-                return false;
+            if (data !== '') {
+                const percent = data.length >= column_index + 1 ? data[column_index + 1] : undefined;
+                const work_type = data[column_index];
+                if (work_type || (work_type && percent)) {
+                    logger.info(`Settings for partner with id: ${partner} found`);
+                    return { work_type, percent };
+                } else {
+                    logger.warn(`Settings for partner with id: ${partner} not found`);
+                    return false;
+                }
             }
+        } else { 
+            logger.warn(`First init partner`);
+            return false;
         }
     } catch (error) {
         logger.error(`Error in get_settings: ${error.stack}`);
