@@ -99,6 +99,8 @@ const auth = async (user_id, partner) => {
             .slice(1)
             .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 7).every(Boolean)) != '';
 
+            logger.info(success);
+
         const root = success.includes(true);
 
         if (success) {
