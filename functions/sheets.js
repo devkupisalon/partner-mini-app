@@ -54,7 +54,7 @@ const get_values = async () => {
         logger.info('Data received successfully');
         return values;
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in get_values: ${error.message}`);
     }
 }
 
@@ -90,7 +90,7 @@ const save = async (params) => {
             return true;
         }
     } catch (error) {
-        logger.error(error.stack);
+        logger.error(`Error in save: ${error.stack}`);
         return false;
     }
 }
@@ -123,7 +123,7 @@ const auth = async (user_id, partner) => {
             return { success: false, root: false };
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in auth: ${error.message}`);
     }
 }
 
@@ -165,7 +165,7 @@ const save_settings = async (obj) => {
             return true;
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in save_settings: ${error.message}`);
         return false;
     }
 }
@@ -193,7 +193,7 @@ const get_settings = async (partner) => {
             }
         }
     } catch (error) {
-        logger.error(error.stack);
+        logger.error(`Error in get_settings: ${error.stack}`);
         return false;
     }
 }
@@ -250,7 +250,7 @@ const do_calc = async (params) => {
             logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in do_calc: ${error.message}`);
         return false;
     }
 }
@@ -268,7 +268,7 @@ const get_partner_name_and_manager = async (partner_id) => {
         partner_folder = partner_folder.split('/').pop();
         return { partner_name, manager, work_type, percent, calculate_id, partner_folder };
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in get_partner_name_and_manager: ${error.message}`);
         return false;
     }
 }
@@ -283,7 +283,7 @@ const get_cars = async () => {
         logger.info('Data received successfully');
         return values;
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in get_cars: ${error.message}`);
     }
 }
 
@@ -318,7 +318,7 @@ const create_folder = async (name) => {
         logger.info('Folder created successfully');
         return { folderLink, id };
     } catch (error) {
-        logger.error(error.stack);
+        logger.error(`Error in create_folder: ${error.stack}`);
     }
 }
 
@@ -354,7 +354,7 @@ const save_new_partner = async (params) => {
         }
         return { partner_id: uid, folder: id };
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in save_new_partner: ${error.message}`);
     }
 }
 
@@ -403,7 +403,7 @@ const save_logo = async (params) => {
             return { success: 'success' };
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in save_logo: ${error.message}`);
     }
 }
 
@@ -434,7 +434,7 @@ const get_partners_data = async (chat_id) => {
             return { partner_name: undefined, partner_id: undefined };
         }
     } catch (error) {
-        logger.error(error.message);
+        logger.error(`Error in get_partners_data: ${error.message}`);
     }
 }
 
