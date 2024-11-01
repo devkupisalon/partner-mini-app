@@ -108,6 +108,8 @@ const auth = async (user_id, partner) => {
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);
             return { success, root };
+        } else {
+            return { success: false, root: false };
         }
     } catch (error) {
         logger.error(error.message);
