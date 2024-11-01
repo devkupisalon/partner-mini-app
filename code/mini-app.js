@@ -2,7 +2,7 @@ const tg = window.Telegram.WebApp;
 const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const url = window.location.href;
+const url = decodeURIComponent(window.location.href);
 const calc = url.includes('calc=true');
 const partner = urlParams.get('startapp');
 
