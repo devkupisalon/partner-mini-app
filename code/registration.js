@@ -12,6 +12,8 @@ const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
 const logo = document.getElementById('partner-logo');
 const upload = document.getElementById('image-upload');
+const percent_input = document.getElementById('partner-percent');
+const percent_text = document.getElementById('percent-text');
 const checkmark = "  &#9989";
 
 let partner;
@@ -27,7 +29,8 @@ const fields = {
     your_type: '#your-type',
     ya_link: '#yandex-link',
     org_name: '#org-name',
-    address: '#address'
+    address: '#address',
+    percent: '#partner-percent'
 };
 
 tg.onEvent('backButtonClicked', (event) => {
@@ -83,7 +86,7 @@ if (id && username) {
     tg.onEvent('mainButtonClicked', async (event) => {
         tg.MainButton.showProgress(true);
 
-        const { buttonValues, data: { name, phone, type, your_type, ya_link, org_name, address } } = getValues();
+        const { buttonValues, data: { name, phone, type, your_type, ya_link, org_name, address, percent } } = getValues();
 
         if (buttonValues && name && phone && type && org_name && address) {
 
@@ -91,7 +94,7 @@ if (id && username) {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
                 partner = partner_id;
@@ -137,7 +140,8 @@ if (id && username) {
 async function preload() {
     tg.MainButton.hide();
     await fetchData();
-    await select_all()
+    await select_all();
+    await show_percent();
     preloader.style.display = "none";
     container.style.display = "flex";
     tg.MainButton.show();

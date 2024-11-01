@@ -7,6 +7,8 @@ const percent_input = document.getElementById('partner-percent');
 const percent_text = document.getElementById('percent-text');
 const work_type_input = document.getElementById("field_select-type");
 const options = work_type_input.getElementsByTagName("option");
+const container = document.querySelector('.container');
+const preloader = document.querySelector('.c-car-spinner');
 const partner_type = options[2].value;
 
 tg.BackButton.show();
@@ -21,52 +23,6 @@ const fields = {
     percent: '#partner-percent',
     work_type : '#field_select-type'
 };
-
-/** inputmask for precentage */
-function mask() {
-    const elm = document.getElementById('partner-percent');
-    const suffix = '%';
-    const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
-
-    const saveValue = (data) => {
-        elm.dataset.value = data;
-    };
-
-    const pureValue = () => {
-        let value = elm.value.replace(/\D/g, '');
-        value = parseInt(value.replace(suffix, ''))
-        return value || '';
-    };
-
-    const focusNumber = () => {
-        elm.setSelectionRange(elm.dataset.value.length, elm.dataset.value.length);
-    };
-
-    elm.addEventListener('keyup', (e) => {
-        if (bypass.indexOf(e.keyCode) !== -1) return;
-
-        const pure = pureValue();
-        saveValue(pure);
-
-        if (!pure) {
-            elm.value = '';
-            return;
-        }
-
-        elm.value = pure + suffix;
-        focusNumber();
-    });
-}
-
-mask();
-
-/** Show  or hide percent input form */
-function show(check) {
-    let d = check ? 'flex' : 'none';
-    percent_input.style.display = d;
-    percent_text.style.display = d;
-    if (!check) { percent_input.value = '' }
-}
 
 /** Get settings for partner */
 async function get_settings() {
@@ -135,10 +91,8 @@ async function show_percent() {
 /** PRELOADER */
 async function preload() {
     tg.MainButton.hide();
-    const container = document.querySelector('.container');
     await get_settings();
     await show_percent();
-    const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
     tg.MainButton.show();

@@ -24,7 +24,6 @@ let work_type_partner, percent_partner, root;
 tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
-console.log(start_param);
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
