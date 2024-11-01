@@ -55,7 +55,7 @@ bot.on('message', async (message) => {
                     logger.info(`User message successfully forwarded from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}`);
                 })
                 .catch((error) => {
-                    logger.error(`Error forwarding user message from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}: ${error.message}`);
+                    logger.error(`Error forwarding user message from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
                 });
         }
     }
