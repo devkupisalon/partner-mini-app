@@ -23,7 +23,7 @@ const keyboard = {
  * @param {string} chat_id - user chat_id 
  */
 const send_first_message = async (chat_id) => {
-    bot.sendMessage(chat_id, 'Пожалуйста, отправляйте данные для расчета: фото/видео/текст/голосовое одним сообщением.')
+    bot.sendMessage(chat_id, 'Пожалуйста, отправляйте данные для расчета: фото/видео/текст/голосовой контент одним сообщением.')
         .then(() => {
             logger.info('Message successfully sent to the user');
         })
