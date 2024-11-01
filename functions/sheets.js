@@ -366,7 +366,7 @@ const save_new_partner = async (params) => {
 const process_agent = async (chat_id, uid) => {
     try {
         const message_text = `Ниже нопка для формирования расчета`;
-        const url = `${MINI_APP_LINK}${uid}`;
+        const url = `${MINI_APP_LINK}${uid}_calc_true`;
         await send_first_message(chat_id);
         await pinned_message(chat_id, message_text, url);
     } catch (error) {
