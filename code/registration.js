@@ -98,7 +98,7 @@ if (id && username) {
             try {
 
                 const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}`);
-                const { partner_id, folder, partner_name } = await reigistr_response.json();
+                const { partner_id, folder } = await reigistr_response.json();
 
                 partner = partner_id;
 
@@ -118,7 +118,7 @@ if (id && username) {
                 }
 
                 if (partner_id) {
-                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_name=${org_name}&root=true`);
+                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_NAME=${org_name}&root=true`);
                     const { success } = await response.json();
                     if (success) {
                         tg.showPopup({ message: 'Регистрация прошла успешно' });
