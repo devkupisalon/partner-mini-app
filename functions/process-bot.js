@@ -94,7 +94,7 @@ const pinned_message = async (chat_id, text, url) => {
     const pinnedMessage = await bot.sendMessage(chat_id, text, {
         reply_markup: {
             inline_keyboard: [[
-                { text: 'Сформировать расчет', url }
+                { text: 'Сделать расчет', url }
             ]]
         }
     });
