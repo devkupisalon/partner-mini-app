@@ -167,6 +167,7 @@ async function preload() {
         el_arr.forEach(el => el.style.display = 'none');
     }
 
+    console.log(root);
     if (!root) {
         settings.style.dipslay = "none"
         settings_text.style.display = "none";
