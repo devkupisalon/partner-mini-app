@@ -41,7 +41,7 @@ async function get_settings() {
             console.log({ work_type, percent });
 
             if (work_type !== undefined) {
-
+                    console.log('test');
                 for (let option of options) {
                     if (option.value === work_type) {
                         option.selected = true;
@@ -52,6 +52,7 @@ async function get_settings() {
             }
 
             if (percent !== undefined) {
+                console.log('test');
                 percent_input.value = percent;
                 show(true);
             }
@@ -73,19 +74,6 @@ function getValues() {
     );
 
     return data;
-}
-
-/** Show or hide percent onChange work type input */
-async function show_percent() {
-    const selected_work_type = work_type_input.value;
-
-    if (selected_work_type === partner_type) {
-        show(true);
-    } else {
-        show(false);
-    }
-
-    work_type_input.onchange = show_percent;
 }
 
 /** PRELOADER */
