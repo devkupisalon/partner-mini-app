@@ -23,6 +23,7 @@ const constants = {
     PARTNERSPARENT: process.env.partnersparent,
     WEBAPPURL: process.env.webappurl,
     GROUP_CHAT_ID: process.env.GROUP_CHAT_ID,
+    MINI_APP_LINK: process.env.MINI_APP_LINK,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,

@@ -22,7 +22,8 @@ const { SPREADSHEETID,
     MONITORSPREADSHEET,
     MONITORSHEETNAME,
     PARTNERSPARENT,
-    WEBAPPURL } = constants;
+    WEBAPPURL,
+    MINI_APP_LINK } = constants;
 
 /**
  * Получить данные из указанного диапазона в таблице Google Sheets
@@ -360,7 +361,7 @@ const save_new_partner = async (params) => {
 const process_agent = async (chat_id) => {
     try {
         const message_text = `Ниже нопка для формирования расчета`;
-        const url = `https://t.me/KupisalonPartners_bot/partners?startapp=${uid}`;
+        const url = `${MINI_APP_LINK}${uid}`;
         await send_first_message(chat_id);
         await pinned_message(chat_id, message_text, url);
     } catch (error) {
