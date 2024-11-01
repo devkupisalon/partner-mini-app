@@ -391,6 +391,11 @@ const save_logo = async (params) => {
     }
 }
 
+/**
+ * Получение данных о партнере по идентификатору чата
+ * @param {string} chat_id - Идентификатор чата пользователя
+ * @returns {Promise<{ partner_name: string, partner_id: string }>} - Объект с данными партнера (имя и ID)
+ */
 const get_partners_data = async (chat_id) => {
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
@@ -409,7 +414,7 @@ const get_partners_data = async (chat_id) => {
             logger.info(`User with id: ${user_id} is authorized`);
             return { partner_name, partner_id };
         } else {
-            logger.warn(`User with id: ${user_id} is not authorized`)
+            logger.warn(`User with id: ${user_id} is not authorized`);
             return { partner_name: undefined, partner_id: undefined };
         }
     } catch (error) {
