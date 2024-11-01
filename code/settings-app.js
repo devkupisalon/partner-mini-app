@@ -22,6 +22,7 @@ const fields = {
     work_type : '#field_select-type'
 };
 
+/** inputmask for precentage */
 function mask() {
     const elm = document.getElementById('partner-percent');
     const suffix = '%';
@@ -59,6 +60,7 @@ function mask() {
 
 mask();
 
+/** Show  or hide percent input form */
 function show(check) {
     let d = check ? 'flex' : 'none';
     percent_input.style.display = d;
@@ -66,6 +68,7 @@ function show(check) {
     if (!check) { percent_input.value = '' }
 }
 
+/** Get settings for partner */
 async function get_settings() {
 
     try {
@@ -103,6 +106,10 @@ async function get_settings() {
     }
 }
 
+/** 
+ * Get values from form 
+ * return {object} object with input data
+ */
 function getValues() {
 
     const data = Object.fromEntries(
@@ -112,6 +119,7 @@ function getValues() {
     return data;
 }
 
+/** Show or hide percent onChange work type input */
 async function show_percent() {
     const selected_work_type = work_type_input.value;
 
@@ -124,6 +132,7 @@ async function show_percent() {
     work_type_input.onchange = show_percent;
 }
 
+/** PRELOADER */
 async function preload() {
     tg.MainButton.hide();
     const container = document.querySelector('.container');
@@ -138,6 +147,7 @@ async function preload() {
 
 preload();
 
+/** MAIN BUTTON */
 tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 

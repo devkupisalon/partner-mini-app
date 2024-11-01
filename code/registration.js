@@ -41,6 +41,9 @@ tg.onEvent('backButtonClicked', (event) => {
     tg.MainButton.hide();
 });
 
+/** get values from form 
+ * return {object} object with input data
+ */
 function getValues() {
 
     const data = Object.fromEntries(
@@ -59,6 +62,7 @@ function getValues() {
     return { buttonValues, data };
 }
 
+/** UPLOAD LOGO BUTTON */
 logo.addEventListener('click', function () {
     upload.click();
 });
@@ -74,6 +78,7 @@ upload.addEventListener('change', function () {
 if (id && username) {
     tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
 
+    /** MAIN BUTTON */
     tg.onEvent('mainButtonClicked', async (event) => {
         tg.MainButton.showProgress(true);
 
@@ -87,6 +92,8 @@ if (id && username) {
 
                 const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}`);
                 const { partner_id, folder } = await reigistr_response.json();
+
+                partner = partner_id;
 
                 if (partner_id && folder && obj_data) {
                     obj_data.append('name', `${org_name}_logo`);
@@ -105,13 +112,12 @@ if (id && username) {
 
                 if (partner_id) {
                     const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}`);
-
                     const { success } = await response.json();
                     if (success) {
                         tg.showPopup({ message: 'Регистрация прошла успешно' });
                         tg.MainButton.hideProgress();
                         tg.MainButton.hide();
-                        window.location.href = '/';
+                        window.location.href = `/?startapp=${partner}`;
                     }
                 }
             } catch (error) {
@@ -126,6 +132,7 @@ if (id && username) {
     });
 }
 
+/** PRELOADER */
 async function preload() {
     tg.MainButton.hide();
     await fetchData();

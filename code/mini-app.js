@@ -29,11 +29,18 @@ start_param = start_param !== undefined ? start_param : partner;
 console.log(`partner: ${partner}`);
 console.log(`start_param: ${start_param}`);
 
+/**
+ * Установить галочку для элемента и отключить его
+ * @param {HTMLElement} s - Элемент, для которого нужно установить галочку и отключить
+ */
 const setCheckmark = s => {
     s.style.pointerEvents = "none";
     s.style.opacity = "0.5";
 };
 
+/**
+ * Объект с методами для установки галочек и отключения кнопок
+ */
 const checkout = {
     as: () => {
         [auth, subscribe].forEach(s => {
@@ -47,17 +54,18 @@ const checkout = {
         [auth, calculate].forEach(s => {
             setCheckmark(s);
         });
-        auth.innerHTML = auth.innerText + checkmark
+        auth.innerHTML = auth.innerText + checkmark;
     },
     s: () => {
         subscribe_text.style.opacity = "0.5";
         [subscribe, calculate].forEach(s => {
             setCheckmark(s);
         });
-        subscribe.innerHTML = subscribe.innerText + checkmark
+        subscribe.innerHTML = subscribe.innerText + checkmark;
     }
 };
 
+/** check subscription and authorization */
 const check = async () => {
 
     try {
@@ -85,6 +93,7 @@ const check = async () => {
     }
 };
 
+/** validation */
 const fetchData = async () => {
     try {
         const response = await fetch(`/validate-init?${tg.initData}`);
@@ -94,6 +103,7 @@ const fetchData = async () => {
     }
 };
 
+/** get partner settings */
 async function get_settings() {
 
     try {
@@ -116,6 +126,7 @@ async function get_settings() {
     }
 }
 
+/** event listeners */
 subscribe.addEventListener('click', function () {
     tg.openTelegramLink(channel);
 });
@@ -142,6 +153,7 @@ calculate.addEventListener('click', async function () {
     }
 });
 
+/** PRELOADER */
 async function preload() {
     await fetchData();
     await check();

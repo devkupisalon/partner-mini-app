@@ -6,6 +6,11 @@ const partner = urlParams.get('partner');
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
 
+const container = document.querySelector('.container');
+const preloader = document.querySelector('.c-car-spinner');
+const carBrandsSelect = document.getElementById("car-brands-select");
+const carModelsSelect = document.getElementById("car-models-select");
+
 const fields = {
     name: '#client-name',
     phone: '#client-phone',
@@ -20,14 +25,13 @@ tg.onEvent('backButtonClicked', (event) => {
 });
 
 function getValues() {
-
     const data = Object.fromEntries(
         Object.entries(fields).map(([key, selector], i) => [key, document.querySelector(selector).value])
     );
-
     return data;
 }
 
+/** Get cars brands and models for select options */
 async function getCarBrandsAndModels() {
     let car_values;
     try {
@@ -37,9 +41,6 @@ async function getCarBrandsAndModels() {
     } catch (err) {
         console.error(err);
     }
-
-    const carBrandsSelect = document.getElementById("car-brands-select");
-    const carModelsSelect = document.getElementById("car-models-select");
 
     for (let row of car_values) {
         const brand = row[0];
@@ -69,11 +70,10 @@ async function getCarBrandsAndModels() {
     carBrandsSelect.onchange = getCarModels;
 }
 
+/** PRELOADER */
 async function preload() {
     tg.MainButton.hide();
-    const container = document.querySelector('.container');
     await getCarBrandsAndModels();
-    const preloader = document.querySelector('.c-car-spinner');
     preloader.style.display = "none";
     container.style.display = "flex";
     tg.MainButton.show();
@@ -85,7 +85,7 @@ async function preload() {
 
 preload();
 
-
+/** MAIN BUTTON */
 tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 

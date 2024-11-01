@@ -30,6 +30,9 @@ tg.onEvent('backButtonClicked', (event) => {
   tg.MainButton.hide();
 });
 
+/** get values from form 
+ * return {object} object with input data
+ */
 function getValues() {
 
   const data = Object.fromEntries(
@@ -51,6 +54,7 @@ function getValues() {
 if (id && username) {
   tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
 
+  /** MAIN BUTTON */
   tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
@@ -81,6 +85,7 @@ if (id && username) {
   });
 }
 
+/** PRELOADER */
 async function preload() {
   tg.MainButton.hide();
   await fetchData();
