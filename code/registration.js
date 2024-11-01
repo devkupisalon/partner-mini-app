@@ -97,7 +97,7 @@ if (id && username) {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}`);
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}&user_id=${id}`);
                 const { partner_id, folder } = await reigistr_response.json();
 
                 partner = partner_id;

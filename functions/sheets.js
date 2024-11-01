@@ -3,7 +3,7 @@ import logger from '../logs/logger.js';
 
 import { constants, __dirname } from '../constants.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
-import { send_first_message, pinned_message } from './process-bot.js';
+import { pinned_message, send_first_message } from './process-bot.js';
 import './process-bot.js';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -329,7 +329,7 @@ const create_folder = async (name) => {
  */
 const save_new_partner = async (params) => {
     const uid = uuidv4();
-    const { org_name, address, phone, type, your_type, link, categories, percent } = params;
+    const { org_name, address, phone, type, your_type, link, categories, percent, user_id } = params;
     const { folderLink, id } = await create_folder(org_name);
 
     try {
@@ -348,10 +348,24 @@ const save_new_partner = async (params) => {
 
         if (data.spreadsheetId) {
             logger.info('New partner data saved successfully');
+            if (type === 'Агент') {
+                await process_agent(user_id);
+            }
         }
         return { partner_id: uid, folder: id };
     } catch (error) {
         logger.error(error.message);
+    }
+}
+
+const process_agent = async (chat_id) => {
+    try {
+        const message_text = `Ниже нопка для формирования расчета`;
+        const url = `https://t.me/KupisalonPartners_bot/partners?startapp=${uid}`;
+        await send_first_message(chat_id);
+        await pinned_message(chat_id, message_text, url);
+    } catch (error) {
+        logger.error(`An a error occured in process_agent: ${error.message}`);
     }
 }
 
@@ -424,4 +438,15 @@ const get_partners_data = async (chat_id) => {
     }
 }
 
-export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc, save_new_partner, save_logo, get_partners_data };
+export {
+    get_values,
+    save,
+    auth,
+    save_settings,
+    get_settings,
+    get_cars,
+    do_calc,
+    save_new_partner,
+    save_logo,
+    get_partners_data
+};

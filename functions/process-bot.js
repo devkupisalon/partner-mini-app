@@ -2,11 +2,12 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 import { constants } from '../constants.js';
 
-const { DEV_CHAT_ID, GROUP_CHAT_ID } = constants;
+const { GROUP_CHAT_ID } = constants;
 const callback_data = {
     report_error: 'report_error',
     send_data: 'send_calculation_info'
 };
+
 const { report_error, send_data } = callback_data;
 
 const keyboard = {
@@ -16,47 +17,67 @@ const keyboard = {
     ]
 };
 
+/**
+ * Send first message to user
+ * @param {string} chat_id - user chat_id 
+ */
 const send_first_message = async (chat_id) => {
-    bot.sendMessage(chat_id, 'Выберите действие:', { reply_markup: JSON.stringify(keyboard) })
+    bot.sendMessage(chat_id, 'Пожалуйста, отправляйте данные для расчета: фото/видео/текст/голосовое одним сообщением.')
         .then(() => {
-            logger.info('Message with buttons successfully sent to the user');
+            logger.info('Message successfully sent to the user');
         })
         .catch((error) => {
-            logger.error(`Error sending message with buttons: ${error.message}`);
+            logger.error(`Error sending message: ${error.message}`);
         });
 }
 
-// Handler for callback_data "send_calculation_info"
-bot.on('callback_query', async (query) => {
-    const chatId = query.message.chat.id;
-    const { partner_name, partner_id } = await get_partners_data(chatId);
+/**
+ * Forward messages from user chats to managers groups chat and
+ * send back responses from managers to user chats 
+ */
+bot.on('message', async (message) => {
+    const chatId = message.chat.id;
 
-    if (query.data === send_data) {
-        bot.sendMessage(chatId, 'Пожалуйста, отправьте данные для расчета: фото/видео/текст/голосовое сообщение одним сообщением.')
+    // Если сообщение от пользователя
+    if (message.from.id === chatId) {
+        const { partner_name, partner_id } = await get_partners_data(chatId);
+
+        // Подготовка текста для пересылки сообщения с именем партнера и его ID
+        const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
+
+        // Пересылка сообщения с подготовленным текстом и данными
+        bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id, forwardedMessage)
             .then(() => {
-                logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send data for calculation.`);
+                logger.info(`User message successfully forwarded from chat_id ${chatId} to chat_id ${targetChatId}`);
             })
             .catch((error) => {
-                logger.error(`Error sending request for data for calculation: ${error.message}`);
-            });
-    } else if (query.data === report_error) {
-        bot.sendMessage(chatId, 'Пожалуйста, отправьте фото/видео/текст/голосовой контент ошибки одним сообщением.')
-            .then(() => {
-                logger.info(`User ${partner_name} (ID: ${partner_id}) is prompted to send an error message.`);
-            })
-            .catch((error) => {
-                logger.error(`Error sending request for error message: ${error.message}`);
+                logger.error(`Error forwarding user message from chat_id ${chatId} to chat_id ${targetChatId}: ${error.message}`);
             });
     }
 
-    // Handling received data and forwarding it to a specific chat ID (for "send_calculation_info" and "report_error")
-    bot.on('message', (message) => {
-        const targetChatId = (query.data === send_data) ? GROUP_CHAT_ID : DEV_CHAT_ID;
-        // Подготовка текста для простой пересылки сообщения с именем партнера и его ID
-        const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
-        // Пересылка сообщения с подгтовленным текстом и данными
-        bot.forwardMessage(targetChatId, chatId, message.message_id, forwardedMessage);
-    });
+    // Проверка, откуда получено сообщение (если из чата группы)
+    if (message.chat.type === 'group' || message.chat.type === 'supergroup') {
+        const groupId = message.chat.id;
+        logger.info(`Received a message from group chat with ID: ${groupId}`);
+
+        if (groupId === GROUP_CHAT_ID) {
+
+            // Проверка на наличие пересланного сообщения от пользователя
+            if (message.reply_to_message && message.reply_to_message.forward_from) {
+                const userChatId = message.reply_to_message.forward_from.id;
+
+                // Пересылка ответа от менеджера обратно пользователю
+                bot.forwardMessage(userChatId, chatId, message.message_id)
+                    .then(() => {
+                        logger.info(`Message successfully sent from manager in chat_id ${chatId} to user in chat_id ${userChatId}`);
+                    })
+                    .catch((error) => {
+                        logger.error(`Error sending message from manager in chat_id ${chatId} to user in chat_id ${userChatId}: ${error.message}`);
+                    });
+            }
+        }
+
+    }
 });
 
 
