@@ -78,9 +78,9 @@ const check = async () => {
         console.log(root);
 
         const checks = {
-            a: is_authorized && !is_subscribed,
-            as: is_authorized && is_subscribed,
-            s: (!is_authorized || is_authorized == undefined) && is_subscribed
+            a: is_authorized.success && !is_subscribed,
+            as: is_authorized.success && is_subscribed,
+            s: (!is_authorized.success || is_authorized.success == undefined) && is_subscribed
         };
 
         for (const key in checks) {
