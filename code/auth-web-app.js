@@ -7,8 +7,7 @@ const partner = urlParams.get('partner');
 
 const fields = {
   name: '#partner-name',
-  phone: '#partner-phone',
-  email: '#partner-email',
+  phone: '#partner-phone'
 };
 
 const setCheckmark = s => {
@@ -30,7 +29,8 @@ tg.onEvent('backButtonClicked', (event) => {
   tg.MainButton.hide();
 });
 
-/** get values from form 
+/** 
+ * Get values from form 
  * return {object} object with input data
  */
 function getValues() {
@@ -65,7 +65,7 @@ if (id && username) {
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&email=${email}&groups=${buttonValues}`);
+        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}`);
 
         const { success } = await response.json();
         if (success) {
