@@ -49,14 +49,15 @@ bot.on('message', async (message) => {
         if (chatId) {
             logger.info(chatId)
             const { partner_name, partner_id } = await get_partners_data(chatId);
-            console.log(partner_name, partner_id);
+            logger.info(partner_name, partner_id);
             const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
+            logger.info(`group_id: ${GROUP_CHAT_ID}, chat_id: ${chatId}, message_id: ${message.message_id}`);
             bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id, forwardedMessage)
                 .then(() => {
-                    logger.info(`User message successfully forwarded from chat_id ${chatId} to chat_id ${targetChatId}`);
+                    logger.info(`User message successfully forwarded from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}`);
                 })
                 .catch((error) => {
-                    logger.error(`Error forwarding user message from chat_id ${chatId} to chat_id ${targetChatId}: ${error.message}`);
+                    logger.error(`Error forwarding user message from chat_id ${chatId} to group_chat_id ${GROUP_CHAT_ID}: ${error.message}`);
                 });
         }
     }
