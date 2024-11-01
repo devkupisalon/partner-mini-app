@@ -165,7 +165,6 @@ async function preload() {
     }
 
     if (!root) {
-        console.log('test');
         settings.style.display = "none"
         settings_text.style.display = "none";
     }
