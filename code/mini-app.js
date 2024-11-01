@@ -72,10 +72,7 @@ const check = async () => {
         const response = await fetch(`/check?partner=${start_param}&user_id=${id}`);
         const { is_subscribed, is_authorized } = await response.json();
 
-        console.log({ is_subscribed, is_authorized });
-
         root = is_authorized.root;
-        console.log(root);
 
         const checks = {
             a: is_authorized.success && !is_subscribed,
@@ -167,10 +164,9 @@ async function preload() {
         el_arr.forEach(el => el.style.display = 'none');
     }
 
-    console.log(root);
     if (!root) {
         console.log('test');
-        settings.style.dipslay = "none"
+        settings.style.display = "none"
         settings_text.style.display = "none";
     }
 
