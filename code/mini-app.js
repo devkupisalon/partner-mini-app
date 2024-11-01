@@ -3,6 +3,7 @@ const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const partner = urlParams.get('startapp');
+const calc = urlParams.get('calc');
 
 tg.ready();
 
@@ -24,7 +25,8 @@ let work_type_partner, percent_partner, root;
 tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
-console.log(start_param); 
+console.log(start_param);
+console.log(calc); 
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
