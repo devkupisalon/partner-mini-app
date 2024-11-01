@@ -29,8 +29,9 @@ const send_first_message = async (chat_id) => {
 const process_callback = async () => {
 
     // Handler for callback_data "send_calculation_info"
-    bot.on('callback_query', (query) => {
+    bot.on('callback_query', async (query) => {
         const chatId = query.message.chat.id;
+        const {partner_name, partner_id} = await get_partners_data(chatId);
 
         if (query.data === send_data) {
             bot.sendMessage(chatId, 'Пожалуйста, отправьте данные для расчета: фото/видео/текст/голосовое сообщение одним сообщением.')

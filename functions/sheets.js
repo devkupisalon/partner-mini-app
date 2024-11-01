@@ -392,4 +392,28 @@ const save_logo = async (params) => {
     }
 }
 
-export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc, save_new_partner, save_logo };
+const get_partners_data = async (chat_id) => {
+    try {
+        const values = await get_data(SPREADSHEETID, SHEETNAME);
+
+        const { partner_name, partner_id } = values
+            .slice(1)
+            .reduce((acc, [, partner_id, partner_name]) => {
+                acc.partner_name = partner_name;
+                acc.partner_id = partner_id;
+                return acc;
+            }, {});
+
+        if (partner_name && partner_id) {
+            logger.info(`User with id: ${user_id} is authorized`);
+            return { partner_name, partner_id };
+        } else {
+            logger.warn(`User with id: ${user_id} is not authorized`)
+            return { partner_name: undefined, partner_id: undefined };
+        }
+    } catch (error) {
+        logger.error(error.message);
+    }
+}
+
+export { get_values, save, auth, save_settings, get_settings, get_cars, do_calc, save_new_partner, save_logo, get_partners_data };
