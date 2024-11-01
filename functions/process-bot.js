@@ -49,7 +49,7 @@ bot.on('message', async (message) => {
                 const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
                 if (message_id) {
                     logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
-                    await bot.re(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+                    await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
                 }
             } catch (error) {
                 logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
@@ -81,6 +81,10 @@ bot.on('message', async (message) => {
     }
 });
 
+// Handle errors
+bot.on('polling_error', (error) => {
+    logger.error(error);
+});
 
 /**
  * Функция для закрепления сообщения с кнопкой в чате
