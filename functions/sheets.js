@@ -177,7 +177,7 @@ const save_settings = async (obj) => {
  */
 const get_settings = async (partner) => {
     try {
-        if (partner !== undefined && partner !== null) {
+        if (partner) {
             const values = await get_data(DB, DATASHEETNAME);
             const column_index = getColumnNumberByValue(values[0], VALUE) - 1;
             const data = values.find(r => r[0] === partner);
