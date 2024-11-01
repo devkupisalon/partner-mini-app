@@ -418,6 +418,7 @@ const save_logo = async (params) => {
  * @returns {Promise<{ partner_name: string, partner_id: string }>} - Объект с данными партнера (имя и ID)
  */
 const get_partners_data = async (chat_id) => {
+    logger.log(`Received chat_id: ${chat_id}`);
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
 

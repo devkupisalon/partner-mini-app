@@ -36,7 +36,7 @@ const send_first_message = async (chat_id) => {
  * Forward messages from user chats to managers groups chat and
  * send back responses from managers to user chats 
  */
-bot.on('message', (message) => {
+bot.on('message', async (message) => {
 
     if (message.contact) {
         return;
@@ -48,7 +48,7 @@ bot.on('message', (message) => {
     if (message.from.id === chatId) {
         if (chatId) {
             logger.info(chatId)
-            const { partner_name, partner_id } = get_partners_data(chatId);
+            const { partner_name, partner_id } = await get_partners_data(chatId);
             logger.info(partner_name, partner_id);
             const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
             logger.info(`group_id: ${GROUP_CHAT_ID}, chat_id: ${chatId}, message_id: ${message.message_id}`);
