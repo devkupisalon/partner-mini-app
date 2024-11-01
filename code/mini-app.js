@@ -25,6 +25,7 @@ tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 const calc = start_param.includes('_calc_true');
+console.log(calc);
 console.log(start_param);
 start_param = calc ? String(start_param).replace('_calc_true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
