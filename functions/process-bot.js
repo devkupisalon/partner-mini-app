@@ -41,19 +41,18 @@ bot.on('message', async (message) => {
 
     // Если сообщение от пользователя
     if (message.from.id === chatId) {
-        const { partner_name, partner_id } = await get_partners_data(chatId);
+        if (chat_id) {
 
-        // Подготовка текста для пересылки сообщения с именем партнера и его ID
-        const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
-
-        // Пересылка сообщения с подготовленным текстом и данными
-        bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id, forwardedMessage)
-            .then(() => {
-                logger.info(`User message successfully forwarded from chat_id ${chatId} to chat_id ${targetChatId}`);
-            })
-            .catch((error) => {
-                logger.error(`Error forwarding user message from chat_id ${chatId} to chat_id ${targetChatId}: ${error.message}`);
-            });
+            const { partner_name, partner_id } = await get_partners_data(chatId);
+            const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
+            bot.forwardMessage(GROUP_CHAT_ID, chatId, message.message_id, forwardedMessage)
+                .then(() => {
+                    logger.info(`User message successfully forwarded from chat_id ${chatId} to chat_id ${targetChatId}`);
+                })
+                .catch((error) => {
+                    logger.error(`Error forwarding user message from chat_id ${chatId} to chat_id ${targetChatId}: ${error.message}`);
+                });
+        }
     }
 
     // Проверка, откуда получено сообщение (если из чата группы)
