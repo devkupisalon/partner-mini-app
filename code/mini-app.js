@@ -169,6 +169,7 @@ async function preload() {
 
     console.log(root);
     if (!root) {
+        console.log('test');
         settings.style.dipslay = "none"
         settings_text.style.display = "none";
     }
