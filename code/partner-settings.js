@@ -1,9 +1,9 @@
 /** Show  or hide percent input form */
 function show(check) {
-    console.log('test');
     let d = check ? 'flex' : 'none';
     percent_input.style.display = d;
     percent_text.style.display = d;
+    console.log(percent_input.style.display);
     if (!check) { percent_input.value = '' }
 }
 
