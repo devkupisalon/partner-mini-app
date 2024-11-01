@@ -1,6 +1,7 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 import { constants } from '../constants.js';
+import { get_partners_data } from './sheets.js';
 
 const { GROUP_CHAT_ID } = constants;
 const callback_data = {
