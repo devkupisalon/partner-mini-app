@@ -20,6 +20,7 @@ const fields = {
 };
 
 tg.onEvent('backButtonClicked', (event) => {
+    console.log(partner);
     window.location.href = `/?startapp=${partner}`;
     tg.MainButton.hide();
 });
