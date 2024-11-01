@@ -7,16 +7,17 @@ function show(check) {
 }
 
 /** Show or hide percent onChange work type input */
-async function show_percent(logotype = undefined) {
+async function show_percent() {
+
     const selected_work_type = work_type_input.value;
-    console.log(logotype);
-    let el = logotype !== undefined ? logotype: logo;
+    const logo = document.getElementById('partner-logo');
+
     if (selected_work_type === partner_type) {
         show(true);
-        if (el && el !== undefined) el.style.display = "block";
+        if (logo && logo !== undefined) el.style.display = "block";
     } else {
         show(false);
-        if (el && el !== undefined) el.style.display = "none";
+        if (logo && logo !== undefined) el.style.display = "none";
     }
 
     work_type_input.onchange = show_percent;
