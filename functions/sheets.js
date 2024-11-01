@@ -61,9 +61,18 @@ const get_values = async () => {
  * @param {Array} arr - Массив данных для сохранения
  * @returns {boolean} - Успешно ли сохранены данные
  */
-const save = async (arr) => {
+const save = async (params) => {
     try {
+
         const values = await get_data(SPREADSHEETID, SHEETNAME);
+        let { timestamp, partner, id, username, name, phone, groups, partner_NAME } = params;
+
+        if (partner_NAME === undefined) {
+            const { partner_name } = await get_partner_name_and_manager(partner);
+            partner_NAME = partner_name;
+        }
+
+        const arr = [timestamp, partner, partner_NAME, id, username, name, phone, groups];
 
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
@@ -97,11 +106,11 @@ const auth = async (user_id, partner) => {
 
         const success = values
             .slice(1)
-            .filter(f => f[1] === partner && f[2] === user_id && f.slice(3, 6).every(Boolean)) != '';
+            .filter(f => f[1] === partner && f[3] === user_id && f.slice(4, 7).every(Boolean)) != '';
 
         const root = values
             .slice(1)
-            .filter(f => f[1] === partner && f[2] === user_id && f[7]) != '';
+            .filter(f => f[1] === partner && f[3] === user_id && f[7]) != '';
 
         if (success) {
             logger.info(`User with id: ${user_id} is authorized`);

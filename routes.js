@@ -113,7 +113,7 @@ app.get('/savedata', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
         logger.info(`Data successfully received from mini-app: ${values_list}`);
-        const success = await save(values_list);
+        const success = await save(req.query);
 
         return res.json({ success });
     } catch (error) {
