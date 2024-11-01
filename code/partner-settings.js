@@ -12,8 +12,10 @@ async function show_percent() {
 
     if (selected_work_type === partner_type) {
         show(true);
+        logo?.style.display = "block";
     } else {
         show(false);
+        logo?.style.display = "none";
     }
 
     work_type_input.onchange = show_percent;

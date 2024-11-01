@@ -300,3 +300,7 @@ input[type="file"],
     white-space: pre-wrap;
     text-align: center;
 }
+
+#partner-logo {
+    display: none;
+}
