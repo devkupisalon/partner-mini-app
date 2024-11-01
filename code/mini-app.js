@@ -2,8 +2,6 @@ const tg = window.Telegram.WebApp;
 const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
-const url = decodeURIComponent(window.location.href);
-const calc = url.includes('calc=true');
 const partner = urlParams.get('startapp');
 
 tg.ready();
@@ -26,9 +24,8 @@ let work_type_partner, percent_partner, root;
 tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
-console.log(start_param);
-console.log(calc); 
-console.log(url);
+const calc = start_param.inclides('_calc_true');
+start_param = calc ? start_param.replace('_calc_true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
@@ -164,6 +161,10 @@ async function preload() {
     await fetchData();
     await check();
     await get_settings();
+
+    if (calc) {
+        window.location.href = `/pre-calc?partner=${start_param}`;
+    }
 
     if (start_param === null) {
         el_arr.forEach(el => el.style.display = 'none');
