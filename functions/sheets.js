@@ -418,25 +418,18 @@ const save_logo = async (params) => {
  * @returns {Promise<{ partner_name: string, partner_id: string }>} - Объект с данными партнера (имя и ID)
  */
 const get_partners_data = async (chat_id) => {
-    logger.info(`Received chat_id: ${chat_id}`);
+
     try {
         const values = await get_data(SPREADSHEETID, SHEETNAME);
-        logger.info(values);
-
         const { partner_name, partner_id } = values
             .slice(1)
             .reduce((acc, [, partner_id, partner_name, id]) => {
-                logger.info(typeof chat_id);
-                logger.info(typeof id);
-                logger.info(id);
                 if (id === String(chat_id)) {
                     acc.partner_name = partner_name;
                     acc.partner_id = partner_id;
                 }
                 return acc;
             }, {});
-
-        logger.info({ partner_name, partner_id });
 
         if (partner_name && partner_id) {
             logger.info(`User with id: ${chat_id} is authorized`);
