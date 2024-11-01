@@ -164,20 +164,23 @@ async function preload() {
     await get_settings();
 
     if (calc && !partner && partner === null) {
+
         window.location.href = `/pre-calc?partner=${start_param}`;
-    }
+        
+    } else {
 
-    if (start_param === null) {
-        el_arr.forEach(el => el.style.display = 'none');
-    }
+        if (start_param === null) {
+            el_arr.forEach(el => el.style.display = 'none');
+        }
 
-    if (!root) {
-        settings.style.display = "none"
-        settings_text.style.display = "none";
-    }
+        if (!root) {
+            settings.style.display = "none"
+            settings_text.style.display = "none";
+        }
 
-    preloader.style.display = "none";
-    container.style.display = "flex";
+        preloader.style.display = "none";
+        container.style.display = "flex";
+    }
 }
 
 preload();
