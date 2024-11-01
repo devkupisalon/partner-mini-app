@@ -41,7 +41,8 @@ tg.onEvent('backButtonClicked', (event) => {
     tg.MainButton.hide();
 });
 
-/** get values from form 
+/** 
+ * Get values from form 
  * return {object} object with input data
  */
 function getValues() {
@@ -111,7 +112,7 @@ if (id && username) {
                 }
 
                 if (partner_id) {
-                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}`);
+                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&root=true`);
                     const { success } = await response.json();
                     if (success) {
                         tg.showPopup({ message: 'Регистрация прошла успешно' });

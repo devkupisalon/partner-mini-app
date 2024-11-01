@@ -75,10 +75,10 @@ app.get('/check', async (req, res) => {
     try {
         const { user_id, partner } = req.query;
 
-        const is_authorized = await auth(user_id, partner);
+        const { success, root } = await auth(user_id, partner);
         const is_subscribed = await subscription(user_id);
 
-        return res.json({ is_subscribed, is_authorized });
+        return res.json({ is_subscribed, is_authorized: { success, root } });
     } catch (error) {
         logger.error(`An error occurred in check: ${error.message}`);
         return res.status(500).json({ error: error.toString() });

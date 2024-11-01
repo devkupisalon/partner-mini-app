@@ -19,7 +19,7 @@ const preloader = document.querySelector('.c-car-spinner');
 const checkmark = "  &#9989";
 const el_arr = [calculate, settings, settings_text];
 
-let work_type_partner, percent_partner;
+let work_type_partner, percent_partner, root;
 
 tg.enableClosingConfirmation();
 
@@ -73,6 +73,9 @@ const check = async () => {
         const { is_subscribed, is_authorized } = await response.json();
 
         console.log({ is_subscribed, is_authorized });
+
+        root = is_authorized.root;
+        console.log(root);
 
         const checks = {
             a: is_authorized && !is_subscribed,
@@ -155,12 +158,20 @@ calculate.addEventListener('click', async function () {
 
 /** PRELOADER */
 async function preload() {
+
     await fetchData();
     await check();
     await get_settings();
+
     if (start_param === null) {
         el_arr.forEach(el => el.style.display = 'none');
     }
+
+    if (!root) {
+        settings.style.dipslay = "none"
+        settings_text.style.display = "none";
+    }
+
     preloader.style.display = "none";
     container.style.display = "flex";
 }
