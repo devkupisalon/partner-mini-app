@@ -398,9 +398,11 @@ const get_partners_data = async (chat_id) => {
 
         const { partner_name, partner_id } = values
             .slice(1)
-            .reduce((acc, [, partner_id, partner_name]) => {
-                acc.partner_name = partner_name;
-                acc.partner_id = partner_id;
+            .reduce((acc, [, partner_id, partner_name, id]) => {
+                if (id === chat_id) {
+                    acc.partner_name = partner_name;
+                    acc.partner_id = partner_id;
+                }
                 return acc;
             }, {});
 
