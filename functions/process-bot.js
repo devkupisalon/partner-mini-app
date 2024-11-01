@@ -63,13 +63,11 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            logger.info(typeof groupId);
-
             if (message.reply_to_message && message.reply_to_message.forward_from) {
                 const userChatId = message.reply_to_message.forward_from.id;
 
                 try {
-                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId)
+                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId, { reply_to_message_id: message.reply_to_message.message_id });
                     if (message_id) {
                         logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${userChatId}`);
                         await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
