@@ -19,11 +19,11 @@ const send_first_messages = async (chat_id, type, uid) => {
             if (messages_map[k][type]) {
 
                 const { url, text, button_text } = messages_map[k][type];
-                const create_url = typeof url === 'function' ? url : () => { return url; };
+                const create_url = typeof url === 'function' ? url(uid) : url;
                 const messageOptions = {
                     link: {
                         message_text_option: text,
-                        reply_markup: { inline_keyboard: [[{ text: button_text, url: create_url(uid) }]] }
+                        reply_markup: { inline_keyboard: [[{ text: button_text, url: create_url }]] }
                     },
                     text: {
                         message_text_option: text
