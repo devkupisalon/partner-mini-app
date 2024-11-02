@@ -74,15 +74,17 @@ bot.on('message', async (message) => {
     if (message.from.id === id) {
         if (id) {
             const { partner_name, partner_id } = await get_partners_data(id);
-            // const forwardedMessage = `Сообщение от партнера ${partner_name} (ID: ${partner_id}):`;
-            try {
-                const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
-                if (message_id) {
-                    logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
-                    await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+            if (partner_name && partner_id) {
+                try {
+                    const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
+                    if (message_id) {
+                        logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
+                        await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+                    }
+
+                } catch (error) {
+                    logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
                 }
-            } catch (error) {
-                logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
             }
         }
     }
