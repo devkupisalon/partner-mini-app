@@ -336,7 +336,7 @@ const save_new_partner = async (params) => {
     try {
         const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folderLink, , , , , type, percent || '', , , user_id];
         const values = await get_data(DB, DATASHEETNAME);
-        const row = values.length + 1;
+        const row = values.findIndex(r => r[0] === '') + 1;
         const range = `${DATASHEETNAME}!A${row}`;
         const requestBody = { values: [arr] };
 
