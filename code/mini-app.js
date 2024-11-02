@@ -45,6 +45,7 @@ const setCheckmark = s => {
 const checkout = {
     no_sub: () => {
         auth.style.display = "none";
+        auth_text.style.display = "none";
     },
     as: () => {
         [auth, subscribe].forEach(s => {
