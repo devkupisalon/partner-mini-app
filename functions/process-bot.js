@@ -39,7 +39,7 @@ const send_first_messages = async (chat_id, type, uid) => {
                 logger.info(messageOptions[messageType]);
 
                 const { message_id } = await (link ?
-                    bot.sendMessage(chat_id, message_text_option, reply_markup) :
+                    bot.sendMessage(chat_id, message_text_option, { reply_markup }) :
                     file ? bot.sendDocument(chat_id, document_option, { caption: caption_option }) :
                         bot.sendMessage(chat_id, message_text_option));
 
