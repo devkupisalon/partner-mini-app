@@ -45,7 +45,6 @@ const get_data = async (spreadsheetId, range) => {
  * @returns {Object} - The updated data.
  */
 const update_data = async (spreadsheetId, range, requestBody) => {
-    logger.info('start');
     const { data } = await sheets.spreadsheets.values.update({
         spreadsheetId,
         range,

@@ -12,14 +12,14 @@ const task = cron.schedule('* * * * *', async () => {
         const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
-            Object.values(data_obj).forEach(({ chat_id, type, uid, i, col_letter }, index) => {
+            Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }) => {
                 try {
                     const success = send_first_messages(chat_id, type, uid);
                     if (success) {
                         logger.info('Initial messages sent successfully');
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
-                        const { data } = update_data(DB, range, requestBody);
+                        const { data } = await update_data(DB, range, requestBody);
                         logger.info(data);
                         if (data.spreadsheetId) {
                             logger.info(`Check_server set to TRUE`);
