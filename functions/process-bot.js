@@ -14,7 +14,7 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
  */
 const send_first_messages = async (chat_id, type, uid) => {
     try {
-        await Object.keys(messages_map).forEach(async (k) => {
+        Object.keys(messages_map).forEach(async (k) => {
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
@@ -48,8 +48,8 @@ const send_first_messages = async (chat_id, type, uid) => {
             }
         });
 
-       const response = await bot.createChat(chat_id, 'Название вашей группы', { type: 'group' });
-       logger.info(response);
+        const response = await bot.createChat(chat_id, 'Название вашей группы', { type: 'group' });
+        logger.info(response);
 
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
