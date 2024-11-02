@@ -32,7 +32,7 @@ const constants = {
     REGISTR: `${__dirname}/html/registration.html`
 };
 
-const { MINI_APP_LINK } = constants;
+const { MINI_APP_LINK, PDF_LINK } = constants;
 
 /** OBJECT WITH MESSAGES OPTIONS */
 const messages_map = {
