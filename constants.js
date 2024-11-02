@@ -1,6 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -75,13 +76,13 @@ const messages_map = {
             caption: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
 С наилучшими пожеланиями,
 Куписалон`,
-            document: path.join(__dirname, 'guides', 'agent.pdf')
+            document: fs.createReadStream(path.join(__dirname, 'guides', 'agent.pdf'))
         },
         'Партнер': {
             caption: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
 С наилучшими пожеланиями,
 Куписалон`,
-            document: path.join(__dirname, 'guides', 'partner.pdf')
+            document: fs.createReadStream(path.join(__dirname, 'guides', 'partner.pdf'))
         }, file: true,
         to_pin: true
     }
