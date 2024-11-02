@@ -14,7 +14,7 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
  */
 const send_first_messages = async (chat_id, type, uid) => {
     try {
-        Object.keys(messages_map).forEach(async (k) => {
+        await Object.keys(messages_map).forEach(async (k) => {
             const { link, file, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
@@ -36,7 +36,7 @@ const send_first_messages = async (chat_id, type, uid) => {
 
                 const messageType = link ? 'link' : file ? 'file' : 'text';
                 logger.info(messageType);
-                const { messageContent: { message_text_option, caption_option, reply_markup, document_option } } = messageOptions[messageType];
+                const { message_text_option, caption_option, reply_markup, document_option } = messageOptions[messageType];
 
                 const { message_id } = await (link ?
                     bot.sendMessage(chat_id, message_text_option, reply_markup) :
