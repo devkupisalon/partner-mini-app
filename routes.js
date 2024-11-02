@@ -21,6 +21,7 @@ import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
 import './functions/process-bot.js';
+import { send_first_messages } from './functions/process-bot.js';
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
@@ -196,6 +197,19 @@ app.get('/check-registration-moderation', async (req, res) => {
         return res.json({ success });
     } catch (error) {
         logger.error(`An error occurred in check_modaration: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+/** send init messages after moderation */
+app.post(`/send-init-messages`, async (req, res) => {
+    try {
+        const { chat_id, uid, type } = req;
+        logger.info(`Data successfully received from google: ${JSON.stringify(req)}`);
+        const { success } = await send_first_messages(chat_id, uid, type);
+        return res.json(success);
+    } catch (error) {
+        logger.error(`An error occurred in send_init_messages: ${error.stack}`);
         return res.status(500).json({ error: error.toString() });
     }
 });

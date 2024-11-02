@@ -48,11 +48,13 @@ const send_first_messages = async (chat_id, type, uid) => {
                         await bot.pinChatMessage(chat_id, message_id);
                         logger.info(`Message with id ${message_id} successfully pinned`);
                     }
+                    return { success: true };
                 }
             }
         });
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
+        return { succces: false };
     }
 }
 
@@ -112,4 +114,4 @@ bot.on('polling_error', (error) => {
     logger.error(error);
 });
 
-export { send_first_message, pinned_message };
+export { send_first_messages };
