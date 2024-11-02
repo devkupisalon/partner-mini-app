@@ -12,13 +12,14 @@ const task = cron.schedule('* * * * *', async () => {
         const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
-            await Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }) => {
+            Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }) => {
                 try {
                     const success = await send_first_messages(chat_id, type, uid);
                     if (success) {
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
                         const { data } = await update_data(DB, range, requestBody);
+                        await new Promise(resolve => setTimeout(resolve, 2000));
                         logger.info(data);
                         logger.info('Initial messages sent successfully');
                         if (data.spreadsheetId) {
@@ -28,7 +29,6 @@ const task = cron.schedule('* * * * *', async () => {
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }
-                await new Promise(resolve => setTimeout(resolve, 2000));
             });
         } else {
             logger.info('There are no users to send initial messages');
