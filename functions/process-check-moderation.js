@@ -19,7 +19,7 @@ const task = cron.schedule('* * * * *', async () => {
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
                         const { data } = await update_data(DB, range, requestBody);
-                        // await new Promise(resolve => setTimeout(resolve, 2000));
+                        await new Promise(resolve => setTimeout(resolve, 4000));
                         logger.info(data);
                         logger.info('Initial messages sent successfully');
                         if (data.spreadsheetId) {
