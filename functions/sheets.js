@@ -432,8 +432,9 @@ const check_moderation = async (user_id) => {
             return acc;
         }, {});
 
-        const success = values.find(r => r[root_id_col] === user_id)?.map(r => [r[0], r[1], r[check_col]]);
-        logger.info(success);
+        const success_values = values.find(r => r[root_id_col] === user_id);
+        const success = success_values?.map(r => [r[0], r[1], r[check_col]]);
+        logger.info(success_values);
         if (success) {
             logger.info(success[2]);
             logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
