@@ -16,11 +16,13 @@ const task = cron.schedule('* * * * *', async () => {
                 try {
                     const success = send_first_messages(chat_id, type, uid);
                     if (success) {
+
                         logger.info('Initial messages sent successfully');
+                        
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
                         const { data } = await update_data(DB, range, requestBody);
-                        logger.info(data);
+
                         if (data.spreadsheetId) {
                             logger.info(`Check_server set to TRUE`);
                         }
