@@ -34,21 +34,10 @@ tg.onEvent('backButtonClicked', (event) => {
  * return {object} object with input data
  */
 function getValues() {
-
   const data = Object.fromEntries(
-    Object.entries(fields).map(([key, selector]) => [key, document.querySelector(selector).value])
+      Object.entries(fields).map(([key, selector], i) => [key, document.querySelector(selector).value])
   );
-
-  const buttons = document.querySelectorAll('.btn_multiselect');
-  let buttonValues = [];
-
-  buttons.forEach(button => {
-    const buttonValue = button.textContent.trim();
-    buttonValues.push(buttonValue);
-  });
-
-  buttonValues = buttonValues.join(', ');
-  return { buttonValues, data };
+  return data;
 }
 
 if (id && username) {
@@ -58,14 +47,14 @@ if (id && username) {
   tg.onEvent('mainButtonClicked', async (event) => {
     tg.MainButton.showProgress(true);
 
-    const { buttonValues, data: { name, phone, email } } = getValues();
+    const { name, phone } = getValues();
 
-    if (buttonValues && name && phone && email) {
+    if (name && phone) {
 
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}`);
+        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}`);
 
         const { success } = await response.json();
         if (success) {
