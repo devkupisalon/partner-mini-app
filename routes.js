@@ -3,10 +3,10 @@ import path from 'path';
 import multer from 'multer';
 
 import logger from './logs/logger.js';
-import { subscription } from './functions/check.js';
+import { check_subscription_and_authorization } from './functions/check.js';
 
 import {
-    save, 
+    save,
     get_values,
     auth,
     get_settings,
@@ -46,7 +46,7 @@ const routes = [
 
 const apiRoutes = [
     { path: '/validate-init', handler: verifyTelegramWebAppData },
-    { path: '/check', handler: checkHandler },
+    { path: '/check', handler: check_subscription_and_authorization },
     { path: '/do-calculation', handler: do_calc },
     { path: '/get-cars', handler: get_cars },
     { path: '/save-data', handler: save },
@@ -56,6 +56,20 @@ const apiRoutes = [
     { path: '/get-settings', handler: get_settings },
     { path: '/get-data', handler: get_values },
     { path: '/check-registration-moderation', handler: check_moderation }
+];
+
+const loggerMessages = [
+    { name: verifyTelegramWebAppData, text: `An error occurred in ${verifyTelegramWebAppData}:` },
+    { name: check_subscription_and_authorization, text: `An error occurred in ${check_subscription_and_authorization}:` },
+    { name: do_calc, text: `An error occurred in ${do_calc}:` },
+    { name: get_cars, text: `An error occurred in ${get_cars}:` },
+    { name: save, text: `An error occurred in ${save}:` },
+    { name: save_new_partner, text: `An error occurred in ${save_new_partner}:` },
+    { name: save_logo, text: `An error occurred in ${save_logo}:` },
+    { name: save_settings, text: `An error occurred in ${save_settings}:` },
+    { name: get_settings, text: `An error occurred in ${get_settings}:` },
+    { name: get_values, text: `An error occurred in ${get_values}:` },
+    { name: check_moderation, text: `An error occurred in ${check_moderation}:` }
 ];
 
 routes.forEach(route => {
@@ -100,12 +114,8 @@ app.get("/validate-init", async (req, res) => {
 /** check subscription and authorization */
 app.get('/check', async (req, res) => {
     try {
-        const { user_id, partner } = req.query;
-
-        const { success, root } = await auth(user_id, partner);
-        const is_subscribed = await subscription(user_id);
-
-        return res.json({ is_subscribed, is_authorized: { success, root } });
+        const { is_subscribed, is_authorized } = await check_subscription_and_authorization(req.query);
+        return res.json({ is_subscribed, is_authorized });
     } catch (error) {
         logger.error(`An error occurred in check: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
