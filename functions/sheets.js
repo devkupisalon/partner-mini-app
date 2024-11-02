@@ -495,6 +495,5 @@ export {
     save_logo,
     get_partners_data,
     check_moderation,
-    check_success_moderation,
-    set_server_check
+    check_success_moderation
 };

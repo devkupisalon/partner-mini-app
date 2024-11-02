@@ -1,6 +1,6 @@
 import logger from '../logs/logger.js';
 import { send_first_messages } from './process-bot.js';
-import { check_success_moderation, set_server_check, update_data } from './sheets.js';
+import { check_success_moderation, update_data } from './sheets.js';
 import { constants } from '../constants.js';
 
 import cron from 'node-cron';
