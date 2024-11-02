@@ -5,7 +5,7 @@ async function fetchData() {
     const selectElement = document.getElementById('field_select-type');
 
     try {
-        const response = await fetch('/getdata');
+        const response = await fetch('/get-data');
         console.log(response);
         if (!response.ok) {
             throw new Error('Network response was not ok');
