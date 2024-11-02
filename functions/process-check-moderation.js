@@ -18,8 +18,12 @@ const task = cron.schedule('* * * * *', async () => {
                     if (success) {
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
-                        await update_data(DB, range, requestBody);
+                        const { data } = await update_data(DB, range, requestBody);
+                        logger.info(data);
                         logger.info('Initial messages sent successfully');
+                        if (data.spreadsheetId) {
+                            logger.info(`Check_server set to TRUE`);
+                        }
                     }
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
