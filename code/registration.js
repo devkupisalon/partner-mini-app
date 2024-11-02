@@ -118,7 +118,7 @@ if (id && username) {
                 }
 
                 if (partner_id) {
-                    const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_NAME=${org_name}&root=true`);
+                    const response = await fetch(`/save-data?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_NAME=${org_name}&root=true`);
                     const { success } = await response.json();
                     if (success) {
                         window.location.href = '/';
