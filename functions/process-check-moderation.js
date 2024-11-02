@@ -24,6 +24,7 @@ const task = cron.schedule('* * * * *', async () => {
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }
+                await new Promise(resolve => setTimeout(resolve, 500));
             });
         } else {
             logger.info('There are no users to send initial messages');
