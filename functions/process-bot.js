@@ -1,64 +1,58 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
-import { constants } from '../constants.js';
+import { constants, messages_map } from '../constants.js';
 import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
-const callback_data = {
-    report_error: 'report_error',
-    send_data: 'send_calculation_info'
-};
-
-const { report_error, send_data } = callback_data;
-
-const keyboard = {
-    inline_keyboard: [
-        [{ text: 'Отправить информацию для расчета', callback_data: send_data }],
-        [{ text: 'Сообщить об ошибке', callback_data: report_error }]
-    ]
-};
 
 /**
- * Send first message to user
+ * Send first init messages to user
  * @param {string} chat_id - user chat_id 
+ * @param {string} type - Agent or Partner
+ * @param {string} uid - Partner ID
  */
-const send_first_message = async (chat_id) => {
-    bot.sendMessage(chat_id, 'Пожалуйста, отправляйте данные для расчета: фото/видео/текст/голосовой контент одним сообщением.')
-        .then(() => {
-            logger.info('Message successfully sent to the user');
-        })
-        .catch((error) => {
-            logger.error(`Error sending message: ${error.message}`);
-        });
-}
-
-/**
- * Функция для закрепления сообщения с кнопкой в чате
- * 
- * @param {number} chat_id - ID чата, куда отправить и закрепить сообщение
- * @param {string} text - Текст сообщения для отправки
- * @param {string} url - URL-адрес для кнопки в сообщении
- */
-const pinned_message = async (chat_id, text, url) => {
-
-    // Отправить сообщение с кнопкой и закрепить его
-    const pinnedMessage = await bot.sendMessage(chat_id, text, {
-        reply_markup: {
-            inline_keyboard: [[
-                { text: 'Сделать расчет', url }
-            ]]
-        }
-    });
-
-    const messageId = pinnedMessage.message_id;
-
+const send_first_messages = async (chat_id, type, uid) => {
     try {
-        await bot.pinChatMessage(chat_id, messageId);
+        Object.keys(messages_map).forEach(async (k) => {
+            const { link, file, to_pin } = messages_map[k];
+            if (messages_map[k][type]) {
 
-        logger.info(`Message successfully pinned in chat with ID: ${chat_id}`);
+                const { url, text, document, caption, button_text } = messages_map[k][type];
+
+                const messageOptions = {
+                    link: {
+                        message_text_option: text,
+                        reply_markup: { inline_keyboard: [[{ text: button_text, url: url(uid) }]] }
+                    },
+                    file: {
+                        document,
+                        caption
+                    },
+                    text: {
+                        message_text_option: text
+                    }
+                };
+
+                const messageType = link ? 'link' : file ? 'file' : 'text';
+                const { messageContent: { message_text_option, caption_option, reply_markup, document_option } } = messageOptions[messageType];
+
+                const { message_id } = await (link ?
+                    bot.sendMessage(chat_id, message_text_option, reply_markup) :
+                    file ? bot.sendDocument(chat_id, document_option, { caption: caption_option }) :
+                        bot.sendMessage(chat_id, message_text_option));
+
+                if (message_id) {
+                    logger.info('Message successfully sent to the user');
+                    if (to_pin) {
+                        await bot.pinChatMessage(chat_id, message_id);
+                        logger.info(`Message with id ${message_id} successfully pinned`);
+                    }
+                }
+            }
+        });
     } catch (error) {
-        logger.error(`Error while pinned message in chat with ID ${chat_id}: ${error.message}`);
+        logger.error(`Error sending messages: ${error.message}`);
     }
 }
 

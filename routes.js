@@ -13,7 +13,8 @@ import {
     get_cars,
     do_calc,
     save_new_partner,
-    save_logo
+    save_logo,
+    check_modaration
 } from './functions/sheets.js';
 
 import { verifyTelegramWebAppData } from './functions/validate.js';
@@ -181,10 +182,20 @@ app.get('/getsettings', async (req, res) => {
 app.get('/getdata', async (req, res) => {
     try {
         const values = await get_values();
-
         return res.json(values);
     } catch (error) {
         logger.error(`An error occurred in get_data: ${error.message}`);
+        return res.status(500).json({ error: error.toString() });
+    }
+});
+
+/** check moderation */
+app.get('/check-registration-moderation', async (req, res) => {
+    try {
+        const success = await check_modaration(req.query.user_id);
+        return res.json({ success });
+    } catch (error) {
+        logger.error(`An error occurred in check_modaration: ${error.message}`);
         return res.status(500).json({ error: error.toString() });
     }
 });

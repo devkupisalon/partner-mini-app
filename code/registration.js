@@ -121,10 +121,9 @@ if (id && username) {
                     const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_NAME=${org_name}&root=true`);
                     const { success } = await response.json();
                     if (success) {
-                        tg.showPopup({ message: 'Регистрация прошла успешно' });
+                        window.location.href = '/';
                         tg.MainButton.hideProgress();
                         tg.MainButton.hide();
-                        window.location.href = `/?startapp=${partner}`;
                     }
                 }
             } catch (error) {

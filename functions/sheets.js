@@ -67,14 +67,14 @@ const save = async (params) => {
     try {
 
         const values = await get_data(SPREADSHEETID, SHEETNAME);
-        let { timestamp, partner, user_id, username, name, phone, groups, partner_NAME, root } = params;
+        let { timestamp, partner, user_id, username, name, phone, partner_NAME, root } = params;
 
         if (partner_NAME === undefined) {
             const { partner_name } = await get_partner_name_and_manager(partner);
             partner_NAME = partner_name;
         }
 
-        const arr = [timestamp, partner, partner_NAME, user_id, username, name, phone, groups, root || ''];
+        const arr = [timestamp, partner, partner_NAME, user_id, username, name, phone, root || ''];
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
 
@@ -338,7 +338,7 @@ const save_new_partner = async (params) => {
     const { folderLink, id } = await create_folder(org_name);
 
     try {
-        const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folderLink, , , , , type, percent || ''];
+        const arr = [uid, org_name, , , , link, address, , , phone, categories || your_type, folderLink, , , , , type, percent || '', , , user_id];
         const values = await get_data(DB, DATASHEETNAME);
         const row = values.length + 1;
         const range = `${DATASHEETNAME}!A${row}`;
@@ -443,6 +443,28 @@ const get_partners_data = async (chat_id) => {
     }
 }
 
+/**
+ * Asynchronous function to check moderation status for a specific user.
+ * @param {string} user_id - The ID of the user to check moderation for.
+ */
+const check_modaration = async (user_id) => {
+    try {
+        const check_col = numberToColumn(getColumnNumberByValue(values[0], 'check'));
+        const root_id_col = numberToColumn(getColumnNumberByValue(values[0], 'root_id'));
+        const values = await get_data(DB, DATASHEETNAME);
+        const success = values.find(r => r[root_id_col] === user_id).map(r => [r[0], r[1], r[check_col]]);
+        logger.info(success[2]);
+        if (success) {
+            logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
+            return true;
+        } else {
+            logger.warn(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is not completed`);
+        }
+    } catch (error) {
+        logger.error(`Error in check_modaration: ${error.stack}`);
+    }
+}
+
 export {
     get_values,
     save,
@@ -453,5 +475,6 @@ export {
     do_calc,
     save_new_partner,
     save_logo,
-    get_partners_data
+    get_partners_data,
+    check_modaration
 };

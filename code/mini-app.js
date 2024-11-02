@@ -3,10 +3,11 @@ const channel = 'https://t.me/kupi_salon';
 const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const partner = urlParams.get('startapp');
-console.log(partner);
 
 tg.ready();
 
+const success_checkmark = document.querySelector('.success-checkmark');
+const success_text = document.getElementById('success-message');
 const subscribe = document.getElementById("subscribe-button");
 const auth = document.getElementById("auth-button");
 const calculate = document.getElementById("calculate-button");
@@ -156,31 +157,54 @@ calculate.addEventListener('click', async function () {
     }
 });
 
+/** CHECK MODERATION */
+async function check_registration() {
+    try {
+        const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
+        const { success } = await check_response.json();
+        if (success) {
+            return { success: false };
+        } else {
+            return { success: 'moderation' };
+        }
+    } catch (error) {
+        console.error(`Error in check_registration: ${error}`);
+        return { success: false }
+    }
+}
+
 /** PRELOADER */
 async function preload() {
-
     await fetchData();
     await check();
     await get_settings();
+    const { success } = await check_registration();
 
-    if (calc && !partner && partner === null) {
+    const actions = {
+        moderation: () => {
+            success_checkmark.style.display = "block";
+            success_text.style.display = "block";
+        },
+        false: () => {
+            if (calc && !partner && partner === null) {
+                window.location.href = `/pre-calc?partner=${start_param}`;
+            } else {
+                if (start_param === null) {
+                    el_arr.forEach(el => el.style.display = 'none');
+                }
 
-        window.location.href = `/pre-calc?partner=${start_param}`;
+                if (!root) {
+                    settings.style.display = "none";
+                    settings_text.style.display = "none";
+                }
 
-    } else {
-
-        if (start_param === null) {
-            el_arr.forEach(el => el.style.display = 'none');
+                preloader.style.display = "none";
+                container.style.display = "flex";
+            }
         }
+    };
 
-        if (!root) {
-            settings.style.display = "none"
-            settings_text.style.display = "none";
-        }
-
-        preloader.style.display = "none";
-        container.style.display = "flex";
-    }
+    actions[success] && actions[success]();
 }
 
 preload();
