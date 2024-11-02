@@ -34,7 +34,7 @@ const send_first_messages = async (chat_id, type, uid) => {
                     }
                 };
 
-                const messageType = link ? 'link' : file ? 'file' : 'text';
+                const messageType = !link && !file ? 'text' : link ? 'link' : 'file';
                 const { message_text_option, caption_option, reply_markup, document_option } = messageOptions[messageType];
                 logger.info(messageOptions[messageType]);
 
