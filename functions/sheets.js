@@ -427,13 +427,13 @@ const get_partners_data = async (chat_id) => {
 const check_moderation = async (user_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
-        const { check_col, root_id_col } = ['check', 'root_id'].reduce((acc, k) => {
+        const { check_col, root_id_col, check_server_col } = ['check', 'root_id', 'check_server'].reduce((acc, k) => {
             acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
             return acc;
         }, {});
 
-        const success_values = values.find(r => r[root_id_col] === user_id);
-        const success = success_values?.map(r => [r[0], r[1], r[check_col]]);
+        const success_values = values.find(r => r[root_id_col] === user_id && r[check_server_col] === 'TRUE');
+        const success = success_values?.map(r => [[r[0], r[1], r[check_col]]]);
 
         if (success) {
             logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
