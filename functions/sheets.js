@@ -432,8 +432,6 @@ const check_moderation = async (user_id) => {
             return acc;
         }, {});
 
-        logger.info({ check_col, root_id_col, server_check_col });
-
         const success_values = values.find(r => r[root_id_col] === user_id);
 
         if (success_values !== undefined) {
