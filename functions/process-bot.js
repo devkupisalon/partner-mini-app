@@ -35,6 +35,7 @@ const send_first_messages = async (chat_id, type, uid) => {
                 };
 
                 const messageType = link ? 'link' : file ? 'file' : 'text';
+                logger.info(messageType);
                 const { messageContent: { message_text_option, caption_option, reply_markup, document_option } } = messageOptions[messageType];
 
                 const { message_id } = await (link ?
