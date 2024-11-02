@@ -438,8 +438,12 @@ const check_moderation = async (user_id) => {
         if (success) {
             logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
             return true;
-        } else {
+        } else if (success[2] === 'FALSE') {
             logger.warn(`Moderation for root_user_id ${user_id} is not completed`);
+            return 'moderation';
+        } else if (!success[0]) {
+            logger.info(`User with id ${user_id} not found in data base`);
+            return false;
         }
     } catch (error) {
         logger.error(`Error in check_moderation: ${error.stack}`);

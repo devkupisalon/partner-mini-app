@@ -76,22 +76,6 @@ routes.forEach(route => {
     app.get(route.path, (req, res) => res.sendFile(route.req ? path.join(route.file, req.params.path) : route.file));
 });
 
-// /** styles */
-// app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
-// /** scripts */
-// app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
-
-// /** main page */
-// app.get('/', (req, res) => res.sendFile(HOME));
-// /** managers registration */
-// app.get('/auth', (req, res) => res.sendFile(AUTH));
-// /** settings */
-// app.get('/settings', (req, res) => res.sendFile(SETTINGS));
-// /** create pre-orders */
-// app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
-// /** init registration */
-// app.get('/registration', (req, res) => res.sendFile(REGISTR));
-
 /** validation */
 app.get("/validate-init", async (req, res) => {
     try {

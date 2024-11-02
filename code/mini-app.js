@@ -164,8 +164,10 @@ async function check_registration() {
         const { success } = await check_response.json();
         if (success) {
             return { success: false };
-        } else {
+        } else if (success === 'moderation') {
             return { success: 'moderation' };
+        } else if (!success) {
+            return { success };
         }
     } catch (error) {
         console.error(`Error in check_registration: ${error}`);
@@ -183,6 +185,7 @@ async function preload() {
 
     const actions = {
         moderation: () => {
+            preloader.style.display = "none";
             success_checkmark.style.display = "block";
             success_text.style.display = "block";
         },
