@@ -59,7 +59,7 @@ const checkout = {
     },
     s: () => {
         subscribe_text.style.opacity = "0.5";
-        [subscribe, calculate].forEach(s => {
+        [subscribe, calculate, auth].forEach(s => {
             setCheckmark(s);
         });
         subscribe.innerHTML = subscribe.innerText + checkmark;
