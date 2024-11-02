@@ -167,13 +167,11 @@ async function check_registration() {
     try {
         const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
         const { success } = await check_response.json();
-        console.log(success);
-        if (success) {
+        
+        if (success === true || !success) {
             return { success: false };
         } else if (success === 'moderation') {
             return { success: 'moderation' };
-        } else if (!success) {
-            return { success };
         }
     } catch (error) {
         console.error(`Error in check_registration: ${error}`);
