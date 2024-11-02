@@ -32,7 +32,6 @@ const send_first_messages = async (chat_id, type, uid) => {
 
                 const messageType = link ? 'link' : 'text';
                 const { message_text_option, reply_markup } = messageOptions[messageType];
-                logger.info(messageOptions[messageType]);
 
                 const { message_id } = await (link ?
                     bot.sendMessage(chat_id, message_text_option, { reply_markup }) :
