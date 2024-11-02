@@ -17,7 +17,7 @@ const task = cron.schedule('* * * * *', async () => {
                     const success = await send_first_messages(chat_id, type, uid);
                     if (success) {
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
-                        const requestBody = { values: [[false]] };
+                        const requestBody = { values: [[true]] };
                         await update_data(DB, range, requestBody);
                         logger.info('Initial messages sent successfully');
                     }
