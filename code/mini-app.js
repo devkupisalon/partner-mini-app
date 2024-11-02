@@ -177,8 +177,9 @@ async function check_registration() {
 async function preload() {
     await fetchData();
     await check();
-    await get_settings();
+    const init = await get_settings();
     const { success } = await check_registration();
+    console.log(success);
 
     const actions = {
         moderation: () => {
