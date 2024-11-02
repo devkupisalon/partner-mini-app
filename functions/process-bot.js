@@ -18,12 +18,12 @@ const send_first_messages = async (chat_id, type, uid) => {
             const { link, file, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
-                const { text, document, caption, button_text } = messages_map[k][type];
-                const urlFunction = messages_map[k][type].url;
+                const { url, text, document, caption, button_text } = messages_map[k][type];
+                logger.info(typeof url);
                 const messageOptions = {
                     link: {
                         message_text_option: text,
-                        reply_markup: { inline_keyboard: [[{ text: button_text, url: urlFunction(uid) }]] }
+                        reply_markup: { inline_keyboard: [[{ text: button_text, url: url(uid) }]] }
                     },
                     file: {
                         document,
