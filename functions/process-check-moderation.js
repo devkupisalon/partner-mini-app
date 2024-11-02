@@ -13,7 +13,7 @@ const task = cron.schedule('* * * * *', async () => {
         const success_obj = {};
 
         if (Object.keys(data_obj).length > 0) {
-            Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }, index) => {
+            await Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }, index) => {
                 try {
                     const success = await send_first_messages(chat_id, type, uid);
                     if (success) {
@@ -31,7 +31,7 @@ const task = cron.schedule('* * * * *', async () => {
         }
 
         if (Object.keys(success_obj).length > 0) {
-            Object.values(success_obj).forEach(async ({ col_letter, i }) => {
+            await Object.values(success_obj).forEach(async ({ col_letter, i }) => {
                 const range = `${DATASHEETNAME}!${col_letter}${i}`;
                 const requestBody = { values: [[true]] };
                 const { data } = await update_data(DB, range, requestBody);
@@ -41,6 +41,7 @@ const task = cron.schedule('* * * * *', async () => {
                 }
             });
         }
+
     } catch (error) {
         logger.error(`An error occurred in cron schedule: ${error}`);
     }
