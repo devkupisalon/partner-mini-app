@@ -3,7 +3,6 @@ import logger from '../logs/logger.js';
 
 import { constants, __dirname } from '../constants.js';
 import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
-import { pinned_message, send_first_message } from './process-bot.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
@@ -22,8 +21,7 @@ const { SPREADSHEETID,
     MONITORSPREADSHEET,
     MONITORSHEETNAME,
     PARTNERSPARENT,
-    WEBAPPURL,
-    MINI_APP_LINK } = constants;
+    WEBAPPURL } = constants;
 
 /**
  * Получить данные из указанного диапазона в таблице Google Sheets
@@ -32,15 +30,28 @@ const { SPREADSHEETID,
  * @returns {Array} - Массив значений из таблицы
  */
 const get_data = async (spreadsheetId, range) => {
-    try {
-        const { data: { values } } = await sheets.spreadsheets.values.get({
-            spreadsheetId,
-            range,
-        });
-        return values;
-    } catch (error) {
-        logger.error(error.message);
-    }
+    const { data: { values } } = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range,
+    });
+    return values;
+}
+
+/**
+ * Update data in a specific range of a Google Spreadsheet.
+ * @param {string} spreadsheetId - The ID of the spreadsheet.
+ * @param {string} range - The range in the spreadsheet to update.
+ * @param {Object} requestBody - The request body containing the data to update.
+ * @returns {Object} - The updated data.
+ */
+const update_data = async (spreadsheetId, range, requestBody) => {
+    const { data } = await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range,
+        valueInputOption: 'USER_ENTERED',
+        requestBody,
+    });
+    return { data };
 }
 
 /**
@@ -78,12 +89,7 @@ const save = async (params) => {
         const requestBody = { values: [arr] };
         const range = `${SHEETNAME}!A${values.length + 1}`;
 
-        const { data } = await sheets.spreadsheets.values.update({
-            spreadsheetId: SPREADSHEETID,
-            range,
-            valueInputOption: 'USER_ENTERED',
-            requestBody,
-        });
+        const { data } = await update_data(SPREADSHEETID, range, requestBody);
 
         if (data.spreadsheetId) {
             logger.info('User data saved successfully');
@@ -153,12 +159,7 @@ const save_settings = async (obj) => {
             return false;
         }
 
-        const { data } = await sheets.spreadsheets.values.update({
-            spreadsheetId: DB,
-            range,
-            valueInputOption: 'USER_ENTERED',
-            requestBody
-        });
+        const { data } = await update_data(DB, range, requestBody);
 
         if (data.spreadsheetId) {
             logger.info('Settings data saved successfully');
@@ -221,12 +222,7 @@ const do_calc = async (params) => {
         const row = values.length + 1;
         const range = `${MONITORSHEETNAME}!A${row}`;
 
-        const { data } = await sheets.spreadsheets.values.update({
-            spreadsheetId: MONITORSPREADSHEET,
-            range,
-            valueInputOption: 'USER_ENTERED',
-            requestBody
-        });
+        const { data } = await update_data(MONITORSPREADSHEET, range, requestBody);
 
         if (data.spreadsheetId) {
             logger.info('Data for calculation saved successfully');
@@ -344,33 +340,14 @@ const save_new_partner = async (params) => {
         const range = `${DATASHEETNAME}!A${row}`;
         const requestBody = { values: [arr] };
 
-        const { data } = await sheets.spreadsheets.values.update({
-            spreadsheetId: DB,
-            range,
-            valueInputOption: 'USER_ENTERED',
-            requestBody
-        });
+        const { data } = await update_data(DB, range, requestBody);
 
         if (data.spreadsheetId) {
             logger.info('New partner data saved successfully');
-            if (type === 'Агент') {
-                await process_agent(user_id, uid);
-            }
+            return { partner_id: uid, folder: id };
         }
-        return { partner_id: uid, folder: id };
     } catch (error) {
         logger.error(`Error in save_new_partner: ${error.message}`);
-    }
-}
-
-const process_agent = async (chat_id, uid) => {
-    try {
-        const message_text = `Кнопка для формирования расчета 👇`;
-        const url = `${MINI_APP_LINK}${uid}-calc-true`;
-        await send_first_message(chat_id);
-        await pinned_message(chat_id, message_text, url);
-    } catch (error) {
-        logger.error(`An a error occured in process_agent: ${error.message}`);
     }
 }
 
@@ -451,7 +428,7 @@ const check_moderation = async (user_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const { check_col, root_id_col } = ['check', 'root_id'].reduce((acc, k) => {
-            acc[`${k}_col`] = numberToColumn(getColumnNumberByValue(values[0], k));
+            acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
             return acc;
         }, {});
 
@@ -475,11 +452,13 @@ const check_success_moderation = async () => {
 
         const { check_col, root_id_col, server_check_col, work_type_col } = ['check', 'server_check', 'root_id', 'work_type']
             .reduce((acc, k) => {
-                acc[`${k}_col`] = numberToColumn(getColumnNumberByValue(values[0], k));
+                acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
                 return acc;
             }, {});
 
-        const data_obj = values.slice(1).reduce((acc, r) => {
+        const col_letter = numberToColumn(server_check_col + 1);
+
+        const data_obj = values.slice(1).reduce((acc, r, i) => {
             const { 0: uid,
                 [check_col]: check,
                 [root_id_col]: root_id,
@@ -487,7 +466,7 @@ const check_success_moderation = async () => {
                 [work_type_col]: type } = r;
 
             if (check && !check_server && root_id) {
-                acc[uid] = { chat_id: root_id, type, uid };
+                acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter };
             }
             return acc;
         }, {});
@@ -504,6 +483,7 @@ const check_success_moderation = async () => {
 }
 
 export {
+    update_data,
     get_values,
     save,
     auth,
@@ -515,5 +495,6 @@ export {
     save_logo,
     get_partners_data,
     check_moderation,
-    check_success_moderation
+    check_success_moderation,
+    set_server_check
 };
