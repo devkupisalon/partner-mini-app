@@ -433,7 +433,7 @@ const check_moderation = async (user_id) => {
         }, {});
 
         const success = values.find(r => r[root_id_col] === user_id)?.map(r => [r[0], r[1], r[check_col]]);
-
+        logger.info(success);
         if (success) {
             logger.info(success[2]);
             logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
@@ -442,7 +442,7 @@ const check_moderation = async (user_id) => {
             logger.warn(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is not completed`);
         }
     } catch (error) {
-        logger.error(`Error in check_modaration: ${error.stack}`);
+        logger.error(`Error in check_moderation: ${error.stack}`);
     }
 }
 
