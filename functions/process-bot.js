@@ -35,13 +35,13 @@ const send_first_messages = async (chat_id, type, uid) => {
                 };
 
                 const messageType = link ? 'link' : file ? 'file' : 'text';
-                logger.info(messageType);
                 const { message_text_option, caption_option, reply_markup, document_option } = messageOptions[messageType];
+                logger.info(messageOptions[messageType]);
 
-                const { message_id } = await (link ?
-                    bot.sendMessage(chat_id, message_text_option, reply_markup) :
-                    file ? bot.sendDocument(chat_id, document_option, { caption: caption_option }) :
-                        bot.sendMessage(chat_id, message_text_option));
+                const { message_id } = await (!link && !file
+                    ? bot.sendMessage(chat_id, message_text_option) :
+                    link ? bot.sendMessage(chat_id, message_text_option, reply_markup) :
+                        bot.sendDocument(chat_id, document_option, { caption: caption_option }));
 
                 if (message_id) {
                     logger.info('Message successfully sent to the user');
