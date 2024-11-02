@@ -21,7 +21,7 @@ import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
 import './functions/process-bot.js';
-import './functions/process-check-modareation.js';
+import './functions/process-check-moderation.js';
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();

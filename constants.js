@@ -33,6 +33,7 @@ const constants = {
 
 const { MINI_APP_LINK } = constants;
 
+/** OBJECT WITH MESSAGES OPTIONS */
 const messages_map = {
     fisrt_message: {
         'Агент': `Добрый день!
@@ -94,9 +95,4 @@ const messages_map = {
     }
 };
 
-const button_text_map = {
-    calc_message: 'Создать расчет',
-    manager_registr_message: 'Регистрация менеджера'
-};
-
-export { constants, __dirname, messages_map, button_text_map };
+export { constants, __dirname, messages_map };
