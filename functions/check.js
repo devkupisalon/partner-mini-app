@@ -11,7 +11,7 @@ const check_subscription = async (user_id) => {
         const chatMember = await bot.getChatMember(KUPISALONID, user_id);
         const is_subscribed = ['member', 'creator', 'administrator'].includes(chatMember.status);
         if (is_subscribed) {
-            logger.info(`User with id: ${chatId} is subscribed`);
+            logger.info(`User with id: ${user_id} is subscribed`);
             return { is_subscribed };
         }
     } catch (error) {
