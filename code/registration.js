@@ -121,7 +121,7 @@ if (id && username) {
                     const response = await fetch(`/save-data?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&partner_NAME=${org_name}&root=true`);
                     const { success } = await response.json();
                     if (success) {
-                        window.location.href = '/';
+                        window.location.href = `/?startapp=${partner_id}`;
                         tg.MainButton.hideProgress();
                         tg.MainButton.hide();
                     }
