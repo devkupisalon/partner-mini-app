@@ -19,7 +19,7 @@ const send_first_messages = async (chat_id, type, uid) => {
             if (messages_map[k][type]) {
 
                 const { url, text, button_text } = messages_map[k][type];
-                const create_url = typeof url === 'function' ? url : (uid) => { uid };
+                const create_url = typeof url === 'function' ? url : () => { return url; };
                 const messageOptions = {
                     link: {
                         message_text_option: text,
