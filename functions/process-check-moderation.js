@@ -18,13 +18,13 @@ const task = cron.schedule('* * * * *', async () => {
                     if (success) {
 
                         logger.info('Initial messages sent successfully');
-                        
+
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
                         const { data } = await update_data(DB, range, requestBody);
 
                         if (data.spreadsheetId) {
-                            logger.info(`Check_server set to TRUE`);
+                            logger.info(`check_server to uid: ${uid} set to TRUE`);
                         }
                     }
                 } catch (error) {
