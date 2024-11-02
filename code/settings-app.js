@@ -28,7 +28,7 @@ const fields = {
 async function get_settings() {
 
     try {
-        const response = await fetch(`/getsettings?partner=${partner}`);
+        const response = await fetch(`/get-settings?partner=${partner}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -95,7 +95,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
     if (check1 || check2) {
 
         try {
-            const response = await fetch(`/savesettings?partner=${partner}&percent=${encodeURIComponent(percent)}&work_type=${encodeURIComponent(work_type)}`);
+            const response = await fetch(`/save-settings?partner=${partner}&percent=${encodeURIComponent(percent)}&work_type=${encodeURIComponent(work_type)}`);
             const { success } = await response.json();
             localStorage.setItem(partner, JSON.stringify({ work_type, percent }));
             if (success) {

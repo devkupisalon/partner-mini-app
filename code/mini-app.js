@@ -108,7 +108,7 @@ const fetchData = async () => {
 async function get_settings() {
 
     try {
-        const response = await fetch(`/getsettings?partner=${start_param}`);
+        const response = await fetch(`/get-settings?partner=${start_param}`);
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }

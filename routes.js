@@ -6,7 +6,8 @@ import logger from './logs/logger.js';
 import { subscription } from './functions/check.js';
 
 import {
-    save, get_values,
+    save, 
+    get_values,
     auth,
     get_settings,
     save_settings,
@@ -48,12 +49,12 @@ const apiRoutes = [
     { path: '/check', handler: checkHandler },
     { path: '/do-calculation', handler: do_calc },
     { path: '/get-cars', handler: get_cars },
-    { path: '/savedata', handler: save },
+    { path: '/save-data', handler: save },
     { path: '/save-new-partner', handler: save_new_partner },
     { path: '/upload-logo', method: 'post', upload: 'file', handler: save_logo },
-    { path: '/savesettings', handler: save_settings },
-    { path: '/getsettings', handler: get_settings },
-    { path: '/getdata', handler: get_values },
+    { path: '/save-settings', handler: save_settings },
+    { path: '/get-settings', handler: get_settings },
+    { path: '/get-data', handler: get_values },
     { path: '/check-registration-moderation', handler: check_moderation }
 ];
 
@@ -135,7 +136,7 @@ app.get('/get-cars', async (rea, res) => {
 });
 
 /** save user data to spreadsheet */
-app.get('/savedata', async (req, res) => {
+app.get('/save-data', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
         logger.info(`Data successfully received from mini-app: ${values_list}`);
@@ -176,7 +177,7 @@ app.post('/upload-logo', upload.single('file'), async (req, res) => {
 });
 
 /** save partner settings to spreadsheet */
-app.get('/savesettings', async (req, res) => {
+app.get('/save-settings', async (req, res) => {
     try {
         const values_list = Object.values(req.query);
         logger.info(`Data successfully received from mini-app: ${values_list}`);
@@ -190,7 +191,7 @@ app.get('/savesettings', async (req, res) => {
 });
 
 /** get partners settings from spreadsheet */
-app.get('/getsettings', async (req, res) => {
+app.get('/get-settings', async (req, res) => {
     try {
         const data = await get_settings(req.query.partner);
 
@@ -202,7 +203,7 @@ app.get('/getsettings', async (req, res) => {
 });
 
 /** get groups */
-app.get('/getdata', async (req, res) => {
+app.get('/get-data', async (req, res) => {
     try {
         const values = await get_values();
         return res.json(values);
