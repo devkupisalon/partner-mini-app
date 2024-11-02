@@ -469,9 +469,7 @@ const check_success_moderation = async () => {
                 [server_check_col]: check_server,
                 [work_type_col]: type } = r;
 
-            logger.info(check);
-
-            if (check && !check_server && root_id) {
+            if (check === 'TRUE' && check_server === 'FALSE' && root_id) {
                 acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter };
             }
             return acc;
