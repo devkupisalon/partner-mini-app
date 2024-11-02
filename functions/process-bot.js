@@ -47,6 +47,10 @@ const send_first_messages = async (chat_id, type, uid) => {
                 }
             }
         });
+
+       const response = await bot.createChat(chat_id, 'Название вашей группы', { type: 'group' });
+       logger.info(response);
+
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
         return { succces: false };
