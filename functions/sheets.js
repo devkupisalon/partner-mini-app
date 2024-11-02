@@ -441,7 +441,7 @@ const check_moderation = async (user_id) => {
         } else if (success && success[2] === 'FALSE') {
             logger.warn(`Moderation for root_user_id ${user_id} is not completed`);
             return 'moderation';
-        } else if (!success) {
+        } else if (!success_values) {
             logger.info(`User with id ${user_id} not found in data base`);
             return false;
         }
