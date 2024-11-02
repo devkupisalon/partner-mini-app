@@ -427,15 +427,15 @@ const get_partners_data = async (chat_id) => {
 const check_moderation = async (user_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
-        const { check_col, root_id_col, check_server_col } = ['check', 'root_id', 'server_check'].reduce((acc, k) => {
+        const { check_col, root_id_col, server_check_col } = ['check', 'root_id', 'server_check'].reduce((acc, k) => {
             acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
             return acc;
         }, {});
 
-        logger.info({ check_col, root_id_col, check_server_col });
+        logger.info({ check_col, root_id_col, server_check_col });
 
         const success_values = values.find(r => r[root_id_col] === user_id);
-        const success = success_values?.map(r => [r[0], r[1], r[check_col], r[check_server_col]]);
+        const success = success_values?.map(r => [r[0], r[1], r[check_col], r[server_check_col]]);
 
         logger.info(success_values);
 
