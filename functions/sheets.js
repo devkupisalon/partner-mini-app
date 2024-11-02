@@ -475,6 +475,8 @@ const check_success_moderation = async () => {
             return acc;
         }, {});
 
+        logger.info(data_obj);
+
         if (Object.keys(data_obj).length > 0) {
             return data_obj;
         } else {
