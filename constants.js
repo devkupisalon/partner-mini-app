@@ -1,7 +1,6 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
 
 dotenv.config();
 
@@ -25,6 +24,7 @@ const constants = {
     WEBAPPURL: process.env.webappurl,
     GROUP_CHAT_ID: process.env.GROUP_CHAT_ID,
     MINI_APP_LINK: process.env.MINI_APP_LINK,
+    PDF_LINK: process.env.PDF_LINK,
     HOME: `${__dirname}/html/mini-app-main.html`,
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,
@@ -73,17 +73,19 @@ const messages_map = {
     },
     helper_message: {
         'Агент': {
-            caption: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
+            text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
 С наилучшими пожеланиями,
 Куписалон`,
-            document: fs.createReadStream(path.join(__dirname, 'guides', 'agent.pdf'))
+            link: PDF_LINK,
+            button_text: `Инструкция`
         },
         'Партнер': {
-            caption: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
+            text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
 С наилучшими пожеланиями,
 Куписалон`,
-            document: fs.createReadStream(path.join(__dirname, 'guides', 'partner.pdf'))
-        }, file: true,
+            url: PDF_LINK,
+            button_text: `Инструкция`
+        }, link: true,
         to_pin: true
     }
 };

@@ -15,33 +15,28 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
 const send_first_messages = async (chat_id, type, uid) => {
     try {
         await Object.keys(messages_map).forEach(async (k) => {
-            const { link, file, to_pin } = messages_map[k];
+            const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
-                const { url, text, document, caption, button_text } = messages_map[k][type];
+                const { url, text, button_text } = messages_map[k][type];
                 const create_url = typeof url === 'function' ? url : (uid) => { uid };
                 const messageOptions = {
                     link: {
                         message_text_option: text,
                         reply_markup: { inline_keyboard: [[{ text: button_text, url: create_url(uid) }]] }
                     },
-                    file: {
-                        document,
-                        caption
-                    },
                     text: {
                         message_text_option: text
                     }
                 };
 
-                const messageType = link ? 'link' : file ? 'file' : 'text';
-                const { message_text_option, caption_option, reply_markup, document_option } = messageOptions[messageType];
+                const messageType = link ? 'link' : 'text';
+                const { message_text_option, reply_markup } = messageOptions[messageType];
                 logger.info(messageOptions[messageType]);
 
                 const { message_id } = await (link ?
                     bot.sendMessage(chat_id, message_text_option, { reply_markup }) :
-                    file ? bot.sendDocument(chat_id, document_option, { caption: caption_option }) :
-                        bot.sendMessage(chat_id, message_text_option));
+                    bot.sendMessage(chat_id, message_text_option));
 
                 if (message_id) {
                     logger.info('Message successfully sent to the user');
