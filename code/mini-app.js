@@ -43,6 +43,9 @@ const setCheckmark = s => {
  * Объект с методами для установки галочек и отключения кнопок
  */
 const checkout = {
+    no_sub: () => {
+        auth.style.diplsay = "none";
+    },
     as: () => {
         [auth, subscribe].forEach(s => {
             s.disabled = true;
@@ -59,7 +62,7 @@ const checkout = {
     },
     s: () => {
         subscribe_text.style.opacity = "0.5";
-        [subscribe, calculate, auth].forEach(s => {
+        [subscribe, calculate].forEach(s => {
             setCheckmark(s);
         });
         subscribe.innerHTML = subscribe.innerText + checkmark;
@@ -76,6 +79,7 @@ const check = async () => {
         root = is_authorized.root;
 
         const checks = {
+            no_sub: !is_subscribed,
             a: is_authorized.success && !is_subscribed,
             as: is_authorized.success && is_subscribed,
             s: (!is_authorized.success || is_authorized.success == undefined) && is_subscribed
