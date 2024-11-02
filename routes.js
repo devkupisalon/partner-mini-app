@@ -14,14 +14,14 @@ import {
     do_calc,
     save_new_partner,
     save_logo,
-    check_modaration
+    check_moderation
 } from './functions/sheets.js';
 
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
 
 import './functions/process-bot.js';
-import { send_first_messages } from './functions/process-bot.js';
+import './functions/process-check-modareation.js';
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();
@@ -33,27 +33,49 @@ app.use(express.json());
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
 
-/** styles */
-app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
-/** scripts */
-app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
+const routes = [
+    { path: '/styles/:path', file: stylesPath, req: true },
+    { path: '/scripts/:path', file: codePath, req: true },
+    { path: '/', file: HOME },
+    { path: '/auth', file: AUTH },
+    { path: '/settings', file: SETTINGS },
+    { path: '/pre-calc', file: PRE_CALC },
+    { path: '/registration', file: REGISTR }
+];
 
-/** main page */
-app.get('/', (req, res) => res.sendFile(HOME));
-/** managers registration */
-app.get('/auth', (req, res) => res.sendFile(AUTH));
-/** settings */
-app.get('/settings', (req, res) => res.sendFile(SETTINGS));
-/** create pre-orders */
-app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
-/** init registration */
-app.get('/registration', (req, res) => res.sendFile(REGISTR));
+const apiRoutes = [
+    { path: '/validate-init', handler: verifyTelegramWebAppData },
+    { path: '/check', handler: checkHandler },
+    { path: '/do-calculation', handler: do_calc },
+    { path: '/get-cars', handler: get_cars },
+    { path: '/savedata', handler: save },
+    { path: '/save-new-partner', handler: save_new_partner },
+    { path: '/upload-logo', method: 'post', upload: 'file', handler: save_logo },
+    { path: '/savesettings', handler: save_settings },
+    { path: '/getsettings', handler: get_settings },
+    { path: '/getdata', handler: get_values },
+    { path: '/check-registration-moderation', handler: check_moderation }
+];
 
-/** route errors */
-app.use((error, req, res, next) => {
-    logger.error(`An error occurred: ${error.message}`);
-    res.status(500).send(error);
+routes.forEach(route => {
+    app.get(route.path, (req, res) => res.sendFile(route.req ? path.join(route.file, req.params.path) : route.file));
 });
+
+// /** styles */
+// app.get('/styles/:path', (req, res) => res.sendFile(path.join(stylesPath, req.params.path)));
+// /** scripts */
+// app.get('/scripts/:path', (req, res) => res.sendFile(path.join(codePath, req.params.path)));
+
+// /** main page */
+// app.get('/', (req, res) => res.sendFile(HOME));
+// /** managers registration */
+// app.get('/auth', (req, res) => res.sendFile(AUTH));
+// /** settings */
+// app.get('/settings', (req, res) => res.sendFile(SETTINGS));
+// /** create pre-orders */
+// app.get('/pre-calc', (req, res) => res.sendFile(PRE_CALC));
+// /** init registration */
+// app.get('/registration', (req, res) => res.sendFile(REGISTR));
 
 /** validation */
 app.get("/validate-init", async (req, res) => {
@@ -193,7 +215,7 @@ app.get('/getdata', async (req, res) => {
 /** check moderation */
 app.get('/check-registration-moderation', async (req, res) => {
     try {
-        const success = await check_modaration(req.query.user_id);
+        const success = await check_moderation(req.query.user_id);
         return res.json({ success });
     } catch (error) {
         logger.error(`An error occurred in check_modaration: ${error.message}`);
@@ -201,17 +223,10 @@ app.get('/check-registration-moderation', async (req, res) => {
     }
 });
 
-/** send init messages after moderation */
-app.post(`/send-init-messages`, async (req, res) => {
-    try {
-        const { chat_id, uid, type } = req;
-        logger.info(`Data successfully received from google: ${JSON.stringify(req)}`);
-        const { success } = await send_first_messages(chat_id, uid, type);
-        return res.json(success);
-    } catch (error) {
-        logger.error(`An error occurred in send_init_messages: ${error.stack}`);
-        return res.status(500).json({ error: error.toString() });
-    }
+/** route errors */
+app.use((error, req, res, next) => {
+    logger.error(`An error occurred: ${error.message}`);
+    res.status(500).send(error);
 });
 
 /** init server */

@@ -447,12 +447,16 @@ const get_partners_data = async (chat_id) => {
  * Asynchronous function to check moderation status for a specific user.
  * @param {string} user_id - The ID of the user to check moderation for.
  */
-const check_modaration = async (user_id) => {
+const check_moderation = async (user_id) => {
     try {
-        const check_col = numberToColumn(getColumnNumberByValue(values[0], 'check'));
-        const root_id_col = numberToColumn(getColumnNumberByValue(values[0], 'root_id'));
         const values = await get_data(DB, DATASHEETNAME);
+        const { check_col, root_id_col } = ['check', 'root_id'].reduce((acc, k) => {
+            acc[`${k}_col`] = numberToColumn(getColumnNumberByValue(values[0], k));
+            return acc;
+        }, {});
+
         const success = values.find(r => r[root_id_col] === user_id).map(r => [r[0], r[1], r[check_col]]);
+
         logger.info(success[2]);
         if (success) {
             logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
@@ -462,6 +466,40 @@ const check_modaration = async (user_id) => {
         }
     } catch (error) {
         logger.error(`Error in check_modaration: ${error.stack}`);
+    }
+}
+
+const check_success_moderation = async () => {
+    try {
+        const values = await get_data(DB, DATASHEETNAME);
+
+        const { check_col, root_id_col, server_check_col, work_type_col } = ['check', 'server_check', 'root_id', 'work_type']
+            .reduce((acc, k) => {
+                acc[`${k}_col`] = numberToColumn(getColumnNumberByValue(values[0], k));
+                return acc;
+            }, {});
+
+        const data_obj = values.slice(1).reduce((acc, r) => {
+            const { 0: uid,
+                [check_col]: check,
+                [root_id_col]: root_id,
+                [server_check_col]: check_server,
+                [work_type_col]: type } = r;
+
+            if (check && !check_server && root_id) {
+                acc[uid] = { chat_id: root_id, type, uid };
+            }
+            return acc;
+        }, {});
+
+        if (Object.keys(data_obj).length > 0) {
+            return data_obj;
+        } else {
+            return {};
+        }
+
+    } catch (error) {
+        logger.error(`Error in check_success_moderation: ${error.stack}`);
     }
 }
 
@@ -476,5 +514,6 @@ export {
     save_new_partner,
     save_logo,
     get_partners_data,
-    check_modaration
+    check_moderation,
+    check_success_moderation
 };
