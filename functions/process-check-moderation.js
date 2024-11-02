@@ -12,7 +12,7 @@ const task = cron.schedule('* * * * *', async () => {
         const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
-            for (const { chat_id, type, uid, i, col_letter } of Object.values(data_obj)) {
+            await Promise.all(Object.values(data_obj).map(async ({ chat_id, type, uid, i, col_letter }) => {
                 try {
                     const success = await send_first_messages(chat_id, type, uid);
                     if (success) {
@@ -29,7 +29,7 @@ const task = cron.schedule('* * * * *', async () => {
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }
-            }
+            }));
         } else {
             logger.info('There are no users to send initial messages');
         }
