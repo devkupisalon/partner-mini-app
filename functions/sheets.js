@@ -435,17 +435,22 @@ const check_moderation = async (user_id) => {
         logger.info({ check_col, root_id_col, server_check_col });
 
         const success_values = values.find(r => r[root_id_col] === user_id);
-        const success = success_values?.map(r => [r[0], r[1], r[check_col], r[server_check_col]]);
+
+        const { 0: uid,
+            1: name,
+            [check_col]: check,
+            [root_id_col]: root_id,
+            [server_check_col]: check_server } = success_values;
 
         logger.info(success_values);
 
-        if (success_values) {
-            logger.info(`Moderation for partner ${success[1]} with id ${success[0]} and user_id ${user_id} is completed`);
+        if (check_server === 'TRUE') {
+            logger.info(`Moderation for partner ${name} with id ${uid} and user_id ${user_id} is completed`);
             return true;
-        } else if (success && (success[2] === 'FALSE' || '')) {
+        } else if (root_id && (check === 'FALSE')) {
             logger.warn(`Moderation for root_user_id ${user_id} is not completed`);
             return 'moderation';
-        } else if (!success_values) {
+        } else if (success_values.length === 0) {
             logger.info(`User with id ${user_id} not found in data base`);
             return false;
         }
