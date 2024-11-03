@@ -167,7 +167,7 @@ bot.on('message', async (message) => {
         const senders = {
             photo: () => {
                 type_m === 'photo' ?
-                    bot.sendPhoto(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
+                    bot.sendPhoto(GROUP_CHAT_ID, media[0].file_id, { caption: text, parse_mode: 'Markdown' }) : ''
             },
             video: () => {
                 type_m === 'video' ?
