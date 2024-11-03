@@ -191,16 +191,16 @@ bot.on('message', async (message) => {
 
         const mediaFunctions = {
             photo: {
-                send: send_media(media_map.photo),
+                send: type_m === 'photo' ? send_media(media_map.photo) : '',
             },
             video: {
-                send: send_media(media_map.video),
+                send: type_m === 'video' ? send_media(media_map.video) : '',
             },
             voice: {
-                send: send_media(media_map.voice),
+                send: type_m === 'voice' ? send_media(media_map.voice) : '',
             },
             document: {
-                send: send_media(media_map.document),
+                send: type_m === 'document' ? send_media(media_map.document) : '',
             },
             text: {
                 send: send(),
@@ -209,6 +209,7 @@ bot.on('message', async (message) => {
 
         // logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
         try {
+
             await mediaFunctions[type_m].send;
             // const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text)
             // const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
