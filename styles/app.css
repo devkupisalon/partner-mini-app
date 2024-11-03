@@ -307,11 +307,11 @@ input[type="file"],
 
 
 #presonal-data-id {
-    font-size: 8px;
+    font-size: 10px;
 }
 
 input[type="checkbox"] {
     border-radius: 15px;
-    height: 5px;
-    width: 5px;
+    height: 15px;
+    width: 15px;
 }
