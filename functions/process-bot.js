@@ -171,7 +171,7 @@ bot.on('message', async (message) => {
         };
 
         const p_success = async (m) => {
-            logger.info(logger_messages(m));
+            logger.info(logger_messages[m]);
             await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
         }
 
