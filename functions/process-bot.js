@@ -151,6 +151,8 @@ bot.on('message', async (message) => {
         if (String(groupId) === GROUP_CHAT_ID) {
 
             if (message.reply_to_message && message.reply_to_message.forward_from) {
+                logger.info(message.reply_to_message.forward_from);
+                logger.info(message.reply_to_message);
                 const userChatId = message.reply_to_message.forward_from.id;
 
                 try {
