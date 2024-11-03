@@ -73,10 +73,11 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                         await bot.pinChatMessage(CHAT_ID, message_id);
                         logger.info(`Message with id ${message_id} successfully pinned`);
                     }
-                    return { success: true, success_send_check: success_send };
                 }
             }
         }
+
+        return { success: true, success_send_check: success_send };
 
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
