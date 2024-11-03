@@ -80,7 +80,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
         return { success: true, success_send_check: success_send };
 
     } catch (error) {
-        logger.error(`Error sending messages: ${error.stack}`);
+        logger.error(`Error sending messages: ${error.stack}, ${CHAT_ID});
         return { succces: false, success_send_check: false };
     }
 }
