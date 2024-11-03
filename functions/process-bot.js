@@ -136,7 +136,7 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        text = `Сообщение от Агента \`\`\`${partner_name}\`\`\`\nID ${partner_id}\nmessage_id: ${messageId}\n\nТекст Сообщения:\n\n${text}`;
+        text = `Сообщение от Агента <b>${partner_name}</b>\nID ${partner_id}\nmessage_id: ${messageId}\n\nТекст Сообщения:\n\n${text}`;
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -158,7 +158,7 @@ bot.on('message', async (message) => {
         };
 
         const send_media = async (media) => {
-            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parseMode: 'Markdown' });
+            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parseMode: 'HTML' });
             if (message_id) {
                 await p_success(media);
             }
@@ -170,7 +170,7 @@ bot.on('message', async (message) => {
         }
 
         const send = async (media) => {
-            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, { text, parseMode: 'Markdown' });
+            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text, { parseMode: 'HTML' });
             if (message_id) {
                 await p_success(media);
             }
