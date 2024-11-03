@@ -471,7 +471,6 @@ const check_success_moderation = async () => {
                 }, {});
 
         const col_letter = numberToColumn(server_check_col + 1);
-        logger.ingo(col_letter);
 
         const data_obj = values.slice(1).reduce((acc, r, i) => {
             const { 0: uid,
