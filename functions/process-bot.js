@@ -1,6 +1,6 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
-import { constants, invite_texts_map, messages_map, invite_texts_map } from '../constants.js';
+import { constants, invite_texts_map, messages_map } from '../constants.js';
 import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
