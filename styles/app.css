@@ -310,8 +310,18 @@ input[type="file"],
     font-size: 10px;
 }
 
+/* Скрыть оригинальный чекбокс */
 input[type="checkbox"] {
-    border-radius: 15px;
-    height: 15px;
-    width: 15px;
+    display: none;
+}
+
+/* Стилизованный круглый чекбокс */
+input[type="checkbox"] + label:before {
+    content: '';
+    display: inline-block;
+    width: 10px; /* Диаметр круглого чекбокса */
+    height: 10px; /* Диаметр круглого чекбокса */
+    border: 2px solid #000; /* Цвет границы */
+    border-radius: 50%; /* Радиус границы для создания круглого чекбокса */
+    margin-right: 5px; /* Расстояние между чекбоксом и текстом */
 }
