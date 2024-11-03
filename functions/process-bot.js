@@ -152,12 +152,6 @@ bot.on('message', async (message) => {
             } else { return l_media(type, m) }
         }; */
 
-        let m_file_id = (photo) => photo.reduce((max, current) => {
-            const currentSize = current.width * current.height;
-            const maxSize = max.width * max.height;
-            return currentSize > maxSize ? current.file_id : max.file_id;
-        });
-
         const logger_messages = {
             media_group: l_message('Media Group'),
             photo: l_message('Photo'),
