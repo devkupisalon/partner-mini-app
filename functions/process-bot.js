@@ -140,12 +140,7 @@ bot.on('message', async (message) => {
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
-        const l_media = (type, m) => {
-            logger.info(m[0])
-            let x = m;
-            if (type === 'photo') x = x[0];
-            return [{ type, media: x.file_id }]
-        };
+        const l_media = async (type, m) => { return [{ type, media: type === 'photo' ? m[0].file_id : m.file_id }] };
 
         /* const l_media_group = (m, type) => {
             if (Array.isArray(m)) {
@@ -182,10 +177,10 @@ bot.on('message', async (message) => {
         };
 
         const media_map = {
-            photo: l_media('photo', photo),
-            video: l_media('video', video),
-            voice: l_media('voice', voice),
-            document: l_media('document', document),
+            photo: await l_media('photo', photo),
+            video: await l_media('video', video),
+            voice: await l_media('voice', voice),
+            document: await l_media('document', document),
         };
 
         const mediaFunctions = {
