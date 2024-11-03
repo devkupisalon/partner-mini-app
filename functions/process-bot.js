@@ -123,7 +123,7 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 bot.on('message', async (message) => {
 
-    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, media } = message;
+    const { contact, chat: { id, type }, photo, document, voice, video } = message;
     const messageId = message.message_id;
     let text = message.text || message.caption || '';
 
@@ -136,7 +136,7 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        text = `Сообщение от Агента *${partner_name}*\nID ${partner_id}\nmessage_id: ${messageId}\n\nТекст Сообщения:\n\n${text}`;
+        text = `Сообщение от Агента \*${partner_name}\*\nID ${partner_id}\nmessage_id: ${messageId}\n\nТекст Сообщения:\n\n${text}`;
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
