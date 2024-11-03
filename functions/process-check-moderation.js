@@ -7,9 +7,9 @@ import cron from 'node-cron';
 
 const { DB, DATASHEETNAME } = constants;
 
-const task = cron.schedule('* * * * *',  () => {
+const task = cron.schedule('* * * * *', async () => {
     try {
-        const data_obj =  check_success_moderation();
+        const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
             for (const { chat_id, type, uid, i, col_letter, group_id, manager_chat_id, name } of Object.values(data_obj)) {
@@ -20,7 +20,7 @@ const task = cron.schedule('* * * * *',  () => {
 
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
-                        const { data } =  update_data(DB, range, requestBody);
+                        const { data } = update_data(DB, range, requestBody);
 
                         if (data.spreadsheetId) {
                             logger.info(`check_server to uid: ${uid} set to TRUE`);
