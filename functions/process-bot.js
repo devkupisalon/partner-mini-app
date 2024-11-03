@@ -18,6 +18,7 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
 const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name, success_send) => {
     let CHAT_ID;
     let is_invite_send = false;
+    let check_suuccess_send;
 
     try {
         for (const k of Object.keys(messages_map)) {
