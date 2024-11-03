@@ -26,7 +26,7 @@ const task = cron.schedule('* * * * *', async () => {
                             logger.info(`check_server to uid: ${uid} set to TRUE`);
                         }
                     }
-                    await new Promise(resolve => setTimeout(resolve, 1000)); // Delay before sending the next message
+                    new Promise(resolve => setTimeout(resolve, 1000)); // Delay before sending the next message
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }
