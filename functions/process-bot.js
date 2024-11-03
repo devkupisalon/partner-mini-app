@@ -140,13 +140,23 @@ bot.on('message', async (message) => {
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
-        const l_media = (type, m) => { return [{ type, media: m.file_id }] };
-        const l_media_group = (m, type) => {
+        const l_media = (type, m) => {
+            let x = m;
+            if (type === 'photo') x = x[0];
+            return [{ type, media: x.file_id }]
+        };
+
+        /* const l_media_group = (m, type) => {
             if (Array.isArray(m)) {
                 return m.map(({ file_id }) => ({ type, media: file_id }));
             } else { return l_media(type, m) }
-        };
+        }; */
 
+        let m_file_id = (photo) => photo.reduce((max, current) => {
+            const currentSize = current.width * current.height;
+            const maxSize = max.width * max.height;
+            return currentSize > maxSize ? current.file_id : max.file_id;
+        });
 
         const logger_messages = {
             media_group: l_message('Media Group'),
@@ -177,10 +187,10 @@ bot.on('message', async (message) => {
         };
 
         const media_map = {
-            photo: l_media_group('photo', photo),
-            video: l_media_group('video', video),
-            voice: l_media_group('voice', voice),
-            document: l_media_group('document', document),
+            photo: l_media('photo', photo),
+            video: l_media('video', video),
+            voice: l_media('voice', voice),
+            document: l_media('document', document),
         };
 
         const mediaFunctions = {
