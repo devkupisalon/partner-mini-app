@@ -7,9 +7,9 @@ import cron from 'node-cron';
 
 const { DB, DATASHEETNAME } = constants;
 
-const task = cron.schedule('* * * * *', async () => {
+const task = cron.schedule('* * * * *',  () => {
     try {
-        const data_obj = await check_success_moderation();
+        const data_obj =  check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
             for (const { chat_id, type, uid, i, col_letter, group_id, manager_chat_id, name } of Object.values(data_obj)) {
@@ -20,13 +20,13 @@ const task = cron.schedule('* * * * *', async () => {
 
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
-                        const { data } = await update_data(DB, range, requestBody);
+                        const { data } =  update_data(DB, range, requestBody);
 
                         if (data.spreadsheetId) {
                             logger.info(`check_server to uid: ${uid} set to TRUE`);
                         }
                     }
-                    new Promise(resolve => setTimeout(resolve, 1000)); // Delay before sending the next message
+                    // new Promise(resolve => setTimeout(resolve, 1000)); // Delay before sending the next message
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }

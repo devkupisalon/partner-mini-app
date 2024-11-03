@@ -27,7 +27,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                 const { url, text, button_text } = messages_map[k][type];
                 const create_url = typeof url === 'function' ? url(uid) : url;
-                
+
                 const messageOptions = {
                     link: {
                         message_text_option: text,
@@ -56,6 +56,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                     if (!success_send) {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                        success_send = true;
                     }
 
                     await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
