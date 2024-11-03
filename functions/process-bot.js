@@ -20,7 +20,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
     let is_invite_send = false;
 
     try {
-        Object.keys(messages_map).forEach(async (k) => {
+        for (const k of Object.keys(messages_map)) {
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
@@ -75,7 +75,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                     return { success: true, success_send_check: success_send };
                 }
             }
-        });
+        }
 
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
