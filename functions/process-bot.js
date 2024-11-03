@@ -21,7 +21,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
     let check_suuccess_send;
 
     try {
-        for (const k of Object.keys(messages_map)) {
+        for await (const k of Object.keys(messages_map)) {
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
 
