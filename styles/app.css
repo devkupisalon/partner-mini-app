@@ -307,24 +307,25 @@ input[type="file"],
 
 
 #presonal-data-id {
-    font-size: 10px;
+    font-size: 11px;
 }
 
 /* Скрыть оригинальный чекбокс */
 input[type="checkbox"] {
-    /* display: none; */
-    width: 10px;
-    height: 10px;
-    border: 2px solid var(--tg-theme-button-color);
-    border-radius: 50%;
+    display: none;
 }
 
 /* Стилизованный круглый чекбокс */
-/* input[type="checkbox"]+label:before {
+input[type="checkbox"]+label:before {
     content: '';
     display: inline-block;
     width: 10px;
     height: 10px;
     border: 2px solid var(--tg-theme-button-color);
     border-radius: 50%;
-} */
+}
+
+/* Устанавливаем чекбокс отмеченным по умолчанию */
+input[type="checkbox"]:checked + label:before {
+    background-color: var(--tg-theme-button-color);
+}
