@@ -88,7 +88,6 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
  * @param {Object} map - Object mapping user IDs to personalized messages.
  */
 const send_group_invite_link = async (groupId, user_ids, map) => {
-    await set_chat_title(groupId, newTitle);
     await bot.exportChatInviteLink(groupId)
         .then(inviteLink => {
             Object.keys(user_ids).forEach(k => {
