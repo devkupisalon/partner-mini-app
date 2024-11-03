@@ -134,6 +134,7 @@ bot.on('message', async (message) => {
                     
                     const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
                     if (message_id) {
+                        logger.info(messageId);
 
                         logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
                         await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
@@ -155,6 +156,7 @@ bot.on('message', async (message) => {
             if (message.reply_to_message && message.reply_to_message.forward_from) {
                 
                 const origin_message_id = message.reply_to_message.message_id;
+                logger.info(origin_message_id);
                 const userChatId = message.reply_to_message.forward_from.id;
 
                 try {
