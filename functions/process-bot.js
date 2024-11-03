@@ -124,6 +124,7 @@ const set_chat_title = async (groupId, newTitle) => {
 bot.on('message', async (message) => {
     const { contact, chat: { id, type } } = message;
     const messageId = message.message_id;
+    logger.info(message);
     if (contact) return;
 
     if (message.from.id === id) {
