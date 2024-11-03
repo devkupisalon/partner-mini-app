@@ -131,6 +131,7 @@ bot.on('message', async (message) => {
     if (contact) return;
 
     const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
+    logger.info(type_m);
 
     const { partner_name, partner_id } = await get_partners_data(id);
 
@@ -141,12 +142,6 @@ bot.on('message', async (message) => {
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
         const l_media = async (type, m) => { return [{ type, media: type === 'photo' ? m[0].file_id : m.file_id }] };
-
-        /* const l_media_group = (m, type) => {
-            if (Array.isArray(m)) {
-                return m.map(({ file_id }) => ({ type, media: file_id }));
-            } else { return l_media(type, m) }
-        }; */
 
         const logger_messages = {
             media_group: l_message('Media Group'),
