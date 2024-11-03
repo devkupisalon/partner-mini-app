@@ -305,6 +305,13 @@ input[type="file"],
     display: none;
 }
 
+
+#presonal-data-id {
+    font-size: 8px;
+}
+
 input[type="checkbox"] {
-    font-size: 7px;
+    border-radius: 15px;
+    height: 5px;
+    width: 5px;
 }
