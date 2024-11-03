@@ -130,7 +130,7 @@ bot.on('message', async (message) => {
     logger.info(message);
     if (contact) return;
 
-    const type_m = photo ? 'photo' : video ? 'video' : voice ? voice : document ? document : 'text';
+    const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
 
     const { partner_name, partner_id } = await get_partners_data(id);
 
@@ -141,6 +141,7 @@ bot.on('message', async (message) => {
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
         const l_media = (type, m) => {
+            logger.info(m[0])
             let x = m;
             if (type === 'photo') x = x[0];
             return [{ type, media: x.file_id }]
