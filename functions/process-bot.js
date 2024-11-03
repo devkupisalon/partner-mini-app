@@ -158,7 +158,7 @@ bot.on('message', async (message) => {
         };
 
         const send_media = async (media) => {
-            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parseMode: 'HTML' });
+            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parse_mode: 'HTML' });
             if (message_id) {
                 await p_success(media);
             }
@@ -170,7 +170,7 @@ bot.on('message', async (message) => {
         }
 
         const send = async (media) => {
-            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text, { parseMode: 'HTML' });
+            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode: 'HTML' });
             if (message_id) {
                 await p_success(media);
             }
