@@ -158,7 +158,7 @@ bot.on('message', async (message) => {
         };
 
         const send_media = async (media) => {
-            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parseMode: 'MarkdownV2' });
+            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parseMode: 'Markdown' });
             if (message_id) {
                 await p_success(media);
             }
