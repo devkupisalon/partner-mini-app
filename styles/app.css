@@ -311,12 +311,7 @@ input[type="file"],
 }
 
 input[type="checkbox"] {
-    -webkit-appearance: none; /* Убираем стандартный внешний вид для Chrome и Safari */
-    -moz-appearance: none; /* Убираем стандартный внешний вид для Firefox */
-    appearance: none; /* Убираем стандартный внешний вид */
-    display: inline-block;
-    width: 10px; /* Ширина чекбокса */
-    height: 10px; /* Высота чекбокса */
-    border: 2px solid var(--tg-theme-button-color) ; /* Цвет рамки чекбокса */
-    border-radius: 15%; /* Радиус закругления углов чекбокса */
+    display: flex;
+    height: 15px;
+    width: 15px;
 }
