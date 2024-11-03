@@ -154,7 +154,7 @@ bot.on('message', async (message) => {
 
             if (message.reply_to_message && message.reply_to_message.forward_from) {
                 
-                const origin_message_id = messagereply_to_message.message_id;
+                const origin_message_id = message.reply_to_message.message_id;
                 const userChatId = message.reply_to_message.forward_from.id;
 
                 try {
