@@ -55,7 +55,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                     if (!success_send) {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     }
-                    
+
                     await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
                     is_invite_send = true;
                 }
@@ -108,7 +108,7 @@ const send_group_invite_link = async (groupId, user_ids, map) => {
 const set_chat_title = async (groupId, newTitle) => {
     bot.setChatTitle(groupId, newTitle)
         .then(() => {
-            logger.imfo(`Group chat title changed to: ${newTitle}`);
+            logger.info(`Group chat title changed to: ${newTitle}`);
         })
         .catch(error => {
             logger.error(`Error while changing group chat title: ${error}`);
