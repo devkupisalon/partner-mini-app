@@ -122,29 +122,111 @@ const set_chat_title = async (groupId, newTitle) => {
  * send back responses from managers to user chats 
  */
 bot.on('message', async (message) => {
-    const { contact, chat: { id, type } } = message;
+
+    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, media } = message;
     const messageId = message.message_id;
+    let text = message.text || message.caption || '';
+
     logger.info(message);
     if (contact) return;
 
-    if (message.from.id === id) {
-        if (id) {
-            const { partner_name, partner_id } = await get_partners_data(id);
-            if (partner_name && partner_id) {
-                try {
-                    
-                    const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
-                    if (message_id) {
-                        logger.info(messageId);
+    const type_m = photo ? 'photo' : video ? 'video' : voice ? voice : document ? document : 'text';
 
-                        logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
-                        await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
-                    }
+    const { partner_name, partner_id } = await get_partners_data(id);
 
-                } catch (error) {
-                    logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
-                }
+    if (partner_name && partner_id) {
+
+        text = `Сообщение от Партнера *${partner_name}*
+                ID ${partner_id}
+                message_id: ${messageId}
+                
+                Текст Сообщения: 
+                
+                ${text}`;
+
+        /** MEDIA FUNCTIONS */
+        const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
+        const l_media = (type, m) => { return [{ type, media: m.file_id }] };
+        const l_media_group = (m, type) => {
+            if (Array.isArray(m)) {
+                return m.map(({ file_id }) => ({ type, media: file_id }));
+            } else { return l_media(type, m) }
+        };
+
+
+        const logger_messages = {
+            media_group: l_message('Media Group'),
+            photo: l_message('Photo'),
+            video: l_message('Video'),
+            voice: l_message('Voice'),
+            document: l_message('Document'),
+            text: l_message('Text'),
+        };
+
+        const send_media = async (media) => {
+            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text });
+            if (message_id) {
+                await p_success(media);
             }
+        };
+
+        const p_success = async (m) => {
+            logger.info(logger_messages(m));
+            await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+        }
+
+        const send = async (media) => {
+            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text);
+            if (message_id) {
+                await p_success(media);
+            }
+        };
+
+        const media_map = {
+            photo: l_media_group('photo', photo),
+            video: l_media_group('video', video),
+            voice: l_media_group('voice', voice),
+            document: l_media_group('document', document),
+        };
+
+        const mediaFunctions = {
+            photo: {
+                send: send_media(media_map.photo),
+            },
+            video: {
+                send: send_media(media_map.video),
+            },
+            voice: {
+                send: send_media(media_map.voice),
+            },
+            document: {
+                send: send_media(media_map.document),
+            },
+            text: {
+                send: send(),
+            }
+        };
+
+        // logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
+        try {
+            await mediaFunctions[type_m].send;
+            // const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text)
+            // const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
+
+            // for (const mediaType in mediaFunctions) {
+            //     const { send } = mediaFunctions[mediaType];
+            //     if (send) await send;
+            // }
+            /* if (message_id) {
+                // logger.info(messageId);
+
+        
+
+                await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+            } */
+
+        } catch (error) {
+            logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
         }
     }
 
@@ -155,7 +237,7 @@ bot.on('message', async (message) => {
         if (String(groupId) === GROUP_CHAT_ID) {
 
             if (message.reply_to_message && message.reply_to_message.forward_from) {
-                
+
                 const origin_message_id = message.reply_to_message.message_id;
                 logger.info(origin_message_id);
                 const userChatId = message.reply_to_message.forward_from.id;
