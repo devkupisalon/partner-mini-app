@@ -90,6 +90,7 @@ const messages_map = {
     }
 };
 
+/** INVITE TEXT MAP */
 const invite_texts_map = {
     manager: 'Присоединяйтесь к группе с партнером по ссылке:',
     partner: 'Присоединяйтесь к группе с менеджером по ссылке:'
