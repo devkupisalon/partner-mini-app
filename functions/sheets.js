@@ -427,7 +427,7 @@ const get_partners_data = async (chat_id) => {
 const check_moderation = async (user_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
-        const { check_col, root_id_col, server_check_col } = ['check', 'root_id', 'server_check'].reduce((acc, k) => {
+        const { check_col, root_id_col, server_check_col, group } = ['check', 'root_id', 'server_check', 'group_id', 'manager_chat_id'].reduce((acc, k) => {
             acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
             return acc;
         }, {});

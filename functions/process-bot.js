@@ -1,6 +1,6 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
-import { constants, messages_map } from '../constants.js';
+import { constants, invite_texts_map, messages_map, invite_texts_map } from '../constants.js';
 import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
@@ -11,8 +11,10 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
  * @param {string} chat_id - user chat_id 
  * @param {string} type - Agent or Partner
  * @param {string} uid - Partner ID
+ * @param {string} group_id  - group ID
+ * @param {string} manager_chat_id - Manager chat_id
  */
-const send_first_messages = async (chat_id, type, uid) => {
+const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id) => {
     try {
         Object.keys(messages_map).forEach(async (k) => {
             const { link, to_pin } = messages_map[k];
@@ -32,15 +34,20 @@ const send_first_messages = async (chat_id, type, uid) => {
 
                 const messageType = link ? 'link' : 'text';
                 const { message_text_option, reply_markup } = messageOptions[messageType];
+                const chatId = group_id ? group_id : chat_id;
+
+                if (type === 'Партнер') {
+                    await send_group_invite_link(chatId, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
+                }
 
                 const { message_id } = await (link ?
-                    bot.sendMessage(chat_id, message_text_option, { reply_markup }) :
-                    bot.sendMessage(chat_id, message_text_option));
+                    bot.sendMessage(chatId, message_text_option, { reply_markup }) :
+                    bot.sendMessage(chatId, message_text_option));
 
                 if (message_id) {
                     logger.info('Message successfully sent to the user');
                     if (to_pin) {
-                        await bot.pinChatMessage(chat_id, message_id);
+                        await bot.pinChatMessage(chatId, message_id);
                         logger.info(`Message with id ${message_id} successfully pinned`);
                     }
                     return { success: true };
@@ -48,13 +55,28 @@ const send_first_messages = async (chat_id, type, uid) => {
             }
         });
 
-        const response = await bot.createNewGroupChat(chat_id, 'Название вашей группы', { type: 'group' });
-        logger.info(response);
-
     } catch (error) {
         logger.error(`Error sending messages: ${error.message}`);
         return { succces: false };
     }
+}
+
+/**
+ * Function to send group invite link to users.
+ * @param {string} groupId - The ID of the group from which to get the invite.
+ * @param {Array<string>} user_ids - Array of user IDs to send the invite to.
+ * @param {Object} map - Object mapping user IDs to personalized messages.
+ */
+const send_group_invite_link = async (groupId, user_ids, map) => {
+    await bot.exportChatInviteLink(groupId)
+        .then(inviteLink => {
+            Object.keys(user_ids).forEach(k => {
+                bot.sendMessage(user_ids[k], `${map[k]} ${inviteLink}`);
+            });
+        })
+        .catch(error => {
+            logger.error(`Error while export chat_invite_link: ${error}`);
+        });
 }
 
 /**

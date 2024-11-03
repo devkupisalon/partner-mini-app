@@ -12,9 +12,9 @@ const task = cron.schedule('* * * * *', async () => {
         const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
-            Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter }) => {
+            Object.values(data_obj).forEach(async ({ chat_id, type, uid, i, col_letter, group_id, manager_chat_id }) => {
                 try {
-                    const success = send_first_messages(chat_id, type, uid);
+                    const success = send_first_messages(chat_id, type, uid, group_id, manager_chat_id);
                     if (success) {
 
                         logger.info('Initial messages sent successfully');
