@@ -310,22 +310,13 @@ input[type="file"],
     font-size: 11px;
 }
 
-/* Скрыть оригинальный чекбокс */
 input[type="checkbox"] {
-    display: none;
-}
-
-/* Стилизованный круглый чекбокс */
-input[type="checkbox"]+label:before {
-    content: '';
+    -webkit-appearance: none; /* Убираем стандартный внешний вид для Chrome и Safari */
+    -moz-appearance: none; /* Убираем стандартный внешний вид для Firefox */
+    appearance: none; /* Убираем стандартный внешний вид */
     display: inline-block;
-    width: 10px;
-    height: 10px;
-    border: 2px solid var(--tg-theme-button-color);
-    border-radius: 50%;
-}
-
-/* Устанавливаем чекбокс отмеченным по умолчанию */
-input[type="checkbox"]:checked + label:before {
-    background-color: var(--tg-theme-button-color);
+    width: 10px; /* Ширина чекбокса */
+    height: 10px; /* Высота чекбокса */
+    border: 2px solid var(--tg-theme-button-color) ; /* Цвет рамки чекбокса */
+    border-radius: 15%; /* Радиус закругления углов чекбокса */
 }
