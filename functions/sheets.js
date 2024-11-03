@@ -427,10 +427,11 @@ const get_partners_data = async (chat_id) => {
 const check_moderation = async (user_id) => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
-        const { check_col, root_id_col, server_check_col, group } = ['check', 'root_id', 'server_check', 'group_id', 'manager_chat_id'].reduce((acc, k) => {
-            acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
-            return acc;
-        }, {});
+        const { check_col, root_id_col, server_check_col } =
+            ['check', 'root_id', 'server_check'].reduce((acc, k) => {
+                acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
+                return acc;
+            }, {});
 
         const success_values = values.find(r => r[root_id_col] === user_id);
 
@@ -462,11 +463,12 @@ const check_success_moderation = async () => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
 
-        const { check_col, root_id_col, server_check_col, work_type_col } = ['check', 'server_check', 'root_id', 'work_type']
-            .reduce((acc, k) => {
-                acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
-                return acc;
-            }, {});
+        const { check_col, root_id_col, server_check_col, work_type_col, group_id_col, manager_chat_id_col } =
+            ['check', 'server_check', 'root_id', 'work_type', 'group_id', 'manager_chat_id']
+                .reduce((acc, k) => {
+                    acc[`${k}_col`] = getColumnNumberByValue(values[0], k) - 1;
+                    return acc;
+                }, {});
 
         const col_letter = numberToColumn(server_check_col + 1);
 
@@ -475,10 +477,12 @@ const check_success_moderation = async () => {
                 [check_col]: check,
                 [root_id_col]: root_id,
                 [server_check_col]: check_server,
-                [work_type_col]: type } = r;
+                [work_type_col]: type,
+                [group_id_col]: group_id,
+                [manager_chat_id_col]: manager_chat_id } = r;
 
             if (check === 'TRUE' && check_server === 'FALSE' && root_id) {
-                acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter };
+                acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter, group_id, manager_chat_id };
             }
             return acc;
         }, {});
