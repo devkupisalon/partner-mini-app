@@ -170,7 +170,7 @@ bot.on('message', async (message) => {
         }
 
         const send = async (media) => {
-            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text, { parseMode: 'Markdown' });
+            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, { text, parseMode: 'Markdown' });
             if (message_id) {
                 await p_success(media);
             }
