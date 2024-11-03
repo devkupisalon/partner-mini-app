@@ -5,6 +5,7 @@ import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
+let success_send = false;
 
 /**
  * Send first init messages to user
@@ -18,7 +19,7 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
 const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name) => {
     let CHAT_ID;
     let is_invite_send = false;
-    let success_send = false
+
     try {
         Object.keys(messages_map).forEach(async (k) => {
             const { link, to_pin } = messages_map[k];
@@ -26,6 +27,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                 const { url, text, button_text } = messages_map[k][type];
                 const create_url = typeof url === 'function' ? url(uid) : url;
+                
                 const messageOptions = {
                     link: {
                         message_text_option: text,
