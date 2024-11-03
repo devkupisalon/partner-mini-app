@@ -312,21 +312,19 @@ input[type="file"],
 
 /* Скрыть оригинальный чекбокс */
 input[type="checkbox"] {
-    display: none;
+    /* display: none; */
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--tg-theme-button-color);
+    border-radius: 50%;
 }
 
 /* Стилизованный круглый чекбокс */
-input[type="checkbox"]+label:before {
+/* input[type="checkbox"]+label:before {
     content: '';
     display: inline-block;
     width: 10px;
-    /* Диаметр круглого чекбокса */
     height: 10px;
-    /* Диаметр круглого чекбокса */
     border: 2px solid var(--tg-theme-button-color);
-    /* Цвет границы */
     border-radius: 50%;
-    /* Радиус границы для создания круглого чекбокса */
-    margin-right: 5px;
-    /* Расстояние между чекбоксом и текстом */
-}
+} */
