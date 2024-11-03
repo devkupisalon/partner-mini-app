@@ -13,8 +13,10 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
  * @param {string} uid - Partner ID
  * @param {string} group_id  - group ID
  * @param {string} manager_chat_id - Manager chat_id
+ * @param {string} name - Partner nname
  */
-const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id) => {
+const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name) => {
+    let is_invite_send = false;
     try {
         Object.keys(messages_map).forEach(async (k) => {
             const { link, to_pin } = messages_map[k];
@@ -36,8 +38,10 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                 const { message_text_option, reply_markup } = messageOptions[messageType];
                 const chatId = group_id ? group_id : chat_id;
 
-                if (type === 'Партнер') {
+                if (type === 'Партнер' && !is_invite_send) {
+                    await set_chat_title(group_id, `Рабочая группа с Партнером ${name}`);
                     await send_group_invite_link(chatId, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
+                    is_invite_send = true;
                 }
 
                 const { message_id } = await (link ?
@@ -68,6 +72,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
  * @param {Object} map - Object mapping user IDs to personalized messages.
  */
 const send_group_invite_link = async (groupId, user_ids, map) => {
+    await set_chat_title(groupId, newTitle);
     await bot.exportChatInviteLink(groupId)
         .then(inviteLink => {
             Object.keys(user_ids).forEach(k => {
@@ -76,6 +81,21 @@ const send_group_invite_link = async (groupId, user_ids, map) => {
         })
         .catch(error => {
             logger.error(`Error while export chat_invite_link: ${error}`);
+        });
+}
+
+/**
+ * Function to set the title of a group chat.
+ * @param {string} groupId - The ID of the group where the title will be changed.
+ * @param {string} newTitle - The new title for the group chat.
+ */
+const set_chat_title = async (groupId, newTitle) => {
+    bot.setChatTitle(groupId, newTitle)
+        .then(() => {
+            logger.imfo(`Group chat title changed to: ${newTitle}`);
+        })
+        .catch(error => {
+            logger.error(`Error while changing group chat title: ${error}`);
         });
 }
 

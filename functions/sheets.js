@@ -474,6 +474,7 @@ const check_success_moderation = async () => {
 
         const data_obj = values.slice(1).reduce((acc, r, i) => {
             const { 0: uid,
+                1: name,
                 [check_col]: check,
                 [root_id_col]: root_id,
                 [server_check_col]: check_server,
@@ -482,7 +483,7 @@ const check_success_moderation = async () => {
                 [manager_chat_id_col]: manager_chat_id } = r;
 
             if (check === 'TRUE' && check_server === 'FALSE' && root_id) {
-                acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter, group_id, manager_chat_id };
+                acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter, group_id, manager_chat_id, name };
             }
             return acc;
         }, {});
