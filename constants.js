@@ -48,6 +48,15 @@ const messages_map = {
 С уважением,
 Куписалон` }
     },
+    manager_registr_message: {
+        'Партнер': {
+            text: `Приглашаем Ваших менеджеров присоединиться к нашей партнерской программе.
+Для регистрации используйте кнопку ниже.`,
+            url: (uid) => { return `${MINI_APP_LINK}${uid}`; },
+            button_text: `Регистрация менеджера`
+        }, link: true,
+        to_pin: true
+    },
     calc_message: {
         'Агент': {
             text: `Сделать расчёт стоимости для клиента можно по кнопке ниже.`,
@@ -60,15 +69,6 @@ const messages_map = {
             button_text: `Создать расчет`
         },
         link: true,
-        to_pin: true
-    },
-    manager_registr_message: {
-        'Партнер': {
-            text: `Приглашаем Ваших менеджеров присоединиться к нашей партнерской программе.
-Для регистрации используйте кнопку ниже.`,
-            url: (uid) => { return `${MINI_APP_LINK}${uid}`; },
-            button_text: `Регистрация менеджера`
-        }, link: true,
         to_pin: true
     },
     helper_message: {

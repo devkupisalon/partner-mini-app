@@ -18,7 +18,6 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
 const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name, success_send) => {
     let CHAT_ID;
     let is_invite_send = false;
-    let check_suuccess_send;
 
     try {
         for await (const k of Object.keys(messages_map)) {
@@ -110,10 +109,10 @@ const send_group_invite_link = async (groupId, user_ids, map) => {
 const set_chat_title = async (groupId, newTitle) => {
     bot.setChatTitle(groupId, newTitle)
         .then(() => {
-            logger.info(`Group chat title changed to: ${newTitle}`);
+            logger.info(`Group chat title with id:${groupId} changed to: ${newTitle}`);
         })
         .catch(error => {
-            logger.error(`Error while changing group chat title: ${error}`);
+            logger.error(`Error while changing group chat title with id:${groupId} : ${error}`);
         });
 }
 
