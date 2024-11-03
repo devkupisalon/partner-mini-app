@@ -14,19 +14,18 @@ const task = cron.schedule('* * * * *', async () => {
         if (Object.keys(data_obj).length > 0) {
             for (const { chat_id, type, uid, i, col_letter, group_id, manager_chat_id, name } of Object.values(data_obj)) {
                 try {
-                    const success = send_first_messages(chat_id, type, uid, group_id, manager_chat_id, name);
+                    const success = await send_first_messages(chat_id, type, uid, group_id, manager_chat_id, name);
                     if (success) {
                         logger.info('Initial messages sent successfully');
 
                         const range = `${DATASHEETNAME}!${col_letter}${i}`;
                         const requestBody = { values: [[true]] };
-                        const { data } = update_data(DB, range, requestBody);
+                        const { data } = await update_data(DB, range, requestBody);
 
                         if (data.spreadsheetId) {
                             logger.info(`check_server to uid: ${uid} set to TRUE`);
                         }
                     }
-                    // new Promise(resolve => setTimeout(resolve, 1000)); // Delay before sending the next message
                 } catch (error) {
                     logger.error(`Error sending initial messages: ${error}`);
                 }
