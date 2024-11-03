@@ -128,7 +128,7 @@ bot.on('message', async (message) => {
 
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
-        logger.info(`Received a message from group chat with ID: ${groupId}`);
+        logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
