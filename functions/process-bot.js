@@ -16,7 +16,9 @@ GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
  * @param {string} name - Partner nname
  */
 const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name) => {
+    let CHAT_ID;
     let is_invite_send = false;
+    let success_send = false
     try {
         Object.keys(messages_map).forEach(async (k) => {
             const { link, to_pin } = messages_map[k];
@@ -36,22 +38,36 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                 const messageType = link ? 'link' : 'text';
                 const { message_text_option, reply_markup } = messageOptions[messageType];
-                const chatId = group_id ? group_id : chat_id;
+                CHAT_ID = group_id ? group_id : chat_id;
 
                 if (type === 'Партнер' && !is_invite_send) {
-                    await set_chat_title(group_id, `Рабочая группа с Партнером ${name}`);
-                    await send_group_invite_link(chatId, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
+                    CHAT_ID = `-${CHAT_ID}`;
+
+                    try {
+                        await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                        success_send = true;
+                    } catch (error) {
+                        logger.error(`Partner chat ID not found: ${error.message}`);
+                        CHAT_ID = CHAT_ID.replace('-', '-100');
+                        success_send = false;
+                    }
+
+                    if (!success_send) {
+                        await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                    }
+                    
+                    await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
                     is_invite_send = true;
                 }
 
                 const { message_id } = await (link ?
-                    bot.sendMessage(chatId, message_text_option, { reply_markup }) :
-                    bot.sendMessage(chatId, message_text_option));
+                    bot.sendMessage(CHAT_ID, message_text_option, { reply_markup }) :
+                    bot.sendMessage(CHAT_ID, message_text_option));
 
                 if (message_id) {
                     logger.info('Message successfully sent to the user');
                     if (to_pin) {
-                        await bot.pinChatMessage(chatId, message_id);
+                        await bot.pinChatMessage(CHAT_ID, message_id);
                         logger.info(`Message with id ${message_id} successfully pinned`);
                     }
                     return { success: true };
