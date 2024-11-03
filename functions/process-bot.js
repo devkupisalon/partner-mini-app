@@ -5,7 +5,6 @@ import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-100${GROUP_CHAT_ID}`;
-let success_send = false;
 
 /**
  * Send first init messages to user
@@ -16,7 +15,7 @@ let success_send = false;
  * @param {string} manager_chat_id - Manager chat_id
  * @param {string} name - Partner nname
  */
-const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name) => {
+const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id, name, success_send) => {
     let CHAT_ID;
     let is_invite_send = false;
 

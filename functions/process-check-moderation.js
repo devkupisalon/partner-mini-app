@@ -8,13 +8,14 @@ import cron from 'node-cron';
 const { DB, DATASHEETNAME } = constants;
 
 const task = cron.schedule('* * * * *', async () => {
+    let success_send = false;
     try {
         const data_obj = await check_success_moderation();
 
         if (Object.keys(data_obj).length > 0) {
             for (const { chat_id, type, uid, i, col_letter, group_id, manager_chat_id, name } of Object.values(data_obj)) {
                 try {
-                    const success = await send_first_messages(chat_id, type, uid, group_id, manager_chat_id, name);
+                    const success = await send_first_messages(chat_id, type, uid, group_id, manager_chat_id, name, success_send);
                     if (success) {
                         logger.info('Initial messages sent successfully');
 
