@@ -92,8 +92,10 @@ const messages_map = {
 
 /** INVITE TEXT MAP */
 const invite_texts_map = {
-    manager: 'Присоединяйтесь к группе с партнером по ссылке:',
-    partner: 'Присоединяйтесь к группе с менеджером по ссылке:'
+    manager: (name) => {return `Создана новая группа с партнером ${name}, присоединяйтесь к группе по ссылке:`},
+    partner: (name) => {return `${name}, 
+    Ваша зявка на участие в нашей партнерской программе была успешно одобрена.
+    Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
 export { constants, __dirname, messages_map, invite_texts_map };

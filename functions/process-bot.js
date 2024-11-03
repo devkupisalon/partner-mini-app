@@ -57,7 +57,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                         success_send = true;
                     }
 
-                    await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map);
+                    await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map, name);
                     is_invite_send = true;
                 }
 
@@ -86,14 +86,15 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 /**
  * Function to send group invite link to users.
  * @param {string} groupId - The ID of the group from which to get the invite.
- * @param {Array<string>} user_ids - Array of user IDs to send the invite to.
+ * @param {Object} user_ids - Object of user IDs to send the invite to.
  * @param {Object} map - Object mapping user IDs to personalized messages.
+ * @param {string} name - Name of invited organization.
  */
-const send_group_invite_link = async (groupId, user_ids, map) => {
+const send_group_invite_link = async (groupId, user_ids, map, name) => {
     await bot.exportChatInviteLink(groupId)
         .then(inviteLink => {
             Object.keys(user_ids).forEach(k => {
-                bot.sendMessage(user_ids[k], `${map[k]} ${inviteLink}`);
+                bot.sendMessage(user_ids[k], `${map[k](name)} ${inviteLink}`);
             });
         })
         .catch(error => {
