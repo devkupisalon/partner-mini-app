@@ -132,6 +132,8 @@ bot.on('message', async (message) => {
 
     const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
     const media = photo ? photo : video ? video : voice ? voice : document ? document : '';
+    logger.info(media);
+    logger.log(media[0].file_id);
     logger.info(type_m);
 
     const { partner_name, partner_id } = await get_partners_data(id);
