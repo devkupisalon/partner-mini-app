@@ -131,6 +131,7 @@ bot.on('message', async (message) => {
     if (contact) return;
 
     const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
+    const media = photo ? photo : video ? video : voice ? voice : document ? document : '';
     logger.info(type_m);
 
     const { partner_name, partner_id } = await get_partners_data(id);
@@ -141,7 +142,6 @@ bot.on('message', async (message) => {
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
-        const l_media = async (type, m) => { return [{ type, media: type === 'photo' ? m[0].file_id : m.file_id }] };
 
         const logger_messages = {
             media_group: l_message('Media Group'),
@@ -150,13 +150,6 @@ bot.on('message', async (message) => {
             voice: l_message('Voice'),
             document: l_message('Document'),
             text: l_message('Text'),
-        };
-
-        const send_media = async (media) => {
-            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, media, { caption: text, parse_mode: 'Markdown' });
-            if (message_id) {
-                await p_success(media);
-            }
         };
 
         const p_success = async (m) => {
@@ -171,28 +164,47 @@ bot.on('message', async (message) => {
             }
         };
 
-        const media_map = {
-            photo: type_m === 'photo' ? l_media('photo', photo) : '',
-            video: type_m === 'video' ? l_media('video', video) : '',
-            voice: type_m === 'voice' ? l_media('voice', voice) : '',
-            document: type_m === 'document' ? l_media('document', document) : '',
+        const senders = {
+            photo: () => {
+                type_m === 'photo' ?
+                    bot.sendPhoto(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
+            },
+            video: () => {
+                type_m === 'video' ?
+                    bot.sendVideo(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
+            },
+            voice: () => {
+                type_m === 'voice' ?
+                    bot.sendVoice(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
+            },
+            document: () => {
+                type_m === 'document' ?
+                    bot.sendDocument(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
+            }
+        };
+
+        const send_media = async (media) => {
+            const { message_id } = await senders[media];
+            if (message_id) {
+                await p_success(media);
+            }
         };
 
         const mediaFunctions = {
             photo: {
-                send: type_m === 'photo' ? send_media(media_map.photo) : '',
+                send: type_m === 'photo' ? send_media(type_m) : '',
             },
             video: {
-                send: type_m === 'video' ? send_media(media_map.video) : '',
+                send: type_m === 'video' ? send_media(type_m) : '',
             },
             voice: {
-                send: type_m === 'voice' ? send_media(media_map.voice) : '',
+                send: type_m === 'voice' ? send_media(type_m) : '',
             },
             document: {
-                send: type_m === 'document' ? send_media(media_map.document) : '',
+                send: type_m === 'document' ? send_media(type_m) : '',
             },
             text: {
-                send: send(),
+                send: send(type_m),
             }
         };
 
