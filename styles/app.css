@@ -316,12 +316,17 @@ input[type="checkbox"] {
 }
 
 /* Стилизованный круглый чекбокс */
-input[type="checkbox"] + label:before {
+input[type="checkbox"]+label:before {
     content: '';
     display: inline-block;
-    width: 10px; /* Диаметр круглого чекбокса */
-    height: 10px; /* Диаметр круглого чекбокса */
-    border: 2px solid #000; /* Цвет границы */
-    border-radius: 50%; /* Радиус границы для создания круглого чекбокса */
-    margin-right: 5px; /* Расстояние между чекбоксом и текстом */
+    width: 10px;
+    /* Диаметр круглого чекбокса */
+    height: 10px;
+    /* Диаметр круглого чекбокса */
+    border: 2px solid var(--tg-theme-button-color);
+    /* Цвет границы */
+    border-radius: 50%;
+    /* Радиус границы для создания круглого чекбокса */
+    margin-right: 5px;
+    /* Расстояние между чекбоксом и текстом */
 }
