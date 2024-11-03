@@ -172,10 +172,10 @@ bot.on('message', async (message) => {
         };
 
         const media_map = {
-            photo: await l_media('photo', photo),
-            video: await l_media('video', video),
-            voice: await l_media('voice', voice),
-            document: await l_media('document', document),
+            photo: type_m === 'photo' ? l_media('photo', photo) : '',
+            video: type_m === 'video' ? l_media('video', video) : '',
+            voice: type_m === 'voice' ? l_media('voice', voice) : '',
+            document: type_m === 'document' ? l_media('document', document) : '',
         };
 
         const mediaFunctions = {
