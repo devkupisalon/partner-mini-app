@@ -310,8 +310,10 @@ bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const messageId = message.message_id;
+    const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
 
     let text = message.text || message.caption || '';
+
 
     if (contact) return;
 
@@ -343,7 +345,7 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            if (reply_to_message && reply_to_message.from.is_bot) {
+            if (reply_to_message && reply_to_message.from.is_bot && !save) {
 
                 logger.info(reply_to_message);
 
@@ -364,34 +366,34 @@ bot.on('message', async (message) => {
                     reply_to_message_id: messageId
                 })
             }
-        }
-    }
 
-    // process save media from agents
-    if (reply_to_message && ['Сохранить', 'сохранить'].includes(message.text) && Object.values(managers_map).find(k => k === id)) {
+            // process save media from agents
+            if (reply_to_message && save && Object.values(managers_map).find(k => k === id)) {
 
-        let media_data;
+                let media_data;
 
-        const media = reply_to_message.photo ? reply_to_message.photo[0] :
-            reply_to_message.video ? reply_to_message.video :
-                reply_to_message.voice ? reply_to_message.voice :
-                    reply_to_message.document ? reply_to_message.document : ''
+                const media = reply_to_message.photo ? reply_to_message.photo[0] :
+                    reply_to_message.video ? reply_to_message.video :
+                        reply_to_message.voice ? reply_to_message.voice :
+                            reply_to_message.document ? reply_to_message.document : ''
 
-        if (media !== '') {
+                if (media !== '') {
 
-            const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                    const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
-            const selectedData = Object.entries(dataObject).find(([k, v]) => {
-                const [c_chat_id] = k.split("_");
-                return c_chat_id === id && v.message_ids.includes(messageId) && v.data && v.data.length > 0;
-            });
+                    const selectedData = Object.entries(dataObject).find(([k, v]) => {
+                        const [c_chat_id] = k.split("_");
+                        return c_chat_id === id && v.message_ids.includes(messageId) && v.data && v.data.length > 0;
+                    });
 
-            logger.info(selectedData);
+                    logger.info(selectedData);
 
-            media_data = selectedData ? selectedData.data : media.file_id;
+                    media_data = selectedData ? selectedData.data : media.file_id;
 
-            logger.info(media_data);
+                    logger.info(media_data);
 
+                }
+            }
         }
     }
 });
