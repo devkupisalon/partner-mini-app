@@ -11,6 +11,7 @@ let mediaGroupId;
 let mediaFiles = [];
 let text_for_media;
 let messageId_to_media_group;
+let id_to_media_group;
 
 /**
  * Send first init messages to user
@@ -124,20 +125,20 @@ const set_chat_title = async (groupId, newTitle) => {
 }
 
 /** Logger message */
-const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
+const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
 
 const logger_messages = {
-    media_group: l_message('Media Group'),
-    photo: l_message('Photo'),
-    video: l_message('Video'),
-    voice: l_message('Voice'),
-    document: l_message('Document'),
-    text: l_message('Text'),
+    media_group: (id) => l_message('Media Group', id),
+    photo: (id) => l_message('Photo', id),
+    video: (id) => l_message('Video', id),
+    voice: (id) => l_message('Voice', id),
+    document: (id) => l_message('Document', id),
+    text: (id) => l_message('Text', id),
 };
 
 /** Success function */
-const p_success = async (m, reply_to_message_id) => {
-    logger.info(logger_messages[m]);
+const p_success = async (m, reply_to_message_id, id) => {
+    logger.info(logger_messages[m](id));
     await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id });
 }
 
@@ -149,8 +150,8 @@ const send_media_group = async () => {
         });
         const { message_id } = await bot.sendDocument(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
         if (message_id) {
-            p_success('media_group', messageId_to_media_group);
-            [mediaGroupId, text_for_media, messageId_to_media_group].forEach(m => m = '');
+            p_success('media_group', messageId_to_media_group, id_to_media_group);
+            [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = '');
             mediaFiles = [];
         }
     }
@@ -184,11 +185,12 @@ bot.on('message', async (message) => {
             messageId_to_media_group = messageId;
             mediaGroupId = media_group_id
             text_for_media = text;
+            id_to_media_group = id;
             photo ? mediaFiles.push({ type: 'photo', media: media }) :
                 video ? mediaFiles.push({ type: 'video', media: media }) :
                     voice ? mediaFiles.push({ type: 'voice', media: media }) :
                         document ? mediaFiles.push({ type: 'document', media: media }) : ''
-            logger.info(`Media files prepeared to send: ${mediaGroupId, messageId_to_media_group, text_for_media, mediaFiles}`);
+            logger.info(`Media files prepeared to send: ${mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles}`);
             return;
         }
 
