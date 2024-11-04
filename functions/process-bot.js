@@ -201,7 +201,8 @@ bot.on('message', async (message) => {
         if (media_group_id) {
             messageId_to_media_group = messageId;
             mediaGroupId = media_group_id
-            text_for_media = text;
+            message.caption ?
+                text_for_media = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n` : '';
             id_to_media_group = id;
             photo ? mediaFiles.push({ type: 'photo', media: media }) :
                 video ? mediaFiles.push({ type: 'video', media: media }) :
