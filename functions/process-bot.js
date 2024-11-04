@@ -341,8 +341,6 @@ const parse_text = (replyText) => {
 async function executeTask() {
     if (Object.keys(send_media_obj).length > 0) {
         await send_media_group();
-    } else {
-        logger.info(`There are no media_group_files to send`);
     }
     setTimeout(executeTask, interval);
 }
