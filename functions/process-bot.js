@@ -470,7 +470,11 @@ async function executeTask() {
 
 executeTask();
 
-setInterval(checkAndDeleteOldData(media_files), 24 * 60 * 60 * 1000); // Call every 24 hours
+function intervalCallback() {
+    checkAndDeleteOldData(media_files);
+}
+
+setInterval(intervalCallback, 24 * 60 * 60 * 1000); // Call every 24 hours
 
 // Handle errors
 bot.on('polling_error', (error) => {
