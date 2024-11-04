@@ -181,22 +181,24 @@ const send_media_group = async () => {
         logger.error(`Error in send_media_group: ${error}`);
     }
 }
+
 const process_save_media_to_obj = async (message, chat_id) => {
     if (!media_files[chat_id]) {
-        media_files[chat_id] = Object.values(message).reduce((acc, { message_id, photo, video, voice, document }) => {
-            const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
-            const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
-            acc.data = [];
-            acc.message_ids = [];
-            acc.data.push({ media, mime_type });
-            acc.message_ids.push(message_id);
+        media_files[chat_id] = {
+            data: [],
+            message_ids: [],
+        };
+    }
 
-            return acc;
-        }, {});
+    Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
+        const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
+        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
 
-        logger.info(media_files);
+        media_files[chat_id].data.push({ media, mime_type });
+        media_files[chat_id].message_ids.push(message_id);
+    });
 
-    };
+    logger.info(media_files[chat_id]);
 }
 
 /**
