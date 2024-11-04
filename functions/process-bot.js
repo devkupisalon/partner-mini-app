@@ -222,8 +222,6 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
  * @returns {array|string} - An array of file URLs if multiple files are provided, or a single file URL.
  */
 const getTelegramFiles = async (files) => {
-    logger.info(files)
-    logger.info(files[0].media);
     let fileUrls = [];
     if (Array.isArray(files)) {
         for (const { media, mime_type } of files) {
@@ -237,9 +235,9 @@ const getTelegramFiles = async (files) => {
             }
         }
     } else {
-        const { file_path } = await bot.getFile(files[0].media);
+        const { file_path } = await bot.getFile(files.media);
         const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
-        fileUrls = [[{ fileUrl, mime_type: files[0].mime_type }]];
+        fileUrls = [[{ fileUrl, mime_type: files.mime_type }]];
     }
 
     return fileUrls;
@@ -402,7 +400,7 @@ bot.on('message', async (message) => {
                         return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
-                    media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mimeType ? 'image/png' : media.mimeType }];
+                    media_data = selectedData ? selectedData[1].data : { media: media.file_id, mime_type: !media.mimeType ? 'image/png' : media.mimeType };
 
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
                     const folder = await create_folder(`${hash_id}-${agent_name}`, partner_folder);
