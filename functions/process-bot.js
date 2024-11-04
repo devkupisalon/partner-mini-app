@@ -236,9 +236,10 @@ bot.on('message', async (message) => {
         if (String(groupId) === GROUP_CHAT_ID) {
 
             logger.info(message);
-            if (message.reply_to_message && message.reply_to_message.is_bot) {
+            if (message.reply_to_message && message.reply_to_message.from.is_bot) {
 
                 const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
+                logger.infp({ agent_id, messageId, agent_name, chat_id });
 
                 try {
                     const { message_id } = await bot.forwardMessage(chat_id, id, messageId, { reply_to_message_id: origin_message_id });
