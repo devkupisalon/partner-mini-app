@@ -174,6 +174,7 @@ const send_media_group = async () => {
     }
 }
 
+/** Process message */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
@@ -189,7 +190,7 @@ const process_message = async (data) => {
     if (media_group_id) {
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         message.caption ?
-            send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : text;
+            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : text : '';
         photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
             video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
                 voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
@@ -248,41 +249,6 @@ bot.on('message', async (message) => {
             message,
             from_user: true
         });
-
-        /*  text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${id}\n`;
- 
-         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
- 
-         if (media_group_id) {
-             if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [] };
-             message.caption ?
-                 send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : '';
-             photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
-                 video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
-                     voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
-                         document ? send_media_obj[id].mediaFiles.push({ type: 'document', media: media }) : '';
- 
-             logger.info(`Media files prepeared to send: ${JSON.stringify(send_media_obj[id])}`);
-             return;
-         }
- 
-         try {
- 
-             const { message_id } = await (
-                 type_m === 'photo' ? bot.sendPhoto(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                     type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                         type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                             type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                                 bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
- 
-             if (message_id) {
-                 p_success(type_m, messageId, id);
-             }
- 
-         } catch (error) {
-             logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
-         } */
     }
 
     if (type === 'group' || type === 'supergroup') {
@@ -309,17 +275,6 @@ bot.on('message', async (message) => {
                     chat_id,
                     reply_to_message_id: messageId
                 })
-
-                /*    try {
-                       const { message_id } = await bot.forwardMessage(chat_id, id, manager_message_id, { reply_to_message_id: messageId });
-                       if (message_id) {
-                           logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${chat_id}`);
-                           await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: manager_message_id });
-                       }
-                   } catch (error) {
-                       logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${chat_id}: ${error.stack}`);
-   
-                   } */
             }
         }
     }
