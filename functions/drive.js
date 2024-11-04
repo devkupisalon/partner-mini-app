@@ -45,6 +45,11 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
     }
 }
 
+/**
+ * Retrieves file data from the specified URL and converts it into a Readable stream.
+ * @param {string} url - The URL of the file to retrieve.
+ * @returns {Readable} - A Readable stream with the file data.
+ */
 const get_blob = async (url) => {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
@@ -108,6 +113,8 @@ const save_media = async (params) => {
             const data = await process_url(fileUrl, mime_type, [folder])
             success_data.push(data);
         }
+
+        logger.info(success_data);
 
         const lenght = fileUrls.length;
 
