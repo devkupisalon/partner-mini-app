@@ -9,6 +9,8 @@ GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 const parse_mode = 'Markdown';
 
+let send_media_obj = {};
+
 let mediaGroupId = null;
 let mediaFiles = [];
 let text_for_media = null;
@@ -147,26 +149,24 @@ const p_success = async (m, reply_to_message_id, id) => {
 /** Send media group */
 const send_media_group = async () => {
 
-    logger.info({ mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group, mediaFiles });
+    logger.info({ send_media_obj });
 
     try {
-        if (mediaGroupId !== null) {
-            const mediaGroup = mediaFiles.map(({ type, media }, i) => {
-                if (i === 0) {
-                    return { type, media, caption: text_for_media, parse_mode };
+        if (Object.keys(send_media_obj).length > 0) {
+            for (const [i, { caption, mediaFiles, messageId, id }] of Object.values(send_media_obj)) {
+                const mediaGroup = mediaFiles.map(({ type, media }, i) => {
+                    if (i === 0) {
+                        return { type, media, caption, parse_mode };
+                    }
+                    return { type, media };
+                });
+
+                const message = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup);
+
+                if (message) {
+                    p_success('media_group', messageId, id);
+                    delete send_media_obj[Object.keys(send_media_obj)[i]];
                 }
-                return { type, media };
-            });
-
-            const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup);
-
-            if (message_id) {
-                p_success('media_group', messageId_to_media_group, id_to_media_group);
-                mediaGroupId = null;
-                text_for_media = null;
-                messageId_to_media_group = null;
-                id_to_media_group = null;
-                mediaFiles = [];
             }
         }
     } catch (error) {
@@ -199,17 +199,16 @@ bot.on('message', async (message) => {
         logger.info(message);
 
         if (media_group_id) {
-            messageId_to_media_group = messageId;
-            mediaGroupId = media_group_id
+            if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id };
+            send_media_obj[id].mediaFiles = [];
             message.caption ?
-                text_for_media = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n` : '';
-            id_to_media_group = id;
-            photo ? mediaFiles.push({ type: 'photo', media: media }) :
-                video ? mediaFiles.push({ type: 'video', media: media }) :
-                    voice ? mediaFiles.push({ type: 'voice', media: media }) :
-                        document ? mediaFiles.push({ type: 'document', media: media }) : ''
+                send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n` : '';
+            photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
+                video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
+                    voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
+                        document ? send_media_obj[id].mediaFiles.push({ type: 'document', media: media }) : '';
 
-            logger.info(`Media files prepeared to send: ${JSON.stringify({ mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles })}`);
+            logger.info(`Media files prepeared to send: ${JSON.stringify(send_media_obj[id])}`);
             return;
         }
 
@@ -259,10 +258,10 @@ bot.on('message', async (message) => {
 });
 
 
-const interval = 10000; // Интервал в миллисекундах (10 секунд)
+const interval = 5000; // Интервал в миллисекундах (10 секунд)
 
 async function executeTask() {
-    if (mediaGroupId !== null) {
+    if (Object.keys(send_media_obj).length > 0) {
         await send_media_group();
     } else {
         logger.info(`There are no media_group_files to send`);
