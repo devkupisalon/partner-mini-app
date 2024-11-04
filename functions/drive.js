@@ -89,37 +89,19 @@ const save_media = async (params) => {
     try {
         const { fileUrls, folder } = params;
         let filesData = [];
+        let success_data = [];
 
-        if (Array.isArray(fileUrls)) {
+        for (const { fileUrl, mime_type } of fileUrls) {
+            const data = await process_url(fileUrl, mime_type, [folder])
+            filesData.push(data);
+        }
 
-            for (const { fileUrl, mime_type } of fileUrls) {
-                const data = await process_url(fileUrl, mime_type, [folder])
-                filesData.push(data);
-            }
+        const lenght = filesData.length;
 
-            logger.info(filesData);
+        for (const { fileMetadata, mimeType, body } of filesData) {
 
             const { data } = await drive.files.create({
-                requestBody: {
-                    files: filesData
-                },
-                media: {
-                    mimeType: 'multipart/related'
-                }
-            });
-
-            logger.info(data);
-
-            if (data) {
-                logger.info(`Files successfully uploaded to Agent folder`);
-                return { success: 'success' };
-            }
-
-        } /* else {
-            const { name, mimeType, body, parents } = await process_url(fileUrls, [folder]);
-
-            const { data: { id } } = await drive.files.create({
-                requestBody: { name, mimeType, parents },
+                requestBody: fileMetadata,
                 media: {
                     mimeType,
                     body
@@ -127,11 +109,17 @@ const save_media = async (params) => {
                 fields: 'id',
             });
 
-            if (id) {
-                logger.info(`File successfully uploaded to Agent folder`);
-                return { success: 'success' };
+            logger.info(data);
+
+            if (data) {
+                success_data.push({ success: 'success' });
             }
-        } */
+        }
+
+        if (success_data.every(({ success }) => success === 'success') && lenght === success_data.lenght) {
+            logger.info(`Files successfully uploaded to Agent folder`);
+        }
+
 
     } catch (error) {
         logger.error(`Error in save_media: ${error.message}`);
