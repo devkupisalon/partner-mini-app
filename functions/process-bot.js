@@ -406,7 +406,7 @@ bot.on('message', async (message) => {
 
                     logger.info(selectedData);
 
-                    media_data = selectedData ? selectedData.data : media.file_id;
+                    media_data = selectedData ? selectedData[1] : media.file_id;
 
                     logger.info(media_data);
 
