@@ -207,7 +207,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
 
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
-        const mime_type = photo ? 'image/png' : video ? video.mimeType : voice ? voice.mimeType : document ? document.mimeType : '';
+        const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
 
         media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
         media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
@@ -395,7 +395,7 @@ bot.on('message', async (message) => {
                         return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
-                    media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mimeType ? 'image/png' : media.mimeType }];
+                    media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
 
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
                     const folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
