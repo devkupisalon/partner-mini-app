@@ -191,7 +191,7 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
+        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${id}`;
 
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
@@ -201,7 +201,7 @@ bot.on('message', async (message) => {
         if (media_group_id) {
             if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [] };
             message.caption ?
-                send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n` : '';
+                send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${id}` : '';
             photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
                 video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
                     voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
@@ -232,30 +232,35 @@ bot.on('message', async (message) => {
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
-        logger.info(message);
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            if (message.reply_to_message && message.reply_to_message.forward_from) {
+            if (message.reply_to_message && message.reply_to_message.is_bot) {
 
-                const origin_message_id = message.reply_to_message.message_id;
-                logger.info(origin_message_id);
-                const userChatId = message.reply_to_message.forward_from.id;
+                const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
 
                 try {
-                    const { message_id } = await bot.forwardMessage(userChatId, id, messageId, { reply_to_message_id: origin_message_id });
+                    const { message_id } = await bot.forwardMessage(chat_id, id, messageId, { reply_to_message_id: origin_message_id });
                     if (message_id) {
-                        logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${userChatId}`);
+                        logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${chat_id}`);
                         await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
                     }
                 } catch (error) {
-                    logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${userChatId}: ${error.stack}`);
+                    logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${chat_id}: ${error.stack}`);
 
                 }
             }
         }
     }
 });
+
+const parse_text = (replyText) => {
+    const messageId = replyText.match(/\{(\d+)\}/)[1]; // Получение message_id внутри {}
+    const agent_name = replyText.match(/Агент (.*?):/)[1]; // Получение имени агента после слова "Агент "
+    const agent_id = replyText.match(/ID:(.*)\n/)[1]; // Получение ID после "ID:"
+    const chat_id = replyText.match(/chat_id:(.*)\n/)[1];
+    return { agent_id, messageId, agent_name, chat_id };
+}
 
 
 const interval = 5000; // Интервал в миллисекундах (10 секунд)
