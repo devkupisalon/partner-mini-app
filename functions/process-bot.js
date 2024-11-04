@@ -188,6 +188,8 @@ bot.on('message', async (message) => {
                 video ? mediaFiles.push({ type: 'video', media: media }) :
                     voice ? mediaFiles.push({ type: 'voice', media: media }) :
                         document ? mediaFiles.push({ type: 'document', media: media }) : ''
+            logger.info(`Media files prepeared to send: ${mediaGroupId, messageId_to_media_group, text_for_media, mediaFiles}`);
+            return;
         }
 
         text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
