@@ -191,7 +191,7 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${id}`;
+        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${id}\n`;
 
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
@@ -201,7 +201,7 @@ bot.on('message', async (message) => {
         if (media_group_id) {
             if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [] };
             message.caption ?
-                send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${id}` : '';
+                send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\nchat_id:${String(id)}\n` : '';
             photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
                 video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
                     voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
