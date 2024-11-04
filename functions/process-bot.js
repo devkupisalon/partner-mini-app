@@ -140,7 +140,7 @@ bot.on('message', async (message) => {
         if (media_group_id) {
 
             if (photo) {
-                mediaFiles.push({ type: 'photo', media: p[0].file_id });
+                mediaFiles.push({ type: 'photo', media: photo[0].file_id });
             }
             if (video) {
                 mediaFiles.push({ type: 'video', media: video.file_id });
