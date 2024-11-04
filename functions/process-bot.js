@@ -222,7 +222,8 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
  * @returns {array|string} - An array of file URLs if multiple files are provided, or a single file URL.
  */
 const getTelegramFiles = async (files) => {
-    logger.info(files[0].media.file_id);
+    logger.info(files)
+    logger.info(files[0].media);
     let fileUrls = [];
     if (Array.isArray(files)) {
         for (const { media, mime_type } of files) {
@@ -236,7 +237,7 @@ const getTelegramFiles = async (files) => {
             }
         }
     } else {
-        const { file_path } = await bot.getFile(files[0].media.file_id);
+        const { file_path } = await bot.getFile(files[0].media);
         const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
         fileUrls = [[{ fileUrl, mime_type: files[0].mime_type }]];
     }
