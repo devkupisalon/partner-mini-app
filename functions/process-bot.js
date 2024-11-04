@@ -319,7 +319,7 @@ bot.on('message', async (message) => {
     const from_id = message.from.id;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
-    const calc = ['Создать расчет', 'создать расчет'].includes(message.text);
+    const calc = ['Создать расчет', 'создать расчет'].some(c => message.text.includes(c));
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
 
     let text = message.text || message.caption || '';
@@ -382,7 +382,7 @@ bot.on('message', async (message) => {
                 await process_save({ reply_to_message, manager_message_id, id });
             }
 
-            logger.info(/* is_manager &&  */calc);
+            logger.info(is_manager && calc);
 
             if (reply_to_message && is_manager && calc) {
 
