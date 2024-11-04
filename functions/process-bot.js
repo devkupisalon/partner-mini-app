@@ -384,7 +384,10 @@ bot.on('message', async (message) => {
                     const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
+                        logger.info(k);
+                        logger.info(v);
                         const [c_chat_id] = k.split("_");
+                        logger.info(c_chat_id);
                         return c_chat_id === from_id && v.message_ids.includes(agent_message_id) && v.data && v.data.length > 0;
                     });
 
