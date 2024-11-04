@@ -54,16 +54,9 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
  */
 const process_url = async (url, mimeType, parents) => {
     try {
-        const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/octet-stream'
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+        const response = await fetch(url);
+        const res = await response;
+        logger.info(res);
 
         const fileBlob = await response.blob(); // Попробуйте arrayBuffer()
         logger.info(fileBlob);
