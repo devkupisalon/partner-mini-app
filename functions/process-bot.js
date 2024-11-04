@@ -258,10 +258,10 @@ bot.on('message', async (message) => {
 
 const parse_text = (replyText) => {
     logger.info(replyText);
-    const messageId = replyText.match(/\{(\/d+)\}/)[1]; // Получение message_id внутри {}
-    const agent_name = replyText.match(/Агент (.*?):/)[1]; // Получение имени агента после слова "Агент "
-    const agent_id = replyText.match(/ID:(.*)\n/)[1]; // Получение ID после "ID:"
-    const chat_id = replyText.match(/chat_id:(.*)\n/)[1];
+    const messageId = replyText.match(/\{(\d+)\}/).group[1]; // Получение message_id внутри {}
+    const agent_name = replyText.match(/Агент (.*?):/).group[1]; // Получение имени агента после слова "Агент "
+    const agent_id = replyText.match(/ID:(.*)\n/).group[1]; // Получение ID после "ID:"
+    const chat_id = replyText.match(/chat_id:(.*)/).group[1];
     return { agent_id, messageId, agent_name, chat_id };
 }
 
