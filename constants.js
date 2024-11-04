@@ -101,7 +101,7 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-fs.readFile('managers.json', 'utf8', (err, data) => {
+fs.readFile('managers_ids.json', 'utf8', (err, data) => {
     if (err) {
         console.error(err);
         return;
