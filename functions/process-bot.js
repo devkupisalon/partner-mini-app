@@ -148,7 +148,7 @@ const send_media_group = async () => {
         const mediaGroup = mediaFiles.map(({ type, media }) => {
             return { type, media };
         });
-        
+
         const { message_id } = await bot.sendDocument(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
         if (message_id) {
             p_success('media_group', messageId_to_media_group, id_to_media_group);
@@ -243,7 +243,7 @@ bot.on('message', async (message) => {
 });
 
 
-const task_media = cron.schedule('*/10 * * * * *', async () => {
+const task_media = cron.schedule('0/10 * * * * *', async () => {
     if (mediaGroupId !== null) {
         await send_media_group();
     } else {
