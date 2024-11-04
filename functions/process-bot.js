@@ -389,7 +389,7 @@ bot.on('message', async (message) => {
 
                 if (media !== '') {
 
-                    const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                    const { agent_id, agent_message_id, agent_name, chat_id, media_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
@@ -416,9 +416,9 @@ bot.on('message', async (message) => {
  */
 const parse_text = (replyText) => {
     const hash = replyText.match(/hash:(.*)/)[1];
-    const [agent_id, agent_message_id, agent_name, chat_id] = hash.split(':');
+    const [agent_id, agent_message_id, chat_id, agent_name, media_id] = hash.split(':');
     // const data = stringToObjectdecryptString(hash, BOT_TOKEN));
-    return { agent_id, agent_message_id, agent_name, chat_id };
+    return { agent_id, agent_message_id, agent_name, chat_id, media_id };
 }
 
 /**
