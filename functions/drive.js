@@ -116,9 +116,9 @@ const save_media = async (params) => {
 
         logger.info(success_data);
 
-        const lenght = fileUrls.length;
+        const length = fileUrls.length;
 
-        if (success_data.every(({ success }) => success === 'success') && lenght === success_data.lenght) {
+        if (success_data.every(({ success }) => success === 'success') && length === success_data.length) {
             logger.info(`Files successfully uploaded to Agent folder`);
             return { success: 'success' };
         }
