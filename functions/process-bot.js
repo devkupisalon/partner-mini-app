@@ -235,7 +235,7 @@ const getTelegramFiles = async (files) => {
             }
         }
     } else {
-        const { file_path } = await bot.getFile(files[0].media);
+        const { file_path } = await bot.getFile(files[0].media.file_id);
         const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
         fileUrls = [[{ fileUrl, mime_type: files[0].mime_type }]];
     }
