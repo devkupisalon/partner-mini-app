@@ -384,7 +384,7 @@ bot.on('message', async (message) => {
 
                     const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
-                    const selectedData = Object.entries(dataObject).find(([k, v]) => {
+                    const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
                         return c_chat_id === id && v.message_ids.includes(messageId) && v.data && v.data.length > 0;
                     });
