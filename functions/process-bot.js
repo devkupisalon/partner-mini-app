@@ -309,9 +309,10 @@ const save_content = async (data) => {
 bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
+    const from_id = message.from.id;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
-    const is_manager = Object.values(managers_map).find(k => k === message.from.id) ? true : false;
+    const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
 
     let text = message.text || message.caption || '';
 
@@ -351,7 +352,7 @@ bot.on('message', async (message) => {
                 logger.info(reply_to_message);
 
                 const manager_message_id = message.message_id;
-                const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                 await process_message({
                     text: message.text || message.caption || '',
@@ -364,12 +365,10 @@ bot.on('message', async (message) => {
                     media_group_id,
                     message,
                     chat_id,
-                    reply_to_message_id: messageId
+                    reply_to_message_id: agent_message_id
                 })
             }
 
-            logger.info(is_manager);
-            logger.info(save);
             // process save media from agents
             if (reply_to_message && save && is_manager) {
 
@@ -382,11 +381,11 @@ bot.on('message', async (message) => {
 
                 if (media !== '') {
 
-                    const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                    const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
-                        return c_chat_id === id && v.message_ids.includes(messageId) && v.data && v.data.length > 0;
+                        return c_chat_id === from_id && v.message_ids.includes(agent_message_id) && v.data && v.data.length > 0;
                     });
 
                     logger.info(selectedData);
@@ -408,11 +407,11 @@ bot.on('message', async (message) => {
  * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
  */
 const parse_text = (replyText) => {
-    const messageId = replyText.match(/\{(\d+)\}/)[1];
+    const agent_message_id = replyText.match(/\{(\d+)\}/)[1];
     const agent_name = replyText.match(/Агент (.*?):/)[1];
     const agent_id = replyText.match(/ID:(.*)\n/)[1];
     const chat_id = replyText.match(/chat_id:(.*)/)[1];
-    return { agent_id, messageId, agent_name, chat_id };
+    return { agent_id, agent_message_id, agent_name, chat_id };
 }
 
 /**
