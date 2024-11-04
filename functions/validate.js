@@ -39,7 +39,7 @@ const encryptString = (stringToEncrypt, bot_token) => {
 // Function to decrypt the encrypted string using the bot token
 const decryptString = (encryptedString, bot_token) => {
   const decipher = crypto.createDecipher('aes-256-cbc', bot_token);
-  let decryptedString = decipher.update(encryptedString, 'base64', 'hex');
+  let decryptedString = decipher.update(encryptedString, 'hex', 'utf8');
   decryptedString += decipher.final('utf8');
   return decryptedString;
 };
