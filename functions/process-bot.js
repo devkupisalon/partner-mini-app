@@ -196,7 +196,7 @@ const process_message = async (data) => {
             video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
                 voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
                     document ? send_media_obj[id].mediaFiles.push({ type: 'document', media: media }) : '';
-
+        from_user ? '' : send_media_obj[id].reply_to_message_id = reply_to_message_id;
         logger.info(`Media files prepeared to send: ${JSON.stringify(send_media_obj[id])}`);
         return;
     }
