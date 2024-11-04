@@ -168,7 +168,7 @@ const send_media_group = async () => {
                 // logger.info(message);
 
                 if (message) {
-
+                    logger.info(message);
                     process_save_media_to_obj(message, chat_id);
                     p_success('media_group', messageId, id);
 
