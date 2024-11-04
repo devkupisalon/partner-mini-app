@@ -65,7 +65,7 @@ const process_url = async (url, mimeType, parents) => {
             throw new Error('Network response was not ok');
         }
 
-        const fileBlob = await response.arrayBuffer(); // Попробуйте arrayBuffer()
+        const fileBlob = await response.blob(); // Попробуйте arrayBuffer()
         logger.info(fileBlob);
         const name = url.split('/').pop();
 
@@ -93,18 +93,15 @@ const save_media = async (params) => {
         if (Array.isArray(fileUrls)) {
 
             for (const { fileUrl, mime_type } of fileUrls) {
-                filesData.push(await process_url(fileUrl, mime_type, [folder]));
+                const data = await process_url(fileUrl, mime_type, [folder])
+                filesData.push(data);
             }
 
-            // const filesData = fileUrls.map(async ({ fileUrl, mime_type }, i) => {
-            //     return await process_url(fileUrl, mime_type, [folder]);
-            // });
-
-            logger.info(await Promise.all(filesData));
+            logger.info(filesData);
 
             const { data } = await drive.files.create({
                 requestBody: {
-                    files: await Promise.all(filesData)
+                    files: filesData
                 },
                 media: {
                     mimeType: 'multipart/related'
