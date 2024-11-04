@@ -4,6 +4,7 @@ import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
 import { get_partners_data, get_partner_name_and_manager } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
+import { encryptString, decryptString, stringToObject, objectToString } from './validate.js';
 
 const interval = 10000;
 
@@ -241,8 +242,10 @@ const getTelegramFiles = async (files) => {
 const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
+    const hash = encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`);
+
     from_user ?
-        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${id}\n` :
+        text = `Агент *${partner_name}*:\n\n${text}\n\nhash:${hash}\n` :
         text = text;
 
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
@@ -251,9 +254,10 @@ const process_message = async (data) => {
     const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
     if (media_group_id) {
+        
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         if (message.caption) {
-            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n*ID:*${partner_id}\n*message_id:*{${messageId}}\n*chat_id:*${id}\n` : text;
+            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\nhash:${hash}\n` : text;
         }
 
         const mediaTypeMap = {
@@ -410,11 +414,9 @@ bot.on('message', async (message) => {
  * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
  */
 const parse_text = (replyText) => {
-    const agent_message_id = replyText.match(/\{(\d+)\}/)[1];
-    const agent_name = replyText.match(/Агент (.*?):/)[1];
-    const agent_id = replyText.match(/ID:(.*)\n/)[1];
-    const chat_id = replyText.match(/chat_id:(.*)/)[1];
-    return { agent_id, agent_message_id, agent_name, chat_id };
+    const hash = replyText.match(/hash:(.*)/)[1];
+    const data = stringToObject(decryptString(hash));
+    return data;
 }
 
 /**
