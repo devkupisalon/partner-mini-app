@@ -146,19 +146,23 @@ const p_success = async (m, reply_to_message_id, id) => {
 
 /** Send media group */
 const send_media_group = async () => {
-    if (mediaGroupId) {
-        const mediaGroup = mediaFiles.map(({ type, media }) => {
-            return { type, media };
-        });
+    try {
+        if (mediaGroupId) {
+            const mediaGroup = mediaFiles.map(({ type, media }) => {
+                return { type, media };
+            });
 
-        const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
-        logger.info(message_id);
-        if (message_id) {
-            logger.info(logger_messages['media_group'](id_to_media_group));
-            await bot.sendMessage(id_to_media_group, 'Сообщение отправлено', { reply_to_message_id: messageId_to_media_group });
-            [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
-            mediaFiles = [];
+            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
+            logger.info(message_id);
+            if (message_id) {
+                logger.info(logger_messages['media_group'](id_to_media_group));
+                await bot.sendMessage(id_to_media_group, 'Сообщение отправлено', { reply_to_message_id: messageId_to_media_group });
+                [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
+                mediaFiles = [];
+            }
         }
+    } catch (error) {
+        logger.error(`Error in send_media_group: ${error}`);
     }
 }
 
