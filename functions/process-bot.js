@@ -1,10 +1,12 @@
+import { v4 as uuidv4 } from 'uuid';
+
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
 import { get_partners_data, get_partner_name_and_manager } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
-import { encryptString, decryptString, stringToObject, objectToString } from './validate.js';
+// import { encryptString, decryptString, stringToObject, objectToString } from './validate.js';
 
 const interval = 10000;
 
@@ -151,6 +153,8 @@ const p_success = async (m, reply_to_message_id, id) => {
 /** Send media group message */
 const send_media_group = async () => {
 
+    const hash_id = uuidv4();
+
     try {
         if (Object.keys(send_media_obj).length > 0) {
             const mediaObjValues = Object.values(send_media_obj);
@@ -158,7 +162,9 @@ const send_media_group = async () => {
             for (let i = 0; i < mediaObjValues.length; i++) {
                 const currentMediaObj = mediaObjValues[i];
 
-                const { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
+                let { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
+
+                caption = `${caption.slice(0, -2)}:${hash_id}\``;
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
@@ -172,7 +178,7 @@ const send_media_group = async () => {
 
                 if (message) {
                     p_success('media_group', messageId, id);
-                    if (from_user) process_save_media_to_obj(message, user_id);
+                    if (from_user) process_save_media_to_obj(message, user_id, hash_id);
                     delete send_media_obj[Object.keys(send_media_obj)[i]];
                 }
             }
@@ -186,15 +192,17 @@ const send_media_group = async () => {
  * Process and save media files from a message to the respective chat ID object.
  * @param {object} message - Message object containing media data.
  * @param {string} chat_id - ID of the chat where the media files are received.
+ * @param {string} hash_id - hash.
  */
-const process_save_media_to_obj = async (message, chat_id) => {
+const process_save_media_to_obj = async (message, chat_id, hash_id) => {
     logger.info(message);
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
             data: [],
             message_ids: [],
-            experation_date: new Date().toISOString()
+            experation_date: new Date().toISOString(),
+            hash_id
         };
     }
 
@@ -389,11 +397,11 @@ bot.on('message', async (message) => {
 
                 if (media !== '') {
 
-                    const { agent_id, agent_message_id, agent_name, chat_id, media_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                    const { agent_id, agent_message_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
-                        return c_chat_id === chat_id && v.message_ids.includes(agent_message_id) && v.data && v.data.length > 0;
+                        return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
                     logger.info(selectedData);
@@ -416,9 +424,9 @@ bot.on('message', async (message) => {
  */
 const parse_text = (replyText) => {
     const hash = replyText.match(/hash:(.*)/)[1];
-    const [agent_id, agent_message_id, chat_id, agent_name, media_id] = hash.split(':');
+    const [agent_id, agent_message_id, chat_id, agent_name, hash_id] = hash.split(':');
     // const data = stringToObjectdecryptString(hash, BOT_TOKEN));
-    return { agent_id, agent_message_id, agent_name, chat_id, media_id };
+    return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
 }
 
 /**
