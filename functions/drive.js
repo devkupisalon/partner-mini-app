@@ -85,7 +85,7 @@ const save_media = async (params) => {
         if (Array.isArray(fileUrls)) {
 
             for (const { fileUrl, mime_type } of fileUrls) {
-                const data = await process_url(fileUrl, mime_type, [folder])
+                const data = process_url(fileUrl, mime_type, [folder])
                 filesData.push(data);
             }
 
