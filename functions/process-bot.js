@@ -3,7 +3,7 @@ import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map } from '../constants.js';
 import { get_partners_data, create_folder, save_media } from './sheets.js';
 
-const interval = 5000;
+const interval = 10000;
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -165,14 +165,9 @@ const send_media_group = async () => {
                     await bot.sendMediaGroup(chat_id, mediaGroup, { reply_to_message_id }) :
                     await bot.sendMediaGroup(chat_id, mediaGroup);
 
-                // logger.info(message);
-
                 if (message) {
-                    logger.info(message);
-                    process_save_media_to_obj(message, chat_id);
                     p_success('media_group', messageId, id);
-
-                    // Удаление обработанного объекта
+                    process_save_media_to_obj(message, chat_id);
                     delete send_media_obj[Object.keys(send_media_obj)[i]];
                 }
             }
