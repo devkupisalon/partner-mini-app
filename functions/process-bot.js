@@ -242,7 +242,7 @@ const getTelegramFiles = async (files) => {
 const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
-    const hash = encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`);
+    const hash = encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`, BOT_TOKEN);
 
     from_user ?
         text = `Агент *${partner_name}*:\n\n${text}\n\nhash:${hash}\n` :
@@ -415,7 +415,7 @@ bot.on('message', async (message) => {
  */
 const parse_text = (replyText) => {
     const hash = replyText.match(/hash:(.*)/)[1];
-    const data = stringToObject(decryptString(hash));
+    const data = stringToObject(decryptString(hash, BOT_TOKEN));
     return data;
 }
 
