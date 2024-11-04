@@ -190,7 +190,7 @@ bot.on('message', async (message) => {
                 video ? mediaFiles.push({ type: 'video', media: media }) :
                     voice ? mediaFiles.push({ type: 'voice', media: media }) :
                         document ? mediaFiles.push({ type: 'document', media: media }) : ''
-            logger.info(`Media files prepeared to send: ${mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles}`);
+            logger.info(`Media files prepeared to send: ${JSON.stringify({ mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles })}`);
             return;
         }
 
@@ -242,7 +242,7 @@ bot.on('message', async (message) => {
 });
 
 
-const task = cron.schedule('*/30 * * * * *', async () => {
+const task = cron.schedule('*/10 * * * * *', async () => {
     if (mediaGroupId) {
         await send_media_group();
     } else {
