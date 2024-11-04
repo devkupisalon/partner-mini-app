@@ -4,7 +4,7 @@ import { constants, invite_texts_map, messages_map } from '../constants.js';
 import { get_partners_data, create_folder, save_media } from './sheets.js';
 
 const interval = 10000;
-let { GROUP_CHAT_ID } = constants;
+let { GROUP_CHAT_ID, BOT_TOKEN } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 const parse_mode = 'Markdown';
@@ -177,6 +177,11 @@ const send_media_group = async () => {
     }
 }
 
+/**
+ * Process and save media files from a message to the respective chat ID object.
+ * @param {object} message - Message object containing media data.
+ * @param {string} chat_id - ID of the chat where the media files are received.
+ */
 const process_save_media_to_obj = async (message, chat_id) => {
     if (!media_files[chat_id]) {
         media_files[chat_id] = {
@@ -187,14 +192,40 @@ const process_save_media_to_obj = async (message, chat_id) => {
     }
 
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
-        const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
+        // const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
 
-        media_files[chat_id].data.push({ media, mime_type });
+        media_files[chat_id].data.push({ media });
         media_files[chat_id].message_ids.push(message_id);
     });
 
     logger.info(media_files[chat_id]);
+}
+
+/**
+ * Retrieve file URLs from Telegram based on the provided files data.
+ * @param {Array|String} files - Object or Array containing data of files to be processed.
+ * @returns {array|string} - An array of file URLs if multiple files are provided, or a single file URL.
+ */
+const getTelegramFiles = async (files) => {
+    let fileUrls;
+    if (Array.isArray(files)) {
+        fileUrls = files.map(async ({ media }) => {
+            try {
+                const { file_path } = await bot.getFile(media);
+                const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
+                logger.info(`File url successfully received: ${fileUrl}`);
+                return fileUrl;
+            } catch (error) {
+                logger.error(`Error in getTelegramFiles: ${error}`);
+            }
+        });
+    } else {
+        const { file_path } = await bot.getFile(files);
+        fileUrls = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
+    }
+
+    return fileUrls;
 }
 
 /**

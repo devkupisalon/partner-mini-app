@@ -351,39 +351,68 @@ const save_new_partner = async (params) => {
     }
 }
 
+const process_url = async (url, parents) => {
+    const response = await fetch(url);
+    const fileBlob = await response.blob();
+    const mimeType = fileBlob.type;
+    const name = url.split('/').pop();
+
+    return {
+        name,
+        mimeType,
+        body: fileBlob,
+        parents
+    };
+}
+
 
 /**
- * Сохранить медиа контент в отдельную папку в папке Агента его папку на Google Drive
- * @param {object} params - Параметры для сохранения медиа (name, folder, file)
- * @returns {object} - Объект успешности загрузки, если логотип успешно загружен
+ * Save media content to a separate folder in the Agent's folder on Google Drive.
+ * @param {object} params - Parameters for saving media (name, folder, file)
+ * @returns {object} - Object indicating the successful upload of the logo.
  */
 const save_media = async (params) => {
     try {
-        const { body: { name, folder, mimeType }, file } = params;
+        const { fileUrls, folders } = params;
 
-        const fileMetadata = {
-            name,
-            parents: [folder],
-            mimeType
-        };
+        if (Array.isArray(fileUrls)) {
 
-        const fileStream = new Readable();
-        fileStream.push(file.buffer);
-        fileStream.push(null);
+            const filesData = fileUrls.map(async (fileUrl, i) => {
+                return await process_url(fileUrl, [folders[i]]);
+            });
 
-        const { data: { id } } = await drive.files.create({
-            requestBody: fileMetadata,
-            media: {
-                mimeType,
-                body: fileStream
-            },
-            fields: 'id',
-        });
+            const { data } = await drive.files.create({
+                requestBody: {
+                    files: await Promise.all(filesData)
+                },
+                media: {
+                    mimeType: 'multipart/related'
+                }
+            });
 
-        if (id) {
-            logger.info(`Media successfully uploaded to specific agent folder`);
-            return { success: 'success' };
+            if (data) {
+                logger.info(`Files successfully uploaded to Agent folder`);
+                return { success: 'success' };
+            }
+
+        } else {
+            const { name, mimeType, body, parents } = await process_url(fileUrls, [folders]);
+
+            const { data: { id } } = await drive.files.create({
+                requestBody: { name, mimeType, parents },
+                media: {
+                    mimeType,
+                    body
+                },
+                fields: 'id',
+            });
+
+            if (id) {
+                logger.info(`File successfully uploaded to Agent folder`);
+                return { success: 'success' };
+            }
         }
+
     } catch (error) {
         logger.error(`Error in save_media: ${error.message}`);
     }
