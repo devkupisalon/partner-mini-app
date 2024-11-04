@@ -237,7 +237,6 @@ bot.on('message', async (message) => {
 
                 const manager_message_id = message.message_id;
                 const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
-                logger.info({ agent_id, messageId, agent_name, chat_id });
 
                 try {
                     const { message_id } = await bot.forwardMessage(chat_id, id, manager_message_id, { reply_to_message_id: messageId });
