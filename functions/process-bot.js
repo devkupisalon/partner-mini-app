@@ -2,8 +2,8 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map } from '../constants.js';
 import { get_partners_data } from './sheets.js';
-import cron from 'node-cron';
 
+const interval = 5000;
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -196,8 +196,6 @@ bot.on('message', async (message) => {
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
-        logger.info(message);
-
         if (media_group_id) {
             if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [] };
             message.caption ?
@@ -235,17 +233,17 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            logger.info(message);
             if (message.reply_to_message && message.reply_to_message.from.is_bot) {
 
+                const manager_message_id = message.message_id;
                 const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
-                logger.infp({ agent_id, messageId, agent_name, chat_id });
+                logger.info({ agent_id, messageId, agent_name, chat_id });
 
                 try {
-                    const { message_id } = await bot.forwardMessage(chat_id, id, messageId, { reply_to_message_id: origin_message_id });
+                    const { message_id } = await bot.forwardMessage(chat_id, id, manager_message_id, { reply_to_message_id: messageId });
                     if (message_id) {
                         logger.info(`Message successfully sent from manager in chat_id ${id} to user in chat_id ${chat_id}`);
-                        await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
+                        await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: manager_message_id });
                     }
                 } catch (error) {
                     logger.error(`Error sending message from manager in chat_id ${id} to user in chat_id ${chat_id}: ${error.stack}`);
@@ -256,32 +254,34 @@ bot.on('message', async (message) => {
     }
 });
 
+/**
+ * Parses the reply text to extract message ID, agent name, agent ID, and chat ID.
+ * 
+ * @param {string} replyText The text from the reply message.
+ * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
+ */
 const parse_text = (replyText) => {
-    logger.info(replyText);
-    const messageId = replyText.match(/\{(\d+)\}/)[1]; 
-    logger.info(messageId);
+    const messageId = replyText.match(/\{(\d+)\}/)[1];
     const agent_name = replyText.match(/Агент (.*?):/)[1];
-    logger.info(agent_name);
-    const agent_id = replyText.match(/ID:(.*)\n/)[1]; 
-    logger.info(agent_id);
-    const chat_id = replyText.match(/chat_id:(.*)/);
-    logger.info(chat_id);
+    const agent_id = replyText.match(/ID:(.*)\n/)[1];
+    const chat_id = replyText.match(/chat_id:(.*)/)[1];
     return { agent_id, messageId, agent_name, chat_id };
 }
 
-
-const interval = 5000; // Интервал в миллисекундах (10 секунд)
-
+/**
+ * Asynchronously executes a task based on the send_media_obj object.
+ * If the send_media_obj object contains keys, it calls the send_media_group function.
+ * Otherwise, it logs a message indicating there are no media_group_files to send.
+ * Sets a timeout to trigger the executeTask function again after a specified interval.
+ */
 async function executeTask() {
     if (Object.keys(send_media_obj).length > 0) {
         await send_media_group();
     } else {
         logger.info(`There are no media_group_files to send`);
     }
-    setTimeout(executeTask, interval); // Повторный запуск через указанный интервал
+    setTimeout(executeTask, interval);
 }
-
-// Начальный запуск задачи
 executeTask();
 
 // Handle errors
