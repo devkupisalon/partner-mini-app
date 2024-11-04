@@ -1,6 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
+import fs from 'fs';
 
 dotenv.config();
 
