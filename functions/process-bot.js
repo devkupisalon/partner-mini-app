@@ -2,10 +2,15 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map } from '../constants.js';
 import { get_partners_data } from './sheets.js';
+import cron from 'node-cron';
 
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
-const fileCounts = {};
+
+let mediaGroupId;
+let mediaFiles = [];
+let text_for_media;
+let messageId_to_media_group;
 
 /**
  * Send first init messages to user
@@ -118,6 +123,39 @@ const set_chat_title = async (groupId, newTitle) => {
         });
 }
 
+/** Logger message */
+const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
+
+const logger_messages = {
+    media_group: l_message('Media Group'),
+    photo: l_message('Photo'),
+    video: l_message('Video'),
+    voice: l_message('Voice'),
+    document: l_message('Document'),
+    text: l_message('Text'),
+};
+
+/** Success function */
+const p_success = async (m, reply_to_message_id) => {
+    logger.info(logger_messages[m]);
+    await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id });
+}
+
+/** Send media group */
+const send_media_group = async () => {
+    if (mediaGroupId) {
+        const mediaGroup = mediaFiles.map(({ type, media }) => {
+            return { type, media };
+        });
+        const { message_id } = await bot.sendDocument(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
+        if (message_id) {
+            p_success('media_group', messageId_to_media_group);
+            [mediaGroupId, text_for_media, messageId_to_media_group].forEach(m => m = '');
+            mediaFiles = [];
+        }
+    }
+}
+
 /**
  * Forward messages from user chats to managers groups chat and
  * send back responses from managers to user chats 
@@ -136,60 +174,23 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        // Извлечение всех file_id из сообщения пользователя
-        let mediaFiles = [];
         if (media_group_id) {
-
-            bot.getMediaGroup(media_group_id).then((mediaGroup) => {
-                logger.info(mediaGroup);
-            }).catch((error) => {
-                logger.error(error);
-            });
-
-            if (photo) {
-                mediaFiles.push({ type: 'photo', media: photo[0].file_id });
-            }
-            if (video) {
-                mediaFiles.push({ type: 'video', media: video.file_id });
-            }
-            if (voice) {
-                mediaFiles.push({ type: 'voice', media: voice.file_id });
-            }
-            if (document) {
-                mediaFiles.push({ type: 'document', media: document.file_id });
-            }
-
+            messageId_to_media_group = messageId;
+            mediaGroupId = media_group_id
+            text_for_media = text;
+            photo ? mediaFiles.push({ type: 'photo', media: photo[0].file_id }) :
+                video ? mediaFiles.push({ type: 'video', media: video.file_id }) :
+                    voice ? mediaFiles.push({ type: 'voice', media: voice.file_id }) :
+                        document ? mediaFiles.push({ type: 'document', media: document.file_id }) : ''
         }
 
-        // Формирование медиа группы
-        const mediaGroup = mediaFiles.map(({ type, media }) => {
-            return { type, media };
-        });
-
-        const type_m = media_group_id ? 'media_group' : photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-        const media = media_group_id ? mediaGroup : photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
+        const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
+        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
         logger.info(message);
         logger.info(type_m);
 
         text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
-
-        /** MEDIA FUNCTIONS */
-        const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
-
-        const logger_messages = {
-            media_group: l_message('Media Group'),
-            photo: l_message('Photo'),
-            video: l_message('Video'),
-            voice: l_message('Voice'),
-            document: l_message('Document'),
-            text: l_message('Text'),
-        };
-
-        const p_success = async (m) => {
-            logger.info(logger_messages[m]);
-            await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
-        }
 
         try {
 
@@ -198,11 +199,10 @@ bot.on('message', async (message) => {
                     type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
                         type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
                             type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                                type_m === 'media_group' ? bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text, parse_mode }) :
-                                    bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
+                                bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
 
             if (message_id) {
-                p_success(type_m);
+                p_success(type_m, messageId);
             }
 
         } catch (error) {
@@ -236,6 +236,17 @@ bot.on('message', async (message) => {
         }
     }
 });
+
+
+const task = cron.schedule('*/30 * * * * *', async () => {
+    if (mediaGroupId) {
+        await send_media_group();
+    } else {
+        logger.info(`There are no media_group_files to send`);
+    }
+});
+
+task.start();
 
 // Handle errors
 bot.on('polling_error', (error) => {
