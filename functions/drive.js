@@ -53,7 +53,13 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
  * @returns {object} - Object containing the name, mimeType, file body, and parent elements of the processed file.
  */
 const process_url = async (url, mimeType, parents) => {
-    const response = await fetch(url);
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/octet-stream'
+        }
+    });
+
     const fileBlob = await response.blob();
     logger.info(fileBlob);
     const name = url.split('/').pop();
