@@ -25,15 +25,15 @@ function escapeMarkdown(text) {
     });
 
     // Экранируем специальные символы согласно регулярному выражению
-    text = text.replace(regex, '\$1');
+    text = text.replace(regex, '\\$1');
 
     // Возвращаем ссылки обратно в текст
     links.forEach((link, i) => {
         const linkText = link.match(/\[([^\]]+)\]/)[1];
-        const escapedLinkText = linkText.replace(regex, '\$1');
+        const escapedLinkText = linkText.replace(regex, '\\$1');
         const linkWithEscapedText = link.replace(linkText, escapedLinkText);
 
-        text = text.replace(`LINK\_PLACEHOLDER\_${i + 1}`, linkWithEscapedText);
+        text = text.replace(`LINK\\_PLACEHOLDER\\_${i + 1}`, linkWithEscapedText);
     });
 
     return text;
