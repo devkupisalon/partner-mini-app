@@ -191,6 +191,8 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
+        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
+
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
@@ -210,8 +212,6 @@ bot.on('message', async (message) => {
             logger.info(`Media files prepeared to send: ${JSON.stringify({ mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles })}`);
             return;
         }
-
-        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
 
         try {
 
