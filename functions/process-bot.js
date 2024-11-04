@@ -174,21 +174,21 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        if (media_group_id) {
-            messageId_to_media_group = messageId;
-            mediaGroupId = media_group_id
-            text_for_media = text;
-            photo ? mediaFiles.push({ type: 'photo', media: photo[0].file_id }) :
-                video ? mediaFiles.push({ type: 'video', media: video.file_id }) :
-                    voice ? mediaFiles.push({ type: 'voice', media: voice.file_id }) :
-                        document ? mediaFiles.push({ type: 'document', media: document.file_id }) : ''
-        }
-
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
         logger.info(message);
         logger.info(type_m);
+
+        if (media_group_id) {
+            messageId_to_media_group = messageId;
+            mediaGroupId = media_group_id
+            text_for_media = text;
+            photo ? mediaFiles.push({ type: 'photo', media: media }) :
+                video ? mediaFiles.push({ type: 'video', media: media }) :
+                    voice ? mediaFiles.push({ type: 'voice', media: media }) :
+                        document ? mediaFiles.push({ type: 'document', media: media }) : ''
+        }
 
         text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
 
