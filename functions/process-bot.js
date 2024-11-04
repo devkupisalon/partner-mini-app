@@ -140,7 +140,7 @@ bot.on('message', async (message) => {
         let mediaFiles = [];
         if (media_group_id) {
 
-            bot.getMediaGroup(mediaGroupId).then((mediaGroup) => {
+            bot.getMediaGroup(media_group_id).then((mediaGroup) => {
                 logger.info(mediaGroup);
             }).catch((error) => {
                 logger.error(error);
