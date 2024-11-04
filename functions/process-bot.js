@@ -262,9 +262,10 @@ const parse_text = (replyText) => {
     logger.info(messageId);
     const agent_name = replyText.match(/Агент (.*?):/)[1];
     logger.info(agent_name);
-    const agent_id = replyText.match(/ID:(.*)\n/); 
+    const agent_id = replyText.match(/ID:(.*)\n/)[1]; 
     logger.info(agent_id);
-    const chat_id = replyText.match(/chat_id:(.*)/).group[1];
+    const chat_id = replyText.match(/chat_id:(.*)/);
+    logger.info(chat_id);
     return { agent_id, messageId, agent_name, chat_id };
 }
 
