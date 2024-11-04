@@ -308,11 +308,10 @@ const save_content = async (data) => {
  */
 bot.on('message', async (message) => {
 
-    logger.info(message);
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
-    const is_manager = Object.values(managers_map).find(k => k === id);
+    const is_manager = Object.values(managers_map).find(k => k === message.from.id);
 
     let text = message.text || message.caption || '';
 
