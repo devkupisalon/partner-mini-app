@@ -125,20 +125,23 @@ bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video } = message;
     const messageId = message.message_id;
+    const parse_mode = 'Markdown';
+    
     let text = message.text || message.caption || '';
 
-    logger.info(message);
     if (contact) return;
-
-    const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-    const media = photo ? photo : video ? video : voice ? voice : document ? document : '';
-    logger.info(type_m);
 
     const { partner_name, partner_id } = await get_partners_data(id);
 
     if (partner_name && partner_id) {
 
-        text = `Сообщение от Агента *${partner_name}*\n*ID*: ${partner_id}\n*message_id*: {${messageId}}\n\n*Текст Сообщения*:\n\n${text}`;
+        const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
+        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.File_id : document ? document.file_id : text;
+
+        logger.info(message);
+        logger.info(type_m);
+
+        text = `Агент *${partner_name}*:\n\n${text}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n`;
 
         /** MEDIA FUNCTIONS */
         const l_message = (l) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -157,61 +160,21 @@ bot.on('message', async (message) => {
             await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
         }
 
-        const send = async (media) => {
-            const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode: 'Markdown' });
-            if (message_id) {
-                await p_success(media);
-            }
-        };
-
-        const senders = {
-            photo: () => {
-                type_m === 'photo' ?
-                    bot.sendPhoto(GROUP_CHAT_ID, media[0].file_id, { caption: text, parse_mode: 'Markdown' }) : ''
-            },
-            video: () => {
-                type_m === 'video' ?
-                    bot.sendVideo(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
-            },
-            voice: () => {
-                type_m === 'voice' ?
-                    bot.sendVoice(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
-            },
-            document: () => {
-                type_m === 'document' ?
-                    bot.sendDocument(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode: 'Markdown' }) : ''
-            }
-        };
-
-        const send_media = async (media) => {
-            const { message_id } = await senders[media]();
-            if (message_id) {
-                await p_success(media);
-            }
-        };
-
-        const mediaFunctions = {
-            photo: {
-                send: type_m === 'photo' ? send_media(type_m) : '',
-            },
-            video: {
-                send: type_m === 'video' ? send_media(type_m) : '',
-            },
-            voice: {
-                send: type_m === 'voice' ? send_media(type_m) : '',
-            },
-            document: {
-                send: type_m === 'document' ? send_media(type_m) : '',
-            },
-            text: {
-                send: send(type_m),
-            }
-        };
 
         // logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
         try {
 
-            await mediaFunctions[type_m].send;
+            const { message_id } = await (type_m === 'photo' ?
+                bot.sendPhoto(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                    type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode }) :
+                        type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode }) :
+                            bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
+
+            if (message_id) {
+                p_success(type_m);
+            }
+
             // const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text)
             // const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
 
