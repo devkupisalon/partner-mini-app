@@ -48,7 +48,7 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
 const get_blob = async (url, type) => {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
-    const fileBlob = new Blob([arrayBuffer], { type: mimeType });
+    const fileBlob = new Blob([arrayBuffer], { type });
     console.log(fileBlob);
     return fileBlob;
 }
