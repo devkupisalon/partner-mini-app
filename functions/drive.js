@@ -49,6 +49,7 @@ const get_blob = async (url, type) => {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
     const fileBlob = new Blob([arrayBuffer], { type });
+    logger.info(fileBlob);
     console.log(fileBlob);
     return fileBlob;
 }
