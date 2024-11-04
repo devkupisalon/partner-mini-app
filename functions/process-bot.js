@@ -187,6 +187,7 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  */
 const process_save_media_to_obj = async (message, chat_id) => {
+    logger.info(message);
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
@@ -382,12 +383,9 @@ bot.on('message', async (message) => {
                 if (media !== '') {
 
                     const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
-                    logger.info({ chat_id, agent_message_id });
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
-                        logger.info(v.message_ids.includes(agent_message_id));
-                        logger.info(c_chat_id);
                         return c_chat_id === chat_id && v.message_ids.includes(agent_message_id) && v.data && v.data.length > 0;
                     });
 
