@@ -67,8 +67,8 @@ const get_blob = async (url) => {
  */
 const process_url = async (url, mimeType, parents) => {
     try {
+
         const body = await get_blob(url);
-        console.log(body);
         const name = url.split('/').pop();
 
         const fileMetadata = {
@@ -85,8 +85,6 @@ const process_url = async (url, mimeType, parents) => {
             },
             fields: 'id',
         });
-
-        logger.info(id);
 
         if (id) {
             return { success: 'success' };
@@ -115,8 +113,8 @@ const save_media = async (params) => {
 
         if (success_data.every(({ success }) => success === 'success') && lenght === success_data.lenght) {
             logger.info(`Files successfully uploaded to Agent folder`);
+            return { success: 'success' };
         }
-
 
     } catch (error) {
         logger.error(`Error in save_media: ${error.message}`);
