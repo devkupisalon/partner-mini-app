@@ -41,4 +41,4 @@ const task = cron.schedule('* * * * *', async () => {
     }
 });
 
-task.start();
+// task.start();
