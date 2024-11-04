@@ -68,18 +68,29 @@ const get_blob = async (url) => {
 const process_url = async (url, mimeType, parents) => {
     try {
         const body = await get_blob(url);
-        logger.info(body);
+        console.log(body);
         const name = url.split('/').pop();
 
-        return {
-            fileMetadata: {
-                name,
-                mimeType,
-                parents
-            },
-            body,
+        const fileMetadata = {
+            name,
+            parents,
             mimeType
         };
+
+        const { data } = await drive.files.create({
+            requestBody: fileMetadata,
+            media: {
+                mimeType,
+                body
+            },
+            fields: 'id',
+        });
+
+        logger.info(data);
+
+        if (data) {
+            return { success: 'success' };
+        }
     } catch (error) {
         logger.error(`Error in process_url:${error}`);
     }
@@ -93,33 +104,14 @@ const process_url = async (url, mimeType, parents) => {
 const save_media = async (params) => {
     try {
         const { fileUrls, folder } = params;
-        let filesData = [];
         let success_data = [];
 
         for (const { fileUrl, mime_type } of fileUrls) {
             const data = await process_url(fileUrl, mime_type, [folder])
-            filesData.push(data);
+            success_data.push(data);
         }
 
-        const lenght = filesData.length;
-
-        for (const { fileMetadata, mimeType, body } of filesData) {
-
-            const { data } = await drive.files.create({
-                requestBody: fileMetadata,
-                media: {
-                    mimeType,
-                    body
-                },
-                fields: 'id',
-            });
-
-            logger.info(data);
-
-            if (data) {
-                success_data.push({ success: 'success' });
-            }
-        }
+        const lenght = fileUrls.length;
 
         if (success_data.every(({ success }) => success === 'success') && lenght === success_data.lenght) {
             logger.info(`Files successfully uploaded to Agent folder`);
