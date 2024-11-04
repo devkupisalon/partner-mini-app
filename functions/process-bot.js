@@ -182,6 +182,7 @@ const process_save_media_to_obj = async (message, chat_id) => {
         media_files[chat_id] = {
             data: [],
             message_ids: [],
+            experation_date: new Date().toISOString()
         };
     }
 
@@ -354,6 +355,22 @@ async function executeTask() {
 }
 
 executeTask();
+
+/**
+ * Function to check and delete data if a week has passed
+ */
+function checkAndDeleteOldData() {
+    const now = new Date();
+    for (const chatId in media_files) {
+        const expirationDate = new Date(media_files[chatId].expiration_date);
+        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+        if (now - expirationDate >= weekInMilliseconds) {
+            delete media_files[chatId];
+        }
+    }
+}
+
+setInterval(checkAndDeleteOldData, 24 * 60 * 60 * 1000); // Call every 24 hours
 
 // Handle errors
 bot.on('polling_error', (error) => {
