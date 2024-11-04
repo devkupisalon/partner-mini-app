@@ -152,7 +152,7 @@ const send_media_group = async () => {
                 return { type, media };
             });
 
-            const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
+            const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
             logger.info(message_id);
             if (message_id) {
                 logger.info(logger_messages['media_group'](id_to_media_group));
