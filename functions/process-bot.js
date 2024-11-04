@@ -234,12 +234,7 @@ const getTelegramFiles = async (files) => {
                 logger.error(`Error in getTelegramFiles: ${error}`);
             }
         }
-    } else {
-        const { file_path } = await bot.getFile(files.media);
-        const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
-        fileUrls = [[{ fileUrl, mime_type: files.mime_type }]];
     }
-
     return fileUrls;
 }
 
@@ -400,7 +395,7 @@ bot.on('message', async (message) => {
                         return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
-                    media_data = selectedData ? selectedData[1].data : { media: media.file_id, mime_type: !media.mimeType ? 'image/png' : media.mimeType };
+                    media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mimeType ? 'image/png' : media.mimeType }];
 
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
                     const folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
