@@ -164,7 +164,10 @@ const send_media_group = async () => {
             logger.info(message_id);
             if (message_id) {
                 p_success('media_group', messageId_to_media_group, id_to_media_group);
-                [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
+                mediaGroupId = null;
+                text_for_media = null;
+                messageId_to_media_group = null;
+                id_to_media_group = null;
                 mediaFiles = [];
             }
         }
