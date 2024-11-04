@@ -157,7 +157,7 @@ const send_media_group = async () => {
             for (let i = 0; i < mediaObjValues.length; i++) {
                 const currentMediaObj = mediaObjValues[i];
 
-                const { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id } = currentMediaObj;
+                const { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
@@ -171,7 +171,7 @@ const send_media_group = async () => {
 
                 if (message) {
                     p_success('media_group', messageId, id);
-                    process_save_media_to_obj(message, chat_id);
+                    if (from_user) process_save_media_to_obj(message, user_id);
                     delete send_media_obj[Object.keys(send_media_obj)[i]];
                 }
             }
@@ -197,7 +197,6 @@ const process_save_media_to_obj = async (message, chat_id) => {
     }
 
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
-        // const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
 
         media_files[`${chat_id}_${timestamp}`].data.push({ media });
@@ -271,6 +270,9 @@ const process_message = async (data) => {
 
         if (!from_user) {
             send_media_obj[id].reply_to_message_id = reply_to_message_id;
+        } else {
+            send_media_obj[id].from_user = from_user;
+            send_media_obj[id].user_id = id;
         }
 
         logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id])}`);
@@ -385,7 +387,7 @@ bot.on('message', async (message) => {
                         return v.data;
                     }
                 });
-                
+
                 logger.info(media_data);
             } else {
                 media_data = media.file_id;
