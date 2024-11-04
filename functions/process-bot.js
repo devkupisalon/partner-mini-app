@@ -235,6 +235,7 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
+            logger.info(message);
             if (message.reply_to_message && message.reply_to_message.is_bot) {
 
                 const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
