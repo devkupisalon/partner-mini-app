@@ -187,6 +187,7 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  */
 const process_save_media_to_obj = async (message, chat_id) => {
+    logger.info(message);
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
