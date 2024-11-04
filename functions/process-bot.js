@@ -365,6 +365,7 @@ function checkAndDeleteOldData() {
         const expirationDate = new Date(media_files[chatId].expiration_date);
         const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
         if (now - expirationDate >= weekInMilliseconds) {
+            logger.info(`Delete media_data after 7 days from chat_id: ${chatId}`);
             delete media_files[chatId];
         }
     }
