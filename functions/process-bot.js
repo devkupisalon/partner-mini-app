@@ -243,15 +243,19 @@ bot.on('message', async (message) => {
 });
 
 
-const task_media = cron.schedule('0/10 * * * * *', async () => {
+const interval = 10000; // Интервал в миллисекундах (10 секунд)
+
+async function executeTask() {
     if (mediaGroupId !== null) {
         await send_media_group();
     } else {
         logger.info(`There are no media_group_files to send`);
     }
-});
+    setTimeout(executeTask, interval); // Повторный запуск через указанный интервал
+}
 
-task_media.start();
+// Начальный запуск задачи
+executeTask();
 
 // Handle errors
 bot.on('polling_error', (error) => {
