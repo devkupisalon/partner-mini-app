@@ -226,8 +226,9 @@ const getTelegramFiles = async (files) => {
     if (Array.isArray(files)) {
         for (const { media, mime_type } of files) {
             try {
-                const { file_path } = await bot.getFile(media);
-                const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
+                const file = await bot.getFile(media);
+                logger.info(file);
+                const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file.file_path}`;
                 logger.info(`File url successfully received: ${fileUrl}`);
                 fileUrls.push({ fileUrl, mime_type });
             } catch (error) {
