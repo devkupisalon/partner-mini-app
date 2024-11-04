@@ -206,7 +206,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
     }
 
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
-        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
+        const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
         const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
 
         media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
@@ -239,6 +239,11 @@ const getTelegramFiles = async (files) => {
     return fileUrls;
 }
 
+// Get file_id with high quality
+const HQD_photo = (photo) => photo.reduce((prev, current) =>
+    (prev.file_size > current.file_size) ? prev : current
+);
+
 /**
  * Process message data to handle media files and forwarding messages.
  * 
@@ -257,7 +262,7 @@ const process_message = async (data) => {
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
 
     const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-    const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
+    const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
     if (media_group_id) {
 
@@ -382,7 +387,7 @@ bot.on('message', async (message) => {
 
                 let media_data;
 
-                const media = reply_to_message.photo ? reply_to_message.photo[0] :
+                const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
                     reply_to_message.video ? reply_to_message.video :
                         reply_to_message.voice ? reply_to_message.voice :
                             reply_to_message.document ? reply_to_message.document : ''
