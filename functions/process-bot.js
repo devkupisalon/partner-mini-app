@@ -367,8 +367,8 @@ bot.on('message', async (message) => {
                     reply_to_message_id: messageId
                 })
             }
-
-            logger.info(is_manager)
+            logger.info(managers_map);
+            logger.info(is_manager);
             logger.info(save);
             // process save media from agents
             if (reply_to_message && save && is_manager) {
