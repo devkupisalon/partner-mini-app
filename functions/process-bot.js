@@ -401,7 +401,7 @@ bot.on('message', async (message) => {
                     media_data = selectedData ? selectedData[1].data.map(({ media }) => media) : media.file_id;
 
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
-                    const folder = await create_folder(`${hash_id}-${agent_name}`, [partner_folder]);
+                    const folder = await create_folder(`${hash_id}-${agent_name}`, partner_folder);
                     logger.info(folder);
                     const fileUrls = await getTelegramFiles(media_data);
                     const { success } = await save_media({ fileUrls, folder: folder.id });
