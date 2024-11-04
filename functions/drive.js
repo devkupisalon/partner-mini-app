@@ -45,14 +45,17 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
     }
 }
 
-const get_blob = async (url, type) => {
+const get_blob = async (url) => {
     const response = await fetch(url);
     const arrayBuffer = await response.arrayBuffer();
-    console.log(arrayBuffer);
-    const fileBlob = new Blob([arrayBuffer], { type });
-    logger.info(fileBlob);
-    console.log(fileBlob);
-    return fileBlob;
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const fileStream = new Readable({
+        read() {
+            this.push(uint8Array);
+            this.push(null);
+        }
+    });
+    return fileStream;
 }
 
 /**
@@ -64,16 +67,18 @@ const get_blob = async (url, type) => {
  */
 const process_url = async (url, mimeType, parents) => {
     try {
-        const fileBlob = await get_blob(url, mimeType);
-        logger.info(fileBlob);
-
+        const body = await get_blob(url);
+        logger.info(body);
         const name = url.split('/').pop();
 
         return {
-            name,
-            mimeType,
-            body: fileBlob,
-            parents
+            fileMetadata: {
+                name,
+                mimeType,
+                parents
+            },
+            body,
+            mimeType
         };
     } catch (error) {
         logger.error(`Error in process_url:${error}`);
