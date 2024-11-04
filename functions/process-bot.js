@@ -195,7 +195,6 @@ const send_media_group = async () => {
  * @param {string} hash_id - hash.
  */
 const process_save_media_to_obj = async (message, chat_id, hash_id) => {
-    logger.info(message);
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
@@ -368,7 +367,7 @@ bot.on('message', async (message) => {
                 logger.info(reply_to_message);
 
                 const manager_message_id = message.message_id;
-                const { agent_id, agent_message_id, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                const { agent_message_id, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                 await process_message({
                     text: message.text || message.caption || '',
@@ -404,9 +403,7 @@ bot.on('message', async (message) => {
                         return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
-                    logger.info(selectedData);
-
-                    media_data = selectedData ? selectedData[1] : media.file_id;
+                    media_data = selectedData ? selectedData[1].data.map(({ media }) => media) : media.file_id;
 
                     logger.info(media_data);
 
