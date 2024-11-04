@@ -197,7 +197,7 @@ const process_message = async (data) => {
     if (media_group_id) {
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         if (message.caption) {
-            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : text;
+            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n*ID:*${partner_id}\n*message_id:*{${messageId}}\n*chat_id:*${id}\n` : text;
         }
 
         const mediaTypeMap = {
