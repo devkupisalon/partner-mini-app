@@ -407,7 +407,7 @@ bot.on('message', async (message) => {
  */
 const prepare_calc = (text) => {
     const parts = text.split(/\n+/);
-    const [, phone, name, brand, model, gosnum] = parts;
+    const [, name, phone, brand, model, gosnum] = parts;
     return { phone, name, brand, model, gosnum }
 }
 
