@@ -199,8 +199,7 @@ bot.on('message', async (message) => {
         logger.info(message);
 
         if (media_group_id) {
-            if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id };
-            send_media_obj[id].mediaFiles = [];
+            if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [] };
             message.caption ?
                 send_media_obj[id].caption = `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n` : '';
             photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
