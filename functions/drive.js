@@ -35,8 +35,10 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
                 domain: 'kupisalon.ru' // Домен для разрешения
             }
         });
-
-        logger.info('Folder created successfully');
+        
+        if (id) {
+            logger.info('Folder created successfully');
+        }
         return { folderLink, id };
     } catch (error) {
         logger.error(`Error in create_folder: ${error.stack}`);
