@@ -187,7 +187,6 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  */
 const process_save_media_to_obj = async (message, chat_id) => {
-    logger.info(message);
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
@@ -308,6 +307,8 @@ const save_content = async (data) => {
  * send back responses from managers to user chats 
  */
 bot.on('message', async (message) => {
+
+    logger.info(message);
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const from_id = message.from.id;
