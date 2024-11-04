@@ -10,6 +10,7 @@ GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 const parse_mode = 'Markdown';
 
 let send_media_obj = {};
+let media_files = {};
 
 /** Logger message */
 const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -163,6 +164,8 @@ const send_media_group = async () => {
                 let message = reply_to_message_id ?
                     await bot.sendMediaGroup(chat_id, mediaGroup, { reply_to_message_id }) :
                     await bot.sendMediaGroup(chat_id, mediaGroup);
+
+                    logger.info(message);
 
                 if (message) {
                     p_success('media_group', messageId, id);
