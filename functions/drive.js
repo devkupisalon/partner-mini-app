@@ -77,7 +77,7 @@ const process_url = async (url, mimeType, parents) => {
             mimeType
         };
 
-        const { data } = await drive.files.create({
+        const { data: { id } } = await drive.files.create({
             requestBody: fileMetadata,
             media: {
                 mimeType,
@@ -86,9 +86,9 @@ const process_url = async (url, mimeType, parents) => {
             fields: 'id',
         });
 
-        logger.info(data);
+        logger.info(id);
 
-        if (data) {
+        if (id) {
             return { success: 'success' };
         }
     } catch (error) {
