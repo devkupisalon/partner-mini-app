@@ -4,7 +4,7 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
-import { get_partners_data, get_partner_name_and_manager } from './sheets.js';
+import { get_partners_data, get_partner_name_and_manager, do_calc } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, checkAndDeleteOldData } from './helper.js';
 
@@ -319,6 +319,7 @@ bot.on('message', async (message) => {
     const from_id = message.from.id;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
+    const calc = [`!Растчет`, '!расчет'].includes(message.text);
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
 
     let text = message.text || message.caption || '';
@@ -378,41 +379,25 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
-
                 await process_save({ reply_to_message, manager_message_id, id });
+            }
 
-                /* let media_data;
-
-                const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
-                    reply_to_message.video ? reply_to_message.video :
-                        reply_to_message.voice ? reply_to_message.voice :
-                            reply_to_message.document ? reply_to_message.document : ''
-
-                if (media !== '') {
-
-                    const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
-
-                    const selectedData = Object.entries(media_files).find(([k, v]) => {
-                        const [c_chat_id] = k.split("_");
-                        return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
-                    });
-
-                    media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
-
-                    const { partner_folder } = await get_partner_name_and_manager(agent_id);
-                    const folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
-                    const fileUrls = await getTelegramFiles(media_data);
-                    const { success } = await save_media({ fileUrls, folder: folder.id });
-
-                    if (success) {
-                        await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
-                    }
-
-                } */
+            if (reply_to_message && is_manager && calc) {
+                const { phone, name, brand, model, gosnum } = prepare_calc(reply_to_message.text || reply_to_message.caption);
+                const { agent_name } = parse_text(reply_to_message.text || reply_to_message.caption);
+                const { link, folder_id } = await do_calc({ partner: agent_name, phone, name, brand, model, gosnum });
+                if (link) {
+                    await bot.sendMessage(id, `Расчет создан, [открыть](${link})\n\n\`hash:${folder_id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                }
             }
         }
     }
 });
+
+const prepare_calc = (text) => {
+
+    return { phone, name, brand, model, gosnum }
+}
 
 /**
  * Processes and saves media content based on the provided data.
@@ -468,12 +453,12 @@ async function executeTask() {
     setTimeout(executeTask, interval);
 }
 
-executeTask();
-
+// Callback forcheckAndDeleteOldData
 function intervalCallback() {
     checkAndDeleteOldData(media_files);
 }
 
+executeTask(); // Call every 10 cseconds
 setInterval(intervalCallback, 24 * 60 * 60 * 1000); // Call every 24 hours
 
 // Handle errors

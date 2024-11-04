@@ -208,12 +208,14 @@ const get_settings = async (partner) => {
  * @returns {string|boolean} - Ссылка на результат или false в случае ошибки
  */
 const do_calc = async (params) => {
-    
+
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
-    const { partner, name, phone, brand, model, gosnum } = params;
-    const { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
+    const { partner, name, phone, brand, model, gosnum, folderId } = params;
+    let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, 'Партнер', partner_name, , , , , , , , , , , , , , , , , date];
+
+    partner_folder = folderId ? folderId: partner_folder
 
     try {
         const values = await get_data(MONITORSPREADSHEET, MONITORSHEETNAME);
@@ -245,7 +247,7 @@ const do_calc = async (params) => {
         if (linkResponse.ok) {
             const link = await linkResponse.text();
             logger.info(`Received link: ${link}`);
-            return link;
+            return { link, folder_id: partner_folder };
         } else {
             logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);
         }

@@ -109,7 +109,7 @@ app.get('/check', async (req, res) => {
 /** create pre-orders */
 app.get('/do-calculation', async (req, res) => {
     try {
-        const link = await do_calc(req.query);
+        const { link } = await do_calc(req.query);
         return res.json({ link });
     } catch (error) {
         logger.error(`An error occurred in do_calc: ${error.message}`);
