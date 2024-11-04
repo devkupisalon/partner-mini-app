@@ -123,10 +123,10 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 bot.on('message', async (message) => {
 
-    const { contact, chat: { id, type }, photo, document, voice, video } = message;
+    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id } = message;
     const messageId = message.message_id;
     const parse_mode = 'Markdown';
-    
+
     let text = message.text || message.caption || '';
 
     if (contact) return;
@@ -135,8 +135,32 @@ bot.on('message', async (message) => {
 
     if (partner_name && partner_id) {
 
-        const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
+        // Извлечение всех file_id из сообщения пользователя
+        let mediaFiles = [];
+        if (media_group_id) {
+
+            if (photo) {
+                mediaFiles.push(...photo.map(p => { return { type: 'photo', media: p[0].file_id }; }));
+            }
+            if (video) {
+                mediaFiles.push({ type: 'video', media: video.file_id });
+            }
+            if (voice) {
+                mediaFiles.push({ type: 'voice', media: voice.file_id });
+            }
+            if (document) {
+                mediaFiles.push({ type: 'document', media: document.file_id });
+            }
+
+        }
+
+        // Формирование медиа группы
+        const mediaGroup = mediaFiles.map(({ type, media }) => {
+            return { type, media };
+        });
+
+        const type_m = media_group_id ? 'media_group' : photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
+        const media = media_group_id ? mediaGroup : photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
         logger.info(message);
         logger.info(type_m);
@@ -160,35 +184,19 @@ bot.on('message', async (message) => {
             await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
         }
 
-
-        // logger.info(`Message successfully forwarded from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}`);
         try {
 
-            const { message_id } = await (type_m === 'photo' ?
-                bot.sendPhoto(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                    type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                        type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                            bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
+            const { message_id } = await (
+                type_m === 'photo' ? bot.sendPhoto(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                    type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                        type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                            type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                                type_m === 'media_group' ? bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text, parse_mode }) :
+                                    bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
 
             if (message_id) {
                 p_success(type_m);
             }
-
-            // const { message_id } = await bot.sendMessage(GROUP_CHAT_ID, text)
-            // const { message_id } = await bot.forwardMessage(GROUP_CHAT_ID, id, messageId);
-
-            // for (const mediaType in mediaFunctions) {
-            //     const { send } = mediaFunctions[mediaType];
-            //     if (send) await send;
-            // }
-            /* if (message_id) {
-                // logger.info(messageId);
-
-        
-
-                await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id: messageId });
-            } */
 
         } catch (error) {
             logger.error(`Error forwarding user message from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}: ${error.stack}`);
