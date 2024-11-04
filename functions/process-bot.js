@@ -174,7 +174,7 @@ bot.on('message', async (message) => {
         logger.info(message);
         logger.info(type_m);
 
-        text = `Агент *${partner_name}:* ${text}\n\nID:${partner_id}\nmessage_id:${messageId}`;
+        text = `Агент \*${partner_name}:\* ${text}\n\nID:${partner_id}\nmessage_id:${messageId}`;
         // text = escapeMarkdown(text);
 
         logger.info(text);
