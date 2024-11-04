@@ -382,7 +382,7 @@ bot.on('message', async (message) => {
                 await process_save({ reply_to_message, manager_message_id, id });
             }
 
-            logger.info(is_manager && calc);
+            logger.info(/* is_manager &&  */calc);
 
             if (reply_to_message && is_manager && calc) {
 
