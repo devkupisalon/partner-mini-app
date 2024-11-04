@@ -221,18 +221,18 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
  * @returns {array|string} - An array of file URLs if multiple files are provided, or a single file URL.
  */
 const getTelegramFiles = async (files) => {
-    let fileUrls;
+    let fileUrls = [];
     if (Array.isArray(files)) {
-        fileUrls = files.map(async ({ media }) => {
+        for (const media of files) {
             try {
                 const { file_path } = await bot.getFile(media);
                 const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
                 logger.info(`File url successfully received: ${fileUrl}`);
-                return fileUrl;
+                fileUrls.push(fileUrl);
             } catch (error) {
                 logger.error(`Error in getTelegramFiles: ${error}`);
             }
-        });
+        }
     } else {
         const { file_path } = await bot.getFile(files);
         fileUrls = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
