@@ -55,6 +55,7 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
 const process_url = async (url, mimeType, parents) => {
     const response = await fetch(url);
     const fileBlob = await response.blob();
+    logger.info(blob);
     const name = url.split('/').pop();
 
     return {
@@ -103,7 +104,7 @@ const save_media = async (params) => {
                 return { success: 'success' };
             }
 
-        } else {
+        } /* else {
             const { name, mimeType, body, parents } = await process_url(fileUrls, [folder]);
 
             const { data: { id } } = await drive.files.create({
@@ -119,7 +120,7 @@ const save_media = async (params) => {
                 logger.info(`File successfully uploaded to Agent folder`);
                 return { success: 'success' };
             }
-        }
+        } */
 
     } catch (error) {
         logger.error(`Error in save_media: ${error.message}`);
