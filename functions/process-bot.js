@@ -7,6 +7,8 @@ import cron from 'node-cron';
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
+const parse_mode = 'Markdown';
+
 let mediaGroupId = null;
 let mediaFiles = [];
 let text_for_media = null;
@@ -149,7 +151,7 @@ const send_media_group = async () => {
             return { type, media };
         });
 
-        const { message_id } = await bot.sendDocument(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
+        const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
         if (message_id) {
             p_success('media_group', messageId_to_media_group, id_to_media_group);
             [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
@@ -166,7 +168,6 @@ bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id } = message;
     const messageId = message.message_id;
-    const parse_mode = 'Markdown';
 
     let text = message.text || message.caption || '';
 
