@@ -53,23 +53,31 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
  * @returns {object} - Object containing the name, mimeType, file body, and parent elements of the processed file.
  */
 const process_url = async (url, mimeType, parents) => {
-    const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/octet-stream'
+    try {
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/octet-stream'
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
         }
-    });
 
-    const fileBlob = await response.blob();
-    logger.info(fileBlob);
-    const name = url.split('/').pop();
+        const fileBlob = await response.arrayBuffer(); // Попробуйте arrayBuffer()
+        logger.info(fileBlob);
+        const name = url.split('/').pop();
 
-    return {
-        name,
-        mimeType,
-        body: fileBlob,
-        parents
-    };
+        return {
+            name,
+            mimeType,
+            body: fileBlob,
+            parents
+        };
+    } catch (error) {
+        logger.error(`Error in process_url:${error}`);
+    }
 }
 
 /**
