@@ -319,7 +319,7 @@ bot.on('message', async (message) => {
     const from_id = message.from.id;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
-    const calc = [`!Расчет`, '!расчет'].includes(message.text);
+    const calc = ['Создать расчет', 'создать расчет'].includes(message.text);
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
 
     let text = message.text || message.caption || '';
