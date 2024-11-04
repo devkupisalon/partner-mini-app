@@ -242,7 +242,7 @@ bot.on('message', async (message) => {
 });
 
 
-const task = cron.schedule('*/10 * * * * *', async () => {
+const task_media= cron.schedule('*/10 * * * * *', async () => {
     if (mediaGroupId) {
         await send_media_group();
     } else {
@@ -250,7 +250,7 @@ const task = cron.schedule('*/10 * * * * *', async () => {
     }
 });
 
-task.start();
+task_media.start();
 
 // Handle errors
 bot.on('polling_error', (error) => {
