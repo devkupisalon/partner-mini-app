@@ -311,7 +311,7 @@ bot.on('message', async (message) => {
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const messageId = message.message_id;
     const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
-    const is_manager = Object.values(managers_map).find(k => k === message.from.id);
+    const is_manager = Object.values(managers_map).find(k => k === message.from.id) ? true : false;
 
     let text = message.text || message.caption || '';
 
@@ -367,8 +367,7 @@ bot.on('message', async (message) => {
                     reply_to_message_id: messageId
                 })
             }
-            logger.info(managers_map);
-            logger.info(id);
+
             logger.info(is_manager);
             logger.info(save);
             // process save media from agents
