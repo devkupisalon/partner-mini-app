@@ -183,7 +183,7 @@ const send_media_group = async () => {
 }
 const process_save_media_to_obj = async (message, chat_id) => {
     if (!media_files[chat_id]) {
-        media_files[chat_id] = message.reduce((acc, { message_id, photo, video, voice, document }) => {
+        media_files[chat_id] = Object.values(message).reduce((acc, { message_id, photo, video, voice, document }) => {
             const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
             const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
             acc.data = [];
