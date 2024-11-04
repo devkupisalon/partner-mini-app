@@ -381,21 +381,18 @@ bot.on('message', async (message) => {
 
             const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
-            if (media_files[chat_id].message_ids.includes(reply_to_message.message_id) && media_files[chat_id].data.length > 0) {
-                media_data = Object.entries(media_files).map(([k, v]) => {
-                    if (k.includes(id) && v.message_ids.includes(reply_to_message.message_id)) {
-                        return v.data;
-                    }
-                });
+            const selectedData = Object.entries(dataObject).find(([k, v]) => {
+                const [c_chat_id] = k.split("_");
+                return c_chat_id === id && v.message_ids.includes(messageId) && v.data && v.data.length > 0;
+            });
 
-                logger.info(media_data);
-            } else {
-                media_data = media.file_id;
-            }
+            logger.info(selectedData);
 
+            media_data = selectedData ? selectedData.data : media.file_id;
+
+            logger.info(media_data);
 
         }
-
     }
 });
 
