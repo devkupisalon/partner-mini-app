@@ -7,11 +7,11 @@ import cron from 'node-cron';
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
-let mediaGroupId;
+let mediaGroupId = null;
 let mediaFiles = [];
-let text_for_media;
-let messageId_to_media_group;
-let id_to_media_group;
+let text_for_media = null;
+let messageId_to_media_group = null;
+let id_to_media_group = null;
 
 /**
  * Send first init messages to user
@@ -148,10 +148,11 @@ const send_media_group = async () => {
         const mediaGroup = mediaFiles.map(({ type, media }) => {
             return { type, media };
         });
+        
         const { message_id } = await bot.sendDocument(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
         if (message_id) {
             p_success('media_group', messageId_to_media_group, id_to_media_group);
-            [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = '');
+            [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
             mediaFiles = [];
         }
     }
@@ -242,8 +243,8 @@ bot.on('message', async (message) => {
 });
 
 
-const task_media= cron.schedule('*/10 * * * * *', async () => {
-    if (mediaGroupId) {
+const task_media = cron.schedule('*/10 * * * * *', async () => {
+    if (mediaGroupId !== null) {
         await send_media_group();
     } else {
         logger.info(`There are no media_group_files to send`);
