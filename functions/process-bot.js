@@ -165,9 +165,12 @@ const send_media_group = async () => {
                     await bot.sendMediaGroup(chat_id, mediaGroup, { reply_to_message_id }) :
                     await bot.sendMediaGroup(chat_id, mediaGroup);
 
-                    logger.info(message);
+                logger.info(message);
 
                 if (message) {
+
+                    process_save_media_to_obj(message, chat_id);
+
                     p_success('media_group', messageId, id);
 
                     // Удаление обработанного объекта
@@ -178,6 +181,23 @@ const send_media_group = async () => {
     } catch (error) {
         logger.error(`Error in send_media_group: ${error}`);
     }
+}
+const process_save_media_to_obj = async (message, chat_id) => {
+    if (!media_files[chat_id]) {
+        media_files[chat_id] = message.reduce((acc, { message_id, photo, video, voice, document }) => {
+            const { mime_type } = video || voice || document;
+            const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
+            acc.data = [];
+            acc.message_ids = [];
+            acc.data.push({ media, mime_type });
+            acc.message_ids.push(message_id);
+
+            return acc;
+        }, {});
+
+        logger.info(media_files);
+
+    };
 }
 
 /**
