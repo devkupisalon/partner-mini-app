@@ -1,6 +1,6 @@
 import { Readable } from 'stream';
 
-import gauth from '../functions/google_auth.js';
+import gauth from './google_auth.js';
 import logger from '../logs/logger.js';
 
 import { constants, __dirname } from '../constants.js';
@@ -70,12 +70,12 @@ const process_url = async (url, parents) => {
  */
 const save_media = async (params) => {
     try {
-        const { fileUrls, folders } = params;
+        const { fileUrls, folder } = params;
 
         if (Array.isArray(fileUrls)) {
 
             const filesData = fileUrls.map(async (fileUrl, i) => {
-                return await process_url(fileUrl, [folders[i]]);
+                return await process_url(fileUrl, [folder]);
             });
 
             const { data } = await drive.files.create({
@@ -93,7 +93,7 @@ const save_media = async (params) => {
             }
 
         } else {
-            const { name, mimeType, body, parents } = await process_url(fileUrls, [folders]);
+            const { name, mimeType, body, parents } = await process_url(fileUrls, [folder]);
 
             const { data: { id } } = await drive.files.create({
                 requestBody: { name, mimeType, parents },

@@ -310,11 +310,6 @@ const process_message = async (data) => {
     }
 }
 
-const save_content = async (data) => {
-    const { chat_id, agent_id, file_id } = data;
-    const fileUrls = await getTelegramFiles()
-}
-
 /**
  * Forward messages from user chats to managers groups chat and
  * send back responses from managers to user chats 
@@ -358,6 +353,7 @@ bot.on('message', async (message) => {
     // process manager messages
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
+        const manager_message_id = message.message_id;
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
         if (String(groupId) === GROUP_CHAT_ID) {
@@ -366,7 +362,6 @@ bot.on('message', async (message) => {
 
                 logger.info(reply_to_message);
 
-                const manager_message_id = message.message_id;
                 const { agent_message_id, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                 await process_message({
@@ -405,7 +400,15 @@ bot.on('message', async (message) => {
 
                     media_data = selectedData ? selectedData[1].data.map(({ media }) => media) : media.file_id;
 
-                    logger.info(media_data);
+                    const { partner_folder } = await get_partner_name_and_manager(agent_id);
+                    const folder = await create_folder(`${hash_id}-${agent_name}`, [partner_folder]);
+                    const fileUrls = await getTelegramFiles(media_data);
+
+                    const { success } = await save_media({ fileUrls, folder: folder.id });
+
+                    if (success) {
+                        await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                    }
 
                 }
             }

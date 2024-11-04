@@ -208,6 +208,7 @@ const get_settings = async (partner) => {
  * @returns {string|boolean} - Ссылка на результат или false в случае ошибки
  */
 const do_calc = async (params) => {
+    
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum } = params;
