@@ -356,7 +356,7 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            if (reply_to_message && reply_to_message.from.is_bot && !save) {
+            if (reply_to_message && reply_to_message.from.is_bot && !save && calc) {
 
                 logger.info(reply_to_message);
 
