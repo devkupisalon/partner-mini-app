@@ -154,12 +154,13 @@ const send_media_group = async () => {
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
-                        return { type, media, caption, parse_mode };
+                        return { type, media, caption, parse_mode, reply_to_message_id };
                     }
                     return { type, media };
                 });
-
-                const message = await bot.sendMediaGroup(chat_id, mediaGroup);
+                let message = reply_to_message_id ?
+                    await bot.sendMediaGroup(chat_id, mediaGroup, { reply_to_message_id }) :
+                    await bot.sendMediaGroup(chat_id, mediaGroup);
 
                 if (message) {
                     p_success('media_group', messageId, id);
