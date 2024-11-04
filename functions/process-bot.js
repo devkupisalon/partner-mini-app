@@ -150,11 +150,11 @@ const send_media_group = async () => {
             for (let i = 0; i < mediaObjValues.length; i++) {
                 const currentMediaObj = mediaObjValues[i];
 
-                const { caption, mediaFiles, messageId, id, chat_id } = currentMediaObj;
+                const { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id } = currentMediaObj;
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
-                        return { type, media, caption, parse_mode, reply_to_message_id };
+                        return { type, media, caption, parse_mode };
                     }
                     return { type, media };
                 });
