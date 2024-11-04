@@ -206,7 +206,7 @@ bot.on('message', async (message) => {
                                 bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
 
             if (message_id) {
-                p_success(type_m, messageId);
+                p_success(type_m, messageId, id);
             }
 
         } catch (error) {
