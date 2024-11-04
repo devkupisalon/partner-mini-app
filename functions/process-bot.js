@@ -246,7 +246,7 @@ const process_message = async (data) => {
     // encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`, BOT_TOKEN);
 
     from_user ?
-        text = `Агент *${partner_name}*:\n\n${text}\n\n${hash}` :
+        text = `Агент *${partner_name}*:\n\n${text}\n\n\`${hash}\`` :
         text = text;
 
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
@@ -258,7 +258,7 @@ const process_message = async (data) => {
 
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         if (message.caption) {
-            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n${hash}\n` : text;
+            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n\`${hash}\`` : text;
         }
 
         const mediaTypeMap = {
