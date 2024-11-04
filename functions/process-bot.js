@@ -153,9 +153,15 @@ const send_media_group = async () => {
 
     try {
         if (Object.keys(send_media_obj).length > 0) {
-            for (const [i, { caption, mediaFiles, messageId, id }] of Object.values(send_media_obj)) {
-                const mediaGroup = mediaFiles.map(({ type, media }, i) => {
-                    if (i === 0) {
+            const mediaObjValues = Object.values(send_media_obj);
+
+            for (let i = 0; i < mediaObjValues.length; i++) {
+                const currentMediaObj = mediaObjValues[i];
+
+                const { caption, mediaFiles, messageId, id } = currentMediaObj;
+
+                const mediaGroup = mediaFiles.map(({ type, media }, index) => {
+                    if (index === 0) {
                         return { type, media, caption, parse_mode };
                     }
                     return { type, media };
@@ -165,6 +171,8 @@ const send_media_group = async () => {
 
                 if (message) {
                     p_success('media_group', messageId, id);
+
+                    // Удаление обработанного объекта
                     delete send_media_obj[Object.keys(send_media_obj)[i]];
                 }
             }
