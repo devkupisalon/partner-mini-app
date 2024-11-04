@@ -223,7 +223,7 @@ const process_message = async (data) => {
 
     try {
 
-        const sendFunctions = {
+        /* const sendFunctions = {
             'photo': bot.sendPhoto,
             'video': bot.sendVideo,
             'voice': bot.sendVoice,
@@ -238,14 +238,14 @@ const process_message = async (data) => {
 
         const sendFunction = sendFunctions[type_m] || sendFunctions['text']; // Default to sendMessage if type is not recognized
 
-        const { message_id } = await sendFunction(CHAT_ID, media, sendParams);
+        const { message_id } = await sendFunction(CHAT_ID, media, sendParams); */
 
-        /*  const { message_id } = await (
+         const { message_id } = await (
              type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                  type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                      type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                          type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id })) */
+                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (message_id) {
             p_success(type_m, messageId, id);
