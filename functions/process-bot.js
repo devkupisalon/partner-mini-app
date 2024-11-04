@@ -158,10 +158,8 @@ const send_media_group = async () => {
                 return { type, media };
             });
 
-            logger.info(mediaGroup);
-
             const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup);
-            logger.info(message_id);
+
             if (message_id) {
                 p_success('media_group', messageId_to_media_group, id_to_media_group);
                 mediaGroupId = null;
@@ -184,7 +182,6 @@ bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id } = message;
     const messageId = message.message_id;
-    let text_added = false;
 
     let text = message.text || message.caption || '';
 
@@ -200,7 +197,6 @@ bot.on('message', async (message) => {
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
         logger.info(message);
-        logger.info(type_m);
 
         if (media_group_id) {
             messageId_to_media_group = messageId;
