@@ -242,10 +242,11 @@ const getTelegramFiles = async (files) => {
 const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
-    const hash = encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`, BOT_TOKEN);
+    const hash = `hash:${partner_id}:${messageId}:${id}:${partner_name}\n`;
+    // encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`, BOT_TOKEN);
 
     from_user ?
-        text = `Агент *${partner_name}*:\n\n${text}\n\nhash:${hash}\n` :
+        text = `Агент *${partner_name}*:\n\n${text}\n\n${hash}` :
         text = text;
 
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
@@ -254,10 +255,10 @@ const process_message = async (data) => {
     const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
     if (media_group_id) {
-        
+
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         if (message.caption) {
-            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\nhash:${hash}\n` : text;
+            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n${hash}\n` : text;
         }
 
         const mediaTypeMap = {
@@ -415,8 +416,9 @@ bot.on('message', async (message) => {
  */
 const parse_text = (replyText) => {
     const hash = replyText.match(/hash:(.*)/)[1];
-    const data = stringToObject(decryptString(hash, BOT_TOKEN));
-    return data;
+    const [agent_id, agent_message_id, agent_name, chat_id] = hash.split(':');
+    // const data = stringToObjectdecryptString(hash, BOT_TOKEN));
+    return { agent_id, agent_message_id, agent_name, chat_id };
 }
 
 /**

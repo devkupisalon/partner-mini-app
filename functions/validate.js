@@ -56,4 +56,20 @@ const stringToObject = (queryString) => {
   }, {});
 };
 
+const encrypt = (string) => {
+  const s = `agent_id=partner_id&agent_message_id=messageId&chat_id=id&agent_name=partner_name&media_id=8437589345`;
+  const o = {
+    agent_id: 'x0x',
+    agent_name: 'y0y',
+    agen_message_id: 'v0v',
+    chat_id: 'c0c',
+    media_id: 'm0m'
+  };
+
+  const x = Object.entries(o).forEach(([k,v])=> {
+
+  });
+
+}
+
 export { verifyTelegramWebAppData, encryptString, decryptString, stringToObject, objectToString }
