@@ -146,6 +146,9 @@ const p_success = async (m, reply_to_message_id, id) => {
 
 /** Send media group */
 const send_media_group = async () => {
+
+    logger.info({ mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group, mediaFiles });
+
     try {
         if (mediaGroupId !== null) {
             const mediaGroup = mediaFiles.map(({ type, media }, i) => {
