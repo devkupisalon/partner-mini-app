@@ -136,7 +136,7 @@ bot.on('message', async (message) => {
     if (partner_name && partner_id) {
 
         const type_m = photo ? 'photo' : video ? 'video' : voice ? 'voice' : document ? 'document' : 'text';
-        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.File_id : document ? document.file_id : text;
+        const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : text;
 
         logger.info(message);
         logger.info(type_m);
@@ -167,8 +167,8 @@ bot.on('message', async (message) => {
             const { message_id } = await (type_m === 'photo' ?
                 bot.sendPhoto(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
                 type_m === 'video' ? bot.sendVideo(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
-                    type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode }) :
-                        type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media.file_id, { caption: text, parse_mode }) :
+                    type_m === 'voice' ? bot.sendVoice(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
+                        type_m === 'document' ? bot.sendDocument(GROUP_CHAT_ID, media, { caption: text, parse_mode }) :
                             bot.sendMessage(GROUP_CHAT_ID, text, { parse_mode }))
 
             if (message_id) {
