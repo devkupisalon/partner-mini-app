@@ -287,7 +287,7 @@ bot.on('message', async (message) => {
                 logger.info(message.reply_to_message);
 
                 const manager_message_id = message.message_id;
-                const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
+                const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text || message.reply_to_message.caption);
 
                 await process_message({
                     text: message.text || message.caption || '',
