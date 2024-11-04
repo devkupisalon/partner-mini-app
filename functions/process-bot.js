@@ -153,7 +153,8 @@ const send_media_group = async () => {
 
         const { message_id } = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
         if (message_id) {
-            await p_success('media_group', messageId_to_media_group, id_to_media_group);
+            logger.info(logger_messages['media_group'](id_to_media_group));
+            await bot.sendMessage(id_to_media_group, 'Сообщение отправлено', { reply_to_message_id: messageId_to_media_group });
             [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
             mediaFiles = [];
         }
