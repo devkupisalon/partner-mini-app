@@ -382,6 +382,8 @@ bot.on('message', async (message) => {
                 await process_save({ reply_to_message, manager_message_id, id });
             }
 
+            logger.info(is_manager && calc);
+
             if (reply_to_message && is_manager && calc) {
 
                 const { phone, name, brand, model, gosnum } = prepare_calc(reply_to_message.text || reply_to_message.caption);
