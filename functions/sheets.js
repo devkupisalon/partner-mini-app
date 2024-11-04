@@ -293,13 +293,13 @@ const get_cars = async () => {
  * @param {string} name - Имя новой папки
  * @returns {object} - Объект с ссылкой на папку и её ID, если успешно создана, иначе логируется ошибка
  */
-const create_folder = async (name) => {
+const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
     try {
         const response = await drive.files.create({
             resource: {
                 name,
                 mimeType: 'application/vnd.google-apps.folder',
-                parents: [PARTNERSPARENT]
+                parents: [parent_folder]
             }
         });
 
@@ -348,6 +348,44 @@ const save_new_partner = async (params) => {
         }
     } catch (error) {
         logger.error(`Error in save_new_partner: ${error.message}`);
+    }
+}
+
+
+/**
+ * Сохранить медиа контент в отдельную папку в папке Агента его папку на Google Drive
+ * @param {object} params - Параметры для сохранения медиа (name, folder, file)
+ * @returns {object} - Объект успешности загрузки, если логотип успешно загружен
+ */
+const save_media = async (params) => {
+    try {
+        const { body: { name, folder, mimeType }, file } = params;
+
+        const fileMetadata = {
+            name,
+            parents: [folder],
+            mimeType
+        };
+
+        const fileStream = new Readable();
+        fileStream.push(file.buffer);
+        fileStream.push(null);
+
+        const { data: { id } } = await drive.files.create({
+            requestBody: fileMetadata,
+            media: {
+                mimeType,
+                body: fileStream
+            },
+            fields: 'id',
+        });
+
+        if (id) {
+            logger.info(`Media successfully uploaded to specific agent folder`);
+            return { success: 'success' };
+        }
+    } catch (error) {
+        logger.error(`Error in save_media: ${error.message}`);
     }
 }
 
@@ -512,5 +550,7 @@ export {
     save_logo,
     get_partners_data,
     check_moderation,
-    check_success_moderation
+    check_success_moderation,
+    create_folder,
+    save_media
 };

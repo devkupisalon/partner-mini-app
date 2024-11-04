@@ -1,7 +1,7 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map } from '../constants.js';
-import { get_partners_data } from './sheets.js';
+import { get_partners_data, create_folder, save_media } from './sheets.js';
 
 const interval = 5000;
 let { GROUP_CHAT_ID } = constants;
@@ -223,29 +223,12 @@ const process_message = async (data) => {
 
     try {
 
-        /* const sendFunctions = {
-            'photo': bot.sendPhoto,
-            'video': bot.sendVideo,
-            'voice': bot.sendVoice,
-            'document': bot.sendDocument,
-            'text': bot.sendMessage
-        };
-
-        const sendParams =
-            from_user && type_m !== 'text' ? { caption: text, parse_mode } :
-                from_user && type_m === 'text' ? { parse_mode } :
-                    !from_user && type_m === 'text' ? { parse_mode, reply_to_message_id } : { reply_to_message_id, caption: text, parse_mode };
-
-        const sendFunction = sendFunctions[type_m] || sendFunctions['text']; // Default to sendMessage if type is not recognized
-
-        const { message_id } = await sendFunction(CHAT_ID, media, sendParams); */
-
-         const { message_id } = await (
-             type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                 type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                     type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                         type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
+        const { message_id } = await (
+            type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                    type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                        type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                            bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (message_id) {
             p_success(type_m, messageId, id);
@@ -254,6 +237,10 @@ const process_message = async (data) => {
     } catch (error) {
         logger.error(`Error forwarding user message from chat_id ${id} to chat_id ${CHAT_ID}: ${error.stack}`);
     }
+}
+
+const save_content = async (data) => {
+    const { } = data;
 }
 
 /**
@@ -296,6 +283,8 @@ bot.on('message', async (message) => {
         if (String(groupId) === GROUP_CHAT_ID) {
 
             if (message.reply_to_message && message.reply_to_message.from.is_bot) {
+
+                logger.info(message.reply_to_message);
 
                 const manager_message_id = message.message_id;
                 const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text);
