@@ -45,6 +45,13 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
     }
 }
 
+const get_blob = async (url, type) => {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const fileBlob = new Blob([arrayBuffer], { type: mimeType });
+    return fileBlob;
+}
+
 /**
  * Process the provided URL to fetch and extract necessary information of the file.
  * @param {string} url - URL of the file to be processed.
@@ -54,9 +61,7 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
  */
 const process_url = async (url, mimeType, parents) => {
     try {
-        const response = await fetch(url);
-        const arrayBuffer = await response.arrayBuffer();
-        const fileBlob = new Blob([arrayBuffer], { type: mimeType });
+        const fileBlob = await get_blob(url, mimeType);
         logger.info(fileBlob);
 
         const name = url.split('/').pop();
@@ -85,7 +90,7 @@ const save_media = async (params) => {
         if (Array.isArray(fileUrls)) {
 
             for (const { fileUrl, mime_type } of fileUrls) {
-                const data = process_url(fileUrl, mime_type, [folder])
+                const data = await process_url(fileUrl, mime_type, [folder])
                 filesData.push(data);
             }
 
