@@ -148,15 +148,17 @@ const p_success = async (m, reply_to_message_id, id) => {
 const send_media_group = async () => {
     try {
         if (mediaGroupId !== null) {
-            const mediaGroup = mediaFiles.map(({ type, media }) => {
+            const mediaGroup = mediaFiles.map(({ type, media }, i) => {
+                if (i === 0) {
+                    return { type, media, captin: text_for_media, parse_mode };
+                }
                 return { type, media };
             });
 
-            const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup, { caption: text_for_media, parse_mode });
+            const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup);
             logger.info(message_id);
             if (message_id) {
-                logger.info(logger_messages['media_group'](id_to_media_group));
-                await bot.sendMessage(id_to_media_group, 'Сообщение отправлено', { reply_to_message_id: messageId_to_media_group });
+                p_success('media_group', messageId_to_media_group, id_to_media_group);
                 [mediaGroupId, text_for_media, messageId_to_media_group, id_to_media_group].forEach(m => m = null);
                 mediaFiles = [];
             }
@@ -174,6 +176,7 @@ bot.on('message', async (message) => {
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id } = message;
     const messageId = message.message_id;
+    let text_added = false;
 
     let text = message.text || message.caption || '';
 
@@ -198,6 +201,7 @@ bot.on('message', async (message) => {
                 video ? mediaFiles.push({ type: 'video', media: media }) :
                     voice ? mediaFiles.push({ type: 'voice', media: media }) :
                         document ? mediaFiles.push({ type: 'document', media: media }) : ''
+
             logger.info(`Media files prepeared to send: ${JSON.stringify({ mediaGroupId, id_to_media_group, messageId_to_media_group, text_for_media, mediaFiles })}`);
             return;
         }
