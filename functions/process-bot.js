@@ -7,6 +7,39 @@ let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /**
+ * Экранирует специальные символы Markdown, исключая ссылки.
+ *
+ * @param {string} text Текст для экранирования.
+ * @return {string} Экранированный текст с корректным отображением ссылок.
+ */
+function escapeMarkdown(text) {
+    // Регулярное выражение для экранирования специальных символов Markdown
+    const regex = /(\#|\\|\+|\?|\[|\^|\]|\$|\(|\)|\{|\}|\=|\!|\<|\||\:|\-|\.|\_)/gm;
+
+    // Находим все Markdown-ссылки и заменяем их на плейсхолдеры
+    const links = [];
+    text = text.replace(/\[([^\]]+)\]\(((https?:\/\/|t\.me\/)[^\)]+)\)/g, (match) => {
+        const placeholder = `LINK_PLACEHOLDER_${links.length + 1}`;
+        links.push(match);
+        return placeholder; // Заменяем ссылку на плейсхолдер
+    });
+
+    // Экранируем специальные символы согласно регулярному выражению
+    text = text.replace(regex, '\\$1');
+
+    // Возвращаем ссылки обратно в текст
+    links.forEach((link, i) => {
+        const linkText = link.match(/\[([^\]]+)\]/)[1];
+        const escapedLinkText = linkText.replace(regex, '\\$1');
+        const linkWithEscapedText = link.replace(linkText, escapedLinkText);
+
+        text = text.replace(`LINK\\_PLACEHOLDER\\_${i + 1}`, linkWithEscapedText);
+    });
+
+    return text;
+}
+
+/**
  * Send first init messages to user
  * @param {string} chat_id - user chat_id 
  * @param {string} type - Agent or Partner
@@ -142,6 +175,7 @@ bot.on('message', async (message) => {
         logger.info(type_m);
 
         text = `Агент *${partner_name}:* ${text}\n\nID:${partner_id}\nmessage_id:${messageId}`;
+        text = escapeMarkdown(text);
 
         logger.info(text);
 
