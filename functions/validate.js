@@ -28,48 +28,4 @@ const verifyTelegramWebAppData = (telegramInitData, botToken) => {
   return _hash === hash;
 };
 
-// Function to encrypt the string using the bot token
-const encryptString = (stringToEncrypt, bot_token) => {
-  const cipher = crypto.createCipher('aes-256-cbc', bot_token);
-  let encryptedString = cipher.update(stringToEncrypt, 'utf8', 'hex');
-  encryptedString += cipher.final('hex');
-  return encryptedString;
-};
-
-// Function to decrypt the encrypted string using the bot token
-const decryptString = (encryptedString, bot_token) => {
-  const decipher = crypto.createDecipher('aes-256-cbc', bot_token);
-  let decryptedString = decipher.update(encryptedString, 'hex', 'utf8');
-  decryptedString += decipher.final('utf8');
-  return decryptedString;
-};
-
-const objectToString = (obj) => {
-  return Object.entries(obj).map(([key, value]) => `${key}=${value}`).join("&");
-};
-
-const stringToObject = (queryString) => {
-  return queryString.split("&").reduce((obj, pair) => {
-    const [key, value] = pair.split("=");
-    obj[key] = value;
-    return obj;
-  }, {});
-};
-
-const encrypt = (string) => {
-  const s = `agent_id=partner_id&agent_message_id=messageId&chat_id=id&agent_name=partner_name&media_id=8437589345`;
-  const o = {
-    agent_id: 'x0x',
-    agent_name: 'y0y',
-    agen_message_id: 'v0v',
-    chat_id: 'c0c',
-    media_id: 'm0m'
-  };
-
-  const x = Object.entries(o).forEach(([k,v])=> {
-
-  });
-
-}
-
-export { verifyTelegramWebAppData, encryptString, decryptString, stringToObject, objectToString }
+export { verifyTelegramWebAppData }

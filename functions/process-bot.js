@@ -6,7 +6,7 @@ import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
 import { get_partners_data, get_partner_name_and_manager } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
-// import { encryptString, decryptString, stringToObject, objectToString } from './validate.js';
+import { parse_text, HQD_photo, checkAndDeleteOldData } from './helper.js';
 
 const interval = 10000;
 
@@ -238,11 +238,6 @@ const getTelegramFiles = async (files) => {
     return fileUrls;
 }
 
-// Get file_id with high quality
-const HQD_photo = (photo) => photo.reduce((prev, current) =>
-    (prev.file_size > current.file_size) ? prev : current
-);
-
 /**
  * Process message data to handle media files and forwarding messages.
  * 
@@ -384,7 +379,9 @@ bot.on('message', async (message) => {
             // process save media from agents
             if (reply_to_message && save && is_manager) {
 
-                let media_data;
+                await process_save({ reply_to_message, manager_message_id, id });
+
+                /* let media_data;
 
                 const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
                     reply_to_message.video ? reply_to_message.video :
@@ -411,23 +408,51 @@ bot.on('message', async (message) => {
                         await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
                     }
 
-                }
+                } */
             }
         }
     }
 });
 
 /**
- * Parses the reply text to extract message ID, agent name, agent ID, and chat ID.
- * 
- * @param {string} replyText The text from the reply message.
- * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
+ * Processes and saves media content based on the provided data.
+ * @param {Object} data - Data containing information about the media content.
  */
-const parse_text = (replyText) => {
-    const hash = replyText.match(/hash:(.*)/)[1];
-    const [agent_id, agent_message_id, chat_id, agent_name, hash_id] = hash.split(':');
-    // const data = stringToObjectdecryptString(hash, BOT_TOKEN));
-    return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
+const process_save = async (data) => {
+    let media_data;
+    try {
+        const { reply_to_message, manager_message_id, id } = data;
+
+        const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
+            reply_to_message.video ? reply_to_message.video :
+                reply_to_message.voice ? reply_to_message.voice :
+                    reply_to_message.document ? reply_to_message.document : ''
+
+        if (media !== '') {
+
+            const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+
+            const selectedData = Object.entries(media_files).find(([k, v]) => {
+                const [c_chat_id] = k.split("_");
+                return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
+            });
+
+            media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
+
+            media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
+
+            const { partner_folder } = await get_partner_name_and_manager(agent_id);
+            const folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
+            const fileUrls = await getTelegramFiles(media_data);
+            const { success } = await save_media({ fileUrls, folder: folder.id });
+
+            if (success) {
+                await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+            }
+        }
+    } catch (error) {
+        logger.error(`Error in process_save: ${error}`);
+    }
 }
 
 /**
@@ -445,22 +470,7 @@ async function executeTask() {
 
 executeTask();
 
-/**
- * Function to check and delete data if a week has passed
- */
-function checkAndDeleteOldData() {
-    const now = new Date();
-    for (const chatId in media_files) {
-        const expirationDate = new Date(media_files[chatId].expiration_date);
-        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
-        if (now - expirationDate >= weekInMilliseconds) {
-            logger.info(`Delete media_data after 7 days from chat_id: ${chatId}`);
-            delete media_files[chatId];
-        }
-    }
-}
-
-setInterval(checkAndDeleteOldData, 24 * 60 * 60 * 1000); // Call every 24 hours
+setInterval(checkAndDeleteOldData(media_files), 24 * 60 * 60 * 1000); // Call every 24 hours
 
 // Handle errors
 bot.on('polling_error', (error) => {

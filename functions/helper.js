@@ -1,3 +1,5 @@
+import logger from '../logs/logger.js';
+
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
  * @param {Sheet} sheet - Лист, на котором производится поиск.
@@ -6,7 +8,7 @@
  */
 function getColumnNumberByValue(values, value) {
     // const row = values.find(row => row.includes(value));
-    
+
     if (values) {
         const columnNumber = values.indexOf(value) + 1;
         return columnNumber;
@@ -38,4 +40,36 @@ function numberToColumn(n) {
     return s;
 }
 
-export { numberToColumn, getColumnNumberByValue }
+// Get file_id with high quality
+const HQD_photo = (photo) => photo.reduce((prev, current) =>
+    (prev.file_size > current.file_size) ? prev : current
+);
+
+/**
+ * Parses the reply text to extract message ID, agent name, agent ID, and chat ID.
+ * 
+ * @param {string} replyText The text from the reply message.
+ * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
+ */
+const parse_text = (replyText) => {
+    const hash = replyText.match(/hash:(.*)/)[1];
+    const [agent_id, agent_message_id, chat_id, agent_name, hash_id] = hash.split(':');
+    return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
+}
+
+/**
+ * Function to check and delete data if a week has passed
+ */
+function checkAndDeleteOldData(media_files) {
+    const now = new Date();
+    for (const chatId in media_files) {
+        const expirationDate = new Date(media_files[chatId].expiration_date);
+        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
+        if (now - expirationDate >= weekInMilliseconds) {
+            logger.info(`Delete media_data after 7 days from chat_id: ${chatId}`);
+            delete media_files[chatId];
+        }
+    }
+}
+
+export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, checkAndDeleteOldData }
