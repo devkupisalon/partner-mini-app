@@ -48,13 +48,13 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
 /**
  * Process the provided URL to fetch and extract necessary information of the file.
  * @param {string} url - URL of the file to be processed.
+ * @param {string} mimeType - mimeType for media content.
  * @param {array} parents - Array of parent elements related to the file.
  * @returns {object} - Object containing the name, mimeType, file body, and parent elements of the processed file.
  */
-const process_url = async (url, parents) => {
+const process_url = async (url, mimeType, parents) => {
     const response = await fetch(url);
     const fileBlob = await response.blob();
-    const mimeType = fileBlob.type;
     const name = url.split('/').pop();
 
     return {
@@ -73,12 +73,19 @@ const process_url = async (url, parents) => {
 const save_media = async (params) => {
     try {
         const { fileUrls, folder } = params;
+        let filesData = [];
 
         if (Array.isArray(fileUrls)) {
 
-            const filesData = fileUrls.map(async (fileUrl, i) => {
-                return await process_url(fileUrl, [folder]);
-            });
+            for (const { fileUrl, mime_type } of fileUrls) {
+                filesData.push(await process_url(fileUrl, mime_type, [folder]));
+            }
+
+            // const filesData = fileUrls.map(async ({ fileUrl, mime_type }, i) => {
+            //     return await process_url(fileUrl, mime_type, [folder]);
+            // });
+
+            logger.info(await Promise.all(filesData));
 
             const { data } = await drive.files.create({
                 requestBody: {

@@ -207,8 +207,9 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
 
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
+        const mime_type = photo ? 'image/png' : video ? video.mimeType : voice ? voice.mimeType : document ? document.mimeType : '';
 
-        media_files[`${chat_id}_${timestamp}`].data.push({ media });
+        media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
         media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
     });
 
@@ -223,19 +224,20 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
 const getTelegramFiles = async (files) => {
     let fileUrls = [];
     if (Array.isArray(files)) {
-        for (const media of files) {
+        for (const { media, mime_type } of files) {
             try {
                 const { file_path } = await bot.getFile(media);
                 const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
                 logger.info(`File url successfully received: ${fileUrl}`);
-                fileUrls.push(fileUrl);
+                fileUrls.push({ fileUrl, mime_type });
             } catch (error) {
                 logger.error(`Error in getTelegramFiles: ${error}`);
             }
         }
     } else {
-        const { file_path } = await bot.getFile(files);
-        fileUrls = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
+        const { file_path } = await bot.getFile(files[0].media);
+        const fileUrl = `https://api.telegram.org/file/bot${BOT_TOKEN}/${file_path}`;
+        fileUrls = [[{ fileUrl, mime_type: files[0].mime_type }]];
     }
 
     return fileUrls;
@@ -391,14 +393,14 @@ bot.on('message', async (message) => {
 
                 if (media !== '') {
 
-                    const { agent_id, agent_message_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                    const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                     const selectedData = Object.entries(media_files).find(([k, v]) => {
                         const [c_chat_id] = k.split("_");
                         return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                     });
 
-                    media_data = selectedData ? selectedData[1].data.map(({ media }) => media) : media.file_id;
+                    media_data = selectedData ? selectedData[1].data : media.file_id;
 
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
                     const folder = await create_folder(`${hash_id}-${agent_name}`, partner_folder);
