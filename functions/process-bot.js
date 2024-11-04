@@ -5,6 +5,7 @@ import { get_partners_data } from './sheets.js';
 
 let { GROUP_CHAT_ID } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
+const fileCounts = {};
 
 /**
  * Send first init messages to user
@@ -138,6 +139,12 @@ bot.on('message', async (message) => {
         // Извлечение всех file_id из сообщения пользователя
         let mediaFiles = [];
         if (media_group_id) {
+
+            bot.getMediaGroup(mediaGroupId).then((mediaGroup) => {
+                logger.info(mediaGroup);
+            }).catch((error) => {
+                logger.error(error);
+            });
 
             if (photo) {
                 mediaFiles.push({ type: 'photo', media: photo[0].file_id });
