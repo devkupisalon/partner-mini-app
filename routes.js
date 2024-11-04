@@ -13,11 +13,10 @@ import {
     get_cars,
     do_calc,
     save_new_partner,
-    save_logo,
     check_moderation
 } from './functions/sheets.js';
 
-import {save_logo} from './functions/drive.js'
+import { save_logo } from './functions/drive.js'
 
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
