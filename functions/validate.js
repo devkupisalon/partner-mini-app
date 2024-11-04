@@ -31,15 +31,15 @@ const verifyTelegramWebAppData = (telegramInitData, botToken) => {
 // Function to encrypt the string using the bot token
 const encryptString = (stringToEncrypt, bot_token) => {
   const cipher = crypto.createCipher('aes-256-cbc', bot_token);
-  let encryptedString = cipher.update(stringToEncrypt, 'utf8', 'base64');
-  encryptedString += cipher.final('base64');
+  let encryptedString = cipher.update(stringToEncrypt, 'utf8', 'hex');
+  encryptedString += cipher.final('hex');
   return encryptedString;
 };
 
 // Function to decrypt the encrypted string using the bot token
 const decryptString = (encryptedString, bot_token) => {
   const decipher = crypto.createDecipher('aes-256-cbc', bot_token);
-  let decryptedString = decipher.update(encryptedString, 'base64', 'utf8');
+  let decryptedString = decipher.update(encryptedString, 'base64', 'hex');
   decryptedString += decipher.final('utf8');
   return decryptedString;
 };
