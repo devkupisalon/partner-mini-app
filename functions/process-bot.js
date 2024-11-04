@@ -222,7 +222,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
  * @returns {array|string} - An array of file URLs if multiple files are provided, or a single file URL.
  */
 const getTelegramFiles = async (files) => {
-    logger.info(files);
+    logger.info(files[0].media.file_id);
     let fileUrls = [];
     if (Array.isArray(files)) {
         for (const { media, mime_type } of files) {
