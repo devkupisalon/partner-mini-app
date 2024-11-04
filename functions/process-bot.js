@@ -403,11 +403,10 @@ bot.on('message', async (message) => {
                     const { partner_folder } = await get_partner_name_and_manager(agent_id);
                     const folder = await create_folder(`${hash_id}-${agent_name}`, partner_folder);
                     const fileUrls = await getTelegramFiles(media_data);
-                    logger.info(fileUrls);
                     const { success } = await save_media({ fileUrls, folder: folder.id });
 
                     if (success) {
-                        await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                        await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
                     }
 
                 }

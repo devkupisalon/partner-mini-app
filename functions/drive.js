@@ -35,7 +35,7 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
                 domain: 'kupisalon.ru' // Домен для разрешения
             }
         });
-        
+
         if (id) {
             logger.info('Folder created successfully');
         }
@@ -88,6 +88,8 @@ const save_media = async (params) => {
                     mimeType: 'multipart/related'
                 }
             });
+
+            logger.info(data);
 
             if (data) {
                 logger.info(`Files successfully uploaded to Agent folder`);
