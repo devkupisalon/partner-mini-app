@@ -436,5 +436,6 @@ export {
     save_new_partner,
     get_partners_data,
     check_moderation,
-    check_success_moderation
+    check_success_moderation,
+    get_partner_name_and_manager
 };
