@@ -11,6 +11,18 @@ const parse_mode = 'Markdown';
 
 let send_media_obj = {};
 
+/** Logger message */
+const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
+
+const logger_messages = {
+    media_group: (id) => l_message('Media Group', id),
+    photo: (id) => l_message('Photo', id),
+    video: (id) => l_message('Video', id),
+    voice: (id) => l_message('Voice', id),
+    document: (id) => l_message('Document', id),
+    text: (id) => l_message('Text', id),
+};
+
 /**
  * Send first init messages to user
  * @param {string} chat_id - user chat_id 
@@ -122,25 +134,15 @@ const set_chat_title = async (groupId, newTitle) => {
         });
 }
 
-/** Logger message */
-const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
-
-const logger_messages = {
-    media_group: (id) => l_message('Media Group', id),
-    photo: (id) => l_message('Photo', id),
-    video: (id) => l_message('Video', id),
-    voice: (id) => l_message('Voice', id),
-    document: (id) => l_message('Document', id),
-    text: (id) => l_message('Text', id),
-};
-
-/** Success function */
+/** 
+ * Success function
+ */
 const p_success = async (m, reply_to_message_id, id) => {
     logger.info(logger_messages[m](id));
     await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id });
 }
 
-/** Send media group */
+/** Send media group message */
 const send_media_group = async () => {
 
     try {
@@ -175,7 +177,11 @@ const send_media_group = async () => {
     }
 }
 
-/** Process message */
+/**
+ * Process message data to handle media files and forwarding messages.
+ * 
+ * @param {object} data The data object containing message details.
+ */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
@@ -190,25 +196,56 @@ const process_message = async (data) => {
 
     if (media_group_id) {
         if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
-        message.caption ?
-            send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : text : '';
-        photo ? send_media_obj[id].mediaFiles.push({ type: 'photo', media: media }) :
-            video ? send_media_obj[id].mediaFiles.push({ type: 'video', media: media }) :
-                voice ? send_media_obj[id].mediaFiles.push({ type: 'voice', media: media }) :
-                    document ? send_media_obj[id].mediaFiles.push({ type: 'document', media: media }) : '';
-        from_user ? '' : send_media_obj[id].reply_to_message_id = reply_to_message_id;
-        logger.info(`Media files prepeared to send: ${JSON.stringify(send_media_obj[id])}`);
+        if (message.caption) {
+            send_media_obj[id].caption = from_user ? `Agent *${partner_name}*:\n\n${message.caption}\n\nID:${partner_id}\n*message_id*:{${messageId}}\n*chat_id*:${String(id)}\n` : text;
+        }
+
+        const mediaTypeMap = {
+            'photo': 'photo',
+            'video': 'video',
+            'voice': 'voice',
+            'document': 'document',
+            'text': ''
+        };
+
+        const mediaType = mediaTypeMap[type_m];
+        if (mediaType) {
+            send_media_obj[id].mediaFiles.push({ type: mediaType, media: media });
+        }
+
+        if (!from_user) {
+            send_media_obj[id].reply_to_message_id = reply_to_message_id;
+        }
+
+        logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id])}`);
         return;
     }
 
     try {
 
-        const { message_id } = await (
-            type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                    type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                        type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
-                            bot.sendMessage(CHAT_ID, text, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
+        const sendFunctions = {
+            'photo': bot.sendPhoto,
+            'video': bot.sendVideo,
+            'voice': bot.sendVoice,
+            'document': bot.sendDocument,
+            'text': bot.sendMessage
+        };
+
+        const sendParams =
+            from_user && type_m !== 'text' ? { caption: text, parse_mode } :
+                from_user && type_m === 'text' ? { parse_mode } :
+                    !from_user && type_m === 'text' ? { parse_mode, reply_to_message_id } : { reply_to_message_id, caption: text, parse_mode };
+
+        const sendFunction = sendFunctions[type_m] || sendFunctions['text']; // Default to sendMessage if type is not recognized
+
+        const { message_id } = await sendFunction(CHAT_ID, media, sendParams);
+
+        /*  const { message_id } = await (
+             type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                 type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                     type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                         type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
+                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id })) */
 
         if (message_id) {
             p_success(type_m, messageId, id);
@@ -309,6 +346,7 @@ async function executeTask() {
     }
     setTimeout(executeTask, interval);
 }
+
 executeTask();
 
 // Handle errors
