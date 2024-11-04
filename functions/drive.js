@@ -55,7 +55,7 @@ const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
 const process_url = async (url, mimeType, parents) => {
     const response = await fetch(url);
     const fileBlob = await response.blob();
-    logger.info(blob);
+    logger.info(fileBlob);
     const name = url.split('/').pop();
 
     return {
