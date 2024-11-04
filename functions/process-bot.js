@@ -150,10 +150,12 @@ const send_media_group = async () => {
         if (mediaGroupId !== null) {
             const mediaGroup = mediaFiles.map(({ type, media }, i) => {
                 if (i === 0) {
-                    return { type, media, captin: text_for_media, parse_mode };
+                    return { type, media, caption: text_for_media, parse_mode };
                 }
                 return { type, media };
             });
+
+            logger.info(mediaGroup);
 
             const message_id = await bot.sendMediaGroup(GROUP_CHAT_ID, mediaGroup);
             logger.info(message_id);
