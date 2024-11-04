@@ -11,12 +11,6 @@ const parse_mode = 'Markdown';
 
 let send_media_obj = {};
 
-let mediaGroupId = null;
-let mediaFiles = [];
-let text_for_media = null;
-let messageId_to_media_group = null;
-let id_to_media_group = null;
-
 /**
  * Send first init messages to user
  * @param {string} chat_id - user chat_id 
@@ -149,8 +143,6 @@ const p_success = async (m, reply_to_message_id, id) => {
 /** Send media group */
 const send_media_group = async () => {
 
-    logger.info({ send_media_obj });
-
     try {
         if (Object.keys(send_media_obj).length > 0) {
             const mediaObjValues = Object.values(send_media_obj);
@@ -240,6 +232,8 @@ bot.on('message', async (message) => {
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
+        logger.info(String(groupId));
+        logger.info(GROUP_CHAT_ID);
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
