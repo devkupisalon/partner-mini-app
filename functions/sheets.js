@@ -1,15 +1,14 @@
-import gauth from '../functions/google_auth.js';
+import gauth from './google_auth.js';
 import logger from '../logs/logger.js';
 
 import { constants, __dirname } from '../constants.js';
-import { numberToColumn, getColumnNumberByValue } from '../functions/helper.js';
+import { numberToColumn, getColumnNumberByValue } from './helper.js';
 
 import { v4 as uuidv4 } from 'uuid';
 import { format } from 'date-fns';
-import { Readable } from 'stream';
+import { create_folder } from './drive.js'
 
-
-const { sheets, drive } = gauth();
+const { sheets } = gauth();
 const { SPREADSHEETID,
     SHEETNAME,
     DB,
@@ -20,7 +19,6 @@ const { SPREADSHEETID,
     CARSSPREADSHEET,
     MONITORSPREADSHEET,
     MONITORSHEETNAME,
-    PARTNERSPARENT,
     WEBAPPURL } = constants;
 
 /**
@@ -289,41 +287,6 @@ const get_cars = async () => {
 }
 
 /**
- * Создать новую папку в Google Drive
- * @param {string} name - Имя новой папки
- * @returns {object} - Объект с ссылкой на папку и её ID, если успешно создана, иначе логируется ошибка
- */
-const create_folder = async (name, parent_folder = PARTNERSPARENT) => {
-    try {
-        const response = await drive.files.create({
-            resource: {
-                name,
-                mimeType: 'application/vnd.google-apps.folder',
-                parents: [parent_folder]
-            }
-        });
-
-        const { data: { id } } = response;
-        const folderLink = `https://drive.google.com/drive/folders/${id}`;
-
-        // Добавление разрешения для другого пользователя как owner
-        await drive.permissions.create({
-            fileId: id,
-            requestBody: {
-                role: 'writer', // Роль доступа
-                type: 'domain', // Тип доступа
-                domain: 'kupisalon.ru' // Домен для разрешения
-            }
-        });
-
-        logger.info('Folder created successfully');
-        return { folderLink, id };
-    } catch (error) {
-        logger.error(`Error in create_folder: ${error.stack}`);
-    }
-}
-
-/**
  * Сохранить данные о новом партнере
  * @param {object} params - Параметры нового партнера (org_name, address, phone, type, your_type, link, categories)
  * @returns {object} - Объект с идентификатором партнера и ссылкой на созданную папку, если данные сохранены успешно
@@ -348,111 +311,6 @@ const save_new_partner = async (params) => {
         }
     } catch (error) {
         logger.error(`Error in save_new_partner: ${error.message}`);
-    }
-}
-
-const process_url = async (url, parents) => {
-    const response = await fetch(url);
-    const fileBlob = await response.blob();
-    const mimeType = fileBlob.type;
-    const name = url.split('/').pop();
-
-    return {
-        name,
-        mimeType,
-        body: fileBlob,
-        parents
-    };
-}
-
-
-/**
- * Save media content to a separate folder in the Agent's folder on Google Drive.
- * @param {object} params - Parameters for saving media (name, folder, file)
- * @returns {object} - Object indicating the successful upload of the logo.
- */
-const save_media = async (params) => {
-    try {
-        const { fileUrls, folders } = params;
-
-        if (Array.isArray(fileUrls)) {
-
-            const filesData = fileUrls.map(async (fileUrl, i) => {
-                return await process_url(fileUrl, [folders[i]]);
-            });
-
-            const { data } = await drive.files.create({
-                requestBody: {
-                    files: await Promise.all(filesData)
-                },
-                media: {
-                    mimeType: 'multipart/related'
-                }
-            });
-
-            if (data) {
-                logger.info(`Files successfully uploaded to Agent folder`);
-                return { success: 'success' };
-            }
-
-        } else {
-            const { name, mimeType, body, parents } = await process_url(fileUrls, [folders]);
-
-            const { data: { id } } = await drive.files.create({
-                requestBody: { name, mimeType, parents },
-                media: {
-                    mimeType,
-                    body
-                },
-                fields: 'id',
-            });
-
-            if (id) {
-                logger.info(`File successfully uploaded to Agent folder`);
-                return { success: 'success' };
-            }
-        }
-
-    } catch (error) {
-        logger.error(`Error in save_media: ${error.message}`);
-    }
-}
-
-/**
- * Сохранить логотип партнера в его папку на Google Drive
- * @param {object} params - Параметры для сохранения логотипа (name, folder, file)
- * @returns {object} - Объект успешности загрузки, если логотип успешно загружен
- */
-const save_logo = async (params) => {
-    try {
-        const { body: { name, folder }, file } = params;
-        const mimeType = 'image/png';
-
-        const fileMetadata = {
-            name,
-            parents: [folder],
-            mimeType
-        };
-
-        const fileStream = new Readable();
-        fileStream.push(file.buffer);
-        fileStream.push(null);
-
-        const { data: { id } } = await drive.files.create({
-            requestBody: fileMetadata,
-            media: {
-                mimeType,
-                body: fileStream
-            },
-            fields: 'id',
-        });
-
-        if (id) {
-            logger.info(`Logo successfully uploaded to partner folder`);
-            return { success: 'success' };
-        }
-    } catch (error) {
-        logger.error(`Error in save_logo: ${error.message}`);
     }
 }
 
@@ -576,10 +434,7 @@ export {
     get_cars,
     do_calc,
     save_new_partner,
-    save_logo,
     get_partners_data,
     check_moderation,
-    check_success_moderation,
-    create_folder,
-    save_media
+    check_success_moderation
 };

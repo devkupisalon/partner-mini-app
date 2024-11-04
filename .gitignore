@@ -2,3 +2,4 @@
 credentials.json
 node_modules
 *.log
+managers_ids.json

@@ -7,6 +7,8 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+let managers_map;
+
 const constants = {
     BOT_TOKEN: process.env.bot_token,
     KUPISALONID: process.env.kupisalonID,
@@ -99,4 +101,13 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-export { constants, __dirname, messages_map, invite_texts_map };
+fs.readFile('managers.json', 'utf8', (err, data) => {
+    if (err) {
+        console.error(err);
+        return;
+    }
+    const jsonData = JSON.parse(data);
+    managers_map = jsonData;
+});
+
+export { constants, __dirname, messages_map, invite_texts_map, managers_map };

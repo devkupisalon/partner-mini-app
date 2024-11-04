@@ -1,14 +1,18 @@
 import bot from './init-bot.js';
 import logger from '../logs/logger.js';
-import { constants, invite_texts_map, messages_map } from '../constants.js';
-import { get_partners_data, create_folder, save_media } from './sheets.js';
+
+import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
+import { get_partners_data, get_partner_name_and_manager } from './sheets.js';
+import { create_folder, save_media } from './drive.js';
 
 const interval = 10000;
+
 let { GROUP_CHAT_ID, BOT_TOKEN } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 const parse_mode = 'Markdown';
 
+/** GLOBAL OBJ */
 let send_media_obj = {};
 let media_files = {};
 
@@ -183,8 +187,9 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  */
 const process_save_media_to_obj = async (message, chat_id) => {
-    if (!media_files[chat_id]) {
-        media_files[chat_id] = {
+    const timestamp = new Date().getTime();
+    if (!media_files[`${chat_id}_${timestamp}`]) {
+        media_files[`${chat_id}_${timestamp}`] = {
             data: [],
             message_ids: [],
             experation_date: new Date().toISOString()
@@ -195,11 +200,11 @@ const process_save_media_to_obj = async (message, chat_id) => {
         // const mime_type = video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
         const media = photo ? photo[0].file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
 
-        media_files[chat_id].data.push({ media });
-        media_files[chat_id].message_ids.push(message_id);
+        media_files[`${chat_id}_${timestamp}`].data.push({ media });
+        media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
     });
 
-    logger.info(media_files[chat_id]);
+    logger.info(media_files);
 }
 
 /**
@@ -291,7 +296,8 @@ const process_message = async (data) => {
 }
 
 const save_content = async (data) => {
-    const { } = data;
+    const { chat_id, agent_id, file_id } = data;
+    const fileUrls = await getTelegramFiles()
 }
 
 /**
@@ -300,7 +306,7 @@ const save_content = async (data) => {
  */
 bot.on('message', async (message) => {
 
-    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id } = message;
+    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const messageId = message.message_id;
 
     let text = message.text || message.caption || '';
@@ -309,6 +315,7 @@ bot.on('message', async (message) => {
 
     const { partner_name, partner_id } = await get_partners_data(id);
 
+    // process agent messages
     if (partner_name && partner_id) {
 
         await process_message({
@@ -327,18 +334,19 @@ bot.on('message', async (message) => {
         });
     }
 
+    // process manager messages
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            if (message.reply_to_message && message.reply_to_message.from.is_bot) {
+            if (reply_to_message && reply_to_message.from.is_bot) {
 
-                logger.info(message.reply_to_message);
+                logger.info(reply_to_message);
 
                 const manager_message_id = message.message_id;
-                const { agent_id, messageId, agent_name, chat_id } = parse_text(message.reply_to_message.text || message.reply_to_message.caption);
+                const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
                 await process_message({
                     text: message.text || message.caption || '',
@@ -355,6 +363,37 @@ bot.on('message', async (message) => {
                 })
             }
         }
+    }
+
+    // process save media from agents
+    if (reply_to_message && ['Сохранить', 'сохранить'].includes(message.text) && Object.values(managers_map).find(k => k === id)) {
+
+        let media_data;
+
+        const media = reply_to_message.photo ? reply_to_message.photo[0] :
+            reply_to_message.video ? reply_to_message.video :
+                reply_to_message.voice ? reply_to_message.voice :
+                    reply_to_message.document ? reply_to_message.document : ''
+
+        if (media !== '') {
+
+            const { agent_id, messageId, agent_name, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+
+            if (media_files[chat_id].message_ids.includes(reply_to_message.message_id) && media_files[chat_id].data.length > 0) {
+                media_data = Object.entries(media_files).map(([k, v]) => {
+                    if (k.includes(id) && v.message_ids.includes(reply_to_message.message_id)) {
+                        return v.data;
+                    }
+                });
+                
+                logger.info(media_data);
+            } else {
+                media_data = media.file_id;
+            }
+
+
+        }
+
     }
 });
 

@@ -8,7 +8,6 @@ import { check_subscription_and_authorization } from './functions/check.js';
 import {
     save,
     get_values,
-    auth,
     get_settings,
     save_settings,
     get_cars,
@@ -17,6 +16,8 @@ import {
     save_logo,
     check_moderation
 } from './functions/sheets.js';
+
+import {save_logo} from './functions/drive.js'
 
 import { verifyTelegramWebAppData } from './functions/validate.js';
 import { constants, __dirname } from './constants.js';
