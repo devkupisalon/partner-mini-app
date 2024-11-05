@@ -319,7 +319,8 @@ bot.on('message', async (message) => {
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const from_id = message.from.id;
     const messageId = message.message_id;
-    const save = ['Сохранить медиа', 'сохранить медиа'].includes(message.text);
+
+    const save = ['Сохранить медиа', 'сохранить медиа'].some(c => message.text?.includes(c));
     const calc = ['Создать расчет', 'создать расчет'].some(c => message.text?.includes(c));
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
 
@@ -351,6 +352,7 @@ bot.on('message', async (message) => {
 
     // process manager messagescd part
     if (type === 'group' || type === 'supergroup') {
+
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
         const is_include_groups = group_ids_obj.hasOwnProperty(`-${groupId}`) || group_ids_obj.hasOwnProperty(`-100${groupId}`);
@@ -381,7 +383,7 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
-                await process_save({ reply_to_message, manager_message_id, id });
+                await process_save({ reply_to_message, manager_message_id, id, message });
             }
 
             if (reply_to_message && is_manager && calc) {
@@ -399,7 +401,8 @@ bot.on('message', async (message) => {
                             reply_to_message_id: manager_message_id,
                             parse_mode,
                             disable_web_page_preview: true
-                        });
+                        }
+                    );
                 }
             }
         }
@@ -413,7 +416,7 @@ bot.on('message', async (message) => {
 const process_save = async (data) => {
     let media_data;
     try {
-        const { reply_to_message, manager_message_id, id } = data;
+        const { reply_to_message, manager_message_id, id, message } = data;
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
             reply_to_message.video ? reply_to_message.video :
@@ -422,7 +425,19 @@ const process_save = async (data) => {
 
         if (media !== '') {
 
+            let folder = {};
+
             const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+
+            const hash_folder_id = message.text.match(/hash:(.*)/);
+
+            if (hash_folder_id) {
+                folder.id = message.text.match(/hash:(.*)/)[1];
+                folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
+            } else {
+                const { partner_folder } = await get_partner_name_and_manager(agent_id);
+                folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
+            }
 
             const selectedData = Object.entries(media_files).find(([k, v]) => {
                 const [c_chat_id] = k.split("_");
@@ -431,10 +446,6 @@ const process_save = async (data) => {
 
             media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
 
-            media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
-
-            const { partner_folder } = await get_partner_name_and_manager(agent_id);
-            const folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
             const fileUrls = await getTelegramFiles(media_data);
             const { success } = await save_media({ fileUrls, folder: folder.id });
 
