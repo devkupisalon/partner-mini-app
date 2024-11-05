@@ -487,23 +487,27 @@ async function executeTask() {
     setTimeout(executeTask, interval);
 }
 
+/**
+ * Asynchronous function to update the group ids object.
+ * @param {Object} params - Additional parameters (if any) for updating group ids.
+ */
 async function update_group_ids_obj(params) {
     group_ids_obj = await get_all_groups_ids();
     logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
 }
 
-// Определение времени, когда нужно запустить впервые intervalCallback (например, 02:00 ночи)
+// Define the time to initially run the interval callback (e.g., 02:00 AM)
 const now = new Date();
-const firstRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 2, 0, 0); // 02:00 ночи
+const firstRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 2, 0, 0); // 02:00 AM
 
-// Вычисление разницы между текущим временем и временем первого запуска
+// Calculate the delay between the current time and the first run time
 const delay = firstRun.getTime() - now.getTime();
 
-// Установка setTimeout для первого запуска
+// Set a setTimeout for the initial run
 setTimeout(async () => {
     await update_group_ids_obj();
 
-    // Установка setInterval для последующих запусков каждые 24 часа
+    // Set an interval for subsequent runs every 24 hours
     setInterval(update_group_ids_obj, 24 * 60 * 60 * 1000);
 }, delay);
 
