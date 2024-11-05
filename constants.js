@@ -1,7 +1,8 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+import { process_return_json } from './functions/process-json.js';
+import logger from './logs/logger.js';
 
 dotenv.config();
 
@@ -32,7 +33,10 @@ const constants = {
     AUTH: `${__dirname}/html/auth-web-app.html`,
     SETTINGS: `${__dirname}/html/settings-web-app.html`,
     PRE_CALC: `${__dirname}/html/pre-calculation.html`,
-    REGISTR: `${__dirname}/html/registration.html`
+    REGISTR: `${__dirname}/html/registration.html`,
+    send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
+    media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
+    managers_map_path: `${__dirname}/json/managers_ids.json`
 };
 
 const { MINI_APP_LINK, PDF_LINK } = constants;
@@ -102,13 +106,13 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-fs.readFile('managers_ids.json', 'utf8', (err, data) => {
-    if (err) {
-        console.error(err);
-        return;
+(async () => {
+    try {
+        managers_map = await process_return_json(constants.managers_map_path);
+        logger.info(`Data read and assigned to managers_map: ${managers_map}`);
+    } catch (err) {
+        logger.error(`Error in parse file.managers.json: ${err}`);
     }
-    const jsonData = JSON.parse(data);
-    managers_map = jsonData;
-});
+})();
 
 export { constants, __dirname, messages_map, invite_texts_map, managers_map };

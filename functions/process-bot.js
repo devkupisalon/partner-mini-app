@@ -4,13 +4,16 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
-import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_groups } from './sheets.js';
+import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_groups_ids } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
-import { parse_text, HQD_photo, checkAndDeleteOldData, prepare_calc } from './helper.js';
+import { parse_text, HQD_photo, prepare_calc } from './helper.js';
+import { deletePropertiesFromFile, append_json_file, process_read_json, process_return_json, process_write_json } from './process-json.js';
 
 const interval = 10000;
 
-let { GROUP_CHAT_ID, BOT_TOKEN } = constants;
+let { GROUP_CHAT_ID, BOT_TOKEN, } = constants;
+const { send_media_obj_path, media_files_obj_path } = constants;
+
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 const parse_mode = 'Markdown';
@@ -155,10 +158,11 @@ const p_success = async (m, reply_to_message_id, id) => {
 const send_media_group = async () => {
 
     const hash_id = uuidv4();
+    const media_obj = await process_return_json(send_media_obj_path);
 
     try {
-        if (Object.keys(send_media_obj).length > 0) {
-            const mediaObjValues = Object.values(send_media_obj);
+        if (Object.keys(media_obj).length > 0) {
+            const mediaObjValues = Object.values(media_obj);
 
             for (let i = 0; i < mediaObjValues.length; i++) {
                 const currentMediaObj = mediaObjValues[i];
@@ -180,7 +184,8 @@ const send_media_group = async () => {
                 if (message) {
                     p_success('media_group', messageId, id);
                     if (from_user) process_save_media_to_obj(message, user_id, hash_id);
-                    delete send_media_obj[Object.keys(send_media_obj)[i]];
+                    delete media_obj[Object.keys(media_obj)[i]];
+                    await process_write_json(send_media_obj_path, media_obj);
                 }
             }
         }
@@ -213,6 +218,8 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
         media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
         media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
     });
+
+    await append_json_file(media_files_obj_path, media_files[`${chat_id}_${timestamp}`]);
 
     logger.info(media_files);
 }
@@ -287,6 +294,7 @@ const process_message = async (data) => {
         }
 
         logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id])}`);
+        await append_json_file(send_media_obj_path, send_media_obj[id]);
         return;
     }
 
@@ -438,7 +446,9 @@ const process_save = async (data) => {
                 folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
             }
 
-            const selectedData = Object.entries(media_files).find(([k, v]) => {
+            const media_obj = await process_return_json(media_files_obj_path);
+
+            const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id] = k.split("_");
                 return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
             });
@@ -470,15 +480,11 @@ const process_save = async (data) => {
  * Sets a timeout to trigger the executeTask function again after a specified interval.
  */
 async function executeTask() {
-    if (Object.keys(send_media_obj).length > 0) {
+    const media_obj = await process_return_json(send_media_obj_path);
+    if (Object.keys(media_obj).length > 0) {
         await send_media_group();
     }
     setTimeout(executeTask, interval);
-}
-
-// Callback for checkAndDeleteOldData
-function intervalCallback() {
-    checkAndDeleteOldData(media_files);
 }
 
 async function update_group_ids_obj(params) {
@@ -500,8 +506,11 @@ setTimeout(async () => {
     setInterval(update_group_ids_obj, 24 * 60 * 60 * 1000);
 }, delay);
 
+/**
+ * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
+ */
 executeTask(); // Call every 10 cseconds
-setInterval(intervalCallback, 24 * 60 * 60 * 1000); // Call every 24 hours
+setInterval(deletePropertiesFromFile, 24 * 60 * 60 * 1000); // Call every 24 hours
 
 // Handle errors
 bot.on('polling_error', (error) => {

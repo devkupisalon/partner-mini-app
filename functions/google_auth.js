@@ -6,7 +6,7 @@ import { google } from 'googleapis';
  */
 const gauth = () => {
     const auth = new google.auth.GoogleAuth({
-        keyFile: 'credentials.json',
+        keyFile: './json/credentials.json',
         scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'],
     });
 

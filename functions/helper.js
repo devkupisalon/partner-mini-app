@@ -1,5 +1,3 @@
-import logger from '../logs/logger.js';
-
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
  * @param {Sheet} sheet - Лист, на котором производится поиск.
@@ -68,19 +66,4 @@ const parse_text = (replyText) => {
     return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
 }
 
-/**
- * Function to check and delete data if a week has passed
- */
-function checkAndDeleteOldData(media_files) {
-    const now = new Date();
-    for (const chatId in media_files) {
-        const expirationDate = new Date(media_files[chatId].expiration_date);
-        const weekInMilliseconds = 7 * 24 * 60 * 60 * 1000; // 1 week in milliseconds
-        if (now - expirationDate >= weekInMilliseconds) {
-            logger.info(`Delete media_data after 7 days from chat_id: ${chatId}`);
-            delete media_files[chatId];
-        }
-    }
-}
-
-export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, checkAndDeleteOldData, prepare_calc }
+export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, prepare_calc }
