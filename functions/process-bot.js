@@ -169,8 +169,6 @@ const send_media_group = async () => {
 
                 let { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
 
-                logger.info(currentMediaObj);
-
                 if (from_user) caption = `${caption.slice(0, -2)}:${hash_id}\``;
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {

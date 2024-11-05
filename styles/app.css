@@ -308,10 +308,16 @@ input[type="file"],
 
 #personal-data-id {
     font-size: 11px;
+    color: var(--tg-theme-hint-color);
 }
 
 input[type="checkbox"] {
     display: inline-block;
     height: 10px;
     width: 10px;
+}
+
+a {
+    color: var(--tg-theme-button-color);
+    text-decoration: none;
 }
