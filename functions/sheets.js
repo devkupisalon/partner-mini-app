@@ -247,6 +247,9 @@ const do_calc = async (params) => {
         if (linkResponse.ok) {
             const link = await linkResponse.text();
             logger.info(`Received link: ${link}`);
+            if (link) {
+                logger.info(`Pre-order created successfully`);
+            }
             return { link, folder_id: partner_folder };
         } else {
             logger.warn('Error getting the link:', linkResponse.status, linkResponse.statusText);
