@@ -105,8 +105,6 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-process_read_json('./json/managers_ids.json', managers_map);
-
 const process_read_json = (path, global_obj) => {
     fs.readFile(path, 'utf8', (err, data) => {
         if (err) {
@@ -117,5 +115,7 @@ const process_read_json = (path, global_obj) => {
         global_obj = jsonData;
     });
 }
+
+process_read_json('./json/managers_ids.json', managers_map);
 
 export { constants, __dirname, messages_map, invite_texts_map, managers_map };
