@@ -212,7 +212,6 @@ const do_calc = async (params) => {
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum, folderId } = params;
-    logger.info({partner, name, phone, brand, model, gosnum, folderId});
     let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, work_type, partner_name, , , , , , , , , , , , , , , , , date];
 
@@ -265,11 +264,8 @@ const do_calc = async (params) => {
  */
 const get_partner_name_and_manager = async (partner_id) => {
     try {
-        logger.info(partner_id);
         const values = await get_data(DB, DATASHEETNAME);
-        logger.info(values);
         const data = values.find(r => r[0] === partner_id);
-        logger.info(data);
         let [, partner_name, , , , , , , , , , partner_folder, , , , , work_type, percent, manager, calculate_id] = data;
         partner_folder = partner_folder.split('/').pop();
         return { partner_name, manager, work_type, percent, calculate_id, partner_folder };
