@@ -171,7 +171,7 @@ const send_media_group = async () => {
 
                 logger.info(currentMediaObj);
 
-                caption = `${caption.slice(0, -2)}:${hash_id}\``;
+                if (from_user) caption = `${caption.slice(0, -2)}:${hash_id}\``;
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
@@ -179,6 +179,7 @@ const send_media_group = async () => {
                     }
                     return { type, media };
                 });
+
                 let message = reply_to_message_id ?
                     await bot.sendMediaGroup(chat_id, mediaGroup, { reply_to_message_id }) :
                     await bot.sendMediaGroup(chat_id, mediaGroup);
