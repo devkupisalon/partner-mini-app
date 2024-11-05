@@ -489,7 +489,7 @@ async function executeTask() {
 
 async function update_group_ids_obj(params) {
     group_ids_obj = await get_all_groups_ids();
-    logger.info(`group_obj updated at:${new Date().toLocaleString()}`);
+    logger.info(`group_obj updated at:${new Date().toISOString()}`);
 }
 
 // Определение времени, когда нужно запустить впервые intervalCallback (например, 02:00 ночи)
