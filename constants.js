@@ -1,8 +1,7 @@
 import path from 'path';
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';
-import { process_return_json } from './functions/process-json.js';
-import logger from './logs/logger.js';
+import fs from 'fs';
 
 dotenv.config();
 
@@ -35,8 +34,8 @@ const constants = {
     PRE_CALC: `${__dirname}/html/pre-calculation.html`,
     REGISTR: `${__dirname}/html/registration.html`,
     send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
-    media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
-    managers_map_path: `${__dirname}/json/managers_ids.json`
+    media_files_obj_path: `${__dirname}/json/ media_files_obj.json`,
+    managers_map_obj_path: `${__dirname}/json/managers_ids.json`
 };
 
 const { MINI_APP_LINK, PDF_LINK } = constants;
@@ -106,13 +105,17 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-(async () => {
-    try {
-        managers_map = await process_return_json(constants.managers_map_path);
-        logger.info(`Data read and assigned to managers_map: ${managers_map}`);
-    } catch (err) {
-        logger.error(`Error in parse file.managers.json: ${err}`);
-    }
-})();
+process_read_json('./json/managers_ids.json', managers_map);
+
+const process_read_json = (path, global_obj) => {
+    fs.readFile(path, 'utf8', (err, data) => {
+        if (err) {
+            logger.error(`Error in reda_json_file: ${err}`);
+            return;
+        }
+        const jsonData = JSON.parse(data);
+        global_obj = jsonData;
+    });
+}
 
 export { constants, __dirname, messages_map, invite_texts_map, managers_map };
