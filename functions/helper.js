@@ -46,13 +46,24 @@ const HQD_photo = (photo) => photo.reduce((prev, current) =>
 );
 
 /**
+ * Prepares and extracts phone number, name, brand, model, and license plate number from the provided text.
+ * @param {string} text - The text containing phone number, name, brand, model, and license plate number.
+ * @returns {Object} - An object containing extracted phone number, name, brand, model, and license plate number.
+ */
+const prepare_calc = (text) => {
+    const parts = text.split(/\n+/);
+    const [, name, phone, brand, model, gosnum] = parts;
+    return { phone, name, brand, model, gosnum }
+}
+
+/**
  * Parses the reply text to extract message ID, agent name, agent ID, and chat ID.
  * 
  * @param {string} replyText The text from the reply message.
  * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
  */
 const parse_text = (replyText) => {
-    const hash = replyText.match(/hash:(.*)/)[1];
+    const hash = replyText.match(/hash:(.*)/) ?? [1];
     const [agent_id, agent_message_id, chat_id, agent_name, hash_id] = hash.split(':');
     return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
 }
@@ -72,4 +83,4 @@ function checkAndDeleteOldData(media_files) {
     }
 }
 
-export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, checkAndDeleteOldData }
+export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, checkAndDeleteOldData, prepare_calc }

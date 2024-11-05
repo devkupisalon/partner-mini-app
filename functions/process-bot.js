@@ -6,7 +6,7 @@ import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
 import { get_partners_data, get_partner_name_and_manager, do_calc } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
-import { parse_text, HQD_photo, checkAndDeleteOldData } from './helper.js';
+import { parse_text, HQD_photo, checkAndDeleteOldData, prepare_calc } from './helper.js';
 
 const interval = 10000;
 
@@ -385,7 +385,7 @@ bot.on('message', async (message) => {
             if (reply_to_message && is_manager && calc) {
 
                 const { phone, name, brand, model, gosnum } = prepare_calc(reply_to_message.text || reply_to_message.caption);
-                const hash_folder_id = message.text.match(/hash:(.*)/)[1];
+                const hash_folder_id = message.text.match(/hash:(.*)/) ?? [1];
                 logger.info({ phone, name, brand, model, gosnum, hash_folder_id });
                 const { agent_name } = parse_text(reply_to_message.text || reply_to_message.caption);
                 const { link, folder_id } = await do_calc({ partner: agent_name, phone, name, brand, model, gosnum });
@@ -397,17 +397,6 @@ bot.on('message', async (message) => {
         }
     }
 });
-
-/**
- * Prepares and extracts phone number, name, brand, model, and license plate number from the provided text.
- * @param {string} text - The text containing phone number, name, brand, model, and license plate number.
- * @returns {Object} - An object containing extracted phone number, name, brand, model, and license plate number.
- */
-const prepare_calc = (text) => {
-    const parts = text.split(/\n+/);
-    const [, name, phone, brand, model, gosnum] = parts;
-    return { phone, name, brand, model, gosnum }
-}
 
 /**
  * Processes and saves media content based on the provided data.
