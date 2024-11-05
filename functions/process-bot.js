@@ -192,7 +192,7 @@ const send_media_group = async () => {
             }
         }
     } catch (error) {
-        logger.error(`Error in send_media_group: ${error}`);
+        logger.error(`Error in send_media_group: ${error.stack}`);
     }
 }
 
