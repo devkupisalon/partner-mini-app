@@ -5,7 +5,7 @@ const label_personal_data = document.getElementById('personal-data-id');
 checkbox.addEventListener('change', function () {
     if (checkbox.checked) {
         tg.MainButton.show();
-        console.log(tg.ThemeParams)
+        console.log(tg.ThemeParams().button_color)
         label_personal_data.style.color = 'red';
     } else {
         tg.MainButton.hide();
