@@ -436,7 +436,7 @@ const process_save = async (data) => {
                     {
                         reply_to_message_id: manager_message_id,
                         parse_mode,
-                        link_preview_options: { is_disabled: true }
+                        disable_web_page_preview: true
                     });
             }
         }
