@@ -431,7 +431,13 @@ const process_save = async (data) => {
             const { success } = await save_media({ fileUrls, folder: folder.id });
 
             if (success) {
-                await bot.sendMessage(id, `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                await bot.sendMessage(id,
+                    `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``,
+                    {
+                        reply_to_message_id: manager_message_id,
+                        parse_mode,
+                        disable_web_page_preview: true
+                    });
             }
         }
     } catch (error) {
