@@ -212,6 +212,7 @@ const do_calc = async (params) => {
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum, folderId } = params;
+    logger.info({partner, name, phone, brand, model, gosnum, folderI});
     let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, work_type, partner_name, , , , , , , , , , , , , , , , , date];
 
@@ -263,7 +264,6 @@ const do_calc = async (params) => {
  * @returns {object|boolean} - Объект с данными партнера (partner_name, manager, work_type, percent, calculate_id, partner_folder) или false в случае ошибки
  */
 const get_partner_name_and_manager = async (partner_id) => {
-    logger.info(partner);
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const data = values.find(r => r[0] === partner_id);
