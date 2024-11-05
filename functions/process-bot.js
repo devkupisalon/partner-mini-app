@@ -388,10 +388,16 @@ bot.on('message', async (message) => {
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
                 const { agent_id } = parse_text(text_to_parse);
-                const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum });
+                const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum, folderId: hash_folder_id });
 
                 if (link) {
-                    await bot.sendMessage(id, `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                    await bot.sendMessage(id,
+                        `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``,
+                        {
+                            reply_to_message_id: manager_message_id,
+                            parse_mode,
+                            disable_web_page_preview: true
+                        });
                 }
             }
         }

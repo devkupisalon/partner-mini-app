@@ -215,7 +215,7 @@ const do_calc = async (params) => {
     let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, work_type, partner_name, , , , , , , , , , , , , , , , , date];
 
-    partner_folder = folderId ? folderId: partner_folder
+    partner_folder = folderId ? folderId : partner_folder;
 
     try {
         const values = await get_data(MONITORSPREADSHEET, MONITORSHEETNAME);
