@@ -34,7 +34,7 @@ const constants = {
     PRE_CALC: `${__dirname}/html/pre-calculation.html`,
     REGISTR: `${__dirname}/html/registration.html`,
     send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
-    media_files_obj_path: `${__dirname}/json/ media_files_obj.json`,
+    media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
     managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
     credentials_path: `${__dirname}/json/credentials.json`
 };
