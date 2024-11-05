@@ -212,7 +212,7 @@ const do_calc = async (params) => {
     const date = format(new Date(), 'dd.MM.yyyy');
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum, folderId } = params;
-    logger.info({partner, name, phone, brand, model, gosnum, folderI});
+    logger.info({partner, name, phone, brand, model, gosnum, folderId});
     let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
     const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, work_type, partner_name, , , , , , , , , , , , , , , , , date];
 
