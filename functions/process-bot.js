@@ -428,7 +428,6 @@ const process_save = async (data) => {
             let folder = {};
 
             const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
-
             const hash_folder_id = message.text.match(/hash:(.*)/);
 
             if (hash_folder_id) {
