@@ -213,7 +213,7 @@ const do_calc = async (params) => {
     const uid = uuidv4();
     const { partner, name, phone, brand, model, gosnum, folderId } = params;
     let { partner_name, manager, work_type, percent, calculate_id, partner_folder } = await get_partner_name_and_manager(partner);
-    const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, 'Партнер', partner_name, , , , , , , , , , , , , , , , , date];
+    const arr = [uid, , , , , , manager, brand, model, gosnum, , , , , , , name, phone, work_type, partner_name, , , , , , , , , , , , , , , , , date];
 
     partner_folder = folderId ? folderId: partner_folder
 
@@ -263,9 +263,11 @@ const do_calc = async (params) => {
  * @returns {object|boolean} - Объект с данными партнера (partner_name, manager, work_type, percent, calculate_id, partner_folder) или false в случае ошибки
  */
 const get_partner_name_and_manager = async (partner_id) => {
+    logger.info(partner);
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const data = values.find(r => r[0] === partner_id);
+        logger.info(data);
         let [, partner_name, , , , , , , , , , partner_folder, , , , , work_type, percent, manager, calculate_id] = data;
         partner_folder = partner_folder.split('/').pop();
         return { partner_name, manager, work_type, percent, calculate_id, partner_folder };
