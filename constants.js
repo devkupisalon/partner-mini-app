@@ -116,6 +116,6 @@ const process_read_json = (path, global_obj) => {
     });
 }
 
-process_read_json('./json/managers_ids.json', managers_map);
+process_read_json(constants.managers_map_obj_path, managers_map);
 
 export { constants, __dirname, messages_map, invite_texts_map, managers_map };
