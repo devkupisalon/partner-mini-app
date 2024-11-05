@@ -221,7 +221,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id) => {
         media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
     });
 
-    await append_json_file(media_files_obj_path, media_files[`${chat_id}_${timestamp}`]);
+    await append_json_file(media_files_obj_path, media_files);
 
     logger.info(media_files);
 }
@@ -296,7 +296,7 @@ const process_message = async (data) => {
         }
 
         logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id])}`);
-        await append_json_file(send_media_obj_path, send_media_obj[id]);
+        await append_json_file(send_media_obj_path, send_media_obj);
         return;
     }
 
