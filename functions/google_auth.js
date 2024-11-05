@@ -1,4 +1,7 @@
 import { google } from 'googleapis';
+import { constants } from '../constants.js';
+
+const { credentials_path } = constants;
 
 /**
  * Функция gauth возвращает объект с авторизацией Google и экземплярами объектов для работы с Google Sheets и Google Drive.
@@ -6,7 +9,7 @@ import { google } from 'googleapis';
  */
 const gauth = () => {
     const auth = new google.auth.GoogleAuth({
-        keyFile: './json/credentials.json',
+        keyFile: credentials_path,
         scopes: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/drive'],
     });
 

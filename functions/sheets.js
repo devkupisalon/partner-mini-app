@@ -435,7 +435,7 @@ const get_all_groups_ids = async () => {
         const values = await get_data(DB, DATASHEETNAME)
         if (values) {
             const group_id_col = getColumnNumberByValue(values[0], 'group_id');
-            const group_ids = values.slice(1).filter(r => r[group_id_col]);
+            const group_ids = values.slice(1).filter(r => r[group_id_col + 1]);
             const group_ids_obj = group_ids.reduce((acc, r, i) => {
                 const group_id = r[group_id_col];
                 acc[`-${group_id}`] = i;

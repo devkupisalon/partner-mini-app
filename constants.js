@@ -35,7 +35,8 @@ const constants = {
     REGISTR: `${__dirname}/html/registration.html`,
     send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
     media_files_obj_path: `${__dirname}/json/ media_files_obj.json`,
-    managers_map_obj_path: `${__dirname}/json/managers_ids.json`
+    managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
+    credentials_path: `${__dirname}/json/credentials.json`
 };
 
 const { MINI_APP_LINK, PDF_LINK } = constants;
