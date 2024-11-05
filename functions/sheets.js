@@ -430,6 +430,27 @@ const check_success_moderation = async () => {
     }
 }
 
+const get_all_groups_ids = async () => {
+    try {
+        const values = await get_data(DB, DATASHEETNAME)
+        if (values) {
+            const group_id_col = getColumnNumberByValue(values[0], 'group_id');
+            const group_ids = values.slice(1).filter(r => r[group_id_col]);
+            const group_ids_obj = group_ids.reduce((acc, r, i) => {
+                const group_id = r[group_id_col];
+                acc[`-${group_id}`] = i;
+                acc[`-100${group_id}`] = i;
+                return acc
+            }, {});
+
+            return group_ids_obj;
+        }
+
+    } catch (error) {
+        logger.info(`Error in get_all_groups: ${error}`);
+    }
+}
+
 export {
     update_data,
     get_values,
@@ -443,5 +464,6 @@ export {
     get_partners_data,
     check_moderation,
     check_success_moderation,
-    get_partner_name_and_manager
+    get_partner_name_and_manager,
+    get_all_groups_ids
 };

@@ -4,7 +4,7 @@ import bot from './init-bot.js';
 import logger from '../logs/logger.js';
 
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
-import { get_partners_data, get_partner_name_and_manager, do_calc } from './sheets.js';
+import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_groups } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, checkAndDeleteOldData, prepare_calc } from './helper.js';
 
@@ -18,6 +18,7 @@ const parse_mode = 'Markdown';
 /** GLOBAL OBJ */
 let send_media_obj = {};
 let media_files = {};
+let group_ids_obj = {};
 
 /** Logger message */
 const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -348,13 +349,14 @@ bot.on('message', async (message) => {
         });
     }
 
-    // process manager messages
+    // process manager messagescd part
     if (type === 'group' || type === 'supergroup') {
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
+        const is_include_groups = group_ids_obj.hasOwnProperty(`-${groupId}`) || group_ids_obj.hasOwnProperty(`-100${groupId}`);
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
-        if (String(groupId) === GROUP_CHAT_ID) {
+        if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
 
             if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
@@ -464,10 +466,29 @@ async function executeTask() {
     setTimeout(executeTask, interval);
 }
 
-// Callback forcheckAndDeleteOldData
+// Callback for checkAndDeleteOldData
 function intervalCallback() {
     checkAndDeleteOldData(media_files);
 }
+
+async function update_group_ids_obj(params) {
+    group_ids_obj = await get_all_groups_ids();
+}
+
+// Определение времени, когда нужно запустить впервые intervalCallback (например, 02:00 ночи)
+const now = new Date();
+const firstRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 2, 0, 0); // 02:00 ночи
+
+// Вычисление разницы между текущим временем и временем первого запуска
+const delay = firstRun.getTime() - now.getTime();
+
+// Установка setTimeout для первого запуска
+setTimeout(async () => {
+    await update_group_ids_obj();
+
+    // Установка setInterval для последующих запусков каждые 24 часа
+    setInterval(update_group_ids_obj, 24 * 60 * 60 * 1000);
+}, delay);
 
 executeTask(); // Call every 10 cseconds
 setInterval(intervalCallback, 24 * 60 * 60 * 1000); // Call every 24 hours
