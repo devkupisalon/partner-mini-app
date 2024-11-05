@@ -105,17 +105,15 @@ const invite_texts_map = {
 Присоединяйтесь к группе с менеджером по ссылке:`}
 };
 
-const process_read_json = (path, global_obj) => {
-    fs.readFile(path, 'utf8', (err, data) => {
-        if (err) {
-            logger.error(`Error in reda_json_file: ${err}`);
-            return;
-        }
-        const jsonData = JSON.parse(data);
-        global_obj = jsonData;
-    });
-}
 
-process_read_json(constants.managers_map_obj_path, managers_map);
+fs.readFile(constants.managers_map_obj_path, 'utf8', (err, data) => {
+    if (err) {
+        logger.error(`Error in reda_json_file: ${err}`);
+        return;
+    }
+    const jsonData = JSON.parse(data);
+    managers_map = jsonData;
+});
+
 
 export { constants, __dirname, messages_map, invite_texts_map, managers_map };
