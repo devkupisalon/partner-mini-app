@@ -1,7 +1,8 @@
 import { promises as fs } from 'fs';
 import logger from '../logs/logger.js';
+import { constants } from '../constants.js';
 
-const { send_media_obj_path, media_files_obj_path } = constants;
+const { media_files_obj_path } = constants;
 
 /**
  * Asynchronous function to read and parse JSON data from a file and assign it to a global object.
