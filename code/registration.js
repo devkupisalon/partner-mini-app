@@ -106,6 +106,8 @@ if (id && username) {
                     obj_data.append('name', `${org_name}_logo`);
                     obj_data.append('folder', folder);
 
+                    obj_data.forEach(m => console.log(m));
+
                     const logo_response = await fetch('/upload-logo', {
                         method: 'POST',
                         body: obj_data
