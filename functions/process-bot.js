@@ -356,7 +356,7 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID) {
 
-            if (reply_to_message && reply_to_message.from.is_bot && !save && calc) {
+            if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
                 logger.info(reply_to_message);
 
@@ -381,8 +381,6 @@ bot.on('message', async (message) => {
             if (reply_to_message && save && is_manager) {
                 await process_save({ reply_to_message, manager_message_id, id });
             }
-
-            logger.info(is_manager && calc);
 
             if (reply_to_message && is_manager && calc) {
 
