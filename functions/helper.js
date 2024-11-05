@@ -63,7 +63,7 @@ const prepare_calc = (text) => {
  * @returns {object} An object containing the extracted information: agent ID, message ID, agent name, chat ID.
  */
 const parse_text = (replyText) => {
-    const hash = replyText.match(/hash:(.*)/) ?? [1];
+    const hash = replyText.match(/hash:(.*)/)[1];
     const [agent_id, agent_message_id, chat_id, agent_name, hash_id] = hash.split(':');
     return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
 }
