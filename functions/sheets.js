@@ -265,7 +265,9 @@ const do_calc = async (params) => {
  */
 const get_partner_name_and_manager = async (partner_id) => {
     try {
+        logger.info(partner_id);
         const values = await get_data(DB, DATASHEETNAME);
+        logger.info(values);
         const data = values.find(r => r[0] === partner_id);
         logger.info(data);
         let [, partner_name, , , , , , , , , , partner_folder, , , , , work_type, percent, manager, calculate_id] = data;

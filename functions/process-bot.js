@@ -384,14 +384,14 @@ bot.on('message', async (message) => {
 
             if (reply_to_message && is_manager && calc) {
 
-                const { phone, name, brand, model, gosnum } = prepare_calc(reply_to_message.text || reply_to_message.caption);
-                const hash_folder_id = message.text.match(/hash:(.*)/) ?? [1];
-                logger.info({ phone, name, brand, model, gosnum, hash_folder_id });
-                const { agent_name } = parse_text(reply_to_message.text || reply_to_message.caption);
-                const { link, folder_id } = await do_calc({ partner: agent_name, phone, name, brand, model, gosnum });
+                const text_to_parse = reply_to_message.text || reply_to_message.caption;
+                const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
+                const hash_folder_id = message.text.match(/hash:(.*)/)[1];
+                const { agent_id } = parse_text(text_to_parse);
+                const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum });
 
                 if (link) {
-                    await bot.sendMessage(id, `Расчет создан, [открыть](${link})\n\n\`hash:${folder_id}\``, { reply_to_message_id: manager_message_id, parse_mode });
+                    await bot.sendMessage(id, `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``, { reply_to_message_id: manager_message_id, parse_mode });
                 }
             }
         }
