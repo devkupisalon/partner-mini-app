@@ -7,7 +7,7 @@ import cron from 'node-cron';
 
 const { DB, DATASHEETNAME } = constants;
 
-const task = cron.schedule('* * * * *', async () => {
+const task = cron.schedule('*/20 * * * * *', async () => {
     let success_send = false;
     try {
         const data_obj = await check_success_moderation();
