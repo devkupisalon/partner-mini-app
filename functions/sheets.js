@@ -449,7 +449,7 @@ const get_all_groups_ids = async () => {
         }
 
     } catch (error) {
-        logger.info(`Error in get_all_groups: ${error}`);
+        logger.info(`Error in get_all_groups: ${error.stack}`);
     }
 }
 
