@@ -483,25 +483,15 @@ async function executeTask() {
  * Asynchronous function to update the group ids object.
  * @param {Object} params - Additional parameters (if any) for updating group ids.
  */
-async function update_group_ids_obj(params) {
+async function update_group_ids_obj() {
     group_ids_obj = await get_all_groups_ids();
     logger.info(`Group ids object updated at: ${new Date().toISOString()}, group_obj: ${JSON.stringify(group_ids_obj)}`);
 }
 
-// Define the time to initially run the interval callback (e.g., 02:00 AM)
-const now = new Date();
-const firstRun = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 2, 0, 0); // 02:00 AM
-
-// Calculate the delay between the current time and the first run time
-const delay = firstRun.getTime() - now.getTime();
-
 // Set a setTimeout for the initial run
-setTimeout(async () => {
+setInterval(async () => {
     await update_group_ids_obj();
-
-    // Set an interval for subsequent runs every 24 hours
-    setInterval(update_group_ids_obj, 24 * 60 * 60 * 1000);
-}, delay);
+}, 60 * 1000); // Interval set to run the update every 60 seconds (1 minute)
 
 /**
  * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
