@@ -22,7 +22,7 @@ const parse_mode = 'Markdown';
 /** GLOBAL OBJ */
 let send_media_obj = {};
 let media_files = {};
-let group_ids_obj = {};
+// let group_ids_obj = {};
 
 /** Logger message */
 const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -343,7 +343,8 @@ bot.on('message', async (message) => {
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message, message_id } = message;
 
     const from_id = message.from.id;
-    // const messageId = message.message_id;
+    const group_ids_obj = await get_all_groups_ids();
+    const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
 
     const save = ['Сохранить медиа', 'сохранить медиа'].some(c => message.text?.includes(c));
     const calc = ['Создать расчет', 'создать расчет'].some(c => message.text?.includes(c));
@@ -353,11 +354,12 @@ bot.on('message', async (message) => {
     const is_bot = reply_to_message?.from.is_bot;
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
-
-    const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
+    const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
 
     let text = message.text || message.caption || '';
     let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message?.from.id : id;
+
+    logger.info(user_ID);
 
     if (contact) return;
 
@@ -395,9 +397,6 @@ bot.on('message', async (message) => {
     // process manager messages part
     if (is_group) {
 
-        // const groupId = message.chat.id;
-        // const manager_message_id = message.message_id;
-        const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
         logger.info(`Received message from ${type} with ID: ${id}`);
 
         if (is_managers_work_chat || is_include_groups) {
@@ -554,21 +553,21 @@ async function executeTask() {
  * Asynchronous function to update the group ids object.
  * @param {Object} params - Additional parameters (if any) for updating group ids.
  */
-async function update_group_ids_obj() {
-    group_ids_obj = await get_all_groups_ids();
-    logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
-}
+// async function update_group_ids_obj() {
+//     group_ids_obj = await get_all_groups_ids();
+//     logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
+// }
 
 // Set a setTimeout for the initial run
-setInterval(async () => {
-    await update_group_ids_obj();
-}, 10 * 1000); // Interval set to run the update every 60 seconds (1 minute)
+// setInterval(async () => {
+//     await update_group_ids_obj();
+// }, 10 * 1000); // Interval set to run the update every 60 seconds (1 minute)
 
 /**
  * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
  */
 executeTask(); // Call every 10 cseconds
-setInterval(deletePropertiesFromFile, 24 * 60 * 60 * 1000); // Call every 24 hours
+setInterval(deletePropertiesFromFile, 60 * 60 * 1000); // Call every hour
 
 // Handle errors
 bot.on('polling_error', (error) => {
