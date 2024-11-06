@@ -483,8 +483,10 @@ const process_save = async (data) => {
 
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id, hash] = k.split("_");
+                logger.info(hash);
                 if (v.hash_partner) {
                     const d = parse_text(v.hash_partner);
+                    logger.info(d.hash_id);
                     agent_id = d.agent_id;
                     agent_name = d.agent_name;
                     chat_id = d.chat_id;
