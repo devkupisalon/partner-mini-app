@@ -196,26 +196,46 @@ const send_media_group = async () => {
  */
 const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner) => {
     const timestamp = new Date().getTime();
-    if (!media_files[`${chat_id}_${timestamp}`]) {
-        media_files[`${chat_id}_${timestamp}`] = {
-            data: [],
-            message_ids: [],
-            experation_date: new Date().toISOString(),
-            hash_id,
-            hash_partner
-        };
-    }
 
-    logger.info(message);
+    if (!hash_partner) {
 
-    Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
-        logger.info(message_id);
+        if (!media_files[`${chat_id}_${timestamp}`]) {
+            media_files[`${chat_id}_${timestamp}`] = {
+                data: [],
+                message_ids: [],
+                experation_date: new Date().toISOString(),
+                hash_id
+            };
+        }
+
+        Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
+            logger.info(message_id);
+            const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
+            const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
+
+            media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
+            media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
+        });
+
+    } else {
+        const { message_id, photo, video, voice, document, media_group_id } = message;
+        if (!media_files[`${chat_id}_${media_group_id}`]) {
+            media_files[`${chat_id}_${media_group_id}`] = {
+                data: [],
+                message_ids: [],
+                experation_date: new Date().toISOString(),
+                hash_id
+            };
+        }
+
         const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
         const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
 
-        media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
-        media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
-    });
+        media_files[`${chat_id}_${media_group_id}`].data.push({ media, mime_type });
+        media_files[`${chat_id}_${media_group_id}`].message_ids.push(message_id);
+    }
+
+    // logger.info(message);
 
     await append_json_file(media_files_obj_path, media_files);
 
