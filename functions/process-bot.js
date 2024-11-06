@@ -357,7 +357,7 @@ bot.on('message', async (message) => {
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
 
     let text = message.text || message.caption || '';
-    let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message?.from.id : id;
+    let user_ID = is_group ? from_id : reply_to_message && is_manager && !save && !calc ? reply_to_message?.from.id : id;
 
     logger.info(user_ID);
 
