@@ -533,7 +533,6 @@ async function executeTask() {
 async function update_group_ids_obj() {
     group_ids_obj = await get_all_groups_ids();
     logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
-    logger.info(group_ids_obj);
 }
 
 // Set a setTimeout for the initial run
