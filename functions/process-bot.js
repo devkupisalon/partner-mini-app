@@ -356,12 +356,8 @@ bot.on('message', async (message) => {
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
 
-    logger.info(is_partner_group);
-
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
-
-    logger.info(user_ID);
 
     if (contact) return;
 
