@@ -160,7 +160,7 @@ const send_media_group = async () => {
             for (let i = 0; i < mediaObjValues.length; i++) {
                 const currentMediaObj = mediaObjValues[i];
 
-                let { caption, mediaFiles, messageId, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
+                let { caption, mediaFiles, message_id, id, chat_id, reply_to_message_id, from_user, user_id } = currentMediaObj;
 
                 if (from_user) caption = `${caption.slice(0, -2)}:${hash_id}\``;
 
@@ -176,7 +176,7 @@ const send_media_group = async () => {
                     await bot.sendMediaGroup(chat_id, mediaGroup);
 
                 if (message) {
-                    p_success('media_group', messageId, id);
+                    p_success('media_group', message_id, id);
                     if (from_user) process_save_media_to_obj(message, user_id, hash_id);
                     delete media_obj[Object.keys(media_obj)[i]];
                     await process_write_json(send_media_obj_path, media_obj);
@@ -238,7 +238,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
 
     await append_json_file(media_files_obj_path, media_files);
 
-    logger.info(media_files);
+    // logger.info(media_files);
 }
 
 /**
@@ -269,9 +269,9 @@ const getTelegramFiles = async (files) => {
  * @param {object} data The data object containing message details.
  */
 const process_message = async (data) => {
-    let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
+    let { text, partner_name, partner_id, message_id, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
-    const hash = `hash:${partner_id}:${messageId}:${id}:${partner_name}\n`;
+    const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
 
     from_user ?
         text = `Агент *${partner_name}*:\n\n${text}\n\n\`${hash}\`` :
@@ -284,7 +284,7 @@ const process_message = async (data) => {
 
     if (media_group_id) {
 
-        if (!send_media_obj[id]) send_media_obj[id] = { messageId, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
+        if (!send_media_obj[id]) send_media_obj[id] = { message_id, media_group_id, id, mediaFiles: [], chat_id: CHAT_ID };
         if (message.caption) {
             send_media_obj[id].caption = from_user ? `Агент *${partner_name}*:\n\n${message.caption}\n\n\`${hash}\`` : text;
         }
@@ -316,15 +316,15 @@ const process_message = async (data) => {
 
     try {
 
-        const { message_id } = await (
+        const data = await (
             type_m === 'photo' ? bot.sendPhoto(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                 type_m === 'video' ? bot.sendVideo(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                     type_m === 'voice' ? bot.sendVoice(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                         type_m === 'document' ? bot.sendDocument(CHAT_ID, media, from_user ? { caption: text, parse_mode } : { reply_to_message_id, caption: text, parse_mode }) :
                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
-        if (message_id) {
-            p_success(type_m, messageId, id);
+        if (data.essage_id) {
+            p_success(type_m, message_id, id);
         }
 
     } catch (error) {
@@ -340,14 +340,21 @@ bot.on('message', async (message) => {
 
     // logger.info(message);
 
-    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
+    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message, message_id } = message;
+
     const from_id = message.from.id;
-    const messageId = message.message_id;
+    // const messageId = message.message_id;
 
     const save = ['Сохранить медиа', 'сохранить медиа'].some(c => message.text?.includes(c));
     const calc = ['Создать расчет', 'создать расчет'].some(c => message.text?.includes(c));
+
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
     const is_group = ['group', 'supergroup'].includes(type);
+    const is_bot = reply_to_message.from.is_bot;
+    const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
+    const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message.chat.id);
+
+    const text_to_parse = reply_to_message.text || reply_to_message.caption;
 
     let text = message.text || message.caption || '';
     let user_ID = is_group ? from_id : id;
@@ -363,7 +370,7 @@ bot.on('message', async (message) => {
             text,
             partner_name,
             partner_id,
-            messageId,
+            message_id,
             id,
             photo,
             video,
@@ -378,33 +385,30 @@ bot.on('message', async (message) => {
     // process save media to json if is media send from partner to group
     if (is_group && partner_id && partner_name && media_group_id) {
         const hash_id = uuidv4();
-        const hash_partner = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}:${media_group_id}\n`;
+        const hash_partner = `hash:${partner_id}:${message_id}:${user_ID}:${partner_name}:${media_group_id}\n`;
         await process_save_media_to_obj(message, user_ID, hash_id, hash_partner);
         return;
     }
 
-    // process manager messagescd part
+    // process manager messages part
     if (is_group) {
 
-        const groupId = message.chat.id;
-        const manager_message_id = message.message_id;
-        const is_include_groups = group_ids_obj.hasOwnProperty(`${groupId}`) || group_ids_obj.hasOwnProperty(`${groupId}`);
-        logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
-        logger.info(is_include_groups);
-        logger.info(group_ids_obj);
-        logger.info(groupId);
+        // const groupId = message.chat.id;
+        // const manager_message_id = message.message_id;
+        const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
+        logger.info(`Received message from ${type} with ID: ${id}`);
 
-        if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
+        if (is_managers_work_chat || is_include_groups) {
 
-            logger.info(reply_to_message);
+            // logger.info(reply_to_message);
 
-            if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
+            if (reply_to_message && is_bot && !save && !calc) {
 
-                const { agent_message_id, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
+                const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
                 await process_message({
                     text: message.text || message.caption || '',
-                    messageId: manager_message_id,
+                    message_id,
                     id,
                     photo,
                     video,
@@ -419,23 +423,25 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
-                logger.info('test');
-                await process_save({ reply_to_message, manager_message_id, id, message });
+                await process_save({ reply_to_message, message_id, id, message });
             }
 
             if (reply_to_message && is_manager && calc) {
 
-                const text_to_parse = reply_to_message.text || reply_to_message.caption;
+                let agent_id;
+
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
-                const { agent_id } = parse_text(text_to_parse);
+
+                agent_id = is_partner_group ? await get_partners_data(reply_to_message.from.id).partner_id : await parse_text(text_to_parse).agent_id;
+                // const { agent_id } = parse_text(text_to_parse);
                 const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum, folderId: hash_folder_id });
 
                 if (link) {
                     await bot.sendMessage(id,
                         `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``,
                         {
-                            reply_to_message_id: manager_message_id,
+                            reply_to_message_id: message_id,
                             parse_mode,
                             disable_web_page_preview: true
                         }
@@ -456,7 +462,7 @@ const process_save = async (data) => {
 
     try {
 
-        const { reply_to_message, manager_message_id, id, message } = data;
+        const { reply_to_message, message_id, id, message } = data;
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
             reply_to_message.video ? reply_to_message.video :
@@ -483,10 +489,8 @@ const process_save = async (data) => {
 
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id, hash] = k.split("_");
-                logger.info(hash);
                 if (v.hash_partner) {
                     const d = parse_text(v.hash_partner);
-                    logger.info(d.hash_id);
                     agent_id = d.agent_id;
                     agent_name = d.agent_name;
                     chat_id = d.chat_id;
@@ -495,8 +499,6 @@ const process_save = async (data) => {
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
             });
-
-            logger.info(selectedData);
 
             let folder = {};
 
@@ -519,7 +521,7 @@ const process_save = async (data) => {
                 await bot.sendMessage(id,
                     `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``,
                     {
-                        reply_to_message_id: manager_message_id,
+                        reply_to_message_id: message_id,
                         parse_mode,
                         disable_web_page_preview: true
                     });

@@ -79,9 +79,9 @@ const deletePropertiesFromFile = async () => {
         // Write the updated data back to the file
         await fs.writeFile(filePath, newData, 'utf8');
 
-        logger.info('Specified properties successfully removed from the JSON file.');
+        logger.info('Specified properties successfully removed from JSON file.');
     } catch (err) {
-        logger.error(`Error while deleting properties from the JSON file: ${err}`);
+        logger.error(`Error while deleting properties from JSON file: ${err}`);
     }
 };
 
@@ -106,9 +106,9 @@ const append_json_file = async (filePath, newProperty) => {
         // Write the updated data back to the file
         await fs.writeFile(filePath, newData, 'utf8');
 
-        logger.info('New property successfully added to the JSON file.');
+        logger.info('New property successfully added to JSON file.');
     } catch (err) {
-        logger.error(`Error while adding a new property to the JSON file: ${err}`);
+        logger.error(`Error while adding a new property to JSON file: ${err}`);
     }
 }
 
