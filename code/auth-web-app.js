@@ -10,11 +10,6 @@ const fields = {
   phone: '#partner-phone'
 };
 
-const setCheckmark = s => {
-  s.style.pointerEvents = "none";
-  s.style.opacity = "0.5";
-};
-
 const fill_tg = document.querySelector('.fill-tg');
 const n = document.getElementById('partner-name');
 const ph = document.getElementById('partner-phone');
