@@ -8,6 +8,7 @@ import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_group
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, prepare_calc } from './helper.js';
 import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
+import { decryptString, encryptString } from './validate.json'
 
 const interval = 10000;
 
@@ -314,10 +315,6 @@ const process_message = async (data) => {
  */
 bot.on('message', async (message) => {
 
-    let data;
-    // let partner_id;
-    // let partner_name;
-
     logger.info(message);
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
@@ -330,14 +327,12 @@ bot.on('message', async (message) => {
     const is_group = ['group', 'supergroup'].includes(type);
 
     let text = message.text || message.caption || '';
+    let user_ID = is_group ? from_id : id;
 
     if (contact) return;
 
-    // if (!is_group) {
-    const { partner_id, partner_name } = await get_partners_data(id);
-    // partner_id = data.partner_id;
-    // partner_name = data.partner_name;
-    // }
+
+    const { partner_name, partner_id } = await get_partners_data(user_ID);
 
     // process agent messages
     if (partner_name && partner_id) {
@@ -356,6 +351,13 @@ bot.on('message', async (message) => {
             message,
             from_user: true
         });
+    }
+
+    // process save media to json if is media send from partner to group
+    if (is_group && partner_id && partner_name && media_group_id) {
+        const hash_string = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}\n`;
+        const hash_id = encryptString(hash_string, BOT_TOKEN);
+        await process_save_media_to_obj(message, user_ID, hash_id);
     }
 
     // process manager messagescd part
@@ -423,8 +425,11 @@ bot.on('message', async (message) => {
  * @param {Object} data - Data containing information about the media content.
  */
 const process_save = async (data) => {
+
     let media_data;
+
     try {
+
         const { reply_to_message, manager_message_id, id, message } = data;
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
@@ -434,20 +439,25 @@ const process_save = async (data) => {
 
         if (media !== '') {
 
+            const media_obj = await process_return_json(media_files_obj_path);
+            const hash_partner = Object.entries(media_obj).find(([k, v]) => {
+                const [c_chat_id] = k.split("_");
+
+                return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
+            });
+
             let folder = {};
 
             const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
             const hash_folder_id = message.text.match(/hash:(.*)/);
 
             if (hash_folder_id) {
-                folder.id = message.text.match(/hash:(.*)/)[1];
+                folder.id = hash_folder_id[1];
                 folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
             } else {
                 const { partner_folder } = await get_partner_name_and_manager(agent_id);
                 folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
             }
-
-            const media_obj = await process_return_json(media_files_obj_path);
 
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id] = k.split("_");
@@ -468,6 +478,8 @@ const process_save = async (data) => {
                         disable_web_page_preview: true
                     });
             }
+        } else {
+            logger.info(`There are no media to save`);
         }
     } catch (error) {
         logger.error(`Error in process_save: ${error}`);

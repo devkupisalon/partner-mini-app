@@ -28,4 +28,20 @@ const verifyTelegramWebAppData = (telegramInitData, botToken) => {
   return _hash === hash;
 };
 
-export { verifyTelegramWebAppData }
+// Function to encrypt the string using the bot token
+const encryptString = (stringToEncrypt, bot_token) => {
+  const cipher = crypto.createCipher('aes-256-cbc', bot_token);
+  let encryptedString = cipher.update(stringToEncrypt, 'utf8', 'hex');
+  encryptedString += cipher.final('hex');
+  return encryptedString;
+};
+
+// Function to decrypt the encrypted string using the bot token
+const decryptString = (encryptedString, bot_token) => {
+  const decipher = crypto.createDecipher('aes-256-cbc', bot_token);
+  let decryptedString = decipher.update(encryptedString, 'hex', 'utf8');
+  decryptedString += decipher.final('utf8');
+  return decryptedString;
+};
+
+export { verifyTelegramWebAppData, encryptString, decryptString }
