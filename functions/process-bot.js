@@ -391,6 +391,8 @@ bot.on('message', async (message) => {
         const is_include_groups = group_ids_obj.hasOwnProperty(`${groupId}`) || group_ids_obj.hasOwnProperty(`${groupId}`);
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
         logger.info(is_include_groups);
+        logger.info(group_ids_obj);
+        logger.info(groupId);
 
         if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
 
