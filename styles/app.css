@@ -305,7 +305,6 @@ input[type="file"],
     display: none;
 }
 
-
 #personal-data-id {
     font-size: 11px;
     color: var(--tg-theme-hint-color);
