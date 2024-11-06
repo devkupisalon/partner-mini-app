@@ -8,7 +8,7 @@ import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_group
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, prepare_calc } from './helper.js';
 import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
-import { decryptString, encryptString } from './validate.json';
+// import { decryptString, encryptString } from './validate.json';
 
 const interval = 10000;
 
@@ -194,14 +194,15 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  * @param {string} hash_id - hash.
  */
-const process_save_media_to_obj = async (message, chat_id, hash_id) => {
+const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner) => {
     const timestamp = new Date().getTime();
     if (!media_files[`${chat_id}_${timestamp}`]) {
         media_files[`${chat_id}_${timestamp}`] = {
             data: [],
             message_ids: [],
             experation_date: new Date().toISOString(),
-            hash_id
+            hash_id,
+            hash_partner
         };
     }
 
@@ -355,9 +356,10 @@ bot.on('message', async (message) => {
 
     // process save media to json if is media send from partner to group
     if (is_group && partner_id && partner_name && media_group_id) {
-        const hash_string = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}\n`;
-        const hash_id = encryptString(hash_string, BOT_TOKEN);
-        await process_save_media_to_obj(message, user_ID, hash_id);
+        const hash_id = uuidv4();
+        const hash_partner = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}\n`;
+        // const hash_id = encryptString(hash_string, BOT_TOKEN);
+        await process_save_media_to_obj(message, user_ID, hash_id, hash_partner);
     }
 
     // process manager messagescd part
@@ -442,7 +444,7 @@ const process_save = async (data) => {
             const media_obj = await process_return_json(media_files_obj_path);
             const hash_partner = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id] = k.split("_");
-
+                const { agent_id, agent_name, chat_id, hash_id } = parse_text(v.hash_partner);
                 return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
             });
 
