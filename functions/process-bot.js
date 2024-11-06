@@ -352,7 +352,7 @@ bot.on('message', async (message) => {
     const is_group = ['group', 'supergroup'].includes(type);
     const is_bot = reply_to_message?.from.is_bot;
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
-    const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message.chat.id);
+    const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
 
     const text_to_parse = reply_to_message.text || reply_to_message.caption;
 
