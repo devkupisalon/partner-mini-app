@@ -315,8 +315,8 @@ const process_message = async (data) => {
 bot.on('message', async (message) => {
 
     let data;
-    let partner_id;
-    let partner_name;
+    // let partner_id;
+    // let partner_name;
 
     logger.info(message);
 
@@ -333,11 +333,11 @@ bot.on('message', async (message) => {
 
     if (contact) return;
 
-    if (!is_group) {
-        data = await get_partners_data(id);
-        partner_id = data.partner_id;
-        partner_name = data.partner_name;
-    }
+    // if (!is_group) {
+    const { partner_id, partner_name } = await get_partners_data(id);
+    // partner_id = data.partner_id;
+    // partner_name = data.partner_name;
+    // }
 
     // process agent messages
     if (partner_name && partner_id) {
