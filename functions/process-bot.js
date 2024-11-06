@@ -382,8 +382,9 @@ bot.on('message', async (message) => {
         });
     }
 
-    // process save media to json if is media send from partner to group
+    // process save media to json if is media send from partner in group
     if (is_group && partner_id && partner_name && media_group_id) {
+
         const hash_id = uuidv4();
         const hash_partner = `hash:${partner_id}:${message_id}:${user_ID}:${partner_name}:${media_group_id}\n`;
         await process_save_media_to_obj(message, user_ID, hash_id, hash_partner);
@@ -420,6 +421,7 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
+                
                 await process_save({ reply_to_message, message_id, id, message });
             }
 
