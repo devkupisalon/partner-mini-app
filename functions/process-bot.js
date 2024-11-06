@@ -362,6 +362,7 @@ bot.on('message', async (message) => {
         const hash_partner = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}\n`;
         // const hash_id = encryptString(hash_string, BOT_TOKEN);
         await process_save_media_to_obj(message, user_ID, hash_id, hash_partner);
+        return;
     }
 
     // process manager messagescd part
