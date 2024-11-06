@@ -538,7 +538,7 @@ async function update_group_ids_obj() {
 // Set a setTimeout for the initial run
 setInterval(async () => {
     await update_group_ids_obj();
-}, 20 * 1000); // Interval set to run the update every 60 seconds (1 minute)
+}, 10 * 1000); // Interval set to run the update every 60 seconds (1 minute)
 
 /**
  * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
