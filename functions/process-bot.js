@@ -368,8 +368,6 @@ bot.on('message', async (message) => {
     // process agent messages
     if (partner_name && partner_id && !is_group) {
 
-        logger.info('test');
-
         await process_message({
             text,
             partner_name,
