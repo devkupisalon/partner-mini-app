@@ -78,13 +78,14 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.message}`);
                         CHAT_ID = CHAT_ID.replace('-', '-100');
-                        success_send = false;
+                        await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                        // success_send = false;
                     }
 
-                    if (!success_send) {
-                        await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
-                        success_send = true;
-                    }
+                    // if (!success_send) {
+                    //     await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                    //     success_send = true;
+                    // }
 
                     await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map, name);
                     is_invite_send = true;
