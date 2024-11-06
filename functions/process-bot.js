@@ -357,7 +357,7 @@ bot.on('message', async (message) => {
     const text_to_parse = reply_to_message.text || reply_to_message.caption;
 
     let text = message.text || message.caption || '';
-    let user_ID = is_group ? from_id : id;
+    let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message.from.id : id;
 
     if (contact) return;
 
@@ -433,7 +433,7 @@ bot.on('message', async (message) => {
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
 
-                agent_id = is_partner_group ? await get_partners_data(reply_to_message.from.id).partner_id : await parse_text(text_to_parse).agent_id;
+                agent_id = is_partner_group ? partner_id : await parse_text(text_to_parse).agent_id;
                 // const { agent_id } = parse_text(text_to_parse);
                 const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum, folderId: hash_folder_id });
 
