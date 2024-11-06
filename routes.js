@@ -59,17 +59,17 @@ const apiRoutes = [
 ];
 
 const loggerMessages = [
-    { name: verifyTelegramWebAppData, text: `An error occurred in ${verifyTelegramWebAppData}:` },
-    { name: check_subscription_and_authorization, text: `An error occurred in ${check_subscription_and_authorization}:` },
-    { name: do_calc, text: `An error occurred in ${do_calc}:` },
-    { name: get_cars, text: `An error occurred in ${get_cars}:` },
-    { name: save, text: `An error occurred in ${save}:` },
-    { name: save_new_partner, text: `An error occurred in ${save_new_partner}:` },
-    { name: save_logo, text: `An error occurred in ${save_logo}:` },
-    { name: save_settings, text: `An error occurred in ${save_settings}:` },
-    { name: get_settings, text: `An error occurred in ${get_settings}:` },
-    { name: get_values, text: `An error occurred in ${get_values}:` },
-    { name: check_moderation, text: `An error occurred in ${check_moderation}:` }
+    { name: verifyTelegramWebAppData.name, text: `An error occurred in ${verifyTelegramWebAppData.name}:` },
+    { name: check_subscription_and_authorization.name, text: `An error occurred in ${check_subscription_and_authorization.name}:` },
+    { name: do_calc.anme, text: `An error occurred in ${do_calc.name}:` },
+    { name: get_cars.name, text: `An error occurred in ${get_cars.name}:` },
+    { name: save.name, text: `An error occurred in ${save.name}:` },
+    { name: save_new_partner.name, text: `An error occurred in ${save_new_partner.name}:` },
+    { name: save_logo.name, text: `An error occurred in ${save_logo.name}:` },
+    { name: save_settings.name, text: `An error occurred in ${save_settings.name}:` },
+    { name: get_settings.name, text: `An error occurred in ${get_settings.name}:` },
+    { name: get_values.name, text: `An error occurred in ${get_values.name}:` },
+    { name: check_moderation.name, text: `An error occurred in ${check_moderation.name}:` }
 ];
 
 routes.forEach(route => {

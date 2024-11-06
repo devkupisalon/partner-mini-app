@@ -49,7 +49,7 @@ if (id && username) {
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/savedata?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}`);
+        const response = await fetch(`/save-data?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}`);
 
         const { success } = await response.json();
         if (success) {
