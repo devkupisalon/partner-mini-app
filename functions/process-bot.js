@@ -351,7 +351,7 @@ bot.on('message', async (message) => {
     }
 
     // process manager messagescd part
-    if (/* type === 'group' || type === 'supergroup'  */['group', 'supergroup'].includes(type)) {
+    if (['group', 'supergroup'].includes(type)) {
 
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
@@ -359,6 +359,8 @@ bot.on('message', async (message) => {
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
         if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
+
+            logger.info(groupId);
 
             if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
