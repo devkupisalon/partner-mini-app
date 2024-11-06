@@ -393,9 +393,9 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
 
-            if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
+            logger.info(reply_to_message);
 
-                logger.info(reply_to_message);
+            if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
                 const { agent_message_id, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
