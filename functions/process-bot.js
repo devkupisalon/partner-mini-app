@@ -8,7 +8,7 @@ import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_group
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, prepare_calc } from './helper.js';
 import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
-import { decryptString, encryptString } from './validate.json'
+import { decryptString, encryptString } from './validate.json';
 
 const interval = 10000;
 
