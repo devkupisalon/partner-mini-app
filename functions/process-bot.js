@@ -350,14 +350,14 @@ bot.on('message', async (message) => {
 
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
     const is_group = ['group', 'supergroup'].includes(type);
-    const is_bot = reply_to_message.from.is_bot;
+    const is_bot = reply_to_message?.from.is_bot;
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message.chat.id);
 
     const text_to_parse = reply_to_message.text || reply_to_message.caption;
 
     let text = message.text || message.caption || '';
-    let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message.from.id : id;
+    let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message?.from.id : id;
 
     if (contact) return;
 
