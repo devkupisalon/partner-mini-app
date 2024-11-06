@@ -363,7 +363,7 @@ bot.on('message', async (message) => {
 
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
-        const is_include_groups = group_ids_obj.hasOwnProperty(`-${groupId}`) || group_ids_obj.hasOwnProperty(`-100${groupId}`);
+        const is_include_groups = group_ids_obj.hasOwnProperty(`${groupId}`) || group_ids_obj.hasOwnProperty(`${groupId}`);
         logger.info(`Received a message from ${type} chat with ID: ${groupId}`);
 
         if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
