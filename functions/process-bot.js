@@ -76,8 +76,6 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.message}`);
-                        // CHAT_ID = CHAT_ID.replace('-', '-100');
-                        // await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     }
 
                     await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map, name);
@@ -487,7 +485,7 @@ async function executeTask() {
  */
 async function update_group_ids_obj(params) {
     group_ids_obj = await get_all_groups_ids();
-    logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
+    logger.info(`Group ids object updated at: ${new Date().toISOString()}, group_obj: ${JSON.stringify(group_ids_obj)}`);
 }
 
 // Define the time to initially run the interval callback (e.g., 02:00 AM)
