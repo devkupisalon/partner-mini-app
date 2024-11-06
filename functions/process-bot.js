@@ -335,11 +335,10 @@ bot.on('message', async (message) => {
 
     if (contact) return;
 
-
     const { partner_name, partner_id } = await get_partners_data(user_ID);
 
     // process agent messages
-    if (partner_name && partner_id) {
+    if (partner_name && partner_id && !is_group) {
 
         await process_message({
             text,
