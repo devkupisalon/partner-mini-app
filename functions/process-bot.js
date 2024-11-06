@@ -465,16 +465,37 @@ const process_save = async (data) => {
 
         if (media !== '') {
 
+            let agent_id;
+            let agent_name;
+            let chat_id;
+            let hash_id;
+
+            if (reply_to_message.chat.id === GROUP_CHAT_ID) {
+
+                const d = parse_text(reply_to_message.text || reply_to_message.caption);
+                agent_id = d.agent_id;
+                agent_name = d.agent_name;
+                chat_id = d.chat_id;
+                hash_id = d.hash_id;
+            }
+
             const media_obj = await process_return_json(media_files_obj_path);
-            const hash_partner = Object.entries(media_obj).find(([k, v]) => {
-                const [c_chat_id] = k.split("_");
-                const { agent_id, agent_name, chat_id, hash_id } = parse_text(v.hash_partner);
-                return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
+
+            const selectedData = Object.entries(media_obj).find(([k, v]) => {
+                const [c_chat_id, hash] = k.split("_");
+                if (v.hash_partner) {
+                    const d = parse_text(v.hash_partner);
+                    agent_id = d.agent_id;
+                    agent_name = d.agent_name;
+                    chat_id = d.chat_id;
+                    return c_chat_id === d.chat_id && hash === d.hash_id && v.message_ids.includes(d.agent_message_id) && v.data && v.data.length > 0;
+                } else {
+                    return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
+                }
             });
 
             let folder = {};
 
-            const { agent_id, agent_name, chat_id, hash_id } = parse_text(reply_to_message.text || reply_to_message.caption);
             const hash_folder_id = message.text.match(/hash:(.*)/);
 
             if (hash_folder_id) {
@@ -484,11 +505,6 @@ const process_save = async (data) => {
                 const { partner_folder } = await get_partner_name_and_manager(agent_id);
                 folder = await create_folder(`${hash_id || uuidv4()}-${agent_name}`, partner_folder);
             }
-
-            const selectedData = Object.entries(media_obj).find(([k, v]) => {
-                const [c_chat_id] = k.split("_");
-                return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
-            });
 
             media_data = selectedData ? selectedData[1].data : [{ media: media.file_id, mime_type: !media.mime_type ? 'image/png' : media.mime_type }];
 
