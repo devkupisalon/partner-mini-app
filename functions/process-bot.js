@@ -391,6 +391,7 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
+                logger.info('test');
                 await process_save({ reply_to_message, manager_message_id, id, message });
             }
 
