@@ -351,7 +351,7 @@ bot.on('message', async (message) => {
     }
 
     // process manager messagescd part
-    if (type === 'group' || type === 'supergroup') {
+    if (/* type === 'group' || type === 'supergroup'  */['group', 'supergroup'].includes(type)) {
 
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
@@ -485,7 +485,7 @@ async function executeTask() {
  */
 async function update_group_ids_obj() {
     group_ids_obj = await get_all_groups_ids();
-    logger.info(`Group ids object updated at: ${new Date().toISOString()}, group_obj: ${JSON.stringify(group_ids_obj)}`);
+    logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
 }
 
 // Set a setTimeout for the initial run
