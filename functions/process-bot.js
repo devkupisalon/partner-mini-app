@@ -68,7 +68,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                 const messageType = link ? 'link' : 'text';
                 const { message_text_option, reply_markup } = messageOptions[messageType];
-                CHAT_ID = group_id ? `-${group_id}` : chat_id;
+                CHAT_ID = group_id ? `-100${group_id}` : chat_id;
 
                 if (type === 'Партнер' && !is_invite_send) {
 
@@ -76,8 +76,8 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.message}`);
-                        CHAT_ID = CHAT_ID.replace('-', '-100');
-                        await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                        // CHAT_ID = CHAT_ID.replace('-', '-100');
+                        // await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     }
 
                     await send_group_invite_link(CHAT_ID, { partner: chat_id, manager: manager_chat_id }, invite_texts_map, name);
@@ -120,10 +120,8 @@ const send_group_invite_link = async (groupId, user_ids, map, name) => {
                 bot.sendMessage(user_ids[k], `${map[k](name)} ${inviteLink}`);
             });
         })
-        .catch(async (error) => {
+        .catch(error => {
             logger.error(`Error while export chat_invite_link: ${error}`);
-            groupId = groupId.replace('-', '-100');
-            await bot.exportChatInviteLink(groupId)
         });
 }
 
