@@ -323,13 +323,14 @@ bot.on('message', async (message) => {
     const save = ['Сохранить медиа', 'сохранить медиа'].some(c => message.text?.includes(c));
     const calc = ['Создать расчет', 'создать расчет'].some(c => message.text?.includes(c));
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
+    const is_group = ['group', 'supergroup'].includes(type);
 
     let text = message.text || message.caption || '';
 
 
     if (contact) return;
 
-    const { partner_name, partner_id } = await get_partners_data(id);
+    if () const { partner_name, partner_id } = await get_partners_data(id);
 
     // process agent messages
     if (partner_name && partner_id) {
@@ -351,7 +352,7 @@ bot.on('message', async (message) => {
     }
 
     // process manager messagescd part
-    if (['group', 'supergroup'].includes(type)) {
+    if (is_group) {
 
         const groupId = message.chat.id;
         const manager_message_id = message.message_id;
