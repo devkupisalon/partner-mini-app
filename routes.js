@@ -34,6 +34,7 @@ app.use(express.json());
 const stylesPath = path.join(__dirname, 'styles');
 const codePath = path.join(__dirname, 'code');
 
+/** WEB-APP ROUTES */
 const routes = [
     { path: '/styles/:path', file: stylesPath, req: true },
     { path: '/scripts/:path', file: codePath, req: true },
@@ -44,6 +45,7 @@ const routes = [
     { path: '/registration', file: REGISTR }
 ];
 
+/** API ROUTES */
 const apiRoutes = [
     { path: '/validate-init', handler: verifyTelegramWebAppData },
     { path: '/check', handler: check_subscription_and_authorization },
@@ -58,6 +60,7 @@ const apiRoutes = [
     { path: '/check-registration-moderation', handler: check_moderation }
 ];
 
+/** LOG MESSAGES */
 const loggerMessages = [
     { name: verifyTelegramWebAppData.name, text: `An error occurred in ${verifyTelegramWebAppData.name}:` },
     { name: check_subscription_and_authorization.name, text: `An error occurred in ${check_subscription_and_authorization.name}:` },
@@ -72,6 +75,7 @@ const loggerMessages = [
     { name: check_moderation.name, text: `An error occurred in ${check_moderation.name}:` }
 ];
 
+/** PROCESS WEB-APP */
 routes.forEach(route => {
     app.get(route.path, (req, res) => res.sendFile(route.req ? path.join(route.file, req.params.path) : route.file));
 });
