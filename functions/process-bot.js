@@ -314,6 +314,10 @@ const process_message = async (data) => {
  */
 bot.on('message', async (message) => {
 
+    let data;
+    let partner_id;
+    let partner_name;
+
     logger.info(message);
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
@@ -327,10 +331,13 @@ bot.on('message', async (message) => {
 
     let text = message.text || message.caption || '';
 
-
     if (contact) return;
 
-    if () const { partner_name, partner_id } = await get_partners_data(id);
+    if (!is_group) {
+        data = await get_partners_data(id);
+        partner_id = data.partner_id;
+        partner_name = data.partner_name;
+    }
 
     // process agent messages
     if (partner_name && partner_id) {
