@@ -494,6 +494,8 @@ const process_save = async (data) => {
                 }
             });
 
+            logger.info(selectedData);
+
             let folder = {};
 
             const hash_folder_id = message.text.match(/hash:(.*)/);
