@@ -206,7 +206,10 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
         };
     }
 
+    logger.info(message);
+
     Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
+        logger.info(message_id);
         const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
         const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
 
@@ -316,7 +319,7 @@ const process_message = async (data) => {
  */
 bot.on('message', async (message) => {
 
-    logger.info(message);
+    // logger.info(message);
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message } = message;
     const from_id = message.from.id;
@@ -374,7 +377,7 @@ bot.on('message', async (message) => {
 
             if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
-                logger.info(reply_to_message);
+                // logger.info(reply_to_message);
 
                 const { agent_message_id, chat_id } = parse_text(reply_to_message.text || reply_to_message.caption);
 
