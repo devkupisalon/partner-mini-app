@@ -432,6 +432,7 @@ bot.on('message', async (message) => {
                 let agent_id;
 
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
+                logger.info({phone, name, brand, model, gosnum});
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
 
                 agent_id = is_partner_group ? partner_id : await parse_text(text_to_parse).agent_id;
