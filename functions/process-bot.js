@@ -354,7 +354,7 @@ bot.on('message', async (message) => {
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
 
-    const text_to_parse = reply_to_message.text || reply_to_message.caption;
+    const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
 
     let text = message.text || message.caption || '';
     let user_ID = is_group ? from_id : reply_to_message && is_manager ? reply_to_message?.from.id : id;
