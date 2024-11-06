@@ -224,7 +224,8 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
                 data: [],
                 message_ids: [],
                 experation_date: new Date().toISOString(),
-                hash_id
+                hash_id,
+                hash_partner
             };
         }
 
@@ -378,7 +379,6 @@ bot.on('message', async (message) => {
     if (is_group && partner_id && partner_name && media_group_id) {
         const hash_id = uuidv4();
         const hash_partner = `hash:${partner_id}:${messageId}:${user_ID}:${partner_name}:${media_group_id}\n`;
-        // const hash_id = encryptString(hash_string, BOT_TOKEN);
         await process_save_media_to_obj(message, user_ID, hash_id, hash_partner);
         return;
     }
