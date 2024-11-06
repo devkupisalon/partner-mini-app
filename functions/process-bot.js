@@ -421,7 +421,7 @@ bot.on('message', async (message) => {
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
-                
+
                 await process_save({ reply_to_message, message_id, id, message });
             }
 
@@ -429,8 +429,8 @@ bot.on('message', async (message) => {
 
                 let agent_id;
 
-                const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse);
-                logger.info({phone, name, brand, model, gosnum});
+                const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse, is_partner_group ? true : false);
+                logger.info({ phone, name, brand, model, gosnum });
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
 
                 agent_id = is_partner_group ? partner_id : await parse_text(text_to_parse).agent_id;
