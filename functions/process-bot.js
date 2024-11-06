@@ -368,8 +368,6 @@ bot.on('message', async (message) => {
 
         if (String(groupId) === GROUP_CHAT_ID || is_include_groups) {
 
-            logger.info(groupId);
-
             if (reply_to_message && reply_to_message.from.is_bot && !save && !calc) {
 
                 logger.info(reply_to_message);
