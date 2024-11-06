@@ -7,7 +7,7 @@ import { constants, invite_texts_map, messages_map, managers_map } from '../cons
 import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_groups_ids } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, prepare_calc } from './helper.js';
-import { deletePropertiesFromFile, append_json_file, process_read_json, process_return_json, process_write_json } from './process-json.js';
+import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
 
 const interval = 10000;
 
@@ -74,7 +74,7 @@ const send_first_messages = async (chat_id, type, uid, group_id, manager_chat_id
 
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
-                        success_send = true;
+                        // success_send = true;
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.message}`);
                         CHAT_ID = CHAT_ID.replace('-', '-100');
@@ -257,7 +257,6 @@ const process_message = async (data) => {
     let { text, partner_name, partner_id, messageId, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
 
     const hash = `hash:${partner_id}:${messageId}:${id}:${partner_name}\n`;
-    // encryptString(`agent_id=${partner_id}&agent_message_id=${messageId}&chat_id=${id}&agent_name=${partner_name}`, BOT_TOKEN);
 
     from_user ?
         text = `Агент *${partner_name}*:\n\n${text}\n\n\`${hash}\`` :
