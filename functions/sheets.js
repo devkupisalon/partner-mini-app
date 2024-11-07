@@ -364,7 +364,10 @@ const check_moderation = async (user_id) => {
                 return acc;
             }, {});
 
+            logger.info(root_id_col);
+
         const success_values = values.find(r => r[root_id_col] === user_id);
+        logger.info(success_values);
 
         if (success_values !== undefined) {
 
@@ -390,10 +393,15 @@ const check_moderation = async (user_id) => {
     }
 }
 
+/**
+ * Function to check successful moderation.
+ * @returns {Promise<Object>} - Object containing data for successful moderation or an empty object.
+ */
 const check_success_moderation = async () => {
     try {
         const values = await get_data(DB, DATASHEETNAME);
 
+        // Get column numbers for specific columns
         const { check_col, root_id_col, server_check_col, work_type_col, group_id_col, manager_chat_id_col } =
             ['check', 'server_check', 'root_id', 'work_type', 'group_id', 'manager_chat_id']
                 .reduce((acc, k) => {
@@ -401,24 +409,22 @@ const check_success_moderation = async () => {
                     return acc;
                 }, {});
 
+        // Convert server_check_col to column letter
         const col_letter = numberToColumn(server_check_col + 1);
 
+        // Extract relevant data into an object
         const data_obj = values.slice(1).reduce((acc, r, i) => {
-            const { 0: uid,
-                1: name,
-                [check_col]: check,
-                [root_id_col]: root_id,
-                [server_check_col]: check_server,
-                [work_type_col]: type,
-                [group_id_col]: group_id,
-                [manager_chat_id_col]: manager_chat_id } = r;
+            const { 0: uid, 1: name, [check_col]: check, [root_id_col]: root_id, [server_check_col]: check_server,
+                [work_type_col]: type, [group_id_col]: group_id, [manager_chat_id_col]: manager_chat_id } = r;
 
+            // Check conditions for successful moderation
             if (check === 'TRUE' && check_server === 'FALSE' && root_id) {
                 acc[uid] = { chat_id: root_id, type, uid, i: i + 2, col_letter, group_id, manager_chat_id, name };
             }
             return acc;
         }, {});
 
+        // Return the data object if it has entries, otherwise return an empty object
         if (Object.keys(data_obj).length > 0) {
             return data_obj;
         } else {
@@ -430,9 +436,13 @@ const check_success_moderation = async () => {
     }
 }
 
+/**
+ * Function to get all group IDs.
+ * @returns {Promise<Object>} - Object containing group IDs.
+ */
 const get_all_groups_ids = async () => {
     try {
-        const values = await get_data(DB, DATASHEETNAME)
+        const values = await get_data(DB, DATASHEETNAME);
         if (values) {
             const group_id_col = getColumnNumberByValue(values[0], 'group_id');
             const group_ids = values.slice(1).filter(r => r[group_id_col + 1]);
@@ -447,7 +457,6 @@ const get_all_groups_ids = async () => {
 
             return group_ids_obj;
         }
-
     } catch (error) {
         logger.info(`Error in get_all_groups: ${error.stack}`);
     }
