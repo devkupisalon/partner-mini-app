@@ -168,6 +168,8 @@ async function check_registration() {
         const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
         const { success } = await check_response.json();
 
+        console.log(success);
+
         if (success.true === true) {
             return { true: true, uid: success.uid };
         }
@@ -188,9 +190,9 @@ async function preload() {
     await check();
     const init = await get_settings();
     let { success } = await check_registration();
+    console.log(success);
     let uid = success.true ? success.uid : undefined;
     success = uid ? success.true : success;
-    console.log(success);
 
     const actions = {
         moderation: () => {
