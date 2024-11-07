@@ -94,4 +94,4 @@ const get_first_messages = (messages_map) => {
     return textArray;
 }
 
-export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, prepare_calc }
+export { numberToColumn, getColumnNumberByValue, HQD_photo, parse_text, prepare_calc, get_first_messages }
