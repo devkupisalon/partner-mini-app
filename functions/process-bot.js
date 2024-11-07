@@ -402,7 +402,7 @@ bot.on('message', async (message) => {
 
             logger.info(message);
 
-            if (reply_to_message && is_bot && !save && !calc && !is_first_messages) {
+            if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
 
                 const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
