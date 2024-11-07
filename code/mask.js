@@ -9,8 +9,8 @@ function mask() {
     };
 
     const pureValue = () => {
-        // let value = percent_input.value.replace(/\D/g, '');
-        let value = parseInt(value.replace(suffix, ''))
+        let value = percent_input.value/* .replace(/\D/g, '') */;
+        value = parseInt(value.replace(suffix, ''))
         return value || '';
     };
 
