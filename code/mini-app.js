@@ -188,9 +188,8 @@ async function check_registration() {
 async function preload() {
     await fetchData();
     await check();
-    let { success } = await check_registration();
-    let uid = success === true ? success.uid : null;
-    start_param = uid;
+    let { success, uid } = await check_registration();
+    start_param = uid ? uid : null;
     console.log(start_param);
 
     await get_settings();
