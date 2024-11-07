@@ -79,8 +79,6 @@ const check = async () => {
 
         root = is_authorized.root;
 
-        console.log(root);
-
         const checks = {
             no_sub: !is_subscribed,
             a: is_authorized.success && !is_subscribed,
@@ -202,11 +200,6 @@ async function preload() {
 
             if (start_param === null) {
                 el_arr.forEach(el => el.style.display = 'none');
-            }
-
-            if (!root) {
-                settings.style.display = "none";
-                settings_text.style.display = "none";
             }
 
             preloader.style.display = "none";
