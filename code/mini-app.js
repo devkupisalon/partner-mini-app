@@ -112,6 +112,8 @@ const fetchData = async () => {
 /** get partner settings */
 async function get_settings() {
 
+    console.log(start_param);
+
     try {
         const response = await fetch(`/get-settings?partner=${start_param}`);
         if (!response.ok) {
@@ -189,6 +191,8 @@ async function preload() {
     let { success } = await check_registration();
     let uid = success.true ? success.uid : null;
     start_param = uid;
+    console.log(start_param);
+
     await get_settings();
     success = uid ? success.true : success;
 
