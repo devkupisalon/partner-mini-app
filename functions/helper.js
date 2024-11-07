@@ -71,7 +71,7 @@ const parse_text = (replyText) => {
  * @param {object} messages_map - The messages map object containing text values.
  * @returns {array} - An array of text values extracted from the messages map.
  */
-const get_first_messages = (messages_map) => {
+const get_first_messages = async (messages_map) => {
     // Initialize an empty array to store text values
     const textArray = [];
 
