@@ -235,7 +235,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
 
     await append_json_file(media_files_obj_path, media_files);
 
-    logger.info(media_files);
+    // logger.info(media_files);
 }
 
 /**
@@ -457,6 +457,8 @@ const process_save = async (data) => {
 
     try {
 
+        logger.info(reply_to_message);
+
         const { reply_to_message, message_id, id, message } = data;
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
@@ -470,9 +472,6 @@ const process_save = async (data) => {
             let agent_name;
             let chat_id;
             let hash_id;
-
-            logger.info(GROUP_CHAT_ID);
-            logger.info(reply_to_message.chat.id);
 
             if (reply_to_message.chat.id === GROUP_CHAT_ID) {
 
