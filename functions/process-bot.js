@@ -335,7 +335,8 @@ const process_message = async (data) => {
  */
 bot.on('message', async (message) => {
 
-    // logger.info(message);
+    logger.info(message.text);
+    logger.info(message?.caption);
 
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message, message_id } = message;
 
@@ -352,7 +353,9 @@ bot.on('message', async (message) => {
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
-    const is_first_messages = get_first_messages(messages_map).includes(message.text || message.caption);
+    const is_first_messages = get_first_messages(messages_map).includes(message.text || message?.caption);
+
+    logger.info(is_first_messages);
 
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
