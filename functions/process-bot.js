@@ -422,9 +422,7 @@ bot.on('message', async (message) => {
             logger.info(is_manager);
             logger.info(managers_map);
             logger.info(typeof from_id);
-            logger.info(Object.values(managers_map).map(k => {
-                logger.info(typeof k)
-            }))
+            logger.info(Object.values(managers_map).find(k => k === from_id))
             // logger.info(reply_to_message);
 
             // process save media from agents
