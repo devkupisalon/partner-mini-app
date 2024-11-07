@@ -171,6 +171,7 @@ async function check_registration() {
         console.log(success);
 
         if (success.true === true) {
+            console.log('test');
             return { true: true, uid: success.uid };
         }
         else if (!success) {
