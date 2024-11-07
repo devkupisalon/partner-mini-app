@@ -355,9 +355,6 @@ bot.on('message', async (message) => {
     const first_messages = get_first_messages(messages_map);
     const is_first_messages = first_messages.includes(message.text);
 
-    // logger.info(message.text);
-    // logger.info(is_first_messages);
-
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
 
@@ -400,7 +397,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            logger.info(message);
+            // logger.info(message);
 
             if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
 
@@ -433,9 +430,7 @@ bot.on('message', async (message) => {
 
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse, is_partner_group ? true : false);
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
-                logger.info(is_partner_group);
                 agent_id = is_partner_group ? partner_id : parse_text(text_to_parse).agent_id;
-                logger.info(`Agent_id is ${agent_id}`);
                 const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum, folderId: hash_folder_id });
 
                 if (link) {
