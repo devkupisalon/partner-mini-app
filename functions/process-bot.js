@@ -487,6 +487,8 @@ const process_save = async (data) => {
 
             logger.info(agent_id);
 
+            logger.info(reply_to_message);
+
             const media_obj = await process_return_json(media_files_obj_path);
 
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
