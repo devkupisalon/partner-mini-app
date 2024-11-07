@@ -397,7 +397,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            // logger.info(message);
+            logger.info(message);
 
             if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
 
