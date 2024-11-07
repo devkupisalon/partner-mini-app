@@ -268,7 +268,7 @@ const getTelegramFiles = async (files) => {
  */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, message_id, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
-    // const reply_to_message_chat_id = message..id;
+    id = from_user ? id : message.from.id;
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
 
