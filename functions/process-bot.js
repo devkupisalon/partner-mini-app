@@ -397,7 +397,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            logger.info(message);
+            // logger.info(message);
 
             if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
 
@@ -417,6 +417,10 @@ bot.on('message', async (message) => {
                     reply_to_message_id: agent_message_id
                 })
             }
+
+            logger.info(save);
+            logger.info(is_manager);
+            logger.info(reply_to_message);
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
