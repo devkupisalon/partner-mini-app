@@ -167,8 +167,11 @@ async function check_registration() {
     try {
         const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
         const { success } = await check_response.json();
-        
-        if (success === true || !success) {
+
+        if (success.true === true) {
+            return { succces: true, uid };
+        }
+        else if (!success) {
             return { success: false };
         } else if (success === 'moderation') {
             return { success: 'moderation' };
@@ -184,7 +187,9 @@ async function preload() {
     await fetchData();
     await check();
     const init = await get_settings();
-    const { success } = await check_registration();
+    let { success } = await check_registration();
+    let uid = success.true ? success.uid : undefined;
+    success = uid ? success.true : success;
     console.log(success);
 
     const actions = {
@@ -194,21 +199,28 @@ async function preload() {
             success_text.style.display = "block";
         },
         false: () => {
+
+            if (start_param === null) {
+                el_arr.forEach(el => el.style.display = 'none');
+            }
+
+            preloader.style.display = "none";
+            container.style.display = "flex";
+        },
+        true: () => {
             if (calc && !partner && partner === null) {
                 window.location.href = `/pre-calc?partner=${start_param}`;
-            } else {
-                if (start_param === null) {
-                    el_arr.forEach(el => el.style.display = 'none');
-                }
-
-                if (!root) {
-                    settings.style.display = "none";
-                    settings_text.style.display = "none";
-                }
-
-                preloader.style.display = "none";
-                container.style.display = "flex";
             }
+
+            start_param = uid;
+
+            if (!root) {
+                settings.style.display = "none";
+                settings_text.style.display = "none";
+            }
+
+            preloader.style.display = "none";
+            container.style.display = "flex";
         }
     };
 

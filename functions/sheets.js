@@ -364,10 +364,7 @@ const check_moderation = async (user_id) => {
                 return acc;
             }, {});
 
-            logger.info(root_id_col);
-
         const success_values = values.find(r => r[root_id_col] === user_id);
-        logger.info(success_values);
 
         if (success_values !== undefined) {
 
@@ -379,7 +376,7 @@ const check_moderation = async (user_id) => {
 
             if (check_server === 'TRUE') {
                 logger.info(`Moderation for partner ${name} with id ${uid} and user_id ${user_id} is completed`);
-                return true;
+                return { true: true, uid };
             } else if (root_id && (check === 'FALSE')) {
                 logger.warn(`Moderation for root_user_id ${user_id} is not completed`);
                 return 'moderation';
