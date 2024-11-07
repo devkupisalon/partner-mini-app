@@ -393,8 +393,6 @@ bot.on('message', async (message) => {
 
         logger.info(`Received message from ${type} with ID: ${id}`);
 
-        logger.info(is_managers_work_chat);
-
         if (is_managers_work_chat || is_include_groups) {
 
             logger.info(message);
