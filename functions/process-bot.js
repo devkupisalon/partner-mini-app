@@ -492,13 +492,12 @@ const process_save = async (data) => {
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id, hash] = k.split("_");
                 if (v.hash_partner) {
+                    logger.info(v.hash_partner);
                     const d = parse_text(v.hash_partner);
                     agent_id = d.agent_id;
                     agent_name = d.agent_name
                     chat_id = d.chat_id;
-                    logger.info(v.message_ids);
-                    logger.info(d.agent_message_id);
-                    return c_chat_id === d.chat_id && hash === d.hash_id && v.data && v.data.length > 0;
+                    return c_chat_id === d.chat_id && hash === d.hash_id && v.mesasge_ids[0] === d.agent_message_id && v.data && v.data.length > 0;
                 } else {
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
