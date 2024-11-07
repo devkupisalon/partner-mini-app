@@ -422,6 +422,7 @@ bot.on('message', async (message) => {
             logger.info(save);
             logger.info(is_manager);
             logger.info(managers_map);
+            logger.info(from_id);
             
 
             // process save media from agents
