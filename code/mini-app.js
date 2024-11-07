@@ -167,7 +167,7 @@ calculate.addEventListener('click', async function () {
 /** CHECK MODERATION */
 async function check_registration() {
     try {
-        const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
+        const check_response = await fetch(`/check-registration-moderation?user_id=${id}&partner_id=${start_param}`);
         const { success } = await check_response.json();
 
         if (success.true === true) {
@@ -205,7 +205,6 @@ async function preload() {
             }
 
             if (!root) {
-                console.log("test");
                 settings.style.display = "none";
                 settings_text.style.display = "none";
             }

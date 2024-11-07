@@ -353,9 +353,10 @@ const get_partners_data = async (chat_id) => {
 
 /**
  * Asynchronous function to check moderation status for a specific user.
- * @param {string} user_id - The ID of the user to check moderation for.
+ * @param {object} data - data for check moderation.
  */
-const check_moderation = async (user_id) => {
+const check_moderation = async (data) => {
+    const { user_id, partner_id } = data;
     try {
         const values = await get_data(DB, DATASHEETNAME);
         const { check_col, root_id_col, server_check_col } =
@@ -364,7 +365,7 @@ const check_moderation = async (user_id) => {
                 return acc;
             }, {});
 
-        const success_values = values.find(r => r[root_id_col] === user_id);
+        const success_values = values.find(r => r[root_id_col] === user_id || r[0] === partner_id);
 
         if (success_values !== undefined) {
 

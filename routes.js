@@ -215,7 +215,7 @@ app.get('/get-data', async (req, res) => {
 /** check moderation */
 app.get('/check-registration-moderation', async (req, res) => {
     try {
-        const success = await check_moderation(req.query.user_id);
+        const success = await check_moderation(req.query);
         return res.json({ success });
     } catch (error) {
         logger.error(`An error occurred in check_modaration: ${error.message}`);
