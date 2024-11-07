@@ -32,7 +32,7 @@ function mask() {
         }
 
         // Если введено число не целое, отображаем его с запятой и добавляем суффикс
-        percent_input.value = pure.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + suffix;
+        percent_input.value = pure.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + suffix;
         focusNumber();
     });
 }
