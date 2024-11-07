@@ -499,7 +499,7 @@ const process_save = async (data) => {
                     logger.info(agent_id);
                     logger.info(hash);
                     logger.info(reply_to_message.message_id);
-                    logger.info(v?.message_ids[0]);
+                    logger.info(v?.message_ids);
                     logger.info(c_chat_id);
                     logger.info(d.chat_id);
                     logger.info(d.hash_id);
