@@ -30,6 +30,8 @@ const calc = start_param?.includes('-calc-true') || false;
 start_param = calc ? String(start_param).replace('-calc-true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
 
+console.log(start_param);
+
 /**
  * Установить галочку для элемента и отключить его
  * @param {HTMLElement} s - Элемент, для которого нужно установить галочку и отключить
