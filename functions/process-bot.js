@@ -363,7 +363,7 @@ bot.on('message', async (message) => {
     const { partner_name, partner_id } = await get_partners_data(user_ID);
 
     // process agent messages
-    if (partner_name && partner_id && !is_group && !(!is_bot && !is_first_messages)) {
+    if (partner_name && partner_id && !is_group && !is_bot) {
 
         await process_message({
             text,
