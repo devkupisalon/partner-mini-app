@@ -429,7 +429,7 @@ bot.on('message', async (message) => {
                 const { phone, name, brand, model, gosnum } = prepare_calc(text_to_parse, is_partner_group ? true : false);
                 const hash_folder_id = message.text.match(/hash:(.*)/)[1];
 
-                agent_id = is_partner_group ? partner_id : await parse_text(text_to_parse).agent_id;
+                agent_id = is_partner_group ? partner_id : parse_text(text_to_parse).agent_id;
                 const { link } = await do_calc({ partner: agent_id, phone, name, brand, model, gosnum, folderId: hash_folder_id });
 
                 if (link) {
@@ -458,7 +458,8 @@ const process_save = async (data) => {
     try {
 
         const { reply_to_message, message_id, id, message } = data;
-        logger.info(reply_to_message);
+
+        // logger.info(reply_to_message);
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
             reply_to_message.video ? reply_to_message.video :
@@ -472,11 +473,6 @@ const process_save = async (data) => {
             let chat_id;
             let hash_id;
 
-            logger.info(GROUP_CHAT_ID);
-            logger.info(reply_to_message.chat.id);
-            logger.info(typeof GROUP_CHAT_ID);
-            logger.info(typeof reply_to_message.chat.id);
-
             if (String(reply_to_message.chat.id) === GROUP_CHAT_ID) {
 
                 const d = parse_text(reply_to_message.text || reply_to_message.caption);
@@ -486,7 +482,6 @@ const process_save = async (data) => {
                 chat_id = d.chat_id;
                 hash_id = d.hash_id;
 
-                // logger.info({ agent_id, agent_name, chat_id, hash_id });
             }
 
             const media_obj = await process_return_json(media_files_obj_path);
@@ -500,7 +495,6 @@ const process_save = async (data) => {
                     chat_id = d.chat_id;
                     return c_chat_id === d.chat_id && hash === d.hash_id && v.data && v.data.length > 0;
                 } else {
-                    // logger.info(hash_id);
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
             });
