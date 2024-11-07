@@ -353,7 +353,7 @@ bot.on('message', async (message) => {
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
     const group_title = `Купи салон Рабочая`;
-    const is_title = reply_to_message.chat.title === group_title;
+    const is_title = reply_to_message?.chat.title === group_title;
 
 
     let text = message.text || message.caption || '';
