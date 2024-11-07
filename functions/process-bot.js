@@ -348,12 +348,10 @@ bot.on('message', async (message) => {
 
     const is_manager = Object.values(managers_map).find(k => k === from_id) ? true : false;
     const is_group = ['group', 'supergroup'].includes(type);
-    const is_bot = reply_to_message?.from.is_bot;
+    const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
-    const first_messages = get_first_messages(messages_map);
-    const is_first_messages = first_messages.includes(message.text);
 
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
@@ -363,7 +361,7 @@ bot.on('message', async (message) => {
     const { partner_name, partner_id } = await get_partners_data(user_ID);
 
     // process agent messages
-    if (partner_name && partner_id && !is_group && !message.from.is_bot) {
+    if (partner_name && partner_id && !is_group && !is_bot) {
 
         await process_message({
             text,
@@ -399,7 +397,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            // logger.info(message);
+            logger.info(message);
 
             if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
 
