@@ -185,10 +185,9 @@ async function check_registration() {
 /** PRELOADER */
 async function preload() {
     await fetchData();
-    await check();
     const { success, uid } = await check_registration();
     start_param = uid ? uid : null;
-
+    await check();
     await get_settings();
 
     const actions = {
@@ -210,7 +209,6 @@ async function preload() {
             if (calc && !partner && partner === null) {
                 window.location.href = `/pre-calc?partner=${start_param}`;
             }
-
 
             if (!root) {
                 settings.style.display = "none";
