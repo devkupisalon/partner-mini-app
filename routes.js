@@ -23,6 +23,7 @@ import { constants, __dirname } from './constants.js';
 
 import './functions/process-bot.js';
 import './functions/process-check-moderation.js';
+import './logs/clean-logs.js';
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
 const app = express();

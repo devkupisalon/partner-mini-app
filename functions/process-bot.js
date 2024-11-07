@@ -8,7 +8,6 @@ import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_group
 import { create_folder, save_media } from './drive.js';
 import { parse_text, HQD_photo, prepare_calc } from './helper.js';
 import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
-// import { decryptString, encryptString } from './validate.json';
 
 const interval = 10000;
 
@@ -22,7 +21,6 @@ const parse_mode = 'Markdown';
 /** GLOBAL OBJ */
 let send_media_obj = {};
 let media_files = {};
-// let group_ids_obj = {};
 
 /** Logger message */
 const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
@@ -545,20 +543,6 @@ async function executeTask() {
     }
     setTimeout(executeTask, interval);
 }
-
-/**
- * Asynchronous function to update the group ids object.
- * @param {Object} params - Additional parameters (if any) for updating group ids.
- */
-// async function update_group_ids_obj() {
-//     group_ids_obj = await get_all_groups_ids();
-//     logger.info(`Group ids object updated at: ${new Date().toISOString()}`);
-// }
-
-// Set a setTimeout for the initial run
-// setInterval(async () => {
-//     await update_group_ids_obj();
-// }, 10 * 1000); // Interval set to run the update every 60 seconds (1 minute)
 
 /**
  * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
