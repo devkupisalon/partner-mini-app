@@ -481,7 +481,7 @@ const process_save = async (data) => {
                 chat_id = d.chat_id;
                 hash_id = d.hash_id;
 
-                logger.info({ agent_id, agent_name, chat_id, hash_id });
+                // logger.info({ agent_id, agent_name, chat_id, hash_id });
             }
 
             const media_obj = await process_return_json(media_files_obj_path);
@@ -495,7 +495,7 @@ const process_save = async (data) => {
                     chat_id = d.chat_id;
                     return c_chat_id === d.chat_id && hash === d.hash_id && v.data && v.data.length > 0;
                 } else {
-                    logger.info(hash_id);
+                    // logger.info(hash_id);
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
             });
