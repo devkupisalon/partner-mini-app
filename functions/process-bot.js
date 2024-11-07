@@ -495,15 +495,6 @@ const process_save = async (data) => {
                     agent_id = d.agent_id;
                     agent_name = d.agent_name
                     chat_id = d.chat_id;
-                    // hash_id = 
-                    logger.info(agent_id);
-                    logger.info(hash);
-                    logger.info(reply_to_message.message_id);
-                    logger.info(v?.message_ids);
-                    logger.info(v?.message_ids.some(id => id === reply_to_message.message_id));
-                    logger.info(c_chat_id);
-                    logger.info(d.chat_id);
-                    logger.info(d.hash_id);
                     return c_chat_id === d.chat_id && hash === d.hash_id && v?.message_ids.some(id => id === reply_to_message.message_id) && v.data && v.data.length > 0;
                 } else {
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
