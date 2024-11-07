@@ -12,8 +12,7 @@ function mask() {
         let value = percent_input.value.replace(/\D/g, ''); // Убираем все символы, кроме цифр
         // Заменяем точку на запятую, чтобы обеспечить корректное число с плавающей точкой
         value = value.replace('.', ',');
-        // Ограничиваем значение до максимального числа 100
-        value = parseInt(value.replace(suffix, '') > 100 ? 100 : value.replace(suffix, ''));
+        value = parseInt(value.replace(suffix, ''));
         return value || '';
     };
 
@@ -32,11 +31,8 @@ function mask() {
             return;
         }
 
-        // Ограничиваем количество знаков после запятой до 2
-        const formattedValue = (pure / 100).toLocaleString('en-US', {maximumFractionDigits: 2});
-        
-        // Проверяем, чтобы значение не превышало 100
-        percent_input.value = parseFloat(formattedValue) > 100 ? '100' + suffix : formattedValue + suffix;
+        // Если введено число не целое, отображаем его с запятой и добавляем суффикс
+        percent_input.value = pure.toString().replace(/\B(?=(\d{2})+(?!\d))/g, ",") + suffix;
         focusNumber();
     });
 }
