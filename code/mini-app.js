@@ -204,6 +204,12 @@ async function preload() {
                 el_arr.forEach(el => el.style.display = 'none');
             }
 
+            if (!root) {
+                console.log("test");
+                settings.style.display = "none";
+                settings_text.style.display = "none";
+            }
+
             preloader.style.display = "none";
             container.style.display = "flex";
         },
