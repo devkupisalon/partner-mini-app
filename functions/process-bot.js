@@ -400,7 +400,7 @@ bot.on('message', async (message) => {
 
             // logger.info(message);
 
-            if (reply_to_message && is_bot && !save && !calc && /* !message_thread_id */ is_title) {
+            if (reply_to_message && is_bot && !save && !calc && is_title) {
 
                 const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
@@ -418,6 +418,10 @@ bot.on('message', async (message) => {
                     reply_to_message_id: agent_message_id
                 })
             }
+
+            logger.info(save);
+            logger.info(is_manager);
+            logger.info(reply_to_message);
 
             // process save media from agents
             if (reply_to_message && save && is_manager) {
