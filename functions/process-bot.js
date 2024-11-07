@@ -398,7 +398,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            logger.info(message);
+            // logger.info(message);
 
             if (reply_to_message && is_bot && !save && !calc && /* !message_thread_id */ is_title) {
 
@@ -478,7 +478,6 @@ const process_save = async (data) => {
             if (String(reply_to_message.chat.id) === GROUP_CHAT_ID) {
 
                 const d = parse_text(reply_to_message.text || reply_to_message.caption);
-                logger.info(d);
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
