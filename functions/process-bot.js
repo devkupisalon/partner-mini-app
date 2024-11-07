@@ -235,7 +235,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
 
     await append_json_file(media_files_obj_path, media_files);
 
-    logger.info(media_files);
+    // logger.info(media_files);
 }
 
 /**
