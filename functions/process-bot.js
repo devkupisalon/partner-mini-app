@@ -335,6 +335,8 @@ const process_message = async (data) => {
  */
 bot.on('message', async (message) => {
 
+    logger.info(message);
+
     const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message, message_id } = message;
 
     const from_id = message.from.id;
