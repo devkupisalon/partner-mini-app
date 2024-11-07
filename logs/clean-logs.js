@@ -44,4 +44,4 @@ const clean_log_task = cron.schedule('0 0 * * 0', async () => {
     }
 });
 
-clean_log_task();
+clean_log_task.start();
