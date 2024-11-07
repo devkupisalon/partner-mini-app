@@ -500,6 +500,7 @@ const process_save = async (data) => {
                     logger.info(hash);
                     logger.info(reply_to_message.message_id);
                     logger.info(v?.message_ids);
+                    logger.info(v?.message_ids.some(id => id === reply_to_message.message_id));
                     logger.info(c_chat_id);
                     logger.info(d.chat_id);
                     logger.info(d.hash_id);
