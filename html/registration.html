@@ -7,6 +7,10 @@
 
     <link rel="stylesheet" href="/styles/app.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"
+        integrity="sha512-pHVGpX7F/27yZ0ISY+VVjyULApbDlD0/X0rgGbTqCE7WFW5MezNTWG/dnhtbBuICzsd0WQPgpE4REBLv+UqChw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 </head>
 
@@ -34,7 +38,8 @@
                 <button class="upload-logo" id="partner-logo">Загрузить логотип</button>
             </div>
             <p id="percent-text">Укажите процент наценки</p>
-            <input class="input" type="text" id="partner-percent" placeholder="% наценки в формате 10% или 5,5%" required>
+            <input class="input" type="text" id="partner-percent" placeholder="% наценки в формате 10% или 5,5%"
+                required>
             <p>Напишите наименование своей компании</p>
             <input class="input" type="text" id="org-name" placeholder="наименование" required>
             <p>Укажите адрес </p>
@@ -52,7 +57,8 @@
             <p>или укажите свой</p>
             <input class="input" type="text" id="your-type" placeholder="свой вид деятельности"
                 oninput="validateName(event.target)">
-            <input type="checkbox" id="personal-data-checkbox" checked><label id="personal-data-id"> Нажимая кнопку "Зарегистрироваться" Вы даёте свое
+            <input type="checkbox" id="personal-data-checkbox" checked><label id="personal-data-id"> Нажимая кнопку
+                "Зарегистрироваться" Вы даёте свое
                 <a href="ссылка_на_обработку">согласие на обработку</a> персональных данных
             </label>
         </form>
