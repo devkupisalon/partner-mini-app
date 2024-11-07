@@ -496,7 +496,9 @@ const process_save = async (data) => {
                     agent_id = d.agent_id;
                     agent_name = d.agent_name
                     chat_id = d.chat_id;
-                    return c_chat_id === d.chat_id && hash === d.hash_id && v.message_ids.some(i => i === d.agent_message_id) && v.data && v.data.length > 0;
+                    logger.info(v.message_ids);
+                    logger.info(d.agent_message_id);
+                    return c_chat_id === d.chat_id && hash === d.hash_id && v.data && v.data.length > 0;
                 } else {
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
