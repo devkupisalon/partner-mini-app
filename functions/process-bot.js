@@ -400,7 +400,7 @@ bot.on('message', async (message) => {
 
         if (is_managers_work_chat || is_include_groups) {
 
-            // logger.info(reply_to_message);
+            logger.info(reply_to_message);
 
             if (reply_to_message && is_bot && !save && !calc && !is_first_messages) {
 
