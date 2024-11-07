@@ -23,15 +23,15 @@ let send_media_obj = {};
 let media_files = {};
 
 /** Logger message */
-const l_message = (l, id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${GROUP_CHAT_ID}` };
+const l_message = (l, id, to_id) => { return `${l} message successfully sended from chat_id ${id} to group_chat_id ${to_id}` };
 
 const logger_messages = {
-    media_group: (id) => l_message('Media Group', id),
-    photo: (id) => l_message('Photo', id),
-    video: (id) => l_message('Video', id),
-    voice: (id) => l_message('Voice', id),
-    document: (id) => l_message('Document', id),
-    text: (id) => l_message('Text', id),
+    media_group: (id, to_id) => l_message('Media Group', id, to_id),
+    photo: (id, to_id) => l_message('Photo', id, to_id),
+    video: (id, to_id) => l_message('Video', id, to_id),
+    voice: (id, to_id) => l_message('Voice', id, to_id),
+    document: (id, to_id) => l_message('Document', id, to_id),
+    text: (id, to_id) => l_message('Text', id, to_id),
 };
 
 /**
@@ -140,8 +140,8 @@ const set_chat_title = async (groupId, newTitle) => {
 /** 
  * Success function
  */
-const p_success = async (m, reply_to_message_id, id) => {
-    logger.info(logger_messages[m](id));
+const p_success = async (m, reply_to_message_id, id, to_id) => {
+    logger.info(logger_messages[m](id, to_id));
     await bot.sendMessage(id, 'Сообщение отправлено', { reply_to_message_id });
 }
 
@@ -174,7 +174,7 @@ const send_media_group = async () => {
                     await bot.sendMediaGroup(chat_id, mediaGroup);
 
                 if (message) {
-                    p_success('media_group', message_id, id);
+                    p_success('media_group', message_id, id, GROUP_CHAT_ID);
                     if (from_user) process_save_media_to_obj(message, user_id, hash_id);
                     delete media_obj[Object.keys(media_obj)[i]];
                     await process_write_json(send_media_obj_path, media_obj);
@@ -268,6 +268,7 @@ const getTelegramFiles = async (files) => {
  */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, message_id, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
+    const reply_to_message_chat_id = message.reply_to_message.from.id;
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
 
@@ -322,7 +323,7 @@ const process_message = async (data) => {
                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (data.message_id) {
-            p_success(type_m, message_id, id);
+            p_success(type_m, message_id, id, reply_to_message_chat_id);
         }
 
     } catch (error) {
