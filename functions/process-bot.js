@@ -352,8 +352,8 @@ bot.on('message', async (message) => {
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
-    // const first_messages = get_first_messages(messages_map);
-    // const is_first_messages = first_messages.includes(message.text);
+    const first_messages = get_first_messages(messages_map);
+    const is_first_messages = first_messages.includes(message.text);
 
     // logger.info(message.text);
     // logger.info(is_first_messages);
@@ -366,7 +366,7 @@ bot.on('message', async (message) => {
     const { partner_name, partner_id } = await get_partners_data(user_ID);
 
     // process agent messages
-    if (partner_name && partner_id && !is_group && !message_thread_id) {
+    if (partner_name && partner_id && !is_group && !(!is_bot && is_first_messages)) {
 
         await process_message({
             text,
