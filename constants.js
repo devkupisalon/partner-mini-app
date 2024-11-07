@@ -59,7 +59,7 @@ const messages_map = {
         'Партнер': {
             text: `Приглашаем Ваших менеджеров присоединиться к нашей партнерской программе.
 Для регистрации используйте кнопку ниже.`,
-            url: (uid) => { return `${MINI_APP_LINK}${uid}`; },
+            url: (uid) => { return `${MINI_APP_LINK}${uid}-reg-do-true`; },
             button_text: `Регистрация менеджера`
         }, link: true,
         to_pin: true

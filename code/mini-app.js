@@ -28,11 +28,8 @@ tg.enableClosingConfirmation();
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 const calc = start_param?.includes('-calc-true') || false;
 const do_reg = start_param?.includes(`-reg-do-true`) || false;
-console.log(do_reg);
 start_param = calc ? String(start_param).replace('-calc-true', '') : do_reg ? String(start_param).replace('-reg-do-true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
-
-console.log(start_param);
 
 /**
  * Установить галочку для элемента и отключить его
