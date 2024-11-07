@@ -1,7 +1,4 @@
-/** 
- * inputmask for percentage 
- * Allows input of comma instead of dot and replaces dot with comma. Only allows one comma in the input.
- */
+/** inputmask for precentage */
 function mask() {
     const percent_input = document.getElementById('partner-percent');
     const suffix = '%';
@@ -12,11 +9,8 @@ function mask() {
     };
 
     const pureValue = () => {
-        let value = percent_input.value.replace(/\D/g, '');
-        // Replace dot with comma and ensure only one comma in the value
-        value = value.replace('.', ',').replace(/,{2,}/g, ',');
-        // Extracting the number part and parsing it as an integer
-        value = parseInt(value.replace(suffix, ''));
+        // let value = percent_input.value.replace(/\D/g, '');
+        let value = parseInt(value.replace(suffix, ''))
         return value || '';
     };
 
@@ -35,7 +29,7 @@ function mask() {
             return;
         }
 
-        percent_input.value = pure.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + suffix;
+        percent_input.value = pure + suffix;
         focusNumber();
     });
 }
