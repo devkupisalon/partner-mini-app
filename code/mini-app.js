@@ -168,10 +168,7 @@ async function check_registration() {
         const check_response = await fetch(`/check-registration-moderation?user_id=${id}`);
         const { success } = await check_response.json();
 
-        console.log(success);
-
         if (success.true === true) {
-            console.log('test');
             return { success: true, uid: success.uid };
         }
         else if (!success) {
@@ -189,10 +186,9 @@ async function check_registration() {
 async function preload() {
     await fetchData();
     await check();
-    const init = await get_settings();
     let { success } = await check_registration();
-    console.log(success);
     let uid = success.true ? success.uid : undefined;
+    const init = await get_settings(uid);
     success = uid ? success.true : success;
 
     const actions = {
