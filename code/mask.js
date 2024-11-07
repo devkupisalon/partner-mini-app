@@ -1,64 +1,40 @@
-// /** inputmask for precentage */
-// function mask() {
-//     const percent_input = document.getElementById('partner-percent');
-//     const suffix = '%';
-//     const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
+/** inputmask for percentage */
+function mask() {
+    const percent_input = document.getElementById('partner-percent');
+    const suffix = '%';
+    const bypass = [9, 16, 17, 18, 36, 37, 38, 39, 40, 91, 92, 93];
 
-//     const saveValue = (data) => {
-//         percent_input.dataset.value = data;
-//     };
+    const saveValue = (data) => {
+        percent_input.dataset.value = data;
+    };
 
-//     const pureValue = () => {
-//         let value = percent_input.value;
-//         value = parseInt(value.replace(suffix, ''))
-//         return value || '';
-//     };
+    const pureValue = () => {
+        let value = percent_input.value.replace(/\D/g, ''); // Убираем все символы, кроме цифр
+        // Заменяем точку на запятую, чтобы обеспечить корректное число с плавающей точкой
+        value = value.replace('.', ',');
+        value = parseInt(value.replace(suffix, ''));
+        return value || '';
+    };
 
-//     const focusNumber = () => {
-//         percent_input.setSelectionRange(percent_input.dataset.value.length, percent_input.dataset.value.length);
-//     };
+    const focusNumber = () => {
+        percent_input.setSelectionRange(percent_input.dataset.value.length, percent_input.dataset.value.length);
+    };
 
-//     percent_input.addEventListener('keyup', (e) => {
-//         if (bypass.indexOf(e.keyCode) !== -1) return;
+    percent_input.addEventListener('keyup', (e) => {
+        if (bypass.includes(e.keyCode)) return;
 
-//         const pure = pureValue();
-//         saveValue(pure);
+        const pure = pureValue();
+        saveValue(pure);
 
-//         if (!pure) {
-//             percent_input.value = '';
-//             return;
-//         }
+        if (!pure) {
+            percent_input.value = '';
+            return;
+        }
 
-//         percent_input.value = pure + suffix;
-//         focusNumber();
-//     });
-// }
-
-// mask();
-
-function setPercentageMask() {
-    let input = $('#partner-percent');
-    input.mask('##0,00', {reverse: true});
-    input.bind("change keyup", function() {
-        isBetweenPercentage($(this));
+        // Если введено число не целое, отображаем его с запятой и добавляем суффикс
+        percent_input.value = pure.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") + suffix;
+        focusNumber();
     });
 }
 
-function isBetweenPercentage(input) {
-    let myNumber = (input.val()) ? parseFloat(input.val()) : 0;
-    (myNumber.isBetween(0, 100.00)) ? myNumber : input.val('100,00');
-}
-
-if (typeof(Number.prototype.isBetween) === "undefined") {
-    Number.prototype.isBetween = function(min, max, notBoundaries) {
-            var between = false;
-            if (notBoundaries) {
-                if ((this < max) && (this > min)) between = true;
-            } else {
-                if ((this <= max) && (this >= min)) between = true;
-            }
-            return between;
-    }
-}
-
-setPercentageMask();
+mask();
