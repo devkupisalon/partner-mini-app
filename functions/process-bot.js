@@ -323,7 +323,7 @@ const process_message = async (data) => {
                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (data.message_id) {
-            p_success(type_m, message_id, id, GROUP_CHAT_ID);
+            p_success(type_m, message_id, !from_user ? message.chat.id : id, GROUP_CHAT_ID);
         }
 
     } catch (error) {
