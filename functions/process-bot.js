@@ -6,12 +6,12 @@ import logger from '../logs/logger.js';
 import { constants, invite_texts_map, messages_map, managers_map } from '../constants.js';
 import { get_partners_data, get_partner_name_and_manager, do_calc, get_all_groups_ids } from './sheets.js';
 import { create_folder, save_media } from './drive.js';
-import { parse_text, HQD_photo, prepare_calc } from './helper.js';
+import { parse_text, HQD_photo, prepare_calc, get_first_messages } from './helper.js';
 import { deletePropertiesFromFile, append_json_file, process_return_json, process_write_json } from './process-json.js';
 
 const interval = 10000;
 
-let { GROUP_CHAT_ID, BOT_TOKEN, } = constants;
+let { GROUP_CHAT_ID, BOT_TOKEN } = constants;
 const { send_media_obj_path, media_files_obj_path } = constants;
 
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
@@ -352,6 +352,7 @@ bot.on('message', async (message) => {
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
+    const is_first_messages = get_first_messages(messages_map).includes(message.text || message.caption);
 
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
@@ -397,7 +398,7 @@ bot.on('message', async (message) => {
 
             // logger.info(reply_to_message);
 
-            if (reply_to_message && is_bot && !save && !calc) {
+            if (reply_to_message && is_bot && !save && !calc && !is_first_messages) {
 
                 const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
