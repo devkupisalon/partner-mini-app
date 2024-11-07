@@ -472,12 +472,12 @@ const process_save = async (data) => {
             let chat_id;
             let hash_id;
 
-            logger.info(GROUP_CHAT_ID);
-            logger.info(reply_to_message.chat.id);
-            logger.info(typeof GROUP_CHAT_ID);
-            logger.info(typeof reply_to_message.chat.id);
+            // logger.info(GROUP_CHAT_ID);
+            // logger.info(reply_to_message.chat.id);
+            // logger.info(typeof GROUP_CHAT_ID);
+            // logger.info(typeof reply_to_message.chat.id);
 
-            if (reply_to_message.chat.id === GROUP_CHAT_ID) {
+            if (String(reply_to_message.chat.i) === GROUP_CHAT_ID) {
 
                 const d = parse_text(reply_to_message.text || reply_to_message.caption);
                 logger.info(d);
