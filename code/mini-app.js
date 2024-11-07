@@ -27,7 +27,8 @@ tg.enableClosingConfirmation();
 
 let { user: { username, id }, start_param } = tg.initDataUnsafe;
 const calc = start_param?.includes('-calc-true') || false;
-start_param = calc ? String(start_param).replace('-calc-true', '') : start_param;
+const do_reg = start_param?.includes(`-reg-do-true`) || false;
+start_param = calc ? String(start_param).replace('-calc-true', '') : do_reg ? String(start_param).replace('-reg-do-true', '') : start_param;
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
@@ -208,6 +209,10 @@ async function preload() {
         true: () => {
             if (calc && !partner && partner === null) {
                 window.location.href = `/pre-calc?partner=${start_param}`;
+            }
+
+            if (do_reg && !partner && partner === null) {
+                window.location.href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
             }
 
             if (!root) {
