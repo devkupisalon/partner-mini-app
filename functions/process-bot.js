@@ -268,7 +268,7 @@ const getTelegramFiles = async (files) => {
  */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, message_id, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
-    const reply_to_message_chat_id = message.reply_to_message.from.id;
+    // const reply_to_message_chat_id = message..id;
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
 
@@ -323,7 +323,7 @@ const process_message = async (data) => {
                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (data.message_id) {
-            p_success(type_m, message_id, id, reply_to_message_chat_id);
+            p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
 
     } catch (error) {
