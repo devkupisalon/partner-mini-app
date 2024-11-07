@@ -169,7 +169,7 @@ async function check_registration() {
         const { success } = await check_response.json();
 
         if (success.true === true) {
-            return { succces: true, uid: success.uid };
+            return { true: true, uid: success.uid };
         }
         else if (!success) {
             return { success: false };
