@@ -235,7 +235,7 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
 
     await append_json_file(media_files_obj_path, media_files);
 
-    // logger.info(media_files);
+    logger.info(media_files);
 }
 
 /**
@@ -481,6 +481,8 @@ const process_save = async (data) => {
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
                 hash_id = d.hash_id;
+
+                logger.info({ agent_id, agent_name, chat_id, hash_id });
             }
 
             const media_obj = await process_return_json(media_files_obj_path);
@@ -494,6 +496,7 @@ const process_save = async (data) => {
                     chat_id = d.chat_id;
                     return c_chat_id === d.chat_id && hash === d.hash_id && v.data && v.data.length > 0;
                 } else {
+                    logger.info(hash_id);
                     return c_chat_id === chat_id && v.hash_id === hash_id && v.data && v.data.length > 0;
                 }
             });
