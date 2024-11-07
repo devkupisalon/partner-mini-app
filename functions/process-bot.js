@@ -457,9 +457,8 @@ const process_save = async (data) => {
 
     try {
 
-        logger.info(reply_to_message);
-
         const { reply_to_message, message_id, id, message } = data;
+        logger.info(reply_to_message);
 
         const media = reply_to_message.photo ? HQD_photo(reply_to_message.photo) :
             reply_to_message.video ? reply_to_message.video :
