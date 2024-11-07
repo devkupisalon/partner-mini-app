@@ -475,6 +475,7 @@ const process_save = async (data) => {
             if (reply_to_message.chat.id === GROUP_CHAT_ID) {
 
                 const d = parse_text(reply_to_message.text || reply_to_message.caption);
+                logger.info(d);
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
