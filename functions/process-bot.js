@@ -485,16 +485,11 @@ const process_save = async (data) => {
 
             }
 
-            logger.info(agent_id);
-
-            logger.info(reply_to_message);
-
             const media_obj = await process_return_json(media_files_obj_path);
 
             const selectedData = Object.entries(media_obj).find(([k, v]) => {
                 const [c_chat_id, hash] = k.split("_");
                 if (v.hash_partner) {
-                    logger.info(v.hash_partner);
                     const d = parse_text(v.hash_partner);
                     agent_id = d.agent_id;
                     agent_name = d.agent_name
