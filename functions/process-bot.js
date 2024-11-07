@@ -337,7 +337,7 @@ bot.on('message', async (message) => {
 
     // logger.info(message);
 
-    const { contact, chat: { id, type }, photo, document, voice, video, media_group_id, reply_to_message, message_id, message_thread_id } = message;
+    const { contact, chat: { id, type, title }, photo, document, voice, video, media_group_id, reply_to_message, message_id, message_thread_id } = message;
 
     const from_id = message.from.id;
     const group_ids_obj = await get_all_groups_ids();
@@ -352,6 +352,9 @@ bot.on('message', async (message) => {
     const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
     const is_partner_group = group_ids_obj.hasOwnProperty(reply_to_message?.chat.id);
     const is_include_groups = group_ids_obj.hasOwnProperty(`${id}`) || group_ids_obj.hasOwnProperty(`${id}`);
+    const group_title = `Купи салон Рабочая`;
+    const is_title = reply_to_message.chat.title === group_title;
+
 
     let text = message.text || message.caption || '';
     let user_ID = reply_to_message && is_manager && is_group ? reply_to_message?.from.id : is_group ? from_id : id;
@@ -397,7 +400,7 @@ bot.on('message', async (message) => {
 
             logger.info(message);
 
-            if (reply_to_message && is_bot && !save && !calc && !message_thread_id) {
+            if (reply_to_message && is_bot && !save && !calc && /* !message_thread_id */ is_title) {
 
                 const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
