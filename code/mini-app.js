@@ -112,8 +112,6 @@ const fetchData = async () => {
 /** get partner settings */
 async function get_settings() {
 
-    console.log(start_param);
-
     try {
         const response = await fetch(`/get-settings?partner=${start_param}`);
         if (!response.ok) {
@@ -188,12 +186,10 @@ async function check_registration() {
 async function preload() {
     await fetchData();
     await check();
-    let { success, uid } = await check_registration();
+    const { success, uid } = await check_registration();
     start_param = uid ? uid : null;
-    console.log(start_param);
 
     await get_settings();
-    success = uid ? success.true : success;
 
     const actions = {
         moderation: () => {
