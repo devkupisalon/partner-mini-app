@@ -207,7 +207,6 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
         }
 
         Object.values(message).forEach(({ message_id, photo, video, voice, document }) => {
-            logger.info(message_id);
             const media = photo ? HQD_photo(photo).file_id : video ? video.file_id : voice ? voice.file_id : document ? document.file_id : '';
             const mime_type = photo ? 'image/png' : video ? video.mime_type : voice ? voice.mime_type : document ? document.mime_type : '';
 
@@ -268,7 +267,6 @@ const getTelegramFiles = async (files) => {
  */
 const process_message = async (data) => {
     let { text, partner_name, partner_id, message_id, id, photo, video, voice, document, media_group_id, message, from_user, chat_id, reply_to_message_id } = data;
-    id = from_user ? id : message.from.id;
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
 
@@ -323,7 +321,7 @@ const process_message = async (data) => {
                             bot.sendMessage(CHAT_ID, media, from_user ? { parse_mode } : { parse_mode, reply_to_message_id }))
 
         if (data.message_id) {
-            p_success(type_m, message_id, !from_user ? message.chat.id : id, GROUP_CHAT_ID);
+            p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
 
     } catch (error) {
@@ -472,6 +470,9 @@ const process_save = async (data) => {
             let agent_name;
             let chat_id;
             let hash_id;
+
+            logger.info(GROUP_CHAT_ID);
+            logger.info(reply_to_message.chat.id);
 
             if (reply_to_message.chat.id === GROUP_CHAT_ID) {
 
