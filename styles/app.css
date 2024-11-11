@@ -65,7 +65,7 @@ input[type="file"],
 .input-date,
 .select,
 .select-partner-type {
-    text-align: center;
+    text-align-last: center;
     width: calc(60% - 10px);
     color: var(--tg-theme-text-color);
     padding: 10px 20px;
