@@ -13,7 +13,7 @@ body {
     height: fit-content;
     margin: 0 auto;
     max-width: 400px;
-    padding: 10px 10px;
+    /* padding: 10px 10px; */
     border-radius: 20px;
     background-color: var(--tg-theme-header-bg-color);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -320,3 +320,43 @@ a {
     color: var(--tg-theme-button-color);
     text-decoration: none;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow: hidden;
+  }
+
+  th,
+  td {
+    padding: 10px;
+  }
+
+  td {
+    font-size: 12px;
+  }
+
+  th {
+    background-color: #ff9902;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  .orange-background {
+    background-color: #ff9902 !important;
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+    font-weight: bold;
+    text-align: center;
+    font-size: 14px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f1f1f1;
+  }
+
+  .number-cell {
+    text-align: center;
+  }
