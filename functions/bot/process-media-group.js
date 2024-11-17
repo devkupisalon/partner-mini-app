@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from "uuid";
+
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
