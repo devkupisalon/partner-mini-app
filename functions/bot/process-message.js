@@ -52,7 +52,7 @@ const process_message = async (data) => {
                 brand,
                 model,
                 gosnum,
-                hash
+                hash: hash.replace('hash:', '')
             });
         }
     }
