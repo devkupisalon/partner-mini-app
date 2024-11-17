@@ -1,5 +1,5 @@
 import logger from "../logs/logger.js";
-import { send_first_messages } from "./process-bot.js";
+import { send_first_messages } from "./bot/process-init-messages.js";
 import { check_success_moderation, update_data } from "./sheets.js";
 import { constants } from "../constants.js";
 

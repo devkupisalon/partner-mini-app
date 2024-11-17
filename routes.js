@@ -22,7 +22,7 @@ import { save_logo } from "./functions/drive.js";
 import { verifyTelegramWebAppData } from "./functions/validate.js";
 import { constants, __dirname } from "./constants.js";
 
-import "./functions/process-bot.js";
+import "./functions/bot/process-bot.js";
 import "./functions/process-check-moderation.js";
 import "./logs/clean-logs.js";
 

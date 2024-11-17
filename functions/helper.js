@@ -1,3 +1,7 @@
+import bot from "./init-bot.js";
+import logger from "../../logs/logger.js";
+import { append_json_file } from "./process-json.js";
+
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
  * @param {Sheet} sheet - Лист, на котором производится поиск.
@@ -68,10 +72,48 @@ const parse_text = (replyText) => {
   return { agent_id, agent_message_id, agent_name, chat_id, hash_id };
 };
 
+/** Logger message */
+const l_message = (l, id, to_id) => {
+  return `${l} message successfully sended from chat_id ${id} to group_chat_id ${to_id}`;
+};
+
+const logger_messages = {
+  media_group: (id, to_id) => l_message("Media Group", id, to_id),
+  photo: (id, to_id) => l_message("Photo", id, to_id),
+  video: (id, to_id) => l_message("Video", id, to_id),
+  voice: (id, to_id) => l_message("Voice", id, to_id),
+  document: (id, to_id) => l_message("Document", id, to_id),
+  text: (id, to_id) => l_message("Text", id, to_id),
+};
+
+/**
+ * Success function
+ */
+const p_success = async (m, reply_to_message_id, id, to_id) => {
+  logger.info(logger_messages[m](id, to_id));
+  await bot.sendMessage(id, "Сообщение отправлено", { reply_to_message_id });
+};
+
+/**
+ * Process and save calculation data asynchronously.
+ * @param {Object} data - The data object containing phone, name, brand, model, gosnum, and hash.
+ * @returns {Promise<void>}
+ */
+const process_save_calc_data = async (data) => {
+  const { phone, name, brand, model, gosnum, hash } = data;
+  const obj = {};
+  if (!obj[hash]) {
+      obj[hash] = { phone, name, brand, model, gosnum }
+  }
+  await append_json_file(calc_data_obj_path, obj);
+};
+
 export {
   numberToColumn,
   getColumnNumberByValue,
   HQD_photo,
   parse_text,
   prepare_calc,
+  p_success,
+  process_save_calc_data
 };

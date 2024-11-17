@@ -1,6 +1,6 @@
 import { constants } from "../constants.js";
 import logger from "../logs/logger.js";
-import bot from "./init-bot.js";
+import bot from "./bot/init-bot.js";
 import { auth } from "./sheets.js";
 
 const { KUPISALONID } = constants;
