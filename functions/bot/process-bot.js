@@ -49,6 +49,13 @@ bot.on("message", async (message) => {
   const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
   const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
 
+  const is_media =
+    photo ||
+    video ||
+    voice ||
+    document ||
+    media_group_id;
+
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
   const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
 
@@ -133,22 +140,13 @@ bot.on("message", async (message) => {
   }
 
   // process save media and create calculation orders
-  if (forward_from && forward_from.is_bot && is_manager) {
-    const is_media =
-      photo ||
-      video ||
-      voice ||
-      document ||
-      media_group_id;
-
-    if (is_media || already_uploaded) {
-      await process_save({
-        message_id,
-        id,
-        message,
-      });
-      return;
-    }
+  if (forward_from && forward_from.is_bot && is_manager || is_manager && (is_media || already_uploaded)) {
+    await process_save({
+      message_id,
+      id,
+      message,
+    });
+    return;
   }
 
   if (is_manager && hash && hash_folder_id) {
