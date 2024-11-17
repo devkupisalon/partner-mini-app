@@ -412,11 +412,11 @@ const process_message = async (data) => {
       };
     if (message.caption) {
       send_media_obj[id].caption = from_user
-        ? `Агент *${partner_name}*:\n\n${message.caption}\n\n\`${hash}\``
+        ? `Агент *[${partner_name}](${partner_url})*:\n\n${message.caption}\n\n\`${hash}\``
         : text;
     } else {
       send_media_obj[id].caption = from_user
-        ? `Агент *${partner_name}*:\n\n\`${hash}\``
+        ? `Агент *[${partner_name}](${partner_url})*:\n\n\`${hash}\``
         : text;
     }
 
