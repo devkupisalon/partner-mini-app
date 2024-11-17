@@ -154,7 +154,7 @@ bot.on("message", async (message) => {
     return;
   }
 
-  if (is_manager && /* hash && hash_folder_id && */ calc) {
+  if (is_manager && calc) {
     await process_calc({
       message,
       partner_id,
