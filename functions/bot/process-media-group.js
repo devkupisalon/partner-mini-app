@@ -57,10 +57,7 @@ const send_media_group = async () => {
                 if (message) {
                     p_success("media_group", message_id, id, GROUP_CHAT_ID);
                     if (from_user) process_save_media_to_obj(message, user_id, hash_id);
-                    // delete media_obj[Object.keys(media_obj)[i]];
                     await deleteDataFromJson(send_media_obj_path, Object.keys(media_obj)[i]);
-                    // const new_media_obj = await process_return_json(send_media_obj_path);
-                    // logger.info(new_media_obj);
                 }
             }
         }
