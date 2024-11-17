@@ -6,6 +6,7 @@ import logger from "../../logs/logger.js";
 import { constants } from "../../constants.js";
 import { append_json_file, process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, p_success } from "../helper.js";
+import { send_media_files } from "./process-message.js";
 
 let { GROUP_CHAT_ID } = constants;
 let media_files = {};

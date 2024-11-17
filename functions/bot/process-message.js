@@ -10,7 +10,6 @@ const { send_media_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /** GLOBAL OBJ */
-let send_media_obj = {};
 
 /**
  * Process message data to handle media files and forwarding messages.
@@ -35,6 +34,7 @@ const process_message = async (data) => {
         reply_to_message_id,
         row,
     } = data;
+    let send_media_obj = {};
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
     const partner_url = `${DBLINK}&range=${row}:${row}`;
@@ -121,7 +121,6 @@ const process_message = async (data) => {
 
         logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[key])}`);
         await append_json_file(send_media_obj_path, send_media_obj);
-        send_media_obj = {};
         return;
     }
 
@@ -151,4 +150,4 @@ const process_message = async (data) => {
     }
 };
 
-export { process_message };
+export { process_message, send_media_obj };
