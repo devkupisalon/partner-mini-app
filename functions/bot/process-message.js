@@ -80,8 +80,9 @@ const process_message = async (data) => {
                     : text;
 
     if (media_group_id) {
-        if (!send_media_obj[id])
-            send_media_obj[id] = {
+        const id_t = `${id}-${new Date().toISOString()}`;
+        if (!send_media_obj[id_t])
+            send_media_obj[id_t] = {
                 message_id,
                 media_group_id,
                 id,
@@ -89,13 +90,11 @@ const process_message = async (data) => {
                 chat_id: CHAT_ID,
             };
         if (message.caption) {
-            logger.info(message.caption);
-            logger.info(message);
-            send_media_obj[id].caption = from_user
+            send_media_obj[id_t].caption = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n\`${hash}\``
                 : text;
         } else {
-            send_media_obj[id].caption = from_user
+            send_media_obj[id_t].caption = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n\`${hash}\``
                 : text;
         }
@@ -110,17 +109,17 @@ const process_message = async (data) => {
 
         const mediaType = mediaTypeMap[type_m];
         if (mediaType) {
-            send_media_obj[id].mediaFiles.push({ type: mediaType, media: media });
+            send_media_obj[id_t].mediaFiles.push({ type: mediaType, media: media });
         }
 
         if (!from_user) {
-            send_media_obj[id].reply_to_message_id = reply_to_message_id;
+            send_media_obj[id_t].reply_to_message_id = reply_to_message_id;
         } else {
-            send_media_obj[id].from_user = from_user;
-            send_media_obj[id].user_id = id;
+            send_media_obj[id_t].from_user = from_user;
+            send_media_obj[id_t].user_id = id;
         }
 
-        logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id])}`);
+        logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[id_t])}`);
         await append_json_file(send_media_obj_path, send_media_obj);
         return;
     }
