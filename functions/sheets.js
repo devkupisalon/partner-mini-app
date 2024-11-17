@@ -650,12 +650,12 @@ async function getData(partner_id) {
     header_percent_value
   );
 
-  const partner_percent = partners_values
+  const row = partners_values
     .slice(1)
-    .find((r) => r[0] === partner_id)[percent_col - 1];
-  const percentage =
-    parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
-
+    .find((r) => r[0] === partner_id);
+  logger.info(row);
+  const partner_percent = row[percent_col - 1];
+  const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
   const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
   const header_value_col = getColumnNumberByValue(
     values.slice(FULLPRICECOLSTART - 2)[0],
