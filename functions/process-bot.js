@@ -15,15 +15,11 @@ import {
   get_partner_name_and_manager,
   do_calc,
   get_all_groups_ids,
-} from "./sheets.js"
+} from "./sheets.js";
 
 import { create_folder, save_media } from "./drive.js";
 
-import {
-  parse_text,
-  HQD_photo,
-  prepare_calc,
-} from "./helper.js";
+import { parse_text, HQD_photo, prepare_calc } from "./helper.js";
 
 import {
   deletePropertiesFromFile,
@@ -594,45 +590,64 @@ bot.on("message", async (message) => {
 
       // process save media from agents
       if (reply_to_message && save && is_manager) {
-        await process_save({ reply_to_message, message_id, id, message });
+        await process_save({
+          reply_to_message,
+          message_id,
+          id,
+          message,
+        });
       }
 
       if (reply_to_message && is_manager && calc) {
-        let agent_id;
-
-        const { phone, name, brand, model, gosnum } = prepare_calc(
+        await process_calc({
           text_to_parse,
-          is_partner_group ? true : false
-        );
-        const hash_folder_id = message.text.match(/hash:(.*)/)[1];
-        agent_id = is_partner_group
-          ? partner_id
-          : parse_text(text_to_parse).agent_id;
-        const { link } = await do_calc({
-          partner: agent_id,
-          phone,
-          name,
-          brand,
-          model,
-          gosnum,
-          folderId: hash_folder_id,
+          is_partner_group,
+          message,
+          partner_id,
+          message_id,
         });
-
-        if (link) {
-          await bot.sendMessage(
-            id,
-            `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``,
-            {
-              reply_to_message_id: message_id,
-              parse_mode,
-              disable_web_page_preview: true,
-            }
-          );
-        }
       }
     }
   }
 });
+
+/**
+ * Process and calculate the data asynchronously.
+ *
+ * @param {Object} data - The data object containing text to parse, partner information, and message details.
+ */
+const process_calc = async (data) => {
+  const { text_to_parse, is_partner_group, message, partner_id, message_id } =
+    data;
+  let agent_id;
+  const { phone, name, brand, model, gosnum } = prepare_calc(
+    text_to_parse,
+    is_partner_group ? true : false
+  );
+  const hash_folder_id = message.text.match(/hash:(.*)/)[1];
+  agent_id = is_partner_group ? partner_id : parse_text(text_to_parse).agent_id;
+  const { link } = await do_calc({
+    partner: agent_id,
+    phone,
+    name,
+    brand,
+    model,
+    gosnum,
+    folderId: hash_folder_id,
+  });
+
+  if (link) {
+    await bot.sendMessage(
+      id,
+      `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``,
+      {
+        reply_to_message_id: message_id,
+        parse_mode,
+        disable_web_page_preview: true,
+      }
+    );
+  }
+};
 
 /**
  * Processes and saves media content based on the provided data.
