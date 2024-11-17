@@ -43,8 +43,7 @@ const process_calc = async (data) => {
     let agent_id;
     const obj = await process_return_json(calc_data_obj_path);
     logger.info(hash);
-    logger.info(obj[hash]);
-    logger.info(hash_folder_id);
+    logger.info(obj);
     const { phone, name, brand, model, gosnum } = obj[hash];
     agent_id = parse_text(message.text).agent_id;
     const { link } = await do_calc({
