@@ -54,9 +54,9 @@ const process_return_json = async (path) => {
 };
 
 /**
- * Function to delete 7 days old properties from a JSON file.
+ * Function to delete properties from a JSON file.
  */
-const deletaDataFromJson = async (path, key) => {
+const deleteDataFromJson = async (path, key) => {
   try {
     // Read the file
     const data = await fs.readFile(path, "utf8");
@@ -140,5 +140,5 @@ export {
   process_read_json,
   process_return_json,
   process_write_json,
-  deletaDataFromJson
+  deleteDataFromJson
 };
