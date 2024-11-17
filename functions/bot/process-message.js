@@ -94,7 +94,7 @@ const process_message = async (data) => {
                 ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n\`${hash}\``
                 : text;
         } else {
-            send_media_obj[key].caption = from_user
+            send_media_obj[key].text = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n\`${hash}\``
                 : text;
         }

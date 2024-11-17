@@ -29,6 +29,7 @@ const send_media_group = async () => {
 
                 let {
                     caption,
+                    text,
                     mediaFiles,
                     message_id,
                     id,
@@ -44,7 +45,7 @@ const send_media_group = async () => {
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
-                        return { type, media, caption, parse_mode };
+                        return { type, media, caption: caption ? caption : text, parse_mode };
                     }
                     return { type, media };
                 });
