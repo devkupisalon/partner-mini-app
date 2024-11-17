@@ -48,9 +48,6 @@ bot.on("message", async (message) => {
   const is_group = ["group", "supergroup"].includes(type);
   const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
   const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
-  // const is_partner_group =
-  //   group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
-  //   group_ids_obj.hasOwnProperty(forward_from?.chat?.id); // partners group
 
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
   const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
@@ -168,6 +165,7 @@ bot.on("message", async (message) => {
  */
 async function executeTask() {
   const media_obj = await process_return_json(send_media_obj_path);
+  logger.info(send_media_obj_path);
   if (Object.keys(media_obj).length > 0) {
     await send_media_group();
   }
