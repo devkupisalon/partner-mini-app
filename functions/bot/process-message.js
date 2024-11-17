@@ -1,6 +1,7 @@
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
+import { constants } from "../../constants.js";
 import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
 import { append_json_file } from "../process-json.js";
 
