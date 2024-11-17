@@ -226,7 +226,7 @@ async function preload() {
       }
 
       if (price && !partner && partner === null) {
-        window.location.href = `/get-price?partner=${start_param}`;
+        window.location.href = `/price?partner=${start_param}`;
       }
 
       if (!root) {

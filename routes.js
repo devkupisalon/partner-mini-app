@@ -45,7 +45,7 @@ const routes = [
   { path: "/settings", file: SETTINGS },
   { path: "/pre-calc", file: PRE_CALC },
   { path: "/registration", file: REGISTR },
-  { path: "/get-price", file: PRICE }
+  { path: "/price", file: PRICE }
 ];
 
 /** API ROUTES */
