@@ -82,7 +82,7 @@ const process_save = async (data) => {
     if (!data.message.caption && !data.exist_folder) return;
 
     try {
-        let { message_id, id, message, hash_folder_id, is_bot } = data;
+        const { message_id, id, message, hash_folder_id, is_bot } = data;
 
         const media = message.photo
             ? HQD_photo(message.photo)
@@ -98,7 +98,7 @@ const process_save = async (data) => {
         let agent_name;
         let chat_id;
         let hash_id;
-        let text_to_parse = message.caption || message.text;
+        let text_to_parse = message.text || message.caption;
 
         if (text_to_parse) {
             const d = parse_text(text_to_parse);
@@ -134,8 +134,6 @@ const process_save = async (data) => {
                 );
             }
         });
-
-        logger.info(selectedData);
 
         let folder = {};
 

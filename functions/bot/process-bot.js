@@ -56,6 +56,9 @@ bot.on("message", async (message) => {
     document ||
     media_group_id;
 
+  const calc = ['Сохранить', 'сохранить'].some(v => v.includes(message.text));
+  const save = ['Расчет', 'расчет'].some(v => v.includes(message.text));
+
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
   const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
 
@@ -140,19 +143,19 @@ bot.on("message", async (message) => {
   }
 
   // process save media and create calculation orders
-  if (forward_from && forward_from.is_bot && is_manager || is_manager && (is_media || already_uploaded)) {
+  if (forward_from && forward_from.is_bot || is_manager && save) {
     await process_save({
       message_id,
       id,
       message,
-      exist_folder: true,
+      exist_folder: save ? true : false,
       hash_folder_id,
-      is_bot: forward_from.is_bot ? true : false
+      is_bot: forward_from?.is_bot ? true : false
     });
     return;
   }
 
-  if (is_manager && hash && hash_folder_id) {
+  if (is_manager && /* hash && hash_folder_id && */ calc) {
     await process_calc({
       message,
       partner_id,
