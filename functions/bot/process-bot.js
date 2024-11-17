@@ -60,7 +60,7 @@ bot.on("message", async (message) => {
   const calc = ['Расчет', 'расчет'].some(v => message.text.includes(v));
 
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
-  const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
+  const hash = is_manager && message.text ? message.text.match(/hash:(.*)\n/)[1].replaceAll(':', '-') : '';
 
   const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
   const group_title = `Купи салон Рабочая`;
@@ -142,7 +142,7 @@ bot.on("message", async (message) => {
   }
 
   // process save media and create calculation orders
-  if (forward_from && forward_from.is_bot || is_manager && save) {
+  if (forward_from && forward_from.is_bot && is_media || is_manager && save) {
     await process_save({
       message_id,
       id,
@@ -208,7 +208,7 @@ async function waitForProcessMessage() {
 }
 
 /**
- * SCHEDULER FUNCTIONS FOR UPDATE GLOBAL CONSTANTS
+ * SCHEDULER FUNCTIONS FOR UPDATE JSON FILES
  */
 executeTask(); // Call every 10 cseconds
 setInterval(deletePropertiesFromFile, 60 * 60 * 1000); // Call every hour
