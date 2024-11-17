@@ -188,7 +188,7 @@ async function waitForProcessMessage() {
      */
     const checkProcessMessage = () => {
       if (isProcessMessageRunning) {
-        setTimeout(checkProcessMessage, 100);  // Check the status every 100 milliseconds
+        setTimeout(checkProcessMessage, 500);  // Check the status every 100 milliseconds
       } else {
         resolve();
       }
