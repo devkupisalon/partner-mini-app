@@ -4,7 +4,7 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { append_json_file, process_return_json, process_write_json } from "../process-json.js";
+import { append_json_file, process_return_json, process_write_json, deletaDataFromJson } from "../process-json.js";
 import { HQD_photo, p_success } from "../helper.js";
 
 let { GROUP_CHAT_ID } = constants;
@@ -57,10 +57,10 @@ const send_media_group = async () => {
                 if (message) {
                     p_success("media_group", message_id, id, GROUP_CHAT_ID);
                     if (from_user) process_save_media_to_obj(message, user_id, hash_id);
-                    delete media_obj[Object.keys(media_obj)[i]];
-                    await process_write_json(send_media_obj_path, media_obj);
-                    const new_media_obj = await process_return_json(send_media_obj_path);
-                    logger.info(new_media_obj);
+                    // delete media_obj[Object.keys(media_obj)[i]];
+                    await deletaDataFromJson(send_media_obj_path, Object.keys(media_obj)[i]);
+                    // const new_media_obj = await process_return_json(send_media_obj_path);
+                    // logger.info(new_media_obj);
                 }
             }
         }
