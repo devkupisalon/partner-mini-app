@@ -480,7 +480,7 @@ const process_message = async (data) => {
  * send back responses from managers to user chats
  */
 bot.on("message", async (message) => {
-  logger.info(message);
+  // logger.info(message);
 
   const {
     contact,
@@ -537,7 +537,7 @@ bot.on("message", async (message) => {
   const { partner_name, partner_id, row } = await get_partners_data(user_ID);
 
   // process agent messages
-  if (partner_name && partner_id && !is_group && !is_bot) {
+  if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
     await process_message({
       text,
       partner_name,
@@ -618,6 +618,8 @@ bot.on("message", async (message) => {
       forward_from.voice ||
       forward_from.document ||
       forward_from.media_group_id;
+
+      logger.info(is_media);
 
     if (is_media) {
       await process_save({
