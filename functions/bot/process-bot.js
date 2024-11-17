@@ -167,8 +167,6 @@ async function executeTask() {
   const media_obj = await process_return_json(send_media_obj_path);
   if (Object.keys(media_obj).length > 0) {
     await send_media_group();
-  } else {
-    logger.info(`There are no files to send`);
   }
   setTimeout(executeTask, interval);
 }
