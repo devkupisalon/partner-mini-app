@@ -689,6 +689,7 @@ async function getData(data) {
       }, {});
 
     Object.assign(data_obj, { header_row });
+    logger.info(data_obj);
     return data_obj;
   } catch (error) {
     logger.info(`Error in get_price_data: ${error.stack}`);
