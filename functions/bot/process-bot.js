@@ -52,6 +52,9 @@ bot.on("message", async (message) => {
   //   group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
   //   group_ids_obj.hasOwnProperty(forward_from?.chat?.id); // partners group
 
+  const hash_folder_id = message.text.match(/hash_folder:(.*)/)[1];
+  const hash = message.text.match(/hash:(.*)/)[1];
+
   const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
@@ -143,14 +146,18 @@ bot.on("message", async (message) => {
         id,
         message,
       });
-    } else {
-      logger.info('test');
-      await process_calc({
-        message,
-        // partner_id,
-        message_id,
-      });
     }
+  }
+
+  if (is_manager && hash && hash_folder_id) {
+    logger.info('test');
+    await process_calc({
+      message,
+      partner_id,
+      message_id,
+      hash,
+      hash_folder_id
+    });
   }
 });
 
