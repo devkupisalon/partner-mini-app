@@ -480,7 +480,7 @@ const process_message = async (data) => {
  * send back responses from managers to user chats
  */
 bot.on("message", async (message) => {
-  // logger.info(message);
+  logger.info(message);
 
   const {
     contact,
@@ -513,13 +513,12 @@ bot.on("message", async (message) => {
   const is_group = ["group", "supergroup"].includes(type);
   const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
   const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
-  const is_partner_group = group_ids_obj.hasOwnProperty(
-    reply_to_message?.chat.id
-  );
+  const is_partner_group =
+    group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
+    group_ids_obj.hasOwnProperty(forward_from?.chat.id);
 
-  const is_include_groups =
-    group_ids_obj.hasOwnProperty(`${id}`) ||
-    group_ids_obj.hasOwnProperty(`${id}`);
+  const is_include_groups = group_ids_obj.hasOwnProperty(id); /* || */
+  // group_ids_obj.hasOwnProperty(`${id}`);
 
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
@@ -589,25 +588,51 @@ bot.on("message", async (message) => {
         });
       }
 
-      // process save media from agents
-      if (reply_to_message && save && is_manager) {
-        await process_save({
-          reply_to_message,
-          message_id,
-          id,
-          message,
-        });
-      }
+      // if (reply_to_message && save && is_manager) {
+      //   await process_save({
+      //     reply_to_message,
+      //     message_id,
+      //     id,
+      //     message,
+      //   });
+      // }
 
-      if (reply_to_message && is_manager && calc) {
-        await process_calc({
-          text_to_parse,
-          is_partner_group,
-          message,
-          partner_id,
-          message_id,
-        });
-      }
+      // if (reply_to_message && is_manager && calc) {
+      //   await process_calc({
+      //     text_to_parse,
+      //     is_partner_group,
+      //     message,
+      //     partner_id,
+      //     message_id,
+      //   });
+      // }
+    }
+  }
+
+  // process save media and create calculation orders
+  if (forward_from && message.chat.is_bot && is_manager) {
+    const is_media =
+      forward_from.photo ||
+      forward_from.video ||
+      forward_from.voice ||
+      forward_from.document ||
+      forward_from.media_group_id;
+
+    if (is_media) {
+      await process_save({
+        reply_to_message,
+        message_id,
+        id,
+        message,
+      });
+    } else {
+      await process_calc({
+        text_to_parse,
+        is_partner_group,
+        message,
+        partner_id,
+        message_id,
+      });
     }
   }
 });
