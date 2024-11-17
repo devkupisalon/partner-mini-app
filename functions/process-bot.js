@@ -591,25 +591,6 @@ bot.on("message", async (message) => {
           reply_to_message_id: agent_message_id,
         });
       }
-
-      // if (reply_to_message && save && is_manager) {
-      //   await process_save({
-      //     reply_to_message,
-      //     message_id,
-      //     id,
-      //     message,
-      //   });
-      // }
-
-      // if (reply_to_message && is_manager && calc) {
-      //   await process_calc({
-      //     text_to_parse,
-      //     is_partner_group,
-      //     message,
-      //     partner_id,
-      //     message_id,
-      //   });
-      // }
     }
   }
 
@@ -622,14 +603,8 @@ bot.on("message", async (message) => {
       message.document ||
       message.media_group_id;
 
-    // logger.info(message);
-    // logger.info(await process_return_json(media_files_obj_path));
-
-    // return;
-
     if (is_media) {
       await process_save({
-        // reply_to_message,
         message_id,
         id,
         message,
@@ -659,7 +634,7 @@ const process_calc = async (data) => {
     text_to_parse,
     is_partner_group ? true : false
   );
-  const hash_folder_id = message.text.match(/hash:(.*)/)[1];
+  const hash_folder_id = message.text.match(/hash_folder:(.*)/)[1];
   agent_id = is_partner_group ? partner_id : parse_text(text_to_parse).agent_id;
   const { link } = await do_calc({
     partner: agent_id,
@@ -694,7 +669,7 @@ const process_save = async (data) => {
   if (!data.message.caption) return;
 
   try {
-    const { /* reply_to_message, */ message_id, id, message } = data;
+    const { message_id, id, message } = data;
 
     const media = message.photo
       ? HQD_photo(message.photo)
@@ -734,7 +709,6 @@ const process_save = async (data) => {
           return (
             c_chat_id === d.chat_id &&
             hash === d.hash_id &&
-            // v?.message_ids.some((id) => id === reply_to_message.message_id) &&
             v.data &&
             v.data.length > 0
           );
@@ -753,7 +727,7 @@ const process_save = async (data) => {
 
       let folder = {};
 
-      const hash_folder_id = message.text?.match(/hash:(.*)/);
+      const hash_folder_id = message.text?.match(/hash_folder:(.*)/);
 
       if (hash_folder_id) {
         folder.id = hash_folder_id[1];
