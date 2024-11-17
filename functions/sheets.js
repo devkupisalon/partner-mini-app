@@ -637,10 +637,10 @@ const get_all_groups_ids = async () => {
 
 /**
  * Retrieves data from a Google Sheets document and processes it to extract specific information based on a given partner ID.
- * @param {string} partner_id - The ID of the partner to calculate pricing for.
+ * @param {Object} data - The ID of the partner to calculate pricing for.
  * @returns {Object} An object containing the processed data adjusted based on the partner's percentage and header row.
  */
-async function getData(partner_id) {
+async function getData(data) {
   const header_value = "Розница";
   const header_percent_value = "percent";
 
@@ -652,7 +652,7 @@ async function getData(partner_id) {
 
   const row = partners_values
     .slice(1)
-    .find((r) => r[0] === partner_id);
+    .find((r) => r[0] === data.partner);
   logger.info(row);
   const partner_percent = row[percent_col - 1];
   const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
