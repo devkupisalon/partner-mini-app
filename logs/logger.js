@@ -6,8 +6,6 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const currentDate = new Date();
-const sevenDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 7));
 
 const customTimeFormat = () => `,"time":"${new Date().toISOString()}"`;
 
