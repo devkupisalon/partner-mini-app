@@ -56,8 +56,8 @@ bot.on("message", async (message) => {
     document ||
     media_group_id;
 
-  const calc = ['Сохранить', 'сохранить'].some(v => v.includes(message.text));
-  const save = ['Расчет', 'расчет'].some(v => v.includes(message.text));
+  const save = ['Сохранить', 'сохранить'].some(v => v.includes(message.text));
+  const calc = ['Расчет', 'расчет'].some(v => v.includes(message.text));
 
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
   const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
@@ -65,7 +65,6 @@ bot.on("message", async (message) => {
   const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
-  const already_uploaded = reply_to_message?.text.includes(`Медиа контент сохранен`);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row;
