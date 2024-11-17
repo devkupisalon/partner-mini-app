@@ -82,7 +82,7 @@ const process_save = async (data) => {
     if (!data.message.caption && !data.exist_folder) return;
 
     try {
-        let { message_id, id, message, hash, hash_folder_id } = data;
+        let { message_id, id, message, hash_folder_id, is_bot } = data;
 
         const media = message.photo
             ? HQD_photo(message.photo)
@@ -114,7 +114,7 @@ const process_save = async (data) => {
 
         const selectedData = Object.entries(media_obj).find(([k, v]) => {
             const [c_chat_id, hash] = k.split("_");
-            if (v.hash_partner && !hash_id) {
+            if (v.hash_partner && !hash_id && !is_bot) {
                 const d = parse_text(v.hash_partner);
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
@@ -139,10 +139,8 @@ const process_save = async (data) => {
 
         let folder = {};
 
-        hash_folder_id = hash_folder_id ? hash_folder_id : message.text?.match(/hash_folder:(.*)/);
-
         if (hash_folder_id) {
-            folder.id = hash_folder_id[1];
+            folder.id = hash_folder_id;
             folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
         } else {
             const { partner_folder } = await get_partner_name_and_manager(agent_id);

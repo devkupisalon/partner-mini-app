@@ -146,8 +146,8 @@ bot.on("message", async (message) => {
       id,
       message,
       exist_folder: true,
-      hash,
-      hash_folder_id
+      hash_folder_id,
+      is_bot: forward_from.is_bot ? true : false
     });
     return;
   }
