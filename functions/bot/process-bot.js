@@ -56,8 +56,9 @@ bot.on("message", async (message) => {
     document ||
     media_group_id;
 
-  const save = ['Сохранить', 'сохранить'].some(v => v.includes(message.text));
-  const calc = ['Расчет', 'расчет'].some(v => v.includes(message.text));
+  const save = ['Сохранить', 'сохранить'].some(v => message.text.includes(v));
+  logger.info(save);
+  const calc = ['Расчет', 'расчет'].some(v => message.text.includes(v));
 
   const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text.match(/hash_folder:(.*)/)[1] : '';
   const hash = is_manager && message.text ? message.text.match(/hash:(.*)/)[1].replaceAll(':', '-') : '';
