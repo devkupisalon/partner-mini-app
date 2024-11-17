@@ -376,7 +376,7 @@ const process_message = async (data) => {
   const partner_url = `${DBLINK}&range=${row}:${row}`;
 
   from_user
-    ? (text = `Агент *[${partner_name}](${partner_url})*:\n\n${text}\n\n\`${hash}\``)
+    ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n\`${hash}\``)
     : (text = text);
 
   let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
@@ -412,11 +412,11 @@ const process_message = async (data) => {
       };
     if (message.caption) {
       send_media_obj[id].caption = from_user
-        ? `Агент *[${partner_name}](${partner_url})*:\n\n${message.caption}\n\n\`${hash}\``
+        ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n\`${hash}\``
         : text;
     } else {
       send_media_obj[id].caption = from_user
-        ? `Агент *[${partner_name}](${partner_url})*:\n\n\`${hash}\``
+        ? `Агент [${partner_name}](${partner_url}):\n\n\`${hash}\``
         : text;
     }
 
