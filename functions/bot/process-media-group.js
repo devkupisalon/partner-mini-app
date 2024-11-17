@@ -41,7 +41,7 @@ const send_media_group = async () => {
 
                 logger.info(caption);
 
-                if (from_user) caption = `${caption.slice(0, -2)}:${hash_id}\``;
+                if (from_user) caption = caption ? `${caption.slice(0, -2)}:${hash_id}\`` : '';
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {
                     if (index === 0) {
