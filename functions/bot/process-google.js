@@ -94,7 +94,7 @@ const process_save = async (data) => {
                         ? message.document
                         : "";
 
-        if (media !== "") {
+        // if (media !== "") {
             let agent_id;
             let agent_name;
             let chat_id;
@@ -174,9 +174,9 @@ const process_save = async (data) => {
                     }
                 );
             }
-        } else {
-            logger.info(`There are no media to save`);
-        }
+        // } else {
+        //     logger.info(`There are no media to save`);
+        // }
     } catch (error) {
         logger.error(`Error in process_save: ${error}`);
     }
