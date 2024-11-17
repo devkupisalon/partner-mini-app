@@ -139,10 +139,9 @@ bot.on("message", async (message) => {
     }
   }
 
-  logger.info(is_manager && (is_media || already_uploaded));
-
   // process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_manager || is_manager && (is_media || already_uploaded)) {
+    logger.info('test');
     await process_save({
       message_id,
       id,
