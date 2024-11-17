@@ -23,7 +23,6 @@ GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
  * send back responses from managers to user chats
  */
 bot.on("message", async (message) => {
-  // logger.info(message);
 
   const {
     contact,
@@ -56,6 +55,7 @@ bot.on("message", async (message) => {
   const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
+  const already_uploaded = reply_to_message?.text.includes(`Медиа контент сохранен`);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row;
@@ -139,7 +139,7 @@ bot.on("message", async (message) => {
       video ||
       voice ||
       document ||
-      media_group_id;
+      media_group_id || already_uploaded;
 
     if (is_media) {
       await process_save({
@@ -159,6 +159,11 @@ bot.on("message", async (message) => {
       hash_folder_id
     });
   }
+});
+
+// Handle errors
+bot.on("polling_error", (error) => {
+  logger.error(error);
 });
 
 /**
@@ -203,9 +208,4 @@ async function waitForProcessMessage() {
  */
 executeTask(); // Call every 10 cseconds
 setInterval(deletePropertiesFromFile, 60 * 60 * 1000); // Call every hour
-
-// Handle errors
-bot.on("polling_error", (error) => {
-  logger.error(error);
-});
 

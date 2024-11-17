@@ -17,8 +17,6 @@ const send_media_group = async () => {
     const hash_id = uuidv4();
     const media_obj = await process_return_json(send_media_obj_path);
 
-    logger.info(media_obj);
-
     try {
         if (Object.keys(media_obj).length > 0) {
             const mediaObjValues = Object.values(media_obj);
