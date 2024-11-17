@@ -57,7 +57,7 @@ const process_calc = async (data) => {
     if (link) {
         await bot.sendMessage(
             id,
-            `Расчет создан, [открыть](${link})\n\n\`hash:${hash_folder_id}\``,
+            `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``,
             {
                 reply_to_message_id: message_id,
                 parse_mode,
