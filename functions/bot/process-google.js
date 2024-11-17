@@ -82,7 +82,7 @@ const process_save = async (data) => {
     if (!data.message.caption && !data.exist_folder) return;
 
     try {
-        const { message_id, id, message } = data;
+        let { message_id, id, message, hash, hash_folder_id } = data;
 
         const media = message.photo
             ? HQD_photo(message.photo)
@@ -94,7 +94,6 @@ const process_save = async (data) => {
                         ? message.document
                         : "";
 
-        // if (media !== "") {
         let agent_id;
         let agent_name;
         let chat_id;
@@ -127,7 +126,6 @@ const process_save = async (data) => {
                     v.data.length > 0
                 );
             } else {
-                logger.info(`media_obj hash_id: ${v.hash_id}`);
                 return (
                     c_chat_id === chat_id &&
                     v.hash_id === hash_id &&
@@ -137,9 +135,11 @@ const process_save = async (data) => {
             }
         });
 
+        logger.info(selectedData);
+
         let folder = {};
 
-        const hash_folder_id = message.text?.match(/hash_folder:(.*)/);
+        hash_folder_id = hash_folder_id ? hash_folder_id : message.text?.match(/hash_folder:(.*)/);
 
         if (hash_folder_id) {
             folder.id = hash_folder_id[1];
@@ -175,9 +175,6 @@ const process_save = async (data) => {
                 }
             );
         }
-        // } else {
-        //     logger.info(`There are no media to save`);
-        // }
     } catch (error) {
         logger.error(`Error in process_save: ${error}`);
     }

@@ -145,7 +145,9 @@ bot.on("message", async (message) => {
       message_id,
       id,
       message,
-      exist_folder: true
+      exist_folder: true,
+      hash,
+      hash_folder_id
     });
     return;
   }
