@@ -150,4 +150,4 @@ const process_message = async (data) => {
     }
 };
 
-export { process_message, send_media_obj };
+export { process_message };
