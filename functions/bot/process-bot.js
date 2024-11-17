@@ -144,9 +144,10 @@ bot.on("message", async (message) => {
         message,
       });
     } else {
+      logger.info('test');
       await process_calc({
         message,
-        partner_id,
+        // partner_id,
         message_id,
       });
     }
