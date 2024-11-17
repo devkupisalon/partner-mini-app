@@ -79,7 +79,7 @@ const process_calc = async (data) => {
 const process_save = async (data) => {
     let media_data;
 
-    if (!data.message.caption || !data.exist_folder) return;
+    if (!data.message.caption && !data.exist_folder) return;
 
     try {
         const { message_id, id, message } = data;
