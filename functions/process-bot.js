@@ -517,13 +517,12 @@ bot.on("message", async (message) => {
     group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
     group_ids_obj.hasOwnProperty(forward_from?.chat?.id);
 
-  const is_include_groups = group_ids_obj.hasOwnProperty(id); /* || */
-  // group_ids_obj.hasOwnProperty(`${id}`);
-
+  const is_include_groups = group_ids_obj.hasOwnProperty(id); 
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
 
   let text = message.text || message.caption || "";
+  let partner_name, partner_id, row;
 
   let user_ID =
     reply_to_message && is_manager && is_group
@@ -534,7 +533,12 @@ bot.on("message", async (message) => {
 
   if (contact) return;
 
-  const { partner_name, partner_id, row } = await get_partners_data(user_ID);
+  if (!is_manager) {
+    const p = await get_partners_data(user_ID);
+    partner_id = p.partner_id;
+    partner_name = p.partner_name;
+    row = p.row;
+  }
 
   // process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
@@ -609,12 +613,8 @@ bot.on("message", async (message) => {
     }
   }
 
-  logger.info(is_manager);
-  logger.info(message.chat.is_bot);
-  logger.info(message);
-
   // process save media and create calculation orders
-  if (forward_from && message.chat.is_bot && is_manager) {
+  if (forward_from && forward_from.is_bot && is_manager) {
     logger.info(forward_from);
     const is_media =
       forward_from.photo ||
@@ -623,7 +623,7 @@ bot.on("message", async (message) => {
       forward_from.document ||
       forward_from.media_group_id;
 
-      logger.info(is_media);
+    logger.info(is_media);
 
     if (is_media) {
       await process_save({
