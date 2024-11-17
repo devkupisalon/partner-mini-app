@@ -721,13 +721,14 @@ const process_save = async (data) => {
         hash_id = d.hash_id;
       }
 
+      logger.info(hash_id);
+
       const media_obj = await process_return_json(media_files_obj_path);
 
       const selectedData = Object.entries(media_obj).find(([k, v]) => {
         const [c_chat_id, hash] = k.split("_");
         if (v.hash_partner) {
-          logger.info(v.hash_partner);
-          logger.info({ k, v });
+          // logger.info(v.hash_partner);
           const d = parse_text(v.hash_partner);
           agent_id = d.agent_id;
           agent_name = d.agent_name;
@@ -740,6 +741,7 @@ const process_save = async (data) => {
             v.data.length > 0
           );
         } else {
+          logger.info(v.hash_id);
           return (
             c_chat_id === chat_id &&
             v.hash_id === hash_id &&
@@ -748,6 +750,8 @@ const process_save = async (data) => {
           );
         }
       });
+
+      logger.info(selectedData);
 
       let folder = {};
 
