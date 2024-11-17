@@ -654,6 +654,7 @@ async function getData(data) {
     const row = partners_values
       .slice(1)
       .find((r) => r[0] === data.partner);
+      logger.info(row);
     const partner_percent = row[percent_col - 1];
     const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
     const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
@@ -689,7 +690,6 @@ async function getData(data) {
       }, {});
 
     Object.assign(data_obj, { header_row });
-    logger.info(data_obj);
     return data_obj;
   } catch (error) {
     logger.info(`Error in get_price_data: ${error.stack}`);
