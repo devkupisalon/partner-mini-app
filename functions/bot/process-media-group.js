@@ -9,7 +9,6 @@ import { HQD_photo, p_success } from "../helper.js";
 import { send_media_files } from "./process-message.js";
 
 let { GROUP_CHAT_ID } = constants;
-let media_files = {};
 const { send_media_obj_path, media_files_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -71,13 +70,9 @@ const send_media_group = async () => {
  * @param {string} chat_id - ID of the chat where the media files are received.
  * @param {string} hash_id - hash.
  */
-const process_save_media_to_obj = async (
-    message,
-    chat_id,
-    hash_id,
-    hash_partner
-) => {
+const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner) => {
     const timestamp = new Date().getTime();
+    let media_files = {};
 
     if (!hash_partner) {
         if (!media_files[`${chat_id}_${timestamp}`]) {
