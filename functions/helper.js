@@ -1,6 +1,9 @@
 import bot from "./bot/init-bot.js";
 import logger from "../logs/logger.js";
 import { append_json_file } from "./process-json.js";
+import { constants } from "../constants.js";
+
+const { calc_data_obj_path } = constants;
 
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
@@ -103,7 +106,7 @@ const process_save_calc_data = async (data) => {
   const { phone, name, brand, model, gosnum, hash } = data;
   const obj = {};
   if (!obj[hash]) {
-      obj[hash] = { phone, name, brand, model, gosnum }
+    obj[hash] = { phone, name, brand, model, gosnum }
   }
   await append_json_file(calc_data_obj_path, obj);
 };
