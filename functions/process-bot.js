@@ -611,6 +611,7 @@ bot.on("message", async (message) => {
 
   // process save media and create calculation orders
   if (forward_from && message.chat.is_bot && is_manager) {
+    logger.info(forward_from);
     const is_media =
       forward_from.photo ||
       forward_from.video ||
