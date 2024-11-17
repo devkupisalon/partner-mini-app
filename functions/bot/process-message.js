@@ -121,6 +121,7 @@ const process_message = async (data) => {
 
         logger.info(`Media files prepared to send: ${JSON.stringify(send_media_obj[key])}`);
         await append_json_file(send_media_obj_path, send_media_obj);
+        send_media_obj = {};
         return;
     }
 

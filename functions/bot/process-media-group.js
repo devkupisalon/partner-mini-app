@@ -150,6 +150,7 @@ const process_save_media_to_obj = async (
     }
 
     await append_json_file(media_files_obj_path, media_files);
+    media_files = {};
 };
 
 export { send_media_group, process_save_media_to_obj };
