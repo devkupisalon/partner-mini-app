@@ -641,54 +641,58 @@ const get_all_groups_ids = async () => {
  * @returns {Object} An object containing the processed data adjusted based on the partner's percentage and header row.
  */
 async function getData(data) {
-  const header_value = "Розница";
-  const header_percent_value = "percent";
+  try {
+    const header_value = "Розница";
+    const header_percent_value = "percent";
 
-  const partners_values = await get_data(DB, DATASHEETNAME);
-  const percent_col = getColumnNumberByValue(
-    partners_values[0],
-    header_percent_value
-  );
+    const partners_values = await get_data(DB, DATASHEETNAME);
+    const percent_col = getColumnNumberByValue(
+      partners_values[0],
+      header_percent_value
+    );
 
-  const row = partners_values
-    .slice(1)
-    .find((r) => r[0] === data.partner);
-  const partner_percent = row[percent_col - 1];
-  const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
-  const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
-  const header_value_col = getColumnNumberByValue(
-    values.slice(FULLPRICECOLSTART - 2)[0],
-    header_value
-  );
+    const row = partners_values
+      .slice(1)
+      .find((r) => r[0] === data.partner);
+    const partner_percent = row[percent_col - 1];
+    const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
+    const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
+    const header_value_col = getColumnNumberByValue(
+      values.slice(FULLPRICECOLSTART - 2)[0],
+      header_value
+    );
 
-  const header_row = ["№", "Наименование", "Работа"];
+    const header_row = ["№", "Наименование", "Работа"];
 
-  const data_obj = values
-    .slice(FULLPRICECOLSTART - 1)
-    .reduce((acc, r, index) => {
-      const [, i, , name, , zap] = r;
-      const rawPrice = r[header_value_col - 1] * percentage;
-      const price = parseFloat(rawPrice + Number(zap)).toFixed(0);
+    const data_obj = values
+      .slice(FULLPRICECOLSTART - 1)
+      .reduce((acc, r, index) => {
+        const [, i, , name, , zap] = r;
+        const rawPrice = r[header_value_col - 1] * percentage;
+        const price = parseFloat(rawPrice + Number(zap)).toFixed(0);
 
-      if (!acc.values) acc.values = [];
-      if (i) {
-        acc.values.push({
-          i,
-          name,
-          price,
-        });
-      } else {
-        acc.values.push({
-          name,
-          index,
-          color: true,
-        });
-      }
-      return acc;
-    }, {});
+        if (!acc.values) acc.values = [];
+        if (i) {
+          acc.values.push({
+            i,
+            name,
+            price,
+          });
+        } else {
+          acc.values.push({
+            name,
+            index,
+            color: true,
+          });
+        }
+        return acc;
+      }, {});
 
-  Object.assign(data_obj, { header_row });
-  return data_obj;
+    Object.assign(data_obj, { header_row });
+    return data_obj;
+  } catch (error) {
+    logger.info(`Error in get_price_data: ${error.stack}`);
+  }
 }
 
 export {
