@@ -515,7 +515,7 @@ bot.on("message", async (message) => {
   const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
   const is_partner_group =
     group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
-    group_ids_obj.hasOwnProperty(forward_from?.chat.id);
+    group_ids_obj.hasOwnProperty(forward_from?.chat?.id);
 
   const is_include_groups = group_ids_obj.hasOwnProperty(id); /* || */
   // group_ids_obj.hasOwnProperty(`${id}`);
