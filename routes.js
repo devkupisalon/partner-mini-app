@@ -26,7 +26,7 @@ import "./functions/bot/process-bot.js";
 import "./functions/process-check-moderation.js";
 import "./logs/clean-logs.js";
 
-const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR } = constants;
+const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR, PRICE } = constants;
 const app = express();
 const upload = multer();
 
@@ -45,6 +45,7 @@ const routes = [
   { path: "/settings", file: SETTINGS },
   { path: "/pre-calc", file: PRE_CALC },
   { path: "/registration", file: REGISTR },
+  { path: "/get-price", file: PRICE }
 ];
 
 /** API ROUTES */

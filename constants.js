@@ -36,6 +36,7 @@ const constants = {
   SETTINGS: `${__dirname}/html/settings-web-app.html`,
   PRE_CALC: `${__dirname}/html/pre-calculation.html`,
   REGISTR: `${__dirname}/html/registration.html`,
+  PRICE: `${__dirname}/html/price.html`,
   send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
   media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
   managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
