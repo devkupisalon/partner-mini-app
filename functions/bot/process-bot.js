@@ -14,6 +14,7 @@ import { deletePropertiesFromFile, process_return_json } from "../process-json.j
 const interval = 10000;
 
 let { GROUP_CHAT_ID } = constants;
+let isProcessMessageRunning;
 const { send_media_obj_path } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -77,6 +78,7 @@ bot.on("message", async (message) => {
 
   // process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
+    isProcessMessageRunning = true;
     await process_message({
       text,
       partner_name,
@@ -92,6 +94,7 @@ bot.on("message", async (message) => {
       from_user: true,
       row,
     });
+    isProcessMessageRunning = false;
   }
 
   // process save media to json if is media send from partner/agent in group
@@ -110,7 +113,7 @@ bot.on("message", async (message) => {
 
       if (reply_to_message && is_bot && is_title) {
         const { agent_message_id, chat_id } = parse_text(text_to_parse);
-
+        isProcessMessageRunning = true;
         await process_message({
           text: message.text || message.caption || "",
           message_id,
@@ -124,6 +127,7 @@ bot.on("message", async (message) => {
           chat_id,
           reply_to_message_id: agent_message_id,
         });
+        isProcessMessageRunning = false
       }
     }
   }
@@ -164,11 +168,34 @@ bot.on("message", async (message) => {
  * Sets a timeout to trigger the executeTask function again after a specified interval.
  */
 async function executeTask() {
+  await waitForProcessMessage();
   const media_obj = await process_return_json(send_media_obj_path);
   if (Object.keys(media_obj).length > 0) {
     await send_media_group();
   }
   setTimeout(executeTask, interval);
+}
+
+/**
+ * Asynchronous function to wait for the completion of processMessage().
+ * @returns {Promise} A Promise that resolves when processMessage() has finished.
+ */
+async function waitForProcessMessage() {
+  return new Promise(resolve => {
+    /**
+     * Recursive function to check if processMessage() is running.
+     * Resolves the Promise when processMessage() is not running.
+     */
+    const checkProcessMessage = () => {
+      if (isProcessMessageRunning) {
+        setTimeout(checkProcessMessage, 100);  // Check the status every 100 milliseconds
+      } else {
+        resolve();
+      }
+    };
+
+    checkProcessMessage();
+  });
 }
 
 /**
