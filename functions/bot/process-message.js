@@ -36,8 +36,6 @@ const process_message = async (data) => {
         row,
     } = data;
 
-    logger.info(message);
-
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 

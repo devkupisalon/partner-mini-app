@@ -165,7 +165,6 @@ bot.on("message", async (message) => {
  */
 async function executeTask() {
   const media_obj = await process_return_json(send_media_obj_path);
-  logger.info(media_obj || `File is empty`);
   if (Object.keys(media_obj).length > 0) {
     await send_media_group();
   }
