@@ -56,6 +56,29 @@ const process_return_json = async (path) => {
 /**
  * Function to delete 7 days old properties from a JSON file.
  */
+const deletaDataFromJson = async (path, key) => {
+  try {
+    // Read the file
+    const data = await fs.readFile(path, "utf8");
+    const jsonData = JSON.parse(data);
+
+    delete jsonData[key];
+
+    // Convert the object back to a JSON string
+    const newData = JSON.stringify(jsonData, null, 2);
+
+    // Write the updated data back to the file
+    await fs.writeFile(path, newData, "utf8");
+
+    logger.info("Specified properties successfully removed from JSON file.");
+  } catch (err) {
+    logger.error(`Error while deleting properties from JSON file: ${err}`);
+  }
+};
+
+/**
+ * Function to delete 7 days old properties from a JSON file.
+ */
 const deletePropertiesFromFile = async () => {
   try {
     const now = new Date();
@@ -117,4 +140,5 @@ export {
   process_read_json,
   process_return_json,
   process_write_json,
+  deletaDataFromJson
 };

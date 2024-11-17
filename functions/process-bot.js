@@ -17,7 +17,6 @@ import {
   get_all_groups_ids,
 } from "./sheets.js";
 
-import { encryptString, decryptString } from `./validate.js`;
 import { create_folder, save_media } from "./drive.js";
 import { parse_text, HQD_photo, prepare_calc } from "./helper.js";
 
@@ -26,6 +25,7 @@ import {
   append_json_file,
   process_return_json,
   process_write_json,
+  deletaDataFromJson
 } from "./process-json.js";
 
 const interval = 10000;
@@ -671,6 +671,8 @@ const process_calc = async (data) => {
       }
     );
   }
+
+  await deletaDataFromJson(calc_data_obj_path, hash);
 };
 
 /**
@@ -736,8 +738,6 @@ const process_save = async (data) => {
           );
         }
       });
-
-      logger.info(selectedData);
 
       let folder = {};
 
