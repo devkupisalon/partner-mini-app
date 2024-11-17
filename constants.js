@@ -39,6 +39,7 @@ const constants = {
   send_media_obj_path: `${__dirname}/json/send_media_obj.json`,
   media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
   managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
+  calc_data_obj_path: `${__dirname}/json/calc_data_obj.json`,
   credentials_path: `${__dirname}/json/credentials.json`,
 };
 

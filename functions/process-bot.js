@@ -17,8 +17,8 @@ import {
   get_all_groups_ids,
 } from "./sheets.js";
 
+import { encryptString, decryptString } from `./validate.js`;
 import { create_folder, save_media } from "./drive.js";
-
 import { parse_text, HQD_photo, prepare_calc } from "./helper.js";
 
 import {
@@ -31,7 +31,7 @@ import {
 const interval = 10000;
 
 let { GROUP_CHAT_ID, BOT_TOKEN, DBLINK } = constants;
-const { send_media_obj_path, media_files_obj_path } = constants;
+const { send_media_obj_path, media_files_obj_path, calc_data_obj_path } = constants;
 
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -219,8 +219,8 @@ const send_media_group = async () => {
 
         let message = reply_to_message_id
           ? await bot.sendMediaGroup(chat_id, mediaGroup, {
-              reply_to_message_id,
-            })
+            reply_to_message_id,
+          })
           : await bot.sendMediaGroup(chat_id, mediaGroup);
 
         if (message) {
@@ -234,6 +234,20 @@ const send_media_group = async () => {
   } catch (error) {
     logger.error(`Error in send_media_group: ${error.stack}`);
   }
+};
+
+/**
+ * Process and save calculation data asynchronously.
+ * @param {Object} data - The data object containing phone, name, brand, model, gosnum, and hash.
+ * @returns {Promise<void>}
+ */
+const process_save_calc_data = async (data) => {
+  const { phone, name, brand, model, gosnum, hash } = data;
+  const obj = {};
+  if (!obj[hash]) {
+    obj[hash] = { phone, name, brand, model, gosnum }
+  }
+  await append_json_file(calc_data_obj_path, obj);
 };
 
 /**
@@ -265,21 +279,21 @@ const process_save_media_to_obj = async (
         const media = photo
           ? HQD_photo(photo).file_id
           : video
-          ? video.file_id
-          : voice
-          ? voice.file_id
-          : document
-          ? document.file_id
-          : "";
+            ? video.file_id
+            : voice
+              ? voice.file_id
+              : document
+                ? document.file_id
+                : "";
         const mime_type = photo
           ? "image/png"
           : video
-          ? video.mime_type
-          : voice
-          ? voice.mime_type
-          : document
-          ? document.mime_type
-          : "";
+            ? video.mime_type
+            : voice
+              ? voice.mime_type
+              : document
+                ? document.mime_type
+                : "";
 
         media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
         media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
@@ -301,29 +315,27 @@ const process_save_media_to_obj = async (
     const media = photo
       ? HQD_photo(photo).file_id
       : video
-      ? video.file_id
-      : voice
-      ? voice.file_id
-      : document
-      ? document.file_id
-      : "";
+        ? video.file_id
+        : voice
+          ? voice.file_id
+          : document
+            ? document.file_id
+            : "";
     const mime_type = photo
       ? "image/png"
       : video
-      ? video.mime_type
-      : voice
-      ? voice.mime_type
-      : document
-      ? document.mime_type
-      : "";
+        ? video.mime_type
+        : voice
+          ? voice.mime_type
+          : document
+            ? document.mime_type
+            : "";
 
     media_files[`${chat_id}_${media_group_id}`].data.push({ media, mime_type });
     media_files[`${chat_id}_${media_group_id}`].message_ids.push(message_id);
   }
 
   await append_json_file(media_files_obj_path, media_files);
-
-  // logger.info(media_files);
 };
 
 /**
@@ -379,27 +391,41 @@ const process_message = async (data) => {
     ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n\`${hash}\``)
     : (text = text);
 
+  if (from_user) {
+    const { phone, name, brand, model, gosnum } = prepare_calc(text);
+    if (phone && name && brand && model && gosnum) {
+      await process_save_calc_data({
+        phone,
+        name,
+        brand,
+        model,
+        gosnum,
+        hash
+      });
+    }
+  }
+
   let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
 
   const type_m = photo
     ? "photo"
     : video
-    ? "video"
-    : voice
-    ? "voice"
-    : document
-    ? "document"
-    : "text";
+      ? "video"
+      : voice
+        ? "voice"
+        : document
+          ? "document"
+          : "text";
 
   const media = photo
     ? HQD_photo(photo).file_id
     : video
-    ? video.file_id
-    : voice
-    ? voice.file_id
-    : document
-    ? document.file_id
-    : text;
+      ? video.file_id
+      : voice
+        ? voice.file_id
+        : document
+          ? document.file_id
+          : text;
 
   if (media_group_id) {
     if (!send_media_obj[id])
@@ -458,12 +484,12 @@ const process_message = async (data) => {
     const data = await (type_m === "photo"
       ? bot.sendPhoto(CHAT_ID, media, options)
       : type_m === "video"
-      ? bot.sendVideo(CHAT_ID, media, options)
-      : type_m === "voice"
-      ? bot.sendVoice(CHAT_ID, media, options)
-      : type_m === "document"
-      ? bot.sendDocument(CHAT_ID, media, options)
-      : bot.sendMessage(CHAT_ID, media, default_options));
+        ? bot.sendVideo(CHAT_ID, media, options)
+        : type_m === "voice"
+          ? bot.sendVoice(CHAT_ID, media, options)
+          : type_m === "document"
+            ? bot.sendDocument(CHAT_ID, media, options)
+            : bot.sendMessage(CHAT_ID, media, default_options));
 
     if (data.message_id) {
       p_success(type_m, message_id, id, GROUP_CHAT_ID);
@@ -499,13 +525,6 @@ bot.on("message", async (message) => {
   const group_ids_obj = await get_all_groups_ids();
   const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
 
-  const save = ["Сохранить медиа", "сохранить медиа"].some((c) =>
-    message.text?.includes(c)
-  );
-  const calc = ["Создать расчет", "создать расчет"].some((c) =>
-    message.text?.includes(c)
-  );
-
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
     ? true
     : false;
@@ -528,8 +547,8 @@ bot.on("message", async (message) => {
     reply_to_message && is_manager && is_group
       ? reply_to_message?.from.id
       : is_group
-      ? from_id
-      : id;
+        ? from_id
+        : id;
 
   if (contact) return;
 
@@ -572,9 +591,8 @@ bot.on("message", async (message) => {
     logger.info(`Received message from ${type} with ID: ${id}`);
 
     if (is_managers_work_chat || is_include_groups) {
-      // logger.info(message);
 
-      if (reply_to_message && is_bot && !save && !calc && is_title) {
+      if (reply_to_message && is_bot && is_title) {
         const { agent_message_id, chat_id } = parse_text(text_to_parse);
 
         await process_message({
@@ -611,8 +629,6 @@ bot.on("message", async (message) => {
       });
     } else {
       await process_calc({
-        text_to_parse,
-        is_partner_group,
         message,
         partner_id,
         message_id,
@@ -627,15 +643,13 @@ bot.on("message", async (message) => {
  * @param {Object} data - The data object containing text to parse, partner information, and message details.
  */
 const process_calc = async (data) => {
-  const { text_to_parse, is_partner_group, message, partner_id, message_id } =
-    data;
+  const { message, message_id } = data;
   let agent_id;
-  const { phone, name, brand, model, gosnum } = prepare_calc(
-    text_to_parse,
-    is_partner_group ? true : false
-  );
+  const obj = await process_return_json(calc_data_obj_path);
   const hash_folder_id = message.text.match(/hash_folder:(.*)/)[1];
-  agent_id = is_partner_group ? partner_id : parse_text(text_to_parse).agent_id;
+  const hash = message.text.match(/hash:(.*)/)[1];
+  const { phone, name, brand, model, gosnum } = obj[hash];
+  agent_id = parse_text(message.text).agent_id;
   const { link } = await do_calc({
     partner: agent_id,
     phone,
@@ -674,12 +688,12 @@ const process_save = async (data) => {
     const media = message.photo
       ? HQD_photo(message.photo)
       : message.video
-      ? message.video
-      : message.voice
-      ? message.voice
-      : message.document
-      ? message.document
-      : "";
+        ? message.video
+        : message.voice
+          ? message.voice
+          : message.document
+            ? message.document
+            : "";
 
     if (media !== "") {
       let agent_id;
@@ -743,11 +757,11 @@ const process_save = async (data) => {
       media_data = selectedData
         ? selectedData[1].data
         : [
-            {
-              media: media.file_id,
-              mime_type: !media.mime_type ? "image/png" : media.mime_type,
-            },
-          ];
+          {
+            media: media.file_id,
+            mime_type: !media.mime_type ? "image/png" : media.mime_type,
+          },
+        ];
 
       const fileUrls = await getTelegramFiles(media_data);
       const { success } = await save_media({ fileUrls, folder: folder.id });
