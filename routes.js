@@ -253,6 +253,7 @@ app.get("/check-registration-moderation", async (req, res) => {
 app.get("/get-price", async (req, res) => {
   try {
     const data = await getData(req.query);
+    logger.info(data);
     return res.json({ data });
   } catch (error) {
     logger.error(`An error occurred in get_price: ${error.message}`);

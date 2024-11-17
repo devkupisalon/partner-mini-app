@@ -46,6 +46,7 @@ function createTable(data) {
 }
 
 async function fetchData() {
+  console.log(partner);
   try {
     const response = await fetch(`/get-price?partner=${partner}`);
     if (!response.ok) {
