@@ -56,7 +56,6 @@ bot.on("message", async (message) => {
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
   const already_uploaded = reply_to_message?.text.includes(`Медиа контент сохранен`);
-  logger.info(already_uploaded);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row;
@@ -140,7 +139,10 @@ bot.on("message", async (message) => {
       video ||
       voice ||
       document ||
-      media_group_id || already_uploaded;
+      media_group_id ||
+      already_uploaded;
+
+      logger.info(is_media);
 
     if (is_media) {
       await process_save({
