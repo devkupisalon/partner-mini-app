@@ -609,6 +609,8 @@ bot.on("message", async (message) => {
     }
   }
 
+  logger.info(is_manager);
+
   // process save media and create calculation orders
   if (forward_from && message.chat.is_bot && is_manager) {
     logger.info(forward_from);
