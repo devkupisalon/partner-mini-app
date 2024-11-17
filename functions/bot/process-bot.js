@@ -150,7 +150,6 @@ bot.on("message", async (message) => {
   }
 
   if (is_manager && hash && hash_folder_id) {
-    logger.info('test');
     await process_calc({
       message,
       partner_id,
