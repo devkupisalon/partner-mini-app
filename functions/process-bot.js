@@ -713,13 +713,13 @@ const process_save = async (data) => {
       let chat_id;
       let hash_id;
 
-      // if (String(reply_to_message.chat.id) === GROUP_CHAT_ID) {
+      if (message.caption) {
         const d = parse_text(message.caption);
         agent_id = d.agent_id;
         agent_name = d.agent_name;
         chat_id = d.chat_id;
         hash_id = d.hash_id;
-      // }
+      }
 
       const media_obj = await process_return_json(media_files_obj_path);
 
