@@ -512,12 +512,12 @@ bot.on("message", async (message) => {
 
   const is_group = ["group", "supergroup"].includes(type);
   const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
-  const is_managers_work_chat = String(id) === GROUP_CHAT_ID;
+  const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
   const is_partner_group =
     group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
-    group_ids_obj.hasOwnProperty(forward_from?.chat?.id);
+    group_ids_obj.hasOwnProperty(forward_from?.chat?.id); // partners group
 
-  const is_include_groups = group_ids_obj.hasOwnProperty(id);
+  const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
 
@@ -559,7 +559,7 @@ bot.on("message", async (message) => {
     });
   }
 
-  // process save media to json if is media send from partner in group
+  // process save media to json if is media send from partner/agent in group
   if (is_group && partner_id && partner_name && media_group_id) {
     const hash_id = uuidv4();
     const hash_partner = `hash:${partner_id}:${message_id}:${user_ID}:${partner_name}:${media_group_id}\n`;
@@ -615,7 +615,7 @@ bot.on("message", async (message) => {
 
   // process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_manager) {
-    logger.info(forward_from);
+    // logger.info(forward_from);
     const is_media =
       message.photo ||
       message.video ||
@@ -623,14 +623,14 @@ bot.on("message", async (message) => {
       message.document ||
       message.media_group_id;
 
-      logger.info(message);
-      logger.info(await process_return_json(media_files_obj_path));
+    // logger.info(message);
+    // logger.info(await process_return_json(media_files_obj_path));
 
-      return;
+    // return;
 
     if (is_media) {
       await process_save({
-        reply_to_message,
+        // reply_to_message,
         message_id,
         id,
         message,
@@ -693,18 +693,18 @@ const process_save = async (data) => {
   let media_data;
 
   try {
-    const { reply_to_message, message_id, id, message } = data;
+    const { /* reply_to_message, */ message_id, id, message } = data;
 
     // logger.info(reply_to_message);
 
-    const media = reply_to_message.photo
-      ? HQD_photo(reply_to_message.photo)
-      : reply_to_message.video
-      ? reply_to_message.video
-      : reply_to_message.voice
-      ? reply_to_message.voice
-      : reply_to_message.document
-      ? reply_to_message.document
+    const media = message.photo
+      ? HQD_photo(message.photo)
+      : message.video
+      ? message.video
+      : message.voice
+      ? message.voice
+      : message.document
+      ? message.document
       : "";
 
     if (media !== "") {
@@ -713,13 +713,13 @@ const process_save = async (data) => {
       let chat_id;
       let hash_id;
 
-      if (String(reply_to_message.chat.id) === GROUP_CHAT_ID) {
-        const d = parse_text(reply_to_message.text || reply_to_message.caption);
+      // if (String(reply_to_message.chat.id) === GROUP_CHAT_ID) {
+        const d = parse_text(message.caption);
         agent_id = d.agent_id;
         agent_name = d.agent_name;
         chat_id = d.chat_id;
         hash_id = d.hash_id;
-      }
+      // }
 
       const media_obj = await process_return_json(media_files_obj_path);
 
@@ -734,7 +734,7 @@ const process_save = async (data) => {
           return (
             c_chat_id === d.chat_id &&
             hash === d.hash_id &&
-            v?.message_ids.some((id) => id === reply_to_message.message_id) &&
+            // v?.message_ids.some((id) => id === reply_to_message.message_id) &&
             v.data &&
             v.data.length > 0
           );
