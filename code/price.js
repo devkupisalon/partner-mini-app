@@ -55,7 +55,7 @@ async function fetchData() {
     const { data } = await response.json();
     createTable(data);
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error("Error fetching data:", error.stack);
   }
 }
 
