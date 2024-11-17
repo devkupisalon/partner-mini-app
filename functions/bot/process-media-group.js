@@ -60,7 +60,7 @@ const send_media_group = async () => {
                     delete media_obj[Object.keys(media_obj)[i]];
                     await process_write_json(send_media_obj_path, media_obj);
 
-                    logger.info(`media_obj after delete: ${JSON.stringify(media_obj)}`);
+                    logger.info(`media_obj after delete: ${await process_return_json(send_media_obj_path)}`);
                 }
             }
         }
