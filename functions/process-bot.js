@@ -615,7 +615,6 @@ bot.on("message", async (message) => {
 
   // process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_manager) {
-    // logger.info(forward_from);
     const is_media =
       message.photo ||
       message.video ||
@@ -692,10 +691,10 @@ const process_calc = async (data) => {
 const process_save = async (data) => {
   let media_data;
 
+  if (!data.message.caption) return;
+
   try {
     const { /* reply_to_message, */ message_id, id, message } = data;
-
-    // logger.info(reply_to_message);
 
     const media = message.photo
       ? HQD_photo(message.photo)
@@ -728,7 +727,6 @@ const process_save = async (data) => {
       const selectedData = Object.entries(media_obj).find(([k, v]) => {
         const [c_chat_id, hash] = k.split("_");
         if (v.hash_partner && !hash_id) {
-          // logger.info(v.hash_partner);
           const d = parse_text(v.hash_partner);
           agent_id = d.agent_id;
           agent_name = d.agent_name;
