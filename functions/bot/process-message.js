@@ -3,13 +3,11 @@ import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
 import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
-import { append_json_file } from "../process-json.js";
+import { append_json_file, process_return_json } from "../process-json.js";
 
 let { GROUP_CHAT_ID, DBLINK } = constants;
 const { send_media_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
-
-/** GLOBAL OBJ */
 
 /**
  * Process message data to handle media files and forwarding messages.
@@ -34,7 +32,7 @@ const process_message = async (data) => {
         reply_to_message_id,
         row,
     } = data;
-    let send_media_obj = {};
+    let send_media_obj =  await process_return_json(send_media_obj_path);
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
     const partner_url = `${DBLINK}&range=${row}:${row}`;

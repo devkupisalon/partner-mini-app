@@ -71,11 +71,12 @@ const send_media_group = async () => {
  */
 const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner) => {
     const timestamp = new Date().getTime();
-    let media_files = {};
+    const key = `${chat_id}_${timestamp}`;
+    let media_files = await process_return_json(media_files_obj_path);
 
     if (!hash_partner) {
-        if (!media_files[`${chat_id}_${timestamp}`]) {
-            media_files[`${chat_id}_${timestamp}`] = {
+        if (!media_files[key]) {
+            media_files[key] = {
                 data: [],
                 message_ids: [],
                 experation_date: new Date().toISOString(),
@@ -104,15 +105,15 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
                                 ? document.mime_type
                                 : "";
 
-                media_files[`${chat_id}_${timestamp}`].data.push({ media, mime_type });
-                media_files[`${chat_id}_${timestamp}`].message_ids.push(message_id);
+                media_files[key].data.push({ media, mime_type });
+                media_files[key].message_ids.push(message_id);
             }
         );
     } else {
-        const { message_id, photo, video, voice, document, media_group_id } =
-            message;
-        if (!media_files[`${chat_id}_${media_group_id}`]) {
-            media_files[`${chat_id}_${media_group_id}`] = {
+        const { message_id, photo, video, voice, document, media_group_id } = message;
+        const media_key = `${chat_id}_${media_group_id}`;
+        if (!media_files[media_key]) {
+            media_files[media_key] = {
                 data: [],
                 message_ids: [],
                 experation_date: new Date().toISOString(),
@@ -140,12 +141,11 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
                         ? document.mime_type
                         : "";
 
-        media_files[`${chat_id}_${media_group_id}`].data.push({ media, mime_type });
-        media_files[`${chat_id}_${media_group_id}`].message_ids.push(message_id);
+        media_files[media_key].data.push({ media, mime_type });
+        media_files[media_key].message_ids.push(message_id);
     }
 
     await append_json_file(media_files_obj_path, media_files);
-    media_files = {};
 };
 
 export { send_media_group, process_save_media_to_obj };
