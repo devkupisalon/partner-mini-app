@@ -517,7 +517,7 @@ bot.on("message", async (message) => {
     group_ids_obj.hasOwnProperty(reply_to_message?.chat.id) ||
     group_ids_obj.hasOwnProperty(forward_from?.chat?.id);
 
-  const is_include_groups = group_ids_obj.hasOwnProperty(id); 
+  const is_include_groups = group_ids_obj.hasOwnProperty(id);
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
 
@@ -617,13 +617,16 @@ bot.on("message", async (message) => {
   if (forward_from && forward_from.is_bot && is_manager) {
     logger.info(forward_from);
     const is_media =
-      forward_from.photo ||
-      forward_from.video ||
-      forward_from.voice ||
-      forward_from.document ||
-      forward_from.media_group_id;
+      message.photo ||
+      message.video ||
+      message.voice ||
+      message.document ||
+      message.media_group_id;
 
-    logger.info(is_media);
+      logger.info(message);
+      logger.info(await process_return_json(media_files_obj_path));
+
+      return;
 
     if (is_media) {
       await process_save({
