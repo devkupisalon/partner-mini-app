@@ -727,6 +727,7 @@ const process_save = async (data) => {
         const [c_chat_id, hash] = k.split("_");
         if (v.hash_partner) {
           logger.info(v.hash_partner);
+          logger.info({ k, v });
           const d = parse_text(v.hash_partner);
           agent_id = d.agent_id;
           agent_name = d.agent_name;
@@ -750,7 +751,7 @@ const process_save = async (data) => {
 
       let folder = {};
 
-      const hash_folder_id = message.text.match(/hash:(.*)/);
+      const hash_folder_id = message.text?.match(/hash:(.*)/);
 
       if (hash_folder_id) {
         folder.id = hash_folder_id[1];
