@@ -160,7 +160,8 @@ bot.on("message", async (message) => {
       partner_id,
       message_id,
       hash,
-      hash_folder_id
+      hash_folder_id,
+      id
     });
   }
 });

@@ -39,7 +39,7 @@ const getTelegramFiles = async (files) => {
 * @param {Object} data - The data object containing text to parse, partner information, and message details.
 */
 const process_calc = async (data) => {
-    const { message, message_id, hash, hash_folder_id } = data;
+    const { message, message_id, hash, hash_folder_id, id } = data;
     let agent_id;
     const obj = await process_return_json(calc_data_obj_path);
     const { phone, name, brand, model, gosnum } = obj[hash];
