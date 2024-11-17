@@ -139,17 +139,15 @@ bot.on("message", async (message) => {
       video ||
       voice ||
       document ||
-      media_group_id ||
-      already_uploaded;
+      media_group_id;
 
-      logger.info(is_media);
-
-    if (is_media) {
+    if (is_media || already_uploaded) {
       await process_save({
         message_id,
         id,
         message,
       });
+      return;
     }
   }
 
