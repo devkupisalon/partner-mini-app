@@ -95,85 +95,86 @@ const process_save = async (data) => {
                         : "";
 
         // if (media !== "") {
-            let agent_id;
-            let agent_name;
-            let chat_id;
-            let hash_id;
+        let agent_id;
+        let agent_name;
+        let chat_id;
+        let hash_id;
+        let text_to_parse = message.caption || message.text;
 
-            if (message.caption) {
-                const d = parse_text(message.caption);
+        if (text_to_parse) {
+            const d = parse_text(text_to_parse);
+            agent_id = d.agent_id;
+            agent_name = d.agent_name;
+            chat_id = d.chat_id;
+            hash_id = d.hash_id;
+        }
+
+        logger.info(`message hash_id: ${hash_id}`);
+
+        const media_obj = await process_return_json(media_files_obj_path);
+
+        const selectedData = Object.entries(media_obj).find(([k, v]) => {
+            const [c_chat_id, hash] = k.split("_");
+            if (v.hash_partner && !hash_id) {
+                const d = parse_text(v.hash_partner);
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
-                hash_id = d.hash_id;
-            }
-
-            logger.info(`message hash_id: ${hash_id}`);
-
-            const media_obj = await process_return_json(media_files_obj_path);
-
-            const selectedData = Object.entries(media_obj).find(([k, v]) => {
-                const [c_chat_id, hash] = k.split("_");
-                if (v.hash_partner && !hash_id) {
-                    const d = parse_text(v.hash_partner);
-                    agent_id = d.agent_id;
-                    agent_name = d.agent_name;
-                    chat_id = d.chat_id;
-                    return (
-                        c_chat_id === d.chat_id &&
-                        hash === d.hash_id &&
-                        v.data &&
-                        v.data.length > 0
-                    );
-                } else {
-                    logger.info(`media_obj hash_id: ${v.hash_id}`);
-                    return (
-                        c_chat_id === chat_id &&
-                        v.hash_id === hash_id &&
-                        v.data &&
-                        v.data.length > 0
-                    );
-                }
-            });
-
-            let folder = {};
-
-            const hash_folder_id = message.text?.match(/hash_folder:(.*)/);
-
-            if (hash_folder_id) {
-                folder.id = hash_folder_id[1];
-                folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
+                return (
+                    c_chat_id === d.chat_id &&
+                    hash === d.hash_id &&
+                    v.data &&
+                    v.data.length > 0
+                );
             } else {
-                const { partner_folder } = await get_partner_name_and_manager(agent_id);
-                folder = await create_folder(
-                    `${hash_id || uuidv4()}-${agent_name}`,
-                    partner_folder
+                logger.info(`media_obj hash_id: ${v.hash_id}`);
+                return (
+                    c_chat_id === chat_id &&
+                    v.hash_id === hash_id &&
+                    v.data &&
+                    v.data.length > 0
                 );
             }
+        });
 
-            media_data = selectedData
-                ? selectedData[1].data
-                : [
-                    {
-                        media: media.file_id,
-                        mime_type: !media.mime_type ? "image/png" : media.mime_type,
-                    },
-                ];
+        let folder = {};
 
-            const fileUrls = await getTelegramFiles(media_data);
-            const { success } = await save_media({ fileUrls, folder: folder.id });
+        const hash_folder_id = message.text?.match(/hash_folder:(.*)/);
 
-            if (success) {
-                await bot.sendMessage(
-                    id,
-                    `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``,
-                    {
-                        reply_to_message_id: message_id,
-                        parse_mode,
-                        disable_web_page_preview: true,
-                    }
-                );
-            }
+        if (hash_folder_id) {
+            folder.id = hash_folder_id[1];
+            folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
+        } else {
+            const { partner_folder } = await get_partner_name_and_manager(agent_id);
+            folder = await create_folder(
+                `${hash_id || uuidv4()}-${agent_name}`,
+                partner_folder
+            );
+        }
+
+        media_data = selectedData
+            ? selectedData[1].data
+            : [
+                {
+                    media: media.file_id,
+                    mime_type: !media.mime_type ? "image/png" : media.mime_type,
+                },
+            ];
+
+        const fileUrls = await getTelegramFiles(media_data);
+        const { success } = await save_media({ fileUrls, folder: folder.id });
+
+        if (success) {
+            await bot.sendMessage(
+                id,
+                `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``,
+                {
+                    reply_to_message_id: message_id,
+                    parse_mode,
+                    disable_web_page_preview: true,
+                }
+            );
+        }
         // } else {
         //     logger.info(`There are no media to save`);
         // }
