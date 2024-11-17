@@ -89,6 +89,8 @@ const process_message = async (data) => {
                 chat_id: CHAT_ID,
             };
         if (message.caption) {
+            logger.info(message.caption);
+            logger.info(message);
             send_media_obj[id].caption = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n\`${hash}\``
                 : text;
