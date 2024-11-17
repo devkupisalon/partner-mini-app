@@ -6,7 +6,7 @@ import logger from "../../logs/logger.js";
 import { create_folder, save_media } from "../drive.js";
 import { get_partner_name_and_manager, do_calc } from "../sheets.js";
 import { constants } from "../../constants.js";
-import { process_return_json, deletaDataFromJson } from "../process-json.js";
+import { process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, parse_text } from "../helper.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode } = constants;
@@ -69,7 +69,7 @@ const process_calc = async (data) => {
         );
     }
 
-    await deletaDataFromJson(calc_data_obj_path, hash);
+    await deleteDataFromJson(calc_data_obj_path, hash);
 };
 
 /**
