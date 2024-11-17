@@ -1,4 +1,4 @@
-import bot from "./init-bot.js";
+import bot from "./bot/init-bot.js";
 import logger from "../../logs/logger.js";
 import { append_json_file } from "./process-json.js";
 
