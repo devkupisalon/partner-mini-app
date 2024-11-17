@@ -769,7 +769,7 @@ const process_save = async (data) => {
       if (success) {
         await bot.sendMessage(
           id,
-          `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash:${folder.id}\``,
+          `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``,
           {
             reply_to_message_id: message_id,
             parse_mode,
