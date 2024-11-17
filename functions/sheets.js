@@ -640,7 +640,7 @@ const get_all_groups_ids = async () => {
  * @param {string} partner_id - The ID of the partner to calculate pricing for.
  * @returns {Object} An object containing the processed data adjusted based on the partner's percentage and header row.
  */
-async function getData() {
+async function getData(partner_id) {
   const header_value = "Розница";
   const header_percent_value = "percent";
 
