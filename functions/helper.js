@@ -103,7 +103,8 @@ const p_success = async (m, reply_to_message_id, id, to_id) => {
  * @returns {Promise<void>}
  */
 const process_save_calc_data = async (data) => {
-  const { phone, name, brand, model, gosnum, hash } = data;
+  let { phone, name, brand, model, gosnum, hash } = data;
+  hash = hash.replaceAll(':', '-');
   const obj = {};
   if (!obj[hash]) {
     obj[hash] = { phone, name, brand, model, gosnum }
