@@ -492,6 +492,7 @@ bot.on("message", async (message) => {
     media_group_id,
     reply_to_message,
     message_id,
+    forward_from,
   } = message;
 
   const from_id = message.from.id;
