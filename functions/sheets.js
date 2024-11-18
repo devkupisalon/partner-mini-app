@@ -662,6 +662,8 @@ async function getData(data) {
       header_value
     );
 
+    logger.info(values.slice(FULLPRICECOLSTART - 2)[0]);
+
     logger.info(header_value_col);
 
     const header_row = ["№", "Наименование", "Работа"];
