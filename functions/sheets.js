@@ -662,7 +662,7 @@ async function getData(data) {
       header_value
     );
 
-    const header_row = ["№", "Наименование", "Работа"];
+    const header_row = ["№", "Наименование", "Цена"];
 
     const data_obj = values
       .slice(FULLPRICECOLSTART - 1)

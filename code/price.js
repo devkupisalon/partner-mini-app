@@ -36,7 +36,6 @@ async function createTable(data) {
   const headerRow = thead.insertRow();
   data.header_row.forEach((headerText) => {
     const th = document.createElement("th");
-    th.classList.add("sticky-header");
     th.textContent = headerText;
     headerRow.appendChild(th);
   });
@@ -69,16 +68,3 @@ async function preload() {
 }
 
 preload();
-
-// window.addEventListener("scroll", () => {
-//   const headers = document.querySelectorAll(".sticky-header");
-//   if (window.scrollY > 0) {
-//     headers.forEach((header) => {
-//       header.style.top = `${window.scrollY}px`;
-//     });
-//   } else {
-//     headers.forEach((header) => {
-//       header.style.top = "0";
-//     });
-//   }
-// });
