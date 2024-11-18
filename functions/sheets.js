@@ -662,6 +662,8 @@ async function getData(data) {
       header_value
     );
 
+    logger.info(header_value_col);
+
     const header_row = ["№", "Наименование", "Работа"];
 
     const data_obj = values
