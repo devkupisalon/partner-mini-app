@@ -81,7 +81,7 @@ bot.on("message", async (message) => {
 
   if (contact) return;
 
-  if (!is_manager && is_include_groups) {
+  if (!is_manager) {
     const p = await get_partners_data(user_ID);
     partner_id = p.partner_id;
     partner_name = p.partner_name;
