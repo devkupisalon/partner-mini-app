@@ -39,7 +39,7 @@ const getTelegramFiles = async (files) => {
 * @param {Object} data - The data object containing text to parse, partner information, and message details.
 */
 const process_calc = async (data) => {
-    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id } = data;
+    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id, partner_name } = data;
     let agent_id;
     let obj;
     obj = !is_include_groups
@@ -64,7 +64,7 @@ const process_calc = async (data) => {
         const chatId = !is_include_groups ? id : message.from.id;
         const message_text = !is_include_groups
             ? `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
-            : `Расчет для Партнера: *${agent_name}* создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
+            : `Расчет для Партнера: *${partner_name}* создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
         await bot.sendMessage(chatId, message_text, options);
     }
 
