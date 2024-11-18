@@ -70,16 +70,15 @@ async function preload() {
 
 preload();
 
-
-window.addEventListener("scroll", () => {
-  const headers = document.querySelectorAll(".sticky-header");
-  if (window.scrollY > 0) {
-    headers.forEach((header) => {
-      header.style.top = `${window.scrollY}px`;
-    });
-  } else {
-    headers.forEach((header) => {
-      header.style.top = "0";
-    });
-  }
-});
+// window.addEventListener("scroll", () => {
+//   const headers = document.querySelectorAll(".sticky-header");
+//   if (window.scrollY > 0) {
+//     headers.forEach((header) => {
+//       header.style.top = `${window.scrollY}px`;
+//     });
+//   } else {
+//     headers.forEach((header) => {
+//       header.style.top = "0";
+//     });
+//   }
+// });
