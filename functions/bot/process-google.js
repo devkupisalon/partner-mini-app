@@ -46,7 +46,7 @@ const process_calc = async (data) => {
         ? await process_return_json(calc_data_obj_path)
         : prepare_calc(message.text);
     const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
-    agent_id = !is_include_groups ? arse_text(message.text) : partner_id;
+    agent_id = !is_include_groups ? parse_text(message.text) : partner_id;
     const { link } = await do_calc({
         partner: agent_id,
         phone,
@@ -56,6 +56,8 @@ const process_calc = async (data) => {
         gosnum,
         folderId: hash_folder_id,
     });
+
+    logger.info({ agent_id, partner_name });
 
     if (link) {
         const options = !is_include_groups
@@ -144,7 +146,6 @@ const process_save = async (data) => {
         });
 
         let folder = {};
-        logger.info(hash_folder_id);
 
         if (hash_folder_id) {
             folder.id = hash_folder_id;
