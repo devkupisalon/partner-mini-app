@@ -65,7 +65,6 @@ bot.on("message", async (message) => {
     : '';
 
   const hash = is_manager && message.text && !is_include_groups ? `${message.text?.match(/hash:(.*)/)[1].replaceAll(':', '-')}\n` : '';
-  logger.info(hash_folder_id);
 
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
@@ -173,6 +172,7 @@ bot.on("message", async (message) => {
     await process_calc({
       message,
       partner_id,
+      partner_name,
       message_id,
       hash,
       hash_folder_id,

@@ -46,7 +46,7 @@ const process_calc = async (data) => {
         ? await process_return_json(calc_data_obj_path)
         : prepare_calc(message.text);
     const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
-    agent_id = !is_include_groups ? parse_text(message.text) : partner_id;
+    agent_id = !is_include_groups ? parse_text(message.text).agent_id : partner_id;
     const { link } = await do_calc({
         partner: agent_id,
         phone,
