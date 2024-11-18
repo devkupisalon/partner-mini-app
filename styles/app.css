@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     color: var(--tg-theme-text-color);
     background: var(--tg-theme-bg-color);
-    /* padding-top: 10px; */
 }
 
 .container {
@@ -325,37 +324,43 @@ table {
     border-collapse: collapse;
     border-radius: 20px;
     overflow: hidden;
-  }
+}
 
-  th,
-  td {
+th,
+td {
     padding: 10px;
-  }
+}
 
-  td {
+td {
     font-size: 12px;
-  }
+}
 
-  th {
+th {
     background-color: #ff9902;
     font-weight: bold;
     text-align: center;
     font-size: 14px;
-  }
+}
 
-  .orange-background {
+.orange-background {
     background-color: #ff9902 !important;
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     font-weight: bold;
     text-align: center;
     font-size: 14px;
-  }
+}
 
-  tr:nth-child(even) {
+tr:nth-child(even) {
     background-color: #f1f1f1;
-  }
+}
 
-  .number-cell {
+.number-cell {
     text-align: center;
-  }
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
