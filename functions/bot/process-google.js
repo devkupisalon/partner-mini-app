@@ -108,8 +108,6 @@ const process_save = async (data) => {
             hash_id = d.hash_id;
         }
 
-        logger.info(`message hash_id: ${hash_id}`);
-
         const media_obj = await process_return_json(media_files_obj_path);
 
         const selectedData = Object.entries(media_obj).find(([k, v]) => {
@@ -173,14 +171,13 @@ const process_save = async (data) => {
         const { success } = await save_media({ fileUrls, folder: folder.id });
 
         if (success) {
+            const options = !is_include_groups
+                ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
+                : { parse_mode, disable_web_page_preview: true };
             await bot.sendMessage(
                 id,
                 `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``,
-                {
-                    reply_to_message_id: message_id,
-                    parse_mode,
-                    disable_web_page_preview: true,
-                }
+                options
             );
         }
     } catch (error) {
