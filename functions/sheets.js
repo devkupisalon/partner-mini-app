@@ -662,7 +662,7 @@ async function getData(data) {
       header_value
     );
 
-    logger.info(values.slice(FULLPRICECOLSTART - 1)[0]);
+    logger.info(values);
 
     logger.info(header_value_col);
 
