@@ -170,6 +170,8 @@ const process_save = async (data) => {
         const fileUrls = await getTelegramFiles(media_data);
         const { success } = await save_media({ fileUrls, folder: folder.id });
 
+        logger.info(id);
+
         if (success) {
             const options = !is_include_groups
                 ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
