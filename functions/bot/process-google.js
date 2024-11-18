@@ -79,7 +79,7 @@ const process_save = async (data) => {
     if (!data.message.caption && !data.exist_folder) return;
 
     try {
-        const { message_id, id, message, hash_folder_id, is_bot } = data;
+        const { message_id, id, message, hash_folder_id, is_bot, is_include_groups } = data;
 
         const media = message.photo
             ? HQD_photo(message.photo)
@@ -97,7 +97,9 @@ const process_save = async (data) => {
         let hash_id;
         let text_to_parse = message.text || message.caption;
 
-        if (text_to_parse && is_bot) {
+        logger.info(is_include_groups);
+
+        if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);
             agent_id = d.agent_id;
             agent_name = d.agent_name;
