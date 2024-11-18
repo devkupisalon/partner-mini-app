@@ -59,8 +59,11 @@ bot.on("message", async (message) => {
   const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
   const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
 
-  const is_include_groups = group_ids_obj.hasOwnProperty(id); // include groups in groups ids obj
-  const hash_folder_id = is_manager && reply_to_message ? reply_to_message.text?.match(/hash_folder:(.*)/)[1] : '';
+  const is_include_groups = group_ids_obj.hasOwnProperty(id);
+  const hash_folder_id = is_manager && reply_to_message
+    ? reply_to_message.text?.match(/hash_folder:(.*)/)[1]
+    || message.text?.match(/hash_folder:(.*)/)[1] : '';
+
   const hash = is_manager && message.text && !is_include_groups ? `${message.text?.match(/hash:(.*)/)[1].replaceAll(':', '-')}\n` : '';
   logger.info(hash_folder_id);
 
