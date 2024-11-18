@@ -15,7 +15,7 @@ const interval = 10000;
 
 let { GROUP_CHAT_ID } = constants;
 let isProcessMessageRunning;
-const { send_media_obj_path } = constants;
+const { send_media_obj_path, DBLINK } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /**
@@ -87,7 +87,14 @@ bot.on("message", async (message) => {
     partner_id = p.partner_id;
     partner_name = p.partner_name;
     row = p.row;
+  } else if (is_manager && is_include_groups) {
+    const p = await get_partners_data(user_ID);
+    partner_id = p.partner_id;
+    partner_name = p.partner_name;
+    row = p.row;
   }
+
+  const partner_url = `${DBLINK}&range=${row}:${row}`;
 
   // process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
@@ -156,7 +163,8 @@ bot.on("message", async (message) => {
       exist_folder: save ? true : false,
       hash_folder_id,
       is_bot: forward_from?.is_bot ? true : false,
-      is_include_groups
+      is_include_groups,
+      partner_url
     });
     return;
   }
@@ -169,7 +177,8 @@ bot.on("message", async (message) => {
       hash,
       hash_folder_id,
       id,
-      is_include_groups
+      is_include_groups,
+      partner_url
     });
   }
 });
