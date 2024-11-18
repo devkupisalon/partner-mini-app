@@ -118,7 +118,7 @@ bot.on("message", async (message) => {
   if (is_group) {
     logger.info(`Received message from ${type} with ID: ${id}`);
 
-    if (is_managers_work_chat || is_include_groups) {
+    if ((is_managers_work_chat || is_include_groups) && is_manager) {
 
       if (reply_to_message && is_bot && is_title) {
         const { agent_message_id, chat_id } = parse_text(text_to_parse);
@@ -140,6 +140,8 @@ bot.on("message", async (message) => {
       }
     }
   }
+
+  logger.addListener.info(forward_from);
 
   // process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_media || is_manager && save) {
