@@ -176,11 +176,11 @@ const process_save = async (data) => {
             const options = !is_include_groups
                 ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
                 : { parse_mode, disable_web_page_preview: true };
-            await bot.sendMessage(
-                id,
-                `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``,
-                options
-            );
+            const chatId = !is_include_groups ? id : message.from.id;
+            const message_text = !is_include_groups
+                ? `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
+                : `Медиа контент от Партнера: *${agent_name}* сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``;
+            await bot.sendMessage(chatId, message_text, options);
         }
     } catch (error) {
         logger.error(`Error in process_save: ${error}`);
