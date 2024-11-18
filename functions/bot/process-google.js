@@ -98,8 +98,6 @@ const process_save = async (data) => {
         let hash_id;
         let text_to_parse = message.text || message.caption;
 
-        logger.info(is_include_groups);
-
         if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);
             agent_id = d.agent_id;
@@ -125,8 +123,6 @@ const process_save = async (data) => {
                         v.data.length > 0
                     );
                 } else {
-                    logger.info(v.message_ids);
-                    logger.info(reply_to_message_id);
                     return (
                         c_chat_id === d.chat_id &&
                         hash === d.hash_id &&
@@ -169,8 +165,6 @@ const process_save = async (data) => {
 
         const fileUrls = await getTelegramFiles(media_data);
         const { success } = await save_media({ fileUrls, folder: folder.id });
-
-        logger.info(id);
 
         if (success) {
             const options = !is_include_groups
