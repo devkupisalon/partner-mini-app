@@ -43,6 +43,7 @@ async function createTable(data) {
   });
 
   table.appendChild(tbody);
+  return true;
 }
 
 async function fetchData() {
@@ -53,16 +54,19 @@ async function fetchData() {
     }
 
     const { data } = await response.json();
-    await createTable(data);
+    return data;
   } catch (error) {
     console.error("Error fetching data:", error.stack);
   }
 }
 
 async function preload() {
-  await fetchData();
-  preloader.style.display = "none";
-  container.style.display = "flex";
+  const data = await fetchData();
+  const success = await createTable(data);
+  if (success) {
+    preloader.style.display = "none";
+    container.style.display = "flex";
+  }
 }
 
 preload();
