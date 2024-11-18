@@ -179,7 +179,7 @@ const process_save = async (data) => {
             await bot.sendMessage(chatId, message_text, options);
         }
     } catch (error) {
-        logger.error(`Error in process_save: ${error}`);
+        logger.error(`Error in process_save: ${error.stack}`);
     }
 };
 
