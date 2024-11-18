@@ -658,7 +658,7 @@ async function getData(data) {
     const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
     const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
     const header_value_col = getColumnNumberByValue(
-      values.slice(FULLPRICECOLSTART - 2)[0],
+      values.slice(FULLPRICECOLSTART - 3)[0],
       header_value
     );
 
@@ -669,7 +669,7 @@ async function getData(data) {
     const header_row = ["№", "Наименование", "Работа"];
 
     const data_obj = values
-      .slice(FULLPRICECOLSTART - 1)
+      .slice(FULLPRICECOLSTART - 2)
       .reduce((acc, r, index) => {
         const [, i, , name, , zap] = r;
         const rawPrice = r[header_value_col - 1] * percentage;
