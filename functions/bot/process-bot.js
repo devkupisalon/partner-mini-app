@@ -67,6 +67,9 @@ bot.on("message", async (message) => {
   const is_hash = is_manager && message.text && !is_include_groups ? message.text?.match(/hash:(.*)/) : '';
   const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}\n` : '';
 
+  logger.info(DEV_MODE);
+  logger.info(typeof DEV_MODE);
+
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const is_title = reply_to_message?.chat?.title.includes(group_title);
 
