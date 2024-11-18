@@ -80,6 +80,7 @@ const process_save = async (data) => {
 
     try {
         const { message_id, id, message, hash_folder_id, is_bot, is_include_groups } = data;
+        const reply_to_message_id = message.reply_to_message.message_id;
 
         const media = message.photo
             ? HQD_photo(message.photo)
@@ -118,14 +119,24 @@ const process_save = async (data) => {
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
-                logger.info(v.message_ids);
-                logger.info(d.message_id);
-                return (
-                    c_chat_id === d.chat_id &&
-                    hash === d.hash_id &&
-                    v.data &&
-                    v.data.length > 0
-                );
+                if (!is_include_groups) {
+                    return (
+                        c_chat_id === d.chat_id &&
+                        hash === d.hash_id &&
+                        v.data &&
+                        v.data.length > 0
+                    );
+                } else {
+                    logger.info(v.message_ids);
+                    logger.info(reply_to_message_id);
+                    return (
+                        c_chat_id === d.chat_id &&
+                        hash === d.hash_id &&
+                        v.data &&
+                        v.data.length > 0 &&
+                        v.message_ids.some(id => id === reply_to_message_id)
+                    )
+                }
             } else {
                 return (
                     c_chat_id === chat_id &&
