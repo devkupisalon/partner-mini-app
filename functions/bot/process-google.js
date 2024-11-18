@@ -142,6 +142,7 @@ const process_save = async (data) => {
         });
 
         let folder = {};
+        logger.info(hash_folder_id);
 
         if (hash_folder_id) {
             folder.id = hash_folder_id;
