@@ -5,7 +5,7 @@ const partner = urlParams.get("partner");
 const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
 
-function createTable(data) {
+async function createTable(data) {
   const table = document.getElementById("price-table");
   const thead = table.createTHead();
   const tbody = document.createElement("tbody");
@@ -16,7 +16,7 @@ function createTable(data) {
     if (rowData.color) {
       row.classList.add("orange-background");
       const cellName = row.insertCell();
-      cellName.colSpan = 4;
+      cellName.colSpan = 3;
       cellName.textContent = rowData.name;
     } else {
       const { i, name, price } = rowData;
@@ -53,7 +53,7 @@ async function fetchData() {
     }
 
     const { data } = await response.json();
-    createTable(data);
+    await createTable(data);
   } catch (error) {
     console.error("Error fetching data:", error.stack);
   }
