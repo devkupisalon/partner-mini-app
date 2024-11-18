@@ -19,8 +19,11 @@ const { send_media_obj_path, DBLINK, DEV_MODE } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /**
- * Forward messages from user chats to managers groups chat and
- * send back responses from managers to user chats
+ * Process forward,reply messages between managers and partners or agents
+ * Save media content to google drive folders
+ * Create pre-orders for partners/agents
+ * 
+ * Supports batch transfer of media content and its storage
  */
 bot.on("message", async (message) => {
 
@@ -67,9 +70,6 @@ bot.on("message", async (message) => {
   const is_hash = is_manager && message.text && !is_include_groups ? message.text?.match(/hash:(.*)/) : '';
   const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}\n` : '';
 
-  logger.info(DEV_MODE);
-  logger.info(typeof DEV_MODE);
-
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const is_title = reply_to_message?.chat?.title.includes(group_title);
 
@@ -85,6 +85,7 @@ bot.on("message", async (message) => {
 
   if (contact) return;
 
+  // Get partners/agents data from sheet
   if (!is_manager) {
     const p = await get_partners_data(user_ID);
     partner_id = p.partner_id;
@@ -99,7 +100,7 @@ bot.on("message", async (message) => {
 
   const partner_url = `${DBLINK}&range=${row}:${row}`;
 
-  // process agent messages
+  // Process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
     isProcessMessageRunning = true;
     await process_message({
@@ -128,7 +129,7 @@ bot.on("message", async (message) => {
     return;
   }
 
-  // process manager messages part
+  // Process manager messages part
   if (is_group) {
     logger.info(`Received message from ${type} with ID: ${id}`);
 
@@ -155,9 +156,7 @@ bot.on("message", async (message) => {
     }
   }
 
-  // logger.info(message);
-
-  // process save media and create calculation orders
+  // Process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_media || is_manager && save) {
     await process_save({
       message_id,
@@ -172,6 +171,7 @@ bot.on("message", async (message) => {
     return;
   }
 
+  // Create pre-orders
   if (is_manager && calc) {
     await process_calc({
       message,
