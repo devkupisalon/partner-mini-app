@@ -70,6 +70,8 @@ bot.on("message", async (message) => {
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
 
+  logger.info(reply_to_message);
+
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row;
 
