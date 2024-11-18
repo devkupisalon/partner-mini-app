@@ -151,7 +151,7 @@ bot.on("message", async (message) => {
     }
   }
 
-  logger.info(message);
+  // logger.info(message);
 
   // process save media and create calculation orders
   if (forward_from && forward_from.is_bot && is_media || is_manager && save) {
