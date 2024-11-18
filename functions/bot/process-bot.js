@@ -168,7 +168,8 @@ bot.on("message", async (message) => {
       message_id,
       hash,
       hash_folder_id,
-      id
+      id,
+      is_include_groups
     });
   }
 });

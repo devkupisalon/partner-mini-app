@@ -7,7 +7,7 @@ import { create_folder, save_media } from "../drive.js";
 import { get_partner_name_and_manager, do_calc } from "../sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
-import { HQD_photo, parse_text } from "../helper.js";
+import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode } = constants;
 
@@ -39,11 +39,14 @@ const getTelegramFiles = async (files) => {
 * @param {Object} data - The data object containing text to parse, partner information, and message details.
 */
 const process_calc = async (data) => {
-    const { message, message_id, hash, hash_folder_id, id } = data;
+    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id } = data;
     let agent_id;
-    const obj = await process_return_json(calc_data_obj_path);
-    const { phone, name, brand, model, gosnum } = obj[hash];
-    agent_id = parse_text(message.text).agent_id;
+    let obj;
+    obj = !is_include_groups
+        ? await process_return_json(calc_data_obj_path)
+        : prepare_calc(message.text);
+    const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
+    agent_id = !is_include_groups ? arse_text(message.text) : partner_id;
     const { link } = await do_calc({
         partner: agent_id,
         phone,
@@ -55,15 +58,14 @@ const process_calc = async (data) => {
     });
 
     if (link) {
-        await bot.sendMessage(
-            id,
-            `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``,
-            {
-                reply_to_message_id: message_id,
-                parse_mode,
-                disable_web_page_preview: true,
-            }
-        );
+        const options = !is_include_groups
+            ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
+            : { parse_mode, disable_web_page_preview: true };
+        const chatId = !is_include_groups ? id : message.from.id;
+        const message_text = !is_include_groups
+            ? `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
+            : `Расчет для Партнера: *${agent_name}* создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
+        await bot.sendMessage(chatId, message_text, options);
     }
 
     await deleteDataFromJson(calc_data_obj_path, hash);
