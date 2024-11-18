@@ -60,10 +60,10 @@ bot.on("message", async (message) => {
   const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
 
   const is_include_groups = group_ids_obj.hasOwnProperty(id);
-  const hash_folder_id = is_manager && reply_to_message
-    ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/) ?? [1]
+  const is_hash_folder_id = is_manager && reply_to_message
+    ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
-
+  const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
   const hash = is_manager && message.text && !is_include_groups ? `${message.text?.match(/hash:(.*)/)[1].replaceAll(':', '-')}\n` : '';
 
   const group_title = `Купи салон Рабочая`;
