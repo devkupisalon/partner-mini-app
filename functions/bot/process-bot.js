@@ -15,9 +15,8 @@ const interval = 10000;
 
 let { GROUP_CHAT_ID } = constants;
 let isProcessMessageRunning;
-const { send_media_obj_path, DBLINK } = constants;
+const { send_media_obj_path, DBLINK, DEV_MODE } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
-const dev_mode = true;
 
 /**
  * Forward messages from user chats to managers groups chat and
@@ -68,11 +67,8 @@ bot.on("message", async (message) => {
   const is_hash = is_manager && message.text && !is_include_groups ? message.text?.match(/hash:(.*)/) : '';
   const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}\n` : '';
 
-  const group_title = !dev_mode ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
+  const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const is_title = reply_to_message?.chat?.title.includes(group_title);
-  logger.info(is_title);
-
-  logger.info(reply_to_message);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row;
