@@ -662,7 +662,7 @@ async function getData(data) {
       header_value
     );
 
-    logger.info(values.slice(FULLPRICECOLSTART - 2)[0]);
+    logger.info(values.slice(FULLPRICECOLSTART - 1)[0]);
 
     logger.info(header_value_col);
 
@@ -673,8 +673,6 @@ async function getData(data) {
       .reduce((acc, r, index) => {
         const [, i, , name, , zap] = r;
         const rawPrice = r[header_value_col - 1] * percentage;
-        logger.info(rawPrice);
-        logger.info(rawPrice + Number(zap));
         const price = parseFloat(rawPrice + Number(zap)).toFixed(0);
 
         if (!acc.values) acc.values = [];
