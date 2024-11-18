@@ -656,7 +656,6 @@ async function getData(data) {
       .find((r) => r[0] === data.partner);
     const partner_percent = row[percent_col - 1];
     const percentage = parseFloat(partner_percent.replace("%", "").replace(",", ".")) / 100 + 1;
-    logger.info(percentage);
     const values = await get_data(CARSSPREADSHEET, MAINSHEETNAME);
     const header_value_col = getColumnNumberByValue(
       values.slice(FULLPRICECOLSTART - 2)[0],
@@ -670,6 +669,8 @@ async function getData(data) {
       .reduce((acc, r, index) => {
         const [, i, , name, , zap] = r;
         const rawPrice = r[header_value_col - 1] * percentage;
+        logger.info(rawPrice);
+        logger.info(rawPrice + Number(zap));
         const price = parseFloat(rawPrice + Number(zap)).toFixed(0);
 
         if (!acc.values) acc.values = [];
