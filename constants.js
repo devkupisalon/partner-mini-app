@@ -43,7 +43,7 @@ const constants = {
   calc_data_obj_path: `${__dirname}/json/calc_data_obj.json`,
   credentials_path: `${__dirname}/json/credentials.json`,
   parse_mode: "Markdown",
-  DEV_MODE: process.env.DEV_MODE === 'fasle' ? false : true
+  DEV_MODE: process.env.DEV_MODE === 'false' ? false : true
 };
 
 const { MINI_APP_LINK, PDF_LINK } = constants;
