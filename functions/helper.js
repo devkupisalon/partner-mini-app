@@ -56,9 +56,9 @@ const HQD_photo = (photo) =>
  * @param {string} text - The text containing phone number, name, brand, model, and license plate number.
  * @returns {Object} - An object containing extracted phone number, name, brand, model, and license plate number.
  */
-const prepare_calc = (text) => {
+const prepare_calc = (text, is_include_groups = false) => {
   const parts = text.split(/\n+/);
-  const [name, phone, brand, model, gosnum] = parts.slice(1);
+  const [name, phone, brand, model, gosnum] = !is_include_groups ? parts.slice(1) : parts;
   return { phone, name, brand, model, gosnum };
 };
 
