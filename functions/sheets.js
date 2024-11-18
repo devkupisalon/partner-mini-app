@@ -662,7 +662,7 @@ async function getData(data) {
       header_value
     );
 
-    logger.info(values);
+    // logger.info(values);
 
     logger.info(header_value_col);
 
