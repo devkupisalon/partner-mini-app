@@ -64,7 +64,8 @@ bot.on("message", async (message) => {
     ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
-  const hash = is_manager && message.text && !is_include_groups ? `${message.text?.match(/hash:(.*)/)[1].replaceAll(':', '-')}\n` : '';
+  const is_hash = is_manager && message.text && !is_include_groups ? message.text?.match(/hash:(.*)/) : '';
+  const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}\n` : '';
 
   const group_title = `Купи салон Рабочая`;
   const is_title = reply_to_message?.chat.title === group_title;
