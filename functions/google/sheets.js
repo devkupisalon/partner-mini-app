@@ -91,19 +91,12 @@ const save = async (params) => {
       username,
       name,
       phone,
-      // partner_NAME,
       root,
     } = params;
-
-    /* if (partner_NAME === undefined) {
-      const { partner_name } = await get_partner_name_and_manager(partner);
-      partner_NAME = partner_name;
-    } */
 
     const arr = [
       timestamp,
       partner,
-      // partner_NAME,
       user_id,
       username,
       name,
@@ -251,46 +244,21 @@ const do_calc = async (params) => {
     partner_folder,
     user_name
   } = await get_partners_data(chat_id);
-  const arr =
-    [
-      uid,
-      ,
-      ,
-      ,
-      ,
-      ,
-      manager,
-      brand,
-      model,
-      gosnum,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      name,
-      phone,
-      work_type,
-      partner_name,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      date,
-    ];
+  const arr = [
+    uid,
+    ...Array(5).fill(''),
+    manager,
+    brand,
+    model,
+    gosnum,
+    ...Array(6).fill(''),
+    name,
+    phone,
+    work_type,
+    partner_name,
+    ...Array(16).fill(''),
+    date,
+  ];
 
   partner_folder = folderId ? folderId : partner_folder;
 
@@ -349,51 +317,6 @@ const do_calc = async (params) => {
 };
 
 /**
- * Получить наименование партнера, менеджера и другие данные по идентификатору партнера
- * @param {string} partner_id - Идентификатор партнера для получения данных
- * @returns {object|boolean} - Объект с данными партнера (partner_name, manager, work_type, percent, calculate_id, partner_folder) или false в случае ошибки
- */
-const get_partner_name_and_manager = async (partner_id) => {
-  try {
-    const values = await get_data(DB, DATASHEETNAME);
-    const data = values.find((r) => r[0] === partner_id);
-    let [
-      ,
-      partner_name,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      ,
-      partner_folder,
-      ,
-      ,
-      ,
-      ,
-      work_type,
-      percent,
-      manager,
-      calculate_id,
-    ] = data;
-    partner_folder = partner_folder.split("/").pop();
-    return {
-      partner_name,
-      manager,
-      work_type,
-      percent,
-      partner_folder,
-    };
-  } catch (error) {
-    logger.error(`Error in get_partner_name_and_manager: ${error.message}`);
-    return false;
-  }
-};
-
-/**
  * Получить данные о машинах из Google Sheets
  * @returns {Array} - Массив данных о машинах
  */
@@ -431,24 +354,17 @@ const save_new_partner = async (params) => {
     const arr = [
       uid,
       org_name,
-      ,
-      ,
-      ,
+      ...Array(3).fill(''),
       link,
       address,
-      ,
-      ,
+      , ,
       phone,
       categories || your_type,
       folderLink,
-      ,
-      ,
-      ,
-      ,
+      ...Array(4).fill(''),
       type,
       percent || "",
-      ,
-      ,
+      , ,
       user_id,
     ];
     const values = await get_data(DB, DATASHEETNAME);
@@ -726,7 +642,6 @@ export {
   get_partners_data,
   check_moderation,
   check_success_moderation,
-  // get_partner_name_and_manager,
   get_all_groups_ids,
   getData,
 };
