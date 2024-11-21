@@ -39,9 +39,21 @@ const getTelegramFiles = async (files) => {
 * @param {Object} data - The data object containing text to parse, partner information, and message details.
 */
 const process_calc = async (data) => {
-    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id, partner_name, partner_url, forward_from_id } = data;
+
+    const { message,
+        message_id,
+        hash,
+        hash_folder_id,
+        id,
+        is_include_groups,
+        partner_id,
+        partner_name,
+        partner_url,
+        forward_from_id } = data;
+
     let agent_id, chat_id;
     let obj;
+
     obj = !is_include_groups
         ? await process_return_json(calc_data_obj_path)
         : prepare_calc(message.reply_to_message.text, is_include_groups);
@@ -179,13 +191,16 @@ const process_save = async (data) => {
         const { success } = await save_media({ fileUrls, folder: folder.id });
 
         if (success) {
+            
             const options = !is_include_groups
                 ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
                 : { parse_mode, disable_web_page_preview: true };
+
             const chatId = !is_include_groups ? id : message.from.id;
             const message_text = !is_include_groups
                 ? `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
                 : `Медиа контент от Партнера [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``;
+
             await bot.sendMessage(chatId, message_text, options);
         }
     } catch (error) {

@@ -4,7 +4,7 @@ import bot from "../bot/init-bot.js";
 
 import { constants, __dirname, managers_map } from "../../constants.js";
 import { numberToColumn, getColumnNumberByValue } from "../helper.js";
-import { notify_manager_message } from "../bot/messages.js";
+import { notify_manager_messages_map } from "../bot/messages.js";
 
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
@@ -295,7 +295,7 @@ const do_calc = async (params) => {
         logger.info(`Pre-order created successfully`);
         if (from_web_app === "true") {
           const date_and_time = format(new Date(), 'dd.MM.yyyy HH:mm:ss');
-          const message_text = notify_manager_message(user_name, partner_name, name, `${brand} ${model}`, date_and_time, link);
+          const message_text = notify_manager_messages_map[work_type](user_name, partner_name, name, `${brand} ${model}`, date_and_time, link);
           const { message_id } = await bot.sendMessage(managers_map[manager], message_text, { parse_mode, disable_web_page_preview: true });
           if (message_id) {
             logger.info(`Pre_order notify maessage successfully sended to manager: ${manager}`);

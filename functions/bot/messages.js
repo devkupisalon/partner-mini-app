@@ -86,13 +86,14 @@ const messages_map = {
     },
 };
 
-const notify_manager_message = (partner_manager_name,
-    partner_name,
-    client_name,
-    cars_data,
-    date,
-    link) => {
-    return `*Новый расчет*
+const notify_manager_messages_map = {
+    "Партнер": (partner_manager_name,
+        partner_name,
+        client_name,
+        cars_data,
+        date,
+        link) => {
+        return `*Новый расчет*
   
   Сообщаем, что менеджер ${partner_manager_name} из компании ${partner_name} создал новый расчет.
   
@@ -104,6 +105,26 @@ const notify_manager_message = (partner_manager_name,
   *Ссылка для просмотра расчета:* [открыть](${link})
   
   Если у вас есть вопросы или предложения, пожалуйста, свяжитесь с партнером.`;
+    },
+    "Агент": (partner_manager_name,
+        partner_name,
+        client_name,
+        cars_data,
+        date,
+        link) => {
+        return `*Информация о расчете:*
+
+Сообщаем, что Агент ${partner_name} создал новый расчет.
+
+*Информация о расчете:*
+- Клиент: ${client_name}
+- Автомобиль: ${cars_data}
+- Дата создания: ${date}
+
+*Ссылка для просмотра расчета:* [открыть](${link})
+
+Пожалуйста, ознакомьтесь с расчетом и при необходимости свяжитесь с агентом для дальнейших действий.`
+    }
 };
 
 /** INVITE TEXT MAP */
@@ -118,4 +139,4 @@ const invite_texts_map = {
     },
 };
 
-export { messages_map, invite_texts_map, notify_manager_message };
+export { messages_map, invite_texts_map, notify_manager_messages_map };
