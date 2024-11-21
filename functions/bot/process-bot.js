@@ -4,7 +4,7 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants, managers_map } from "../../constants.js";
-import { get_partners_data, get_all_groups_ids } from "../sheets.js";
+import { get_partners_data, get_all_groups_ids } from "../google/sheets.js";
 import { parse_text } from "../helper.js";
 import { process_save_media_to_obj, send_media_group } from "./process-media-group.js";
 import { process_message } from "./process-message.js";
@@ -74,7 +74,7 @@ bot.on("message", async (message) => {
   const is_title = reply_to_message?.chat?.title.includes(group_title);
 
   let text = message.text || message.caption || "";
-  let partner_name, partner_id, row;
+  let partner_name, partner_id, row, partner_folder;
 
   let user_ID =
     reply_to_message && is_manager && is_group
@@ -91,11 +91,13 @@ bot.on("message", async (message) => {
     partner_id = p.partner_id;
     partner_name = p.partner_name;
     row = p.row;
+    partner_folder = p.partner_folder;
   } else if (is_manager && is_include_groups) {
     const p = await get_partners_data(user_ID);
     partner_id = p.partner_id;
     partner_name = p.partner_name;
     row = p.row;
+    partner_folder = p.partner_folder;
   }
 
   const partner_url = `${DBLINK}&range=${row}:${row}`;
@@ -182,14 +184,15 @@ bot.on("message", async (message) => {
       hash_folder_id,
       id,
       is_include_groups,
-      partner_url
+      partner_url,
+      forward_from_id: forward_from.id
     });
   }
 });
 
 // Handle errors
 bot.on("polling_error", (error) => {
-  logger.error(error);
+  logger.error(error.stack);
 });
 
 /**

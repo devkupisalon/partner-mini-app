@@ -19,6 +19,8 @@ const fields = {
     gosnum: '#car-number'
 };
 
+const { user: { username, id } } = tg.initDataUnsafe;
+
 tg.onEvent('backButtonClicked', (event) => {
     console.log(partner);
     window.location.href = `/?startapp=${partner}`;
@@ -94,7 +96,7 @@ tg.onEvent('mainButtonClicked', async (event) => {
     if (name && phone && brand && model && gosnum) {
 
         try {
-            const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}`);
+            const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}&chat_id=${id}&from_web_app=true`);
             const { link } = await response.json();
             if (link) {
 

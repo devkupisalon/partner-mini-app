@@ -1,8 +1,10 @@
 import gauth from "./google_auth.js";
-import logger from "../logs/logger.js";
+import logger from "../../logs/logger.js";
+import bot from "../bot/init-bot.js";
 
-import { constants, __dirname } from "../constants.js";
-import { numberToColumn, getColumnNumberByValue } from "./helper.js";
+import { constants, __dirname, managers_map } from "../../constants.js";
+import { numberToColumn, getColumnNumberByValue } from "../helper.js";
+import { notify_manager_message } from "../bot/messages.js";
 
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns";
@@ -23,6 +25,7 @@ const {
   MAINSHEETNAME,
   FULLPRICECOLSTART,
   WEBAPPURL,
+  parse_mode
 } = constants;
 
 /**
@@ -88,19 +91,19 @@ const save = async (params) => {
       username,
       name,
       phone,
-      partner_NAME,
+      // partner_NAME,
       root,
     } = params;
 
-    if (partner_NAME === undefined) {
+    /* if (partner_NAME === undefined) {
       const { partner_name } = await get_partner_name_and_manager(partner);
       partner_NAME = partner_name;
-    }
+    } */
 
     const arr = [
       timestamp,
       partner,
-      partner_NAME,
+      // partner_NAME,
       user_id,
       username,
       name,
@@ -137,13 +140,13 @@ const auth = async (user_id, partner) => {
         .slice(1)
         .filter(
           (f) =>
-            f[1] === partner && f[3] === user_id && f.slice(4, 7).every(Boolean)
+            f[1] === partner && f[2] === user_id && f.slice(3, 6).every(Boolean)
         ) != "";
 
     const root =
       values
         .slice(1)
-        .filter((f) => f[1] === partner && f[3] === user_id && f[7]) != "";
+        .filter((f) => f[1] === partner && f[2] === user_id && f[6]) != "";
 
     if (success) {
       logger.info(`User with id: ${user_id} is authorized`);
@@ -239,54 +242,55 @@ const get_settings = async (partner) => {
 const do_calc = async (params) => {
   const date = format(new Date(), "dd.MM.yyyy");
   const uid = uuidv4();
-  const { partner, name, phone, brand, model, gosnum, folderId } = params;
+  const { partner, name, phone, brand, model, gosnum, folderId, chat_id, from_web_app } = params;
   let {
     partner_name,
     manager,
     work_type,
     percent,
-    calculate_id,
     partner_folder,
-  } = await get_partner_name_and_manager(partner);
-  const arr = [
-    uid,
-    ,
-    ,
-    ,
-    ,
-    ,
-    manager,
-    brand,
-    model,
-    gosnum,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    name,
-    phone,
-    work_type,
-    partner_name,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    ,
-    date,
-  ];
+    user_name
+  } = await get_partners_data(chat_id);
+  const arr =
+    [
+      uid,
+      ,
+      ,
+      ,
+      ,
+      ,
+      manager,
+      brand,
+      model,
+      gosnum,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      name,
+      phone,
+      work_type,
+      partner_name,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      ,
+      date,
+    ];
 
   partner_folder = folderId ? folderId : partner_folder;
 
@@ -308,7 +312,6 @@ const do_calc = async (params) => {
         row,
         work_type,
         percent,
-        calculate_id,
         partner_folder,
         partner,
       }),
@@ -322,6 +325,14 @@ const do_calc = async (params) => {
       logger.info(`Received link: ${link}`);
       if (link) {
         logger.info(`Pre-order created successfully`);
+        if (from_web_app === "true") {
+          const date_and_time = format(new Date(), 'dd.MM.yyyy HH:mm:ss');
+          const message_text = notify_manager_message(user_name, partner_name, name, `${brand} ${model}`, date_and_time, link);
+          const { message_id } = await bot.sendMessage(managers_map[manager], message_text, { parse_mode, disable_web_page_preview: true });
+          if (message_id) {
+            logger.info(`Pre_order notify maessage successfully sended to manager: ${manager}`);
+          }
+        }
       }
       return { link, folder_id: partner_folder };
     } else {
@@ -374,7 +385,6 @@ const get_partner_name_and_manager = async (partner_id) => {
       manager,
       work_type,
       percent,
-      calculate_id,
       partner_folder,
     };
   } catch (error) {
@@ -460,27 +470,35 @@ const save_new_partner = async (params) => {
 /**
  * Получение данных о партнере по идентификатору чата
  * @param {string} chat_id - Идентификатор чата пользователя
- * @returns {Promise<{ partner_name: string, partner_id: string }>} - Объект с данными партнера (имя и ID)
+ * @returns {object} - Объект с данными партнера
  */
 const get_partners_data = async (chat_id) => {
   try {
     const values = await get_data(SPREADSHEETID, SHEETNAME);
-    const { partner_name, partner_id } = values
+    const headers = values[0];
+    const acc_data = values
       .slice(1)
-      .reduce((acc, [, partner_id, partner_name, id]) => {
-        if (id === String(chat_id)) {
-          acc.partner_name = partner_name;
-          acc.partner_id = partner_id;
+      .reduce((acc, row) => {
+        if (row[2] === String(chat_id)) {
+          row.forEach((r, i) => {
+            if (i > 0) {
+              let x = r;
+              if (values[i] === 'partner_folder') {
+                x = x.split("/").pop();
+              }
+              acc[headers[i]] = x;
+            }
+          });
         }
         return acc;
       }, {});
 
-    const data_values = await get_data(DB, DATASHEETNAME);
-    const row = data_values.findIndex((r) => r[0] === partner_id) + 1;
+    // const data_values = await get_data(DB, DATASHEETNAME);
+    // const row = data_values.findIndex((r) => r[0] === partner_id) + 1;
 
-    if (partner_name && partner_id) {
+    if (acc_data.partner_name && acc_data.partner_id) {
       logger.info(`User with id: ${chat_id} is authorized`);
-      return { partner_name, partner_id, row };
+      return acc_data;
     } else {
       logger.warn(`User with id: ${chat_id} is not authorized`);
       return { partner_name: undefined, partner_id: undefined };
@@ -640,7 +658,7 @@ const get_all_groups_ids = async () => {
  * @param {Object} data - The ID of the partner to calculate pricing for.
  * @returns {Object} An object containing the processed data adjusted based on the partner's percentage and header row.
  */
-async function getData(data) {
+const getData = async (data) => {
   try {
     const header_value = "Розница";
     const header_percent_value = "percent";
@@ -708,7 +726,9 @@ export {
   get_partners_data,
   check_moderation,
   check_success_moderation,
-  get_partner_name_and_manager,
+  // get_partner_name_and_manager,
   get_all_groups_ids,
   getData,
 };
+
+

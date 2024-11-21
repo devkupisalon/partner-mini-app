@@ -1,5 +1,5 @@
 import { google } from "googleapis";
-import { constants } from "../constants.js";
+import { constants } from "../../constants.js";
 
 const { credentials_path } = constants;
 
@@ -13,12 +13,14 @@ const gauth = () => {
     scopes: [
       "https://www.googleapis.com/auth/spreadsheets",
       "https://www.googleapis.com/auth/drive",
+      "https://www.googleapis.com/auth/documents"
     ],
   });
 
   const sheets = google.sheets({ version: "v4", auth });
   const drive = google.drive({ version: "v3", auth });
-  return { sheets, drive, access_token: auth.getCredentials.access_token };
+  const docs = google.docs({ version: "v1", auth });
+  return { sheets, drive, docs, access_token: auth.getCredentials.access_token };
 };
 
 export default gauth;

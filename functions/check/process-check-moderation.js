@@ -1,7 +1,7 @@
-import logger from "../logs/logger.js";
-import { send_first_messages } from "./bot/process-init-messages.js";
-import { check_success_moderation, update_data } from "./sheets.js";
-import { constants } from "../constants.js";
+import logger from "../../logs/logger.js";
+import { send_first_messages } from "../bot/process-init-messages.js";
+import { check_success_moderation, update_data } from "../google/sheets.js";
+import { constants } from "../../constants.js";
 
 import cron from "node-cron";
 

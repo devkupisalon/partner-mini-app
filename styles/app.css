@@ -11,10 +11,11 @@ body {
     text-align: center;
     height: fit-content;
     margin: 0 auto;
+    padding: 5px;
     max-width: 400px;
     border-radius: 20px;
     background-color: var(--tg-theme-header-bg-color);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
     overflow: hidden;
 }
 
@@ -46,7 +47,7 @@ input:valid {
 
 .input-label {
     text-align: center;
-    width: calc(30% - 10px);
+    width: calc(35% - 10px);
     margin-right: 10px;
     margin-bottom: 10px;
     background-color: var(--tg-theme-button-color);

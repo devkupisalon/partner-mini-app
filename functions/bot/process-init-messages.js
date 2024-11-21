@@ -1,6 +1,7 @@
-import { invite_texts_map, messages_map } from "../../constants.js";
+import { invite_texts_map, messages_map } from "./messages.js";
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
+import { get_logo } from "../google/drive.js";
 
 /**
  * Send first init messages to user
@@ -50,6 +51,7 @@ const send_first_messages = async (
                 if (type === "Партнер" && !is_invite_send) {
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
+                        await set_chat_photo(CHAT_ID, chat_id);
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.message}`);
                     }
@@ -122,6 +124,22 @@ const set_chat_title = async (groupId, newTitle) => {
                 `Error while changing group chat title with id:${groupId} : ${error}`
             );
         });
+};
+
+/**
+ * Set chat photo for a specific chat ID using the provided photo Blob.
+ * @param {string} chatId - The ID of the chat where the photo will be set.
+ * @param {string} root_chat_id - The ID of the telegram.
+ */
+const set_chat_photo = async (chatId, root_chat_id) => {
+    const photoBlob = await get_logo(root_chat_id);
+    const fileStream = new ReadableStream(photoBlob);
+
+    bot.setChatPhoto(chatId, fileStream).then((result) => {
+        logger.info('Photo set successfully:', result);
+    }).catch((error) => {
+        logger.error('Error setting photo:', error.response.body);
+    });
 };
 
 export { send_first_messages };

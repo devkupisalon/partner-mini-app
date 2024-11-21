@@ -2,11 +2,11 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
+import { HQD_photo, prepare_calc, p_success, process_save_calc_data, parse_text } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
-let { GROUP_CHAT_ID, DBLINK } = constants;
-const { send_media_obj_path, parse_mode } = constants;
+let { GROUP_CHAT_ID, DBLINK, BOT_ID } = constants;
+const { send_media_obj_path, agent_messages_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /**
@@ -32,13 +32,12 @@ const process_message = async (data) => {
         reply_to_message_id,
         row,
     } = data;
-    let send_media_obj =  await process_return_json(send_media_obj_path);
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
-        ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n\`${hash}\``)
+        ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n`)
         : (text = text);
 
     if (from_user) {
@@ -78,6 +77,7 @@ const process_message = async (data) => {
                     : text;
 
     if (media_group_id) {
+        let send_media_obj = await process_return_json(send_media_obj_path);
         const key = `${id}-${media_group_id}`;
         if (!send_media_obj[key])
             send_media_obj[key] = {
@@ -89,13 +89,13 @@ const process_message = async (data) => {
             };
         if (message.caption) {
             send_media_obj[key].caption = from_user
-                ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n\`${hash}\``
+                ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n`
                 : text;
-        } else {
+        } /* else {
             send_media_obj[key].text = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n\`${hash}\``
                 : text;
-        }
+        } */
 
         const mediaTypeMap = {
             photo: "photo",
@@ -141,6 +141,7 @@ const process_message = async (data) => {
                         : bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
+            await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name });
             p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
     } catch (error) {
@@ -148,4 +149,33 @@ const process_message = async (data) => {
     }
 };
 
-export { process_message };
+/**
+ * Function to save an agent message to a JSON file.
+ * @param {object} data - The data containing the message information.
+ * @param {object} hash - The hash value to be saved.
+ */
+const save_agent_message_to_json = async (data, hash) => {
+    const { message_id, from: { id } } = data;
+    const obj = {};
+    const key = `${BOT_ID}}-${message_id}-${id}`;
+    if (!obj[key]) obj[key] = hash;
+    await append_json_file(agent_messages_obj_path, obj);
+};
+
+/**
+ * Function to get the message properties from an object asynchronously.
+ * This function retrieves message properties by processing a JSON object and extracting relevant information.
+ * @returns {Object} - The message properties extracted based on partner information.
+ */
+const get_message_property = async () => {
+    const obj = await process_return_json(agent_messages_obj_path);
+    Object.entries(obj).forEach(async ([k, v]) => {
+        const { partner_id, message_id, id, partner_name, hash_id } = v;
+        const key = `${BOT_ID}-${message_id}-${id}`;
+        if (key === k) {
+            return { partner_id, message_id, id, partner_name, hash_id };
+        }
+    });
+};
+
+export { process_message, get_message_property };

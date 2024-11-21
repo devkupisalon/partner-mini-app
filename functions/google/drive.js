@@ -1,9 +1,10 @@
 import { Readable } from "stream";
 
 import gauth from "./google_auth.js";
-import logger from "../logs/logger.js";
+import logger from "../../logs/logger.js";
 
-import { constants, __dirname } from "../constants.js";
+import { constants, __dirname } from "../../constants.js";
+import { get_partners_data } from "./sheets.js";
 
 const { drive } = gauth();
 const { PARTNERSPARENT } = constants;
@@ -172,4 +173,37 @@ const save_logo = async (params) => {
   }
 };
 
-export { save_logo, save_media, create_folder };
+/**
+ * Retrieves the logo file content as a Blob using the provided partner ID.
+ * @param {string} root_chat_id - The ID of the telegram to retrieve the logo file for.
+ * @returns {Blob} - The Blob representing the content of the logo file if found, otherwise null.
+ */
+const get_logo = async (root_chat_id) => {
+  try {
+    const { partner_folder } = await get_partners_data(root_chat_id);
+    // Search for files with '_logo' in the name within the partner_folder
+    const { data: { files } } = await drive.files.list({
+      q: `'${partner_folder}' in parents and name contains '_logo'`,
+    });
+
+    if (files.length > 0) {
+      const { id } = files[0];
+      logger.info("Logo file found:", id);
+      // Get the file content as a Blob
+      const { data } = await drive.files.get({
+        fileId: id,
+        alt: 'media',
+      });
+
+      const logoBlob = new Blob([data], { type: 'image/png' });
+      logger.info("Logo Blob retrieved successfully.");
+      return logoBlob;
+    } else {
+      logger.warn("Logo file not found in the partner_folder.");
+    }
+  } catch (error) {
+    logger.error(`Error in get_logo: ${error.stack}`);
+  }
+};
+
+export { save_logo, save_media, create_folder, get_logo };

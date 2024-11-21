@@ -1,7 +1,7 @@
-import { constants } from "../constants.js";
-import logger from "../logs/logger.js";
-import bot from "./bot/init-bot.js";
-import { auth } from "./sheets.js";
+import { constants } from "../../constants.js";
+import logger from "../../logs/logger.js";
+import bot from "../bot/init-bot.js";
+import { auth } from "../google/sheets.js";
 
 const { KUPISALONID } = constants;
 

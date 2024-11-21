@@ -2,6 +2,7 @@ import bot from "./bot/init-bot.js";
 import logger from "../logs/logger.js";
 import { append_json_file } from "./process-json.js";
 import { constants } from "../constants.js";
+import crypto from "crypto";
 
 const { calc_data_obj_path } = constants;
 
@@ -112,6 +113,16 @@ const process_save_calc_data = async (data) => {
   await append_json_file(calc_data_obj_path, obj);
 };
 
+/**
+ * Function to generate a hexadecimal hash using current date and random number.
+ * @returns {string} The generated hexadecimal hash.
+ */
+const generateHexHash = () => {
+  const current_date = (new Date()).valueOf().toString();
+  const random = Math.random().toString();
+  return crypto.createHash('md5').update(current_date + random).digest('hex');
+}
+
 export {
   numberToColumn,
   getColumnNumberByValue,
@@ -119,5 +130,6 @@ export {
   parse_text,
   prepare_calc,
   p_success,
-  process_save_calc_data
+  process_save_calc_data,
+  generateHexHash
 };

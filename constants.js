@@ -31,6 +31,7 @@ const constants = {
   MINI_APP_LINK: process.env.MINI_APP_LINK,
   PDF_LINK: process.env.PDF_LINK,
   DBLINK: process.env.DBLINK,
+  DOCUMENT_ID_PRIVATE_POLiCY: process.env.PRIVATE_POLICY_ID,
   HOME: `${__dirname}/html/mini-app-main.html`,
   AUTH: `${__dirname}/html/auth-web-app.html`,
   SETTINGS: `${__dirname}/html/settings-web-app.html`,
@@ -41,107 +42,11 @@ const constants = {
   media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
   managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
   calc_data_obj_path: `${__dirname}/json/calc_data_obj.json`,
+  agent_messages_obj_path: `${__dirname}/json/agetn_messages_obj.json`,
   credentials_path: `${__dirname}/json/credentials.json`,
   parse_mode: "Markdown",
-  DEV_MODE: process.env.DEV_MODE === 'false' ? false : true
-};
-
-const { MINI_APP_LINK, PDF_LINK } = constants;
-
-/** OBJECT WITH MESSAGES OPTIONS */
-const messages_map = {
-  fisrt_message: {
-    Агент: {
-      text: `Добрый день!
-Приветствуем вас в компании «Купи Салон». Уверены, что наше сотрудничество будет успешным и взаимовыгодным.
-С уважением,
-Команда Куписалон`,
-    },
-    Партнер: {
-      text: `Здравствуйте!
-Мы рады приветствовать вас среди наших партнеров. Давайте вместе создавать новые возможности и повышать удовлетворенность клиентов.
-С уважением,
-Куписалон`,
-    },
-  },
-  manager_registr_message: {
-    Партнер: {
-      text: `Приглашаем Ваших менеджеров присоединиться к нашей партнерской программе.
-Для регистрации используйте кнопку ниже.`,
-      url: (uid) => {
-        return `${MINI_APP_LINK}${uid}-reg-do-true`;
-      },
-      button_text: `Регистрация менеджера`,
-    },
-    link: true,
-    to_pin: true,
-  },
-  calc_message: {
-    Агент: {
-      text: `Сделать расчёт стоимости для клиента можно по кнопке ниже.`,
-      url: (uid) => {
-        return `${MINI_APP_LINK}${uid}-calc-true`;
-      },
-      button_text: `Создать расчет`,
-    },
-    Партнер: {
-      text: `Сделать расчёт стоимости для клиента можно по кнопке ниже.`,
-      url: (uid) => {
-        return `${MINI_APP_LINK}${uid}-calc-true`;
-      },
-      button_text: `Создать расчет`,
-    },
-    link: true,
-    to_pin: true,
-  },
-  helper_message: {
-    Агент: {
-      text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
-С наилучшими пожеланиями,
-Куписалон`,
-      url: PDF_LINK,
-      button_text: `Инструкция`,
-    },
-    Партнер: {
-      text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
-С наилучшими пожеланиями,
-Куписалон`,
-      url: PDF_LINK,
-      button_text: `Инструкция`,
-    },
-    link: true,
-    to_pin: true,
-  },
-  price_message: {
-    Партнер: {
-      text: `Посмотреть прайс можно по кнопке ниже.`,
-      url: (uid) => {
-        return `${MINI_APP_LINK}${uid}-price-true`;
-      },
-      button_text: `Прайс лист`,
-    },
-    Агент: {
-      text: `Посмотреть прайс можно по кнопке ниже.`,
-      url: (uid) => {
-        return `${MINI_APP_LINK}${uid}-price-true`;
-      },
-      button_text: `Прайс лист`,
-    },
-    link: true,
-    to_pin: true,
-  },
-};
-
-/** INVITE TEXT MAP */
-const invite_texts_map = {
-  manager: (name) => {
-    return `Создана новая группа с партнером ${name}, присоединяйтесь к группе по ссылке:`;
-  },
-  partner: (name) => {
-    return `${name},
-Ваша зявка на участие в нашей партнерской программе была успешно одобрена 🎉.
-Присоединяйтесь к группе с менеджером по ссылке:`;
-  },
+  DEV_MODE: process.env.DEV_MODE === 'false' ? false : true,
+  BOT_ID: process.env.BOT_ID
 };
 
 fs.readFile(constants.managers_map_obj_path, "utf8", (err, data) => {
@@ -153,4 +58,4 @@ fs.readFile(constants.managers_map_obj_path, "utf8", (err, data) => {
   managers_map = jsonData;
 });
 
-export { constants, __dirname, messages_map, invite_texts_map, managers_map };
+export { constants, __dirname,  managers_map };

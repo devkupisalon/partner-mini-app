@@ -8,7 +8,6 @@ node-telegram-bot
 babel-plugin-module-resolver
 pino
 inputmask
-spinkit
 uuid
 date-fns
 multer

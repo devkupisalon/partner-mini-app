@@ -3,7 +3,7 @@ import path from "path";
 import multer from "multer";
 
 import logger from "./logs/logger.js";
-import { check_subscription_and_authorization } from "./functions/check.js";
+import { check_subscription_and_authorization } from "./functions/check/check.js";
 
 import {
   save,
@@ -15,15 +15,15 @@ import {
   save_new_partner,
   check_moderation,
   getData,
-} from "./functions/sheets.js";
+} from "./functions/google/sheets.js";
 
-import { save_logo } from "./functions/drive.js";
-
+import { getGoogleDocContent } from "./functions/google/docs.js";
+import { save_logo } from "./functions/google/drive.js";
 import { verifyTelegramWebAppData } from "./functions/validate.js";
 import { constants, __dirname } from "./constants.js";
 
 import "./functions/bot/process-bot.js";
-import "./functions/process-check-moderation.js";
+import "./functions/check/process-check-moderation.js";
 import "./logs/clean-logs.js";
 
 const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR, PRICE } = constants;
@@ -257,6 +257,15 @@ app.get("/get-price", async (req, res) => {
   } catch (error) {
     logger.error(`An error occurred in get_price: ${error.message}`);
     return res.status(500).json({ error: error.toString() });
+  }
+});
+
+app.get('/privacy_policy', async (req, res) => {
+  const docContent = await getGoogleDocContent();
+  if (docContent) {
+    res.send(docContent);
+  } else {
+    res.send('Error fetching Private Policy content');
   }
 });
 

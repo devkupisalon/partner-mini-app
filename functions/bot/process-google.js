@@ -3,8 +3,8 @@ import { v4 as uuidv4 } from "uuid";
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
-import { create_folder, save_media } from "../drive.js";
-import { get_partner_name_and_manager, do_calc } from "../sheets.js";
+import { create_folder, save_media } from "../google/drive.js";
+import { get_partners_data, do_calc } from "../google/sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
@@ -39,14 +39,23 @@ const getTelegramFiles = async (files) => {
 * @param {Object} data - The data object containing text to parse, partner information, and message details.
 */
 const process_calc = async (data) => {
-    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id, partner_name, partner_url } = data;
-    let agent_id;
+    const { message, message_id, hash, hash_folder_id, id, is_include_groups, partner_id, partner_name, partner_url, forward_from_id } = data;
+    let agent_id, chat_id;
     let obj;
     obj = !is_include_groups
         ? await process_return_json(calc_data_obj_path)
         : prepare_calc(message.reply_to_message.text, is_include_groups);
     const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
-    agent_id = !is_include_groups ? parse_text(message.text).agent_id : partner_id;
+
+    if (!is_include_groups) {
+        const x = parse_text(message.text);
+        agent_id = x.agent_id;
+        chat_id = x.chat_id;
+    } else {
+        agent_id = partner_id;
+        chat_id = forward_from_id;
+    }
+
     const { link } = await do_calc({
         partner: agent_id,
         phone,
@@ -55,6 +64,7 @@ const process_calc = async (data) => {
         model,
         gosnum,
         folderId: hash_folder_id,
+        chat_id
     });
 
     if (link) {
@@ -149,7 +159,7 @@ const process_save = async (data) => {
             folder.id = hash_folder_id;
             folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
         } else {
-            const { partner_folder } = await get_partner_name_and_manager(agent_id);
+            const { partner_folder } = await get_partners_data(chat_id);
             folder = await create_folder(
                 `${hash_id || uuidv4()}-${agent_name}`,
                 partner_folder
