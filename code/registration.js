@@ -4,6 +4,7 @@ const queryString = window.location.search;
 const urlParams = new URLSearchParams(queryString);
 const username = urlParams.get('user');
 const id = urlParams.get('id');
+const super_root = urlParams.get('super_root');
 
 const fill_tg = document.querySelector('.fill-tg');
 const n = document.getElementById('partner-name');
@@ -25,6 +26,10 @@ let obj_data = {};
 tg.BackButton.show();
 tg.setBottomBarColor("bottom_bar_bg_color");
 
+if (super_root === "true") {
+    fill_tg.style.display = "none";
+}
+
 const fields = {
     name: '#partner-name',
     phone: '#partner-phone',
@@ -38,7 +43,7 @@ const fields = {
 
 tg.onEvent('backButtonClicked', (event) => {
     let href;
-    if (partner === undefined) {
+    if (partner === undefined && super_root !== 'true') {
         href = '/';
     } else {
         href = `/?startapp=${partner}`;
@@ -128,7 +133,7 @@ if (id && username) {
                     }
                 }
 
-                if (partner_id) {
+                if (partner_id && super_root !== "true") {
                     const response = await fetch(`/save-data?timestamp=${timestamp}
                         &partner=${partner}
                         &user_id=${id}
@@ -137,13 +142,18 @@ if (id && username) {
                         &phone=${phone}
                         &groups=${buttonValues}
                         &root=true`);
-                        
+
                     const { success } = await response.json();
                     if (success) {
                         window.location.href = `/?startapp=${partner_id}`;
                         tg.MainButton.hideProgress();
                         tg.MainButton.hide();
                     }
+                } else {
+                    tg.showPopup({ message: 'Новый Партнер успешно создан, не забудьте запросить у него telegram id!' });
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 2000);
                 }
             } catch (error) {
                 tg.showPopup({ title: 'Error', message: error });

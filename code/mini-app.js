@@ -32,13 +32,14 @@ let {
 const calc = start_param?.includes("-calc-true") || false;
 const do_reg = start_param?.includes(`-reg-do-true`) || false;
 const price = start_param?.includes("-price-true") || false;
+const super_root = start_param === 'super-root' ? start_param : '';
 start_param = calc
   ? String(start_param).replace("-calc-true", "")
   : do_reg
-  ? String(start_param).replace("-reg-do-true", "")
-  : price
-  ? String(start_param).replace("-price-true", "")
-  : start_param;
+    ? String(start_param).replace("-reg-do-true", "")
+    : price
+      ? String(start_param).replace("-price-true", "")
+      : start_param;
 start_param = start_param !== undefined ? start_param : partner;
 
 /**
@@ -175,22 +176,26 @@ calculate.addEventListener("click", async function () {
 
 /** CHECK MODERATION */
 async function check_registration() {
-  try {
-    const check_response = await fetch(
-      `/check-registration-moderation?user_id=${id}&partner_id=${start_param}`
-    );
-    const { success } = await check_response.json();
+  if (start_param !== 'super-root') {
+    try {
+      const check_response = await fetch(
+        `/check-registration-moderation?user_id=${id}&partner_id=${start_param}`
+      );
+      const { success } = await check_response.json();
 
-    if (success.true === true) {
-      return { success: true, uid: success.uid };
-    } else if (!success) {
+      if (success.true === true) {
+        return { success: true, uid: success.uid };
+      } else if (!success) {
+        return { success: false };
+      } else if (success === "moderation") {
+        return { success: "moderation" };
+      }
+    } catch (error) {
+      console.error(`Error in check_registration: ${error}`);
       return { success: false };
-    } else if (success === "moderation") {
-      return { success: "moderation" };
     }
-  } catch (error) {
-    console.error(`Error in check_registration: ${error}`);
-    return { success: false };
+  } else {
+    return { success: "super_root" };
   }
 }
 
@@ -237,6 +242,10 @@ async function preload() {
       preloader.style.display = "none";
       container.style.display = "flex";
     },
+    super_root: () => {
+      href = `/registration?&super_root=true`;
+      window.location.href = href;
+    }
   };
 
   actions[success] && actions[success]();
