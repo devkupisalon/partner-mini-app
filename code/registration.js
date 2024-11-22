@@ -97,7 +97,16 @@ if (id && username) {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}&user_id=${id}`);
+                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}
+                    &phone=${phone}
+                    &type=${type}
+                    &your_type=${your_type}
+                    &address=${encodeURIComponent(address)}
+                    &link=${ya_link}
+                    &categories=${buttonValues}
+                    &percent=${percent}
+                    &user_id=${id}`);
+
                 const { partner_id, folder } = await reigistr_response.json();
 
                 partner = partner_id;
@@ -120,7 +129,15 @@ if (id && username) {
                 }
 
                 if (partner_id) {
-                    const response = await fetch(`/save-data?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}&groups=${buttonValues}&root=true`);
+                    const response = await fetch(`/save-data?timestamp=${timestamp}
+                        &partner=${partner}
+                        &user_id=${id}
+                        &username=${username}
+                        &name=${name}
+                        &phone=${phone}
+                        &groups=${buttonValues}
+                        &root=true`);
+                        
                     const { success } = await response.json();
                     if (success) {
                         window.location.href = `/?startapp=${partner_id}`;

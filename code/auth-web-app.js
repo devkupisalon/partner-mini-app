@@ -30,7 +30,7 @@ tg.onEvent('backButtonClicked', (event) => {
  */
 function getValues() {
   const data = Object.fromEntries(
-      Object.entries(fields).map(([key, selector], i) => [key, document.querySelector(selector).value])
+    Object.entries(fields).map(([key, selector], i) => [key, document.querySelector(selector).value])
   );
   return data;
 }
@@ -49,7 +49,12 @@ if (id && username) {
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/save-data?timestamp=${timestamp}&partner=${partner}&user_id=${id}&username=${username}&name=${name}&phone=${phone}`);
+        const response = await fetch(`/save-data?timestamp=${timestamp}
+          &partner=${partner}
+          &user_id=${id}
+          &username=${username}
+          &name=${name}
+          &phone=${phone}`);
 
         const { success } = await response.json();
         if (success) {

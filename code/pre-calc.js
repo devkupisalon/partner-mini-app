@@ -36,6 +36,11 @@ function getValues() {
 
 /** Get cars brands and models for select options */
 async function getCarBrandsAndModels() {
+    function clearCarModelsOptions() {
+        while (carModelsSelect.options.length > 0) {
+          carModelsSelect.remove(0);
+        }
+      }
     let car_values;
     try {
         const response = await fetch(`/get-cars`);
@@ -53,6 +58,7 @@ async function getCarBrandsAndModels() {
     }
 
     function getCarModels() {
+        clearCarModelsOptions();
         const selectedBrand = carBrandsSelect.value;
 
         for (let [brand, ...models] of car_values) {
@@ -96,7 +102,14 @@ tg.onEvent('mainButtonClicked', async (event) => {
     if (name && phone && brand && model && gosnum) {
 
         try {
-            const response = await fetch(`/do-calculation?partner=${partner}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}&gosnum=${encodeURIComponent(gosnum)}&chat_id=${id}&from_web_app=true`);
+            const response = await fetch(`/do-calculation?partner=${partner}
+                &name=${encodeURIComponent(name)}
+                &phone=${encodeURIComponent(phone)}
+                &brand=${encodeURIComponent(brand)}
+                &model=${encodeURIComponent(model)}
+                &gosnum=${encodeURIComponent(gosnum)}
+                &chat_id=${id}
+                &from_web_app=true`);
             const { link } = await response.json();
             if (link) {
 
