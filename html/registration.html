@@ -4,9 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
+
     <link rel="stylesheet" href="/styles/app.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
 
 </head>
 
@@ -16,15 +19,14 @@
         <form id="partner-form">
             <h3>Пожалуйста заполните все данные для регистрации</h3>
             <div class="input-form">
-                <div class="input-label" id="partner-name-label">Наименование партнера</div>
-                <input class="input" type="text" id="partner-name" placeholder="ФИО" required
+                <div class="input-label" id="partner-name-label">Ваше ФИО</div>
+                <input class="input" type="text" id="partner-name" placeholder="Ваше ФИО" required
                     oninput="validateName(event.target)">
-                <div class="input-label" id="partner-phone-label">Тел с whatsApp</div>
-                <input class="input" type="tel" id="partner-phone" placeholder="79999999999" required
-                    oninput="formatPhoneNumber(this)">
+                <div class="input-label" id="partner-phone-label">Телефон с WhatsApp</div>
+                <input class="input" type="tel" id="partner-phone" placeholder="7 (999) 999 99-99" required>
                 <p id="fill-text">Вы можете заполнить ФИО и номер телефона из телеграма</p>
-                <button class="fill-tg" id="'autofill-tg">Поделиться контактом</button>
-                <div class="input-label" id="partner-сoop-label">Схема работы</div>
+                <button class="fill-tg" id="'autofill-tg">Заполнить данные из Telegram</button>
+                <p id="work-type-text">Выберите тип сотрудничества</p>
                 <select id="select-type" class="select-partner-type">
                     <option value="">тип сотрудничества</option>
                     <option value="Агент">Агент</option>
@@ -36,22 +38,21 @@
             <p id="percent-text">Укажите процент наценки</p>
             <input class="input" type="text" id="partner-percent" placeholder="% наценки в формате 10% или 5,5%"
                 required>
-            <p>Напишите наименование своей компании</p>
-            <input class="input" type="text" id="org-name" placeholder="наименование" required>
-            <p>Укажите адрес </p>
+            <p>Наименование вашей компании или ИП</p>
+            <input class="input" type="text" id="org-name" placeholder="Наименование вашей компании или ИП" required>
+            <p>Ваш адрес</p>
             <input class="input" type="text" id="address" placeholder="адрес" required>
-            <p>Укажите ссылку на Яндекс.Справочник организации, которую представляете, если вы там зарегистрированны
-            </p>
+            <p>Ссылка на ваш Яндекс.Бизнес (при наличии)</p>
             <input class="input" type="text" id="yandex-link" placeholder="https://yandex.ru/sprav/хххххх">
-            <p>Здесь указаны виды деятельности. Оставьте те, по которым вы работаете,</p>
+            <p>Ваши виды деятельности, нажатием удалите те, которые к вам не относятся</p>
             <div class="multiselect_block">
                 <label for="select-1" class="field_multiselect">Сферы деятельности</label>
                 <select id="field_select-type" class="field_select" multiple>
                     <!-- заполняем из таблицы -->
                 </select>
             </div>
-            <p>или укажите свой</p>
-            <input class="input" type="text" id="your-type" placeholder="свой вид деятельности"
+            <p>Добавьте свой вид деятельности если не нашли его в списке</p>
+            <input class="input" type="text" id="your-type" placeholder="Добавить вид деятельности"
                 oninput="validateName(event.target)">
             <input type="checkbox" id="personal-data-checkbox" checked><label id="personal-data-id"> Нажимая кнопку
                 "Зарегистрироваться" Вы даёте свое
@@ -89,8 +90,6 @@
         </svg>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/scripts/formatters.js"></script>
     <script src="/scripts/fetch.js"></script>
     <script src="/scripts/partner-settings.js"></script>

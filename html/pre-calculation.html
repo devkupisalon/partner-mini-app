@@ -7,6 +7,9 @@
 
     <link rel="stylesheet" href="/styles/app.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 
@@ -17,10 +20,10 @@
             <h3 id="main-heading">Заполните пожалуйста данные для формирования расчета</h3>
             <div class="input-form">
                 <div class="input-label" id="client-name-label">ФИО Клиента</div>
-                <input class="input" type="text" id="client-name" placeholder="ФИО" required
+                <input class="input" type="text" id="client-name" placeholder="ФИО Клиента" required
                     oninput="validateName(event.target)">
                 <div class="input-label" id="client-phone-label">Телефон Клиента</div>
-                <input class="input" type="tel" id="client-phone" placeholder="79998886655" required
+                <input class="input" type="tel" id="client-phone" placeholder="7 (999) 999 99-99" required
                     oninput="formatPhoneNumber(this)">
                 <div class="input-label" id="car-number-label">Госномер</div>
                 <input class="input" type="text" id="car-number" placeholder="А777АA777 или Без Номеров"
@@ -74,9 +77,6 @@
         </svg>
 
     </div>
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="/scripts/formatters.js"></script>
     <script src="/scripts/pre-calc.js"></script>
     <script src="scripts/personal-data-checkbox.js"></script>

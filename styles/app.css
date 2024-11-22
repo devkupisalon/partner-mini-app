@@ -62,8 +62,7 @@ input[type="tel"],
 input[type="file"],
 .input-time,
 .input-date,
-.select,
-.select-partner-type {
+.select {
     text-align-last: center;
     width: calc(60% - 10px);
     color: var(--tg-theme-text-color);
@@ -77,7 +76,8 @@ input[type="file"],
 #yandex-link,
 #your-type,
 #org-name,
-#address {
+#address,
+.select-partner-type {
     width: 100%;
 }
 

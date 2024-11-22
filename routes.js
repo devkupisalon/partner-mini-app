@@ -19,7 +19,7 @@ import {
 
 import { getGoogleDocContent } from "./functions/google/docs.js";
 import { save_logo } from "./functions/google/drive.js";
-import { verifyTelegramWebAppData } from "./functions/validate.js";
+import { verifyTelegramWebAppData } from "./functions/check/validate.js";
 import { constants, __dirname } from "./constants.js";
 
 import "./functions/bot/process-bot.js";

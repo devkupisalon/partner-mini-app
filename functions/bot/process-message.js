@@ -141,7 +141,7 @@ const process_message = async (data) => {
                         : bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
-            await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name });
+            await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name,  });
             p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
     } catch (error) {

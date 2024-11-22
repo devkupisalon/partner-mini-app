@@ -1,11 +1,6 @@
-/**
- * Функция formatPhoneNumber для форматирования введенного номера телефона.
- * @param {HTMLInputElement} input - HTML элемент для ввода номера телефона.
- */
-function formatPhoneNumber(input) {
-    input.value = input.value.replace(/[^\d]/g, '');  // Удаляет все нецифровые символы из введенного значения
-    input.value = input.value.slice(0, 13);  // Ограничивает длину значения до 13 символов
-}
+$(document).ready(function () {
+    $('input[type="tel"]').inputmask({ "mask": "7 (999) 999 99-99" });
+});
 
 /**
  * Функция validateName для валидации введенного имени.
