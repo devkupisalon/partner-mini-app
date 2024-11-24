@@ -82,6 +82,7 @@ input[type="file"],
 
 .select-partner-type {
     margin-bottom: 10px;
+    text-align: center;
 }
 
 @media screen and (max-width: 355px) {
