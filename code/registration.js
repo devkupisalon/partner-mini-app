@@ -9,6 +9,7 @@ const super_root = urlParams.get('super_root');
 const fill_tg = document.querySelector('.fill-tg');
 const fill_text = document.getElementById('fill-text');
 const n = document.getElementById('partner-name');
+const nn = document.getElementById('partner-name-label');
 const ph = document.getElementById('partner-phone');
 const container = document.querySelector('.container');
 const preloader = document.querySelector('.c-car-spinner');
@@ -31,6 +32,7 @@ if (super_root === "true") {
     fill_tg.style.display = "none";
     fill_text.style.display = "none";
     n.style.display = "none";
+    nn.style.display = "none";
 }
 
 const fields = {
