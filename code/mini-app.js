@@ -29,7 +29,7 @@ let {
   user: { username, id },
   start_param,
 } = tg.initDataUnsafe;
-console.log(start_param);
+
 const calc = start_param?.includes("-calc-true") || false;
 const do_reg = start_param?.includes(`-reg-do-true`) || false;
 const price = start_param?.includes("-price-true") || false;

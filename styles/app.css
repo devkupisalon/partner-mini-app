@@ -80,6 +80,10 @@ input[type="file"],
     width: 100%;
 }
 
+.select-partner-type {
+    margin-bottom: 5px;
+}
+
 @media screen and (max-width: 355px) {
 
     .input-label,
