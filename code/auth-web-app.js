@@ -49,13 +49,16 @@ if (id && username) {
       const timestamp = new Date().getTime();
 
       try {
-        const response = await fetch(`/save-data?timestamp=${timestamp}
-          &partner=${partner}
-          &user_id=${id}
-          &username=${username}
-          &name=${name}
-          &phone=${phone}`);
+        const queryParams = new URLSearchParams({
+          timestamp: timestamp,
+          partner: partner,
+          user_id: id,
+          username: username,
+          name: name,
+          phone: phone
+        });
 
+        const response = await fetch(`/save-data?${queryParams.toString()}`);
         const { success } = await response.json();
         if (success) {
           tg.showPopup({ message: 'Регистрация прошла успешно' });

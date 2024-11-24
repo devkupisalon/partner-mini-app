@@ -120,9 +120,6 @@ if (id && username || super_root === "true") {
                 });
 
                 const reigistr_response = await fetch(`/save-new-partner?${queryParams.toString()}`);
-
-                // const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}&user_id=${id}`);
-
                 const { partner_id, folder } = await reigistr_response.json();
 
                 partner = partner_id;
@@ -165,9 +162,7 @@ if (id && username || super_root === "true") {
                     }
                 } else {
                     tg.showPopup({ message: 'Новый Партнер успешно создан, не забудьте запросить у него telegram id!' });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 2000);
+                    window.location.reload();
                 }
             } catch (error) {
                 tg.showPopup({ title: 'Error', message: error });
