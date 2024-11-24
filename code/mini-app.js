@@ -42,6 +42,8 @@ start_param = calc
       : start_param;
 start_param = start_param !== undefined ? start_param : partner;
 
+console.log(super_root);
+
 /**
  * Установить галочку для элемента и отключить его
  * @param {HTMLElement} s - Элемент, для которого нужно установить галочку и отключить
