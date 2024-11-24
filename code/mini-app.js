@@ -29,6 +29,7 @@ let {
   user: { username, id },
   start_param,
 } = tg.initDataUnsafe;
+console.log(start_param);
 const calc = start_param?.includes("-calc-true") || false;
 const do_reg = start_param?.includes(`-reg-do-true`) || false;
 const price = start_param?.includes("-price-true") || false;
@@ -41,8 +42,6 @@ start_param = calc
       ? String(start_param).replace("-price-true", "")
       : start_param;
 start_param = start_param !== undefined ? start_param : partner;
-
-console.log(super_root);
 
 /**
  * Установить галочку для элемента и отключить его
