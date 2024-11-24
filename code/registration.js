@@ -30,6 +30,7 @@ tg.setBottomBarColor("bottom_bar_bg_color");
 if (super_root === "true") {
     fill_tg.style.display = "none";
     fill_text.style.display = "none";
+    n.style.display = "none";
 }
 
 const fields = {
@@ -98,7 +99,7 @@ if (id && username || super_root === "true") {
 
         const { buttonValues, data: { name, phone, type, your_type, ya_link, org_name, address, percent } } = getValues();
 
-        if (buttonValues && name && phone && type && org_name && address) {
+        if (buttonValues && name && phone && type && org_name && address || buttonValues && super_root === "true" && phone && type && org_name && address) {
 
             const timestamp = new Date().getTime();
 
