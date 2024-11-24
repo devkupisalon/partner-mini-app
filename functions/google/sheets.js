@@ -7,7 +7,7 @@ import { numberToColumn, getColumnNumberByValue } from "../helper.js";
 import { notify_manager_messages_map } from "../bot/messages.js";
 
 import { v4 as uuidv4 } from "uuid";
-import { format } from "date-fns";
+import { format } from "date-fns-tz";
 import { create_folder } from "./drive.js";
 
 const { sheets } = gauth();
@@ -294,7 +294,7 @@ const do_calc = async (params) => {
       if (link) {
         logger.info(`Pre-order created successfully`);
         if (from_web_app === "true") {
-          const date_and_time = format(new Date(), 'dd.MM.yyyy HH:mm:ss');
+          const date_and_time = format(new Date(), 'dd.MM.yyyy HH:mm:ss', { timeZone: 'Europe/Moscow' });
           const message_text = notify_manager_messages_map[work_type](user_name, partner_name, name, `${brand} ${model}`, date_and_time, link);
           const { message_id } = await bot.sendMessage(managers_map[manager], message_text, { parse_mode, disable_web_page_preview: true });
           if (message_id) {
