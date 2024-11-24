@@ -7,6 +7,7 @@ const id = urlParams.get('id');
 const super_root = urlParams.get('super_root');
 
 const fill_tg = document.querySelector('.fill-tg');
+const fill_text = document.getElementById('fill-text');
 const n = document.getElementById('partner-name');
 const ph = document.getElementById('partner-phone');
 const container = document.querySelector('.container');
@@ -28,6 +29,7 @@ tg.setBottomBarColor("bottom_bar_bg_color");
 
 if (super_root === "true") {
     fill_tg.style.display = "none";
+    fill_text.style.display = "none";
 }
 
 const fields = {
