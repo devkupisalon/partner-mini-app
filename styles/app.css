@@ -359,3 +359,7 @@ tr:nth-child(even) {
 .number-cell {
     text-align: center;
 }
+
+#work-type-text {
+    margin-bottom: 5px;
+}
