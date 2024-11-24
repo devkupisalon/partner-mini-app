@@ -104,15 +104,21 @@ if (id && username || super_root === "true") {
 
             try {
 
-                const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}
-                    &phone=${phone}
-                    &type=${type}
-                    &your_type=${your_type}
-                    &address=${encodeURIComponent(address)}
-                    &link=${ya_link}
-                    &categories=${buttonValues}
-                    &percent=${percent}
-                    &user_id=${id}`);
+                const queryParams = new URLSearchParams({
+                    org_name: org_name,
+                    phone: phone,
+                    type: type,
+                    your_type: your_type,
+                    address: address,
+                    link: ya_link,
+                    categories: buttonValues,
+                    percent: percent,
+                    user_id: id
+                });
+
+                const reigistr_response = await fetch(`/save-new-partner?${queryParams.toString()}`);
+
+                // const reigistr_response = await fetch(`/save-new-partner?org_name=${org_name}&phone=${phone}&type=${type}&your_type=${your_type}&address=${encodeURIComponent(address)}&link=${ya_link}&categories=${buttonValues}&percent=${percent}&user_id=${id}`);
 
                 const { partner_id, folder } = await reigistr_response.json();
 
@@ -136,15 +142,18 @@ if (id && username || super_root === "true") {
                 }
 
                 if (partner_id && super_root !== "true") {
-                    const response = await fetch(`/save-data?timestamp=${timestamp}
-                        &partner=${partner}
-                        &user_id=${id}
-                        &username=${username}
-                        &name=${name}
-                        &phone=${phone}
-                        &groups=${buttonValues}
-                        &root=true`);
+                    const queryParams = new URLSearchParams({
+                        timestamp: timestamp,
+                        partner: partner,
+                        user_id: id,
+                        username: username,
+                        name: name,
+                        phone: phone,
+                        groups: buttonValues,
+                        root: true
+                    });
 
+                    const response = await fetch(`/save-data?${queryParams.toString()}`);
                     const { success } = await response.json();
                     if (success) {
                         window.location.href = `/?startapp=${partner_id}`;
