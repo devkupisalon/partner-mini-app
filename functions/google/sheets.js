@@ -274,6 +274,14 @@ const do_calc = async (params) => {
       logger.info("Data for calculation saved successfully");
     }
 
+    logger.info({
+      row,
+      work_type,
+      percent,
+      partner_folder,
+      partner,
+    });
+
     const linkResponse = await fetch(WEBAPPURL, {
       method: "POST",
       body: JSON.stringify({
