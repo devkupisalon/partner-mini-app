@@ -89,7 +89,7 @@ upload.addEventListener('change', function () {
     logo.innerHTML = logo.innerText + checkmark;
 });
 
-if (id && username) {
+if (id && username || super_root === "true") {
     tg.MainButton.setParams({ has_shine_effect: true, text: 'Зарегистироваться' });
 
     /** MAIN BUTTON */
