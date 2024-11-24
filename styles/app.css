@@ -81,7 +81,7 @@ input[type="file"],
 }
 
 .select-partner-type {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
 
 @media screen and (max-width: 355px) {
@@ -365,5 +365,5 @@ tr:nth-child(even) {
 }
 
 #work-type-text {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
 }
