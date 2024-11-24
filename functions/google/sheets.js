@@ -407,7 +407,7 @@ const get_partners_data = async (chat_id) => {
           row.forEach((r, i) => {
             if (i > 0) {
               let x = r;
-              if (values[i] === 'partner_folder') {
+              if (headers[i] === 'partner_folder') {
                 x = x.split("/").pop();
               }
               acc[headers[i]] = x;
