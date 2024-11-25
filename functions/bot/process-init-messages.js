@@ -3,9 +3,6 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 import { get_logo } from "../google/drive.js";
 import { __dirname } from "../../constants.js";
-import fs from 'fs';
-
-import { Readable } from 'stream';
 
 /**
  * Send first init messages to user
@@ -55,7 +52,7 @@ const send_first_messages = async (
                 if (type === "Партнер" && !is_invite_send) {
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
-                        await set_chat_photo(CHAT_ID, chat_id);
+                        // await set_chat_photo(CHAT_ID, chat_id);
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.stack}`);
                     }
@@ -153,7 +150,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     const formData = new FormData();
     formData.append('photo', photoBlob, 'photo.png');
-    console.log(formData);
+    // console.log(formData);
 
 
     // const b = await photoBlob.arrayBuffer();
