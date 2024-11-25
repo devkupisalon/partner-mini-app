@@ -38,7 +38,8 @@ bot.on("message", async (message) => {
     reply_to_message,
     message_id,
     forward_from,
-    reply_markup
+    reply_markup,
+    entities
   } = message;
 
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
@@ -72,7 +73,8 @@ bot.on("message", async (message) => {
     group_ids_obj,
     GROUP_CHAT_ID,
     managers_map,
-    reply_markup
+    reply_markup,
+    entities
   });
 
   logger.info(is_text_to_parse);
