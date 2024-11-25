@@ -72,6 +72,8 @@ bot.on("message", async (message) => {
     managers_map
   });
 
+  logger.info(message);
+
   const text_to_parse = reply_to_message && !calc && !save
     ? (reply_to_message.entities
       ? reply_to_message.entities[1].url
