@@ -1,6 +1,6 @@
 import { constants } from "../../constants.js";
 
-const { MINI_APP_LINK, PDF_LINK } = constants;
+const { MINI_APP_LINK, PDF_LINK, CONDITIONS_LINK } = constants;
 
 /** OBJECT WITH MESSAGES OPTIONS */
 const messages_map = {
@@ -53,15 +53,15 @@ const messages_map = {
             text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
   С наилучшими пожеланиями,
   Куписалон`,
-            url: PDF_LINK,
-            button_text: `Инструкция`,
+            url: (type) => { return [PDF_LINK(type), CONDITIONS_LINK] },
+            button_text: [`Инструкция`, `Условия`],
         },
         Партнер: {
             text: `Направляем вам материалы по работе в партнерской программе Куписалон. Если у вас появятся вопросы, мы с радостью на них ответим.
   С наилучшими пожеланиями,
   Куписалон`,
-            url: PDF_LINK,
-            button_text: `Инструкция`,
+            url: (type) => { return [PDF_LINK(type), CONDITIONS_LINK] },
+            button_text: [`Инструкция`, `Условия`],
         },
         link: true,
         to_pin: true,
@@ -87,7 +87,8 @@ const messages_map = {
 };
 
 const notify_manager_messages_map = {
-    "Партнер": (partner_manager_name,
+    "Партнер": (
+        partner_manager_name,
         partner_name,
         client_name,
         cars_data,
@@ -106,7 +107,7 @@ const notify_manager_messages_map = {
   
   Если у вас есть вопросы или предложения, пожалуйста, свяжитесь с партнером.`;
     },
-    "Агент": (partner_manager_name,
+    "Агент": (
         partner_name,
         client_name,
         cars_data,

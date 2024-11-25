@@ -37,7 +37,7 @@ const process_message = async (data) => {
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
-        ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n`)
+        ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)`)
         : (text = text);
 
     if (from_user) {
@@ -141,7 +141,7 @@ const process_message = async (data) => {
                         : bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
-            await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name,  });
+            // await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name,  });
             p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
     } catch (error) {
@@ -167,11 +167,11 @@ const save_agent_message_to_json = async (data, hash) => {
  * This function retrieves message properties by processing a JSON object and extracting relevant information.
  * @returns {Object} - The message properties extracted based on partner information.
  */
-const get_message_property = async () => {
+const get_message_property = async (reply_to_message_id) => {
     const obj = await process_return_json(agent_messages_obj_path);
     Object.entries(obj).forEach(async ([k, v]) => {
         const { partner_id, message_id, id, partner_name, hash_id } = v;
-        const key = `${BOT_ID}-${message_id}-${id}`;
+        const key = `${BOT_ID}-${reply_to_message_id}-${id}`;
         if (key === k) {
             return { partner_id, message_id, id, partner_name, hash_id };
         }

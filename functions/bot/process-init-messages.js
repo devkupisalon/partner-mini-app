@@ -30,13 +30,15 @@ const send_first_messages = async (
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
                 const { url, text, button_text } = messages_map[k][type];
-                const create_url = typeof url === "function" ? url(uid) : url;
+                const create_url = typeof url === "function" && k === 'helper_message' ? url(type) : url(uid)/*  : url */;
 
                 const messageOptions = {
                     link: {
                         message_text_option: text,
                         reply_markup: {
-                            inline_keyboard: [[{ text: button_text, url: create_url }]],
+                            inline_keyboard: k === 'helper_message'
+                                ? create_url.map((r, i) => [{ text: button_text[i], url: r }])
+                                : [[{ text: button_text, url: create_url }]],
                         },
                     },
                     text: {
@@ -52,7 +54,6 @@ const send_first_messages = async (
                 if (type === "Партнер" && !is_invite_send) {
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
-                        // await set_chat_photo(CHAT_ID, chat_id);
                     } catch (error) {
                         logger.error(`Partner chat ID not found: ${error.stack}`);
                     }
