@@ -38,6 +38,7 @@ bot.on("message", async (message) => {
     reply_to_message,
     message_id,
     forward_from,
+    reply_markup
   } = message;
 
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
@@ -54,7 +55,8 @@ bot.on("message", async (message) => {
     calc,
     is_title,
     is_hash_folder_id,
-    is_include_groups
+    is_include_groups,
+    is_text_to_parse
   } = return_conditions({
     from_id,
     type,
@@ -69,12 +71,13 @@ bot.on("message", async (message) => {
     group_title,
     group_ids_obj,
     GROUP_CHAT_ID,
-    managers_map
+    managers_map,
+    reply_markup
   });
 
-  logger.info(message);
+  logger.info(reply_to_message.entities);
 
-  const text_to_parse = reply_to_message && !calc && !save
+  const text_to_parse = is_text_to_parse
     ? (reply_to_message.entities
       ? reply_to_message.entities[1].url
       : reply_to_message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '')
