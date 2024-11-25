@@ -5,7 +5,7 @@ import logger from "../../logs/logger.js";
 
 import { constants, managers_map } from "../../constants.js";
 import { get_partners_data, get_all_groups_ids } from "../google/sheets.js";
-import { parse_text, get_hash } from "../helper.js";
+import { parse_text, get_hash, return_conditions } from "../helper.js";
 import { process_save_media_to_obj, send_media_group } from "./process-media-group.js";
 import { process_message } from "./process-message.js";
 import { process_calc, process_save } from "./process-google.js";
@@ -17,6 +17,65 @@ let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
 let isProcessMessageRunning;
 const { send_media_obj_path, DBLINK, DEV_MODE } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
+
+/**
+ * Function to analyze data and return conditions based on the provided parameters.
+ * 
+ * @param {Object} data - The data object containing various message details.
+ * @returns {Object} - Returns an object with various conditions based on the data.
+ */
+const return_conditions = (data) => {
+  const {
+    from_id,
+    type,
+    message,
+    reply_to_message,
+    id,
+    photo,
+    video,
+    voice,
+    document,
+    media_group_id,
+    group_title,
+    group_ids_obj
+  } = data;
+
+  const is_manager = Object.values(managers_map).find((k) => k === from_id)
+    ? true
+    : false;
+
+  const is_group = ["group", "supergroup"].includes(type);
+  const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
+  const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
+
+  const is_media =
+    photo ||
+    video ||
+    voice ||
+    document ||
+    media_group_id;
+
+  const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
+  const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
+  const is_include_groups = group_ids_obj.hasOwnProperty(id);
+  const is_title = reply_to_message?.chat?.title?.includes(group_title);
+  const is_hash_folder_id = is_manager && reply_to_message
+    ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
+    : '';
+
+  return {
+    is_manager,
+    is_group,
+    is_bot,
+    is_managers_work_chat,
+    is_media,
+    save,
+    calc,
+    is_title,
+    is_hash_folder_id,
+    is_include_groups
+  }
+};
 
 /**
  * Process forward,reply messages between managers and partners or agents
@@ -40,26 +99,53 @@ bot.on("message", async (message) => {
     forward_from,
   } = message;
 
+  const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const from_id = message.from.id;
   const group_ids_obj = await get_all_groups_ids();
 
-  const is_manager = Object.values(managers_map).find((k) => k === from_id)
-    ? true
-    : false;
+  const {
+    is_manager,
+    is_group,
+    is_bot,
+    is_managers_work_chat,
+    is_media,
+    save,
+    calc,
+    is_title,
+    is_hash_folder_id,
+    is_include_groups
+  } = return_conditions({
+    from_id,
+    type,
+    message,
+    reply_to_message,
+    id,
+    photo,
+    video,
+    voice,
+    document,
+    media_group_id,
+    group_title,
+    group_ids_obj
+  });
 
-  const is_group = ["group", "supergroup"].includes(type);
-  const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
-  const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
+  // const is_manager = Object.values(managers_map).find((k) => k === from_id)
+  //   ? true
+  //   : false;
 
-  const is_media =
-    photo ||
-    video ||
-    voice ||
-    document ||
-    media_group_id;
+  // const is_group = ["group", "supergroup"].includes(type);
+  // const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
+  // const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
 
-  const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
-  const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
+  // const is_media =
+  //   photo ||
+  //   video ||
+  //   voice ||
+  //   document ||
+  //   media_group_id;
+
+  // const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
+  // const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
 
   const text_to_parse = reply_to_message && !calc
     ? (reply_to_message.entities
@@ -67,21 +153,19 @@ bot.on("message", async (message) => {
       : reply_to_message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '')
     : '';
 
-  const is_include_groups = group_ids_obj.hasOwnProperty(id);
-  const is_hash_folder_id = is_manager && reply_to_message
-    ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
-    : '';
+  // const is_include_groups = group_ids_obj.hasOwnProperty(id);
+  // const is_hash_folder_id = is_manager && reply_to_message
+  //   ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
+  //   : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
   // const is_hash = is_manager && message.text && !is_include_groups && message.entities ? message.entities[1].url.match(/hash:(.*)/) : '';
   const hash = get_hash(message, is_manager, is_include_groups);
 
   logger.info(hash);
-
-  const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
-  const is_title = reply_to_message?.chat?.title?.includes(group_title);
+  // const is_title = reply_to_message?.chat?.title?.includes(group_title);
 
   let text = message.text || message.caption || "";
-  let partner_name, partner_id, row, partner_folder;
+  let partner_name, partner_id, row;
 
   let user_ID =
     reply_to_message && is_manager && is_group

@@ -141,6 +141,67 @@ const get_hash = (message, is_manager, is_include_groups) => {
   return hash ? hash : null;
 };
 
+/**
+ * Function to analyze data and return conditions based on the provided parameters.
+ * 
+ * @param {Object} data - The data object containing various message details.
+ * @returns {Object} - Returns an object with various conditions based on the data.
+ */
+const return_conditions = (data) => {
+  const {
+    from_id,
+    type,
+    message,
+    reply_to_message,
+    id,
+    photo,
+    video,
+    voice,
+    document,
+    media_group_id,
+    group_title,
+    group_ids_obj,
+    GROUP_CHAT_ID,
+    managers_map
+  } = data;
+
+  const is_manager = Object.values(managers_map).find((k) => k === from_id)
+    ? true
+    : false;
+
+  const is_group = ["group", "supergroup"].includes(type);
+  const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
+  const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
+
+  const is_media =
+    photo ||
+    video ||
+    voice ||
+    document ||
+    media_group_id;
+
+  const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
+  const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
+  const is_include_groups = group_ids_obj.hasOwnProperty(id);
+  const is_title = reply_to_message?.chat?.title?.includes(group_title);
+  const is_hash_folder_id = is_manager && reply_to_message
+    ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
+    : '';
+
+  return {
+    is_manager,
+    is_group,
+    is_bot,
+    is_managers_work_chat,
+    is_media,
+    save,
+    calc,
+    is_title,
+    is_hash_folder_id,
+    is_include_groups
+  }
+};
+
 export {
   numberToColumn,
   getColumnNumberByValue,
@@ -150,5 +211,6 @@ export {
   p_success,
   process_save_calc_data,
   generateHexHash,
-  get_hash
+  get_hash,
+  return_conditions
 };
