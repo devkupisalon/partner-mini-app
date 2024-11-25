@@ -84,6 +84,9 @@ const process_calc = async (data) => {
         chat_id = forward_from_id;
     }
 
+    logger.info(agent_id);
+    logger.info(chat_id);
+
     const { link } = await do_calc({
         partner: agent_id,
         phone,
