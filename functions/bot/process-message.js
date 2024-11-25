@@ -2,7 +2,7 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { HQD_photo, prepare_calc, p_success, process_save_calc_data, parse_text } from "../helper.js";
+import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
 let { GROUP_CHAT_ID, DBLINK, BOT_ID, MINI_APP_LINK } = constants;
@@ -141,6 +141,8 @@ const process_message = async (data) => {
                     : type_m === "document"
                         ? bot.sendDocument(CHAT_ID, media, options)
                         : bot.sendMessage(CHAT_ID, media, default_options));
+
+        logger.info(data);
 
         if (data.message_id) {
             // await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name,  });

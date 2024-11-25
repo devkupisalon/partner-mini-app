@@ -7,7 +7,7 @@ import { constants, managers_map } from "../../constants.js";
 import { get_partners_data, get_all_groups_ids } from "../google/sheets.js";
 import { parse_text } from "../helper.js";
 import { process_save_media_to_obj, send_media_group } from "./process-media-group.js";
-import { process_message, get_message_property } from "./process-message.js";
+import { process_message } from "./process-message.js";
 import { process_calc, process_save } from "./process-google.js";
 import { deletePropertiesFromFile, process_return_json } from "../process-json.js";
 
@@ -40,11 +40,11 @@ bot.on("message", async (message) => {
     forward_from,
   } = message;
 
+  const { entities } = reply_to_message;
+
   const from_id = message.from.id;
   const group_ids_obj = await get_all_groups_ids();
-  const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
-
-  logger.info(reply_to_message);
+  // const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
 
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
     ? true
@@ -140,8 +140,7 @@ bot.on("message", async (message) => {
     if ((is_managers_work_chat || is_include_groups) && is_manager) {
 
       if (reply_to_message && is_bot && is_title) {
-        const {} = await get_message_property();
-        const { agent_message_id, chat_id } = parse_text(text_to_parse);
+        const { agent_message_id, chat_id } = parse_text(entities[1].url);
         isProcessMessageRunning = true;
         await process_message({
           text: message.text || message.caption || "",
