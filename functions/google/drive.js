@@ -187,7 +187,7 @@ const get_logo = async (root_chat_id) => {
       q: `'${partner_folder}' in parents and name contains '_logo'`,
     });
 
-    // const url = (id) => `https://lh3.googleusercontent.com/d/${id}=w2000`;
+    const url = (id) => `https://lh3.googleusercontent.com/d/${id}=w2000`;
 
     if (files.length > 0) {
       const { id } = files[0];
