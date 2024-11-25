@@ -297,7 +297,7 @@ const get_fast_partner_data = async (data) => {
   if (!is_manager || (is_manager && is_include_groups) || (calc_condition)) {
     // Extract chatID based on conditions
     const chatID = calc_condition ? parse_text(decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, ''))).chat_id : user_ID;
-    const partner_data = await get_partners_data(chatID);
+    const p = await get_partners_data(chatID);
     partner_id = p.partner_id;
     partner_name = p.partner_name;
     row = p.row;
