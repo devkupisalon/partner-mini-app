@@ -115,7 +115,7 @@ bot.on("message", async (message) => {
   // }
 
   const partner_url = `${DBLINK}&range=${row}:${row}`;
-  logger.info({ partner_name, partner_url });
+  logger.info({ partner_name, partner_url, partner_id });
 
   // Process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {
