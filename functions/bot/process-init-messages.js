@@ -137,8 +137,9 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    logger.info(photoBlob);
-    logger.info(chatId);
+    console.log(photoBlob);
+    // logger.info(chatId);
+    console.log(photoBlob[Symbol.buffer]);
 
     // Данные из Blob
     const imageBuffer = Buffer.from(photoBlob[Symbol.buffer]);
