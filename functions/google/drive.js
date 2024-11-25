@@ -187,6 +187,8 @@ const get_logo = async (root_chat_id) => {
       q: `'${partner_folder}' in parents and name contains '_logo'`,
     });
 
+    const url = (file_id) => `https://lh3.googleusercontent.com/d/${file_id}=w2000`;
+
     if (files.length > 0) {
       const { id } = files[0];
       logger.info(`Logo file found: ${id}`);
@@ -201,7 +203,7 @@ const get_logo = async (root_chat_id) => {
       // const logoBlob = new Blob([data], { type: 'image/png' });
       // console.log(logoBlob);
       logger.info("Logo Blob retrieved successfully.");
-      return data;
+      return url(id);
     } else {
       logger.warn("Logo file not found in the partner_folder.");
     }

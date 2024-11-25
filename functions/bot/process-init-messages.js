@@ -135,17 +135,17 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    console.log(photoBlob);
+    logger.info(photoBlob);
     logger.info(chatId);
     // const fileStream = new ReadableStream(photoBlob);
-    const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
+    // const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
 
-    const fileStream = new Readable();
-    fileStream.push(photoBuffer);
-    fileStream.push(null);
+    // const fileStream = new Readable();
+    // fileStream.push(photoBuffer);
+    // fileStream.push(null);
 
     try {
-        const result = await bot.setChatPhoto(chatId, fileStream);
+        const result = await bot.setChatPhoto(chatId, photoBlob);
         logger.info(`Photo set successfully: ${result}`);
     } catch (error) {
         logger.error(`Error setting photo: ${error.stack}`);
