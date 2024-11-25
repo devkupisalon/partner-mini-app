@@ -38,7 +38,7 @@ const send_media_group = async () => {
 
                 if (from_user) {
                     const new_caption = caption ? `${caption}:${hash_id}\`` : '';
-                    const new_c = new_caption.replace(/hash:(.*)/, (match, p1) => `[hash](${MINI_APP_LINK}${p1})`);
+                    const new_c = new_caption.replace(/hash:(.*)/, (match, p1) => `[hash](${MINI_APP_LINK}hash:${p1})`);
                     caption = new_c;
                 }
 
