@@ -304,7 +304,7 @@ const get_fast_partner_data = async (data) => {
     partner_folder = p.partner_folder;
   }
 
-  logger.info({artner_id, partner_name, row, partner_folder});
+  logger.info({ partner_id, partner_name, row, partner_folder });
 
   return { partner_id, partner_name, row, partner_folder };
 };
