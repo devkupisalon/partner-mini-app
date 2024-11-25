@@ -181,6 +181,7 @@ const save_logo = async (params) => {
 const get_logo = async (root_chat_id) => {
   try {
     const { partner_folder } = await get_partners_data(root_chat_id);
+    logger.info(partner_folder);
     // Search for files with '_logo' in the name within the partner_folder
     const { data: { files } } = await drive.files.list({
       q: `'${partner_folder}' in parents and name contains '_logo'`,
@@ -188,7 +189,7 @@ const get_logo = async (root_chat_id) => {
 
     if (files.length > 0) {
       const { id } = files[0];
-      logger.info("Logo file found:", id);
+      logger.info(`Logo file found: ${id}`);
       // Get the file content as a Blob
       const { data } = await drive.files.get({
         fileId: id,

@@ -8,7 +8,7 @@ import { notify_manager_messages_map } from "../bot/messages.js";
 
 import { v4 as uuidv4 } from "uuid";
 import { format } from "date-fns-tz";
-import  moment from 'moment-timezone';
+import moment from 'moment-timezone';
 import { create_folder } from "./drive.js";
 
 const { sheets } = gauth();
