@@ -60,7 +60,7 @@ const process_calc = async (data) => {
     const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
 
     if (!is_include_groups) {
-        const t = decodeURI(message.entites[1].url.toString().replace(MINI_APP_LINK, ''));
+        const t = decodeURI(message.entites[0].url.toString().replace(MINI_APP_LINK, ''));
         const x = parse_text(t);
         agent_id = x.agent_id;
         chat_id = x.chat_id;
