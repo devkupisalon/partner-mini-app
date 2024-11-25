@@ -137,13 +137,14 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
     const fileStream = new Readable();
     fileStream.push(photoBlob);
-    fileStream.push(null); 
+    fileStream.push(null);
 
-    bot.setChatPhoto(chatId, fileStream).then((result) => {
-        logger.info('Photo set successfully:', result);
-    }).catch((error) => {
-        logger.error('Error setting photo:', error.stack);
-    });
+    try {
+        const result = await bot.setChatPhoto(chatId, fileStream);
+        logger.info(`Photo set successfully: ${result}`);
+    } catch (error) {
+        logger.error(`Error setting photo: ${error.stack}`);
+    }
 };
 
 export { send_first_messages };
