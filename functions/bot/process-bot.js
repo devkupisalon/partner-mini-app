@@ -75,8 +75,6 @@ bot.on("message", async (message) => {
     reply_markup
   });
 
-  logger.info(reply_to_message.entities);
-
   const text_to_parse = is_text_to_parse
     ? (reply_to_message.entities
       ? reply_to_message.entities[1].url

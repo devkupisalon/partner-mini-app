@@ -30,8 +30,8 @@ const send_first_messages = async (
             if (messages_map[k][type]) {
                 const { url, text, button_text } = messages_map[k][type];
 
-                const create_url = typeof url === "function" && k === 'helper_message' ? url(type) : 
-                                   typeof url === "function" ? url(uid) : url;
+                const create_url = typeof url === "function" && k === 'helper_message' ? url(type) :
+                    typeof url === "function" ? url(uid) : url;
 
                 const messageOptions = {
                     link: {
@@ -100,7 +100,7 @@ const send_group_invite_link = async (groupId, user_ids, map, name) => {
         .exportChatInviteLink(groupId)
         .then((inviteLink) => {
             Object.keys(user_ids).forEach((k) => {
-                bot.sendMessage(user_ids[k], `${map[k](name)} ${inviteLink}`);
+                bot.sendMessage(user_ids[k], `${map[k](name)} ${inviteLink}`, { disable_web_page_preview: true });
             });
         })
         .catch((error) => {
