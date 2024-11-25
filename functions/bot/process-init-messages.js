@@ -138,41 +138,20 @@ const set_chat_title = async (groupId, newTitle) => {
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
     // console.log(photoBlob);
-    // console.log(photoBlob.arrayBuffer());
 
-    // Данные из Blob
-    // const imageBuffer = Buffer.from(photoBlob[Symbol.buffer]);
-    // console.log(imageBuffer);
 
-    // Путь к файлу в корневой папке
-    // const filePathInRoot = path.join(__dirname, 'photo.png');
-    // logger.info(filePathInRoot);
+    // const b = await photoBlob.arrayBuffer();
+    // console.log(b);
+    // const photoBuffer = Buffer.from(b);
+    // console.log(photoBuffer);
 
-    // Запись данных из Blob в файл
-    // await fs.writeFile(filePathInRoot, imageBuffer, 'binary', (err) => {
-    //     if (err) {
-    //         console.error(err);
-    //     } else {
-    //         console.log('Изображение успешно сохранено в корневой папке сервера.');
-    //     }
-    // });
-    // const fileStream = new ReadableStream(photoBlob);
-    // console.log(fileStream);
-    const b = await photoBlob.arrayBuffer();
-    console.log(b);
-    const photoBuffer = Buffer.from(b);
-    console.log(photoBuffer);
+    // const fileStream = new Readable();
+    // fileStream.push(photoBuffer);
+    // fileStream.push(null);
 
-    const fileStream = new Readable();
-    fileStream.push(photoBuffer);
-    fileStream.push(null);
+    const fileStream = new ReadableStream(photoBlob);
 
     console.log(fileStream);
-
-    // const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
-
-    // Создаем InputFile из буфера для загрузки фото
-    // const inputFile = new InputFile(photoBuffer, 'photo.png');
 
     try {
         const result = await bot.setChatPhoto(chatId, fileStream);

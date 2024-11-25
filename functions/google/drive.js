@@ -198,12 +198,12 @@ const get_logo = async (root_chat_id) => {
         alt: 'media',
       });
 
-      // console.log(data);
+      const b = await data.arrayBuffer();
 
-      // const logoBlob = new Blob([data], { type: 'image/png' });
-      // console.log(logoBlob);
+      const logoBlob = new Blob([b], { type: 'image/png' });
+      console.log(logoBlob);
       logger.info("Logo Blob retrieved successfully.");
-      return data;
+      return logoBlob;
     } else {
       logger.warn("Logo file not found in the partner_folder.");
     }
