@@ -4,7 +4,6 @@ import logger from "../../logs/logger.js";
 import { get_logo } from "../google/drive.js";
 
 import { Readable } from 'stream';
-import { InputFile } from 'telegraf/types';
 
 /**
  * Send first init messages to user
@@ -138,20 +137,21 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
     logger.info(photoBlob);
     logger.info(chatId);
-    // const fileStream = new ReadableStream(photoBlob);
+    const fileStream = new ReadableStream(photoBlob);
+    console.log(fileStream);
     // const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
 
     // const fileStream = new Readable();
     // fileStream.push(photoBuffer);
     // fileStream.push(null);
 
-    const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
+    // const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
 
     // Создаем InputFile из буфера для загрузки фото
-    const inputFile = new InputFile(photoBuffer, 'photo.png');
+    // const inputFile = new InputFile(photoBuffer, 'photo.png');
 
     try {
-        const result = await bot.setChatPhoto(chatId, inputFile);
+        const result = await bot.setChatPhoto(chatId, fileStream);
         logger.info(`Photo set successfully: ${result}`);
     } catch (error) {
         logger.error(`Error setting photo: ${error.stack}`);
