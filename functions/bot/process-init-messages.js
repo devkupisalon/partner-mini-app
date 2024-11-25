@@ -140,6 +140,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     console.log(photoBlob);
     // logger.info(chatId);
     console.log(photoBlob['[Symbol(buffer)]']);
+    console.log(photoBlob.arrayBuffer());
 
     // Данные из Blob
     const imageBuffer = Buffer.from(photoBlob[Symbol.buffer]);
