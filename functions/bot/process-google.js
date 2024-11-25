@@ -96,7 +96,7 @@ const process_calc = async (data) => {
     });
 
     if (link) {
-        const message_text = success_calc_messages[is_include_groups](name, brand, model, gosnum, partner_name, partner_url);
+        const message_text = success_calc_messages[is_include_groups](name, brand, model, gosnum, link, hash_folder_id, partner_name, partner_url);
         await bot.sendMessage(chatId, message_text, options);
     }
 
