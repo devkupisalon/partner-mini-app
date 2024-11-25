@@ -3,6 +3,8 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 import { get_logo } from "../google/drive.js";
 
+import { Readable } from 'stream';
+
 /**
  * Send first init messages to user
  * @param {string} chat_id - user chat_id
