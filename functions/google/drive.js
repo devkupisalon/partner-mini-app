@@ -196,7 +196,7 @@ const get_logo = async (root_chat_id) => {
         alt: 'media',
       });
 
-      console.log(data);
+      // console.log(data);
 
       // const logoBlob = new Blob([data], { type: 'image/png' });
       // console.log(logoBlob);
