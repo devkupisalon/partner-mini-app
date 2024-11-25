@@ -136,7 +136,7 @@ const process_save = async (data) => {
         }
 
         logger.info(hash_id);
-        logger.info(is_include_groups);
+        logger.info(chat_id);
 
         const media_obj = await process_return_json(media_files_obj_path);
 
@@ -164,7 +164,7 @@ const process_save = async (data) => {
                     )
                 }
             } else {
-                logger.info(v.hash_id);
+                logger.info()
                 return (
                     c_chat_id === chat_id &&
                     v.hash_id === hash_id &&
@@ -173,6 +173,8 @@ const process_save = async (data) => {
                 );
             }
         });
+
+        logger.info(selectedData);
 
         let folder = {};
 
