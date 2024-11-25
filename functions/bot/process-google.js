@@ -7,7 +7,7 @@ import { create_folder, save_media } from "../google/drive.js";
 import { get_partners_data, do_calc } from "../google/sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
-import { HQD_photo, parse_text, prepare_calc, get_media_and_mime_type, return_success_condition } from "../helper.js";
+import { parse_text, prepare_calc, get_media_and_mime_type, return_success_condition } from "../helper.js";
 import { success_calc_messages, success_save_messages } from "./messages.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode, MINI_APP_LINK } = constants;

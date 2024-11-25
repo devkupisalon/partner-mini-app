@@ -2,7 +2,7 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { HQD_photo, prepare_calc, p_success, process_save_calc_data, get_media_and_mime_type } from "../helper.js";
+import { prepare_calc, p_success, process_save_calc_data, get_media_and_mime_type } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
 let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
@@ -113,16 +113,11 @@ const process_message = async (data) => {
     const options = options_map[from_user];
 
     try {
-        const data = await (
-            type_m === "photo"
-                ? bot.sendPhoto(CHAT_ID, media, options)
-                : type_m === "video"
-                    ? bot.sendVideo(CHAT_ID, media, options)
-                    : type_m === "voice"
-                        ? bot.sendVoice(CHAT_ID, media, options)
-                        : type_m === "document"
-                            ? bot.sendDocument(CHAT_ID, media, options)
-                            : bot.sendMessage(CHAT_ID, media, default_options));
+        const data = await (type_m === "photo" ? bot.sendPhoto(CHAT_ID, media, options) :
+                            type_m === "video" ? bot.sendVideo(CHAT_ID, media, options) :
+                            type_m === "voice" ? bot.sendVoice(CHAT_ID, media, options) :
+                            type_m === "document" ? bot.sendDocument(CHAT_ID, media, options) :
+                            bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
             p_success(type_m, message_id, id, GROUP_CHAT_ID);
