@@ -30,6 +30,7 @@ const constants = {
   GROUP_CHAT_ID: process.env.GROUP_CHAT_ID,
   MINI_APP_LINK: process.env.MINI_APP_LINK,
   PDF_LINK: (type) => { return type === 'Агент' ? process.env.GUIDE_AGENT_LINK : process.env.GUIDE_PARTNER_LINK },
+  CONDITIONS_LINK: process.env.CONDITIONS_LINK,
   DBLINK: process.env.DBLINK,
   DOCUMENT_ID_PRIVATE_POLiCY: process.env.PRIVATE_POLICY_ID,
   HOME: `${__dirname}/html/mini-app-main.html`,
