@@ -104,7 +104,7 @@ const process_save = async (data) => {
     if (!data.message.caption && !data.exist_folder) return;
 
     try {
-        const { message_id, id, message, hash_folder_id, is_bot, is_include_groups, partner_url } = data;
+        const { message_id, id, message, hash_folder_id, is_bot, is_include_groups, partner_url, exist_folder } = data;
         const reply_to_message_id = message.reply_to_message?.message_id;
 
         const media = message.photo
@@ -117,9 +117,10 @@ const process_save = async (data) => {
                         ? message.document
                         : "";
 
-        const _text = (message.entities
-            ? message.entities[1].url
-            : message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '');
+        const _text = (message.entities && exist_folder
+            ? message.entities[0].url
+            : message.caption_entities[1].url)
+            .toString().replace(MINI_APP_LINK, '');
 
         let agent_id;
         let agent_name;
