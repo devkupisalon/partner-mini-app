@@ -202,6 +202,84 @@ const return_conditions = (data) => {
   }
 };
 
+/** 
+ * Function to get the media and mime type based on the provided photo, video, voice, and document.
+ * @param {object} photo - The photo object.
+ * @param {object} video - The video object.
+ * @param {object} voice - The voice object.
+ * @param {object} document - The document object.
+ * @returns {object} An object containing the media and mime type.
+ */
+const get_media_and_mime_type = (photo, video, voice, document, flag = false) => {
+  // Determine the media based on photo, video, voice, and document.
+  const media = photo ? HQD_photo(photo).file_id :
+    video ? video.file_id :
+      voice ? voice.file_id :
+        document ? document.file_id : "";
+
+  // Determine the mime type based on the type of media.
+  const mime_type = photo ? "image/png" :
+    video ? video.mime_type :
+      voice ? voice.mime_type :
+        document ? document.mime_type : "";
+
+  const type_m = photo ? "photo" :
+    video ? "video" :
+      voice ? "voice" :
+        document ? "document" : "text";
+
+  // Return the media and mime type as an object.
+  return flag ? { media, mime_type } : { media, type_m };
+};
+
+/** 
+ * Function to define the success condition based on provided data.
+ * @param {object} data - The data object containing chat_id, c_chat_id, v, d, hash_id, reply_to_message_id, hash, is_include_groups, is_bot.
+ * @returns {boolean} The success condition evaluation based on the data.
+ */
+const return_success_condition = (data) => {
+  const { chat_id, c_chat_id, v, d, hash_id, reply_to_message_id, hash, is_include_groups, is_bot, } = data;
+  if (v.hash_partner && !hash_id && !is_bot) {
+    if (!is_include_groups) {
+      return (
+        c_chat_id === d.chat_id &&
+        hash === d.hash_id &&
+        v.data &&
+        v.data.length > 0
+      );
+    } else {
+      return (
+        c_chat_id === d.chat_id &&
+        hash === d.hash_id &&
+        v.data &&
+        v.data.length > 0 &&
+        v.message_ids.some(id => id === reply_to_message_id)
+      )
+    }
+  } else {
+    return (
+      c_chat_id === chat_id &&
+      v.hash_id === hash_id &&
+      v.data &&
+      v.data.length > 0
+    );
+  }
+};
+
+/** 
+ * Arrow function to initialize the media files entry with default values.
+ * @param {string} hash_id - The hash id for the media entry.
+ * @param {string} hash_partner - The hash partner for the media entry (optional).
+ * @returns {object} An object with initialized media files entry.
+ */
+const initialize_media_files_entry = (hash_id, hash_partner = null) => ({
+  data: [],
+  message_ids: [],
+  experation_date: new Date().toISOString(),
+  hash_id,
+  hash_partner,
+});
+
 export {
   numberToColumn,
   getColumnNumberByValue,
@@ -212,5 +290,8 @@ export {
   process_save_calc_data,
   generateHexHash,
   get_hash,
-  return_conditions
+  return_conditions,
+  get_media_and_mime_type,
+  initialize_media_files_entry,
+  return_success_condition
 };

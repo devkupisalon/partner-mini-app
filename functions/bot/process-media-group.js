@@ -5,7 +5,7 @@ import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
 import { append_json_file, process_return_json, deleteDataFromJson } from "../process-json.js";
-import { HQD_photo, p_success } from "../helper.js";
+import { HQD_photo, p_success, get_media_and_mime_type, initialize_media_files_entry } from "../helper.js";
 
 let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
 const { send_media_obj_path, media_files_obj_path, parse_mode } = constants;
@@ -77,35 +77,19 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
     let media_files = await process_return_json(media_files_obj_path);
 
     if (!hash_partner) {
-        if (!media_files[key]) {
-            media_files[key] = {
-                data: [],
-                message_ids: [],
-                experation_date: new Date().toISOString(),
-                hash_id,
-            };
-        }
+        media_files[key] = media_files[key] || initialize_media_files_entry(hash_id);
+        // if (!media_files[key]) {
+        //     media_files[key] = {
+        //         data: [],
+        //         message_ids: [],
+        //         experation_date: new Date().toISOString(),
+        //         hash_id,
+        //     };
+        // }
 
         Object.values(message).forEach(
             ({ message_id, photo, video, voice, document }) => {
-                const media = photo
-                    ? HQD_photo(photo).file_id
-                    : video
-                        ? video.file_id
-                        : voice
-                            ? voice.file_id
-                            : document
-                                ? document.file_id
-                                : "";
-                const mime_type = photo
-                    ? "image/png"
-                    : video
-                        ? video.mime_type
-                        : voice
-                            ? voice.mime_type
-                            : document
-                                ? document.mime_type
-                                : "";
+                const { media, mime_type } = get_media_and_mime_type(photo, video, voice, document, true);
 
                 media_files[key].data.push({ media, mime_type });
                 media_files[key].message_ids.push(message_id);
@@ -114,34 +98,18 @@ const process_save_media_to_obj = async (message, chat_id, hash_id, hash_partner
     } else {
         const { message_id, photo, video, voice, document, media_group_id } = message;
         const media_key = `${chat_id}_${media_group_id}`;
-        if (!media_files[media_key]) {
-            media_files[media_key] = {
-                data: [],
-                message_ids: [],
-                experation_date: new Date().toISOString(),
-                hash_id,
-                hash_partner,
-            };
-        }
+        media_files[media_key] = media_files[media_key] || initialize_media_files_entry(hash_id, hash_partner);
+        // if (!media_files[media_key]) {
+        //     media_files[media_key] = {
+        //         data: [],
+        //         message_ids: [],
+        //         experation_date: new Date().toISOString(),
+        //         hash_id,
+        //         hash_partner,
+        //     };
+        // }
 
-        const media = photo
-            ? HQD_photo(photo).file_id
-            : video
-                ? video.file_id
-                : voice
-                    ? voice.file_id
-                    : document
-                        ? document.file_id
-                        : "";
-        const mime_type = photo
-            ? "image/png"
-            : video
-                ? video.mime_type
-                : voice
-                    ? voice.mime_type
-                    : document
-                        ? document.mime_type
-                        : "";
+        const { media, mime_type } = get_media_and_mime_type(photo, video, voice, document, true);
 
         media_files[media_key].data.push({ media, mime_type });
         media_files[media_key].message_ids.push(message_id);

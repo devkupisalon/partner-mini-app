@@ -1,7 +1,6 @@
 import { invite_texts_map, messages_map } from "./messages.js";
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
-import { get_logo } from "../google/drive.js";
 import { __dirname } from "../../constants.js";
 
 /**
@@ -30,16 +29,9 @@ const send_first_messages = async (
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
                 const { url, text, button_text } = messages_map[k][type];
-                const create_url =
-                    typeof url === "function" && k === 'helper_message'
-                        ? url(type)
-                        : typeof url === "function"
-                            ? url(uid)
-                            : url;
 
-                            logger.info(type);
-                            logger.info(button_text);
-                            logger.info(create_url);
+                const create_url = typeof url === "function" && k === 'helper_message' ? url(type) : 
+                                   typeof url === "function" ? url(uid) : url;
 
                 const messageOptions = {
                     link: {
@@ -56,17 +48,14 @@ const send_first_messages = async (
                 };
 
                 const messageType = link ? "link" : "text";
-                const { message_text_option, reply_markup } =
-                    messageOptions[messageType];
+                const { message_text_option, reply_markup } = messageOptions[messageType];
                 CHAT_ID = group_id ? `-100${group_id}` : chat_id;
-
-                logger.info(reply_markup);
 
                 if (type === "Партнер" && !is_invite_send) {
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                     } catch (error) {
-                        logger.error(`Partner chat ID not found: ${error.stack}`);
+                        logger.error(`Error while rename chat title: ${error.stack}`);
                     }
 
                     await send_group_invite_link(
@@ -128,14 +117,10 @@ const set_chat_title = async (groupId, newTitle) => {
     bot
         .setChatTitle(groupId, newTitle)
         .then(() => {
-            logger.info(
-                `Group chat title with id:${groupId} changed to: ${newTitle}`
-            );
+            logger.info(`Group chat title with id:${groupId} changed to: ${newTitle}`);
         })
         .catch((error) => {
-            logger.error(
-                `Error while changing group chat title with id:${groupId} : ${error}`
-            );
+            logger.error(`Error while changing group chat title with id:${groupId} : ${error}`);
         });
 };
 
@@ -144,48 +129,48 @@ const set_chat_title = async (groupId, newTitle) => {
  * @param {string} chatId - The ID of the chat where the photo will be set.
  * @param {string} root_chat_id - The ID of the telegram.
  */
-const set_chat_photo = async (chatId, root_chat_id) => {
-    const photoBlob = await get_logo(root_chat_id);
-    // console.log(await photoBlob.stream());
+// const set_chat_photo = async (chatId, root_chat_id) => {
+//     const photoBlob = await get_logo(root_chat_id);
+//     // console.log(await photoBlob.stream());
 
-    const b = await photoBlob.arrayBuffer();
-    const photoBuffer = Buffer.from(b);
+//     const b = await photoBlob.arrayBuffer();
+//     const photoBuffer = Buffer.from(b);
 
-    // Создание Readable stream и передача файла в поток
-    // const fileStream = new Readable({
-    //     read() {
-    //         this.push(photoBuffer);
-    //         this.push(null);
-    //     },
-    //     objectMode: false,
-    // });
+//     // Создание Readable stream и передача файла в поток
+//     // const fileStream = new Readable({
+//     //     read() {
+//     //         this.push(photoBuffer);
+//     //         this.push(null);
+//     //     },
+//     //     objectMode: false,
+//     // });
 
-    const formData = new FormData();
-    formData.append('photo', photoBlob, 'photo.png');
-    // console.log(formData);
+//     const formData = new FormData();
+//     formData.append('photo', photoBlob, 'photo.png');
+//     // console.log(formData);
 
 
-    // const b = await photoBlob.arrayBuffer();
-    // console.log(b);
-    // const photoBuffer = Buffer.from(b);
-    // console.log(photoBuffer);
+//     // const b = await photoBlob.arrayBuffer();
+//     // console.log(b);
+//     // const photoBuffer = Buffer.from(b);
+//     // console.log(photoBuffer);
 
-    // const fileStream = new Readable();
-    // fileStream.push(photoBuffer);
-    // fileStream.push(null);
+//     // const fileStream = new Readable();
+//     // fileStream.push(photoBuffer);
+//     // fileStream.push(null);
 
-    // fileStream.headers = {
-    //     'Content-Type': 'image/png',
-    // };
+//     // fileStream.headers = {
+//     //     'Content-Type': 'image/png',
+//     // };
 
-    // console.log(fileStream);
+//     // console.log(fileStream);
 
-    try {
-        const result = await bot.setChatPhoto(chatId, formData);
-        logger.info(`Photo set successfully: ${result}`);
-    } catch (error) {
-        logger.error(`Error setting photo: ${error}`);
-    }
-};
+//     try {
+//         const result = await bot.setChatPhoto(chatId, formData);
+//         logger.info(`Photo set successfully: ${result}`);
+//     } catch (error) {
+//         logger.error(`Error setting photo: ${error}`);
+//     }
+// };
 
 export { send_first_messages };

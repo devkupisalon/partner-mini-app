@@ -2,10 +2,10 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
+import { HQD_photo, prepare_calc, p_success, process_save_calc_data, get_media_and_mime_type } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
-let { GROUP_CHAT_ID, DBLINK, MINI_APP_LINK } = constants;
+let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
 const { send_media_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -30,11 +30,10 @@ const process_message = async (data) => {
         from_user,
         chat_id,
         reply_to_message_id,
-        row,
+        partner_url
     } = data;
 
     const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}`;
-    const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
         ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](${MINI_APP_LINK}${hash})`
@@ -56,25 +55,7 @@ const process_message = async (data) => {
 
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
 
-    const type_m = photo
-        ? "photo"
-        : video
-            ? "video"
-            : voice
-                ? "voice"
-                : document
-                    ? "document"
-                    : "text";
-
-    const media = photo
-        ? HQD_photo(photo).file_id
-        : video
-            ? video.file_id
-            : voice
-                ? voice.file_id
-                : document
-                    ? document.file_id
-                    : text;
+    const { media, type_m } = get_media_and_mime_type(photo, video, voice, document);
 
     if (media_group_id) {
         let send_media_obj = await process_return_json(send_media_obj_path);
@@ -118,23 +99,30 @@ const process_message = async (data) => {
         return;
     }
 
-    const options = from_user
-        ? { caption: text, parse_mode, disable_web_page_preview: true }
-        : { reply_to_message_id, caption: text, parse_mode };
-    const default_options = from_user
-        ? { parse_mode, disable_web_page_preview: true }
-        : { parse_mode, reply_to_message_id };
+    const options_map = {
+        true: { caption: text, parse_mode, disable_web_page_preview: true },
+        false: { reply_to_message_id, caption: text, parse_mode }
+    };
+
+    const default_options_map = {
+        true: { parse_mode, disable_web_page_preview: true },
+        false: { parse_mode, reply_to_message_id }
+    };
+
+    const default_options = default_options_map[from_user];
+    const options = options_map[from_user];
 
     try {
-        const data = await (type_m === "photo"
-            ? bot.sendPhoto(CHAT_ID, media, options)
-            : type_m === "video"
-                ? bot.sendVideo(CHAT_ID, media, options)
-                : type_m === "voice"
-                    ? bot.sendVoice(CHAT_ID, media, options)
-                    : type_m === "document"
-                        ? bot.sendDocument(CHAT_ID, media, options)
-                        : bot.sendMessage(CHAT_ID, media, default_options));
+        const data = await (
+            type_m === "photo"
+                ? bot.sendPhoto(CHAT_ID, media, options)
+                : type_m === "video"
+                    ? bot.sendVideo(CHAT_ID, media, options)
+                    : type_m === "voice"
+                        ? bot.sendVoice(CHAT_ID, media, options)
+                        : type_m === "document"
+                            ? bot.sendDocument(CHAT_ID, media, options)
+                            : bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
             p_success(type_m, message_id, id, GROUP_CHAT_ID);

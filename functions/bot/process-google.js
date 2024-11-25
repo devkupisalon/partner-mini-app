@@ -7,7 +7,7 @@ import { create_folder, save_media } from "../google/drive.js";
 import { get_partners_data, do_calc } from "../google/sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
-import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
+import { HQD_photo, parse_text, prepare_calc, get_media_and_mime_type, return_success_condition } from "../helper.js";
 import { success_calc_messages, success_save_messages } from "./messages.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode, MINI_APP_LINK } = constants;
@@ -41,7 +41,8 @@ const getTelegramFiles = async (files) => {
 */
 const process_calc = async (data) => {
 
-    const { message,
+    const {
+        message,
         message_id,
         hash,
         hash_folder_id,
@@ -52,8 +53,7 @@ const process_calc = async (data) => {
         partner_url,
         forward_from_id } = data;
 
-    let agent_id, chat_id;
-    let obj;
+    let agent_id, chat_id, obj;
 
     const chatId = !is_include_groups ? id : message.from.id;
     const options = !is_include_groups
@@ -97,8 +97,6 @@ const process_calc = async (data) => {
 
     if (link) {
         const message_text = success_calc_messages[is_include_groups](name, brand, model, gosnum, partner_name, partner_url);
-        // ? `Расчет для клиента:\n\nИмя: ${name}\nМарка и модель: ${brand} ${model}\nГосномер: ${gosnum}\n\nсоздан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
-        // : `Расчет для Партнера [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
         await bot.sendMessage(chatId, message_text, options);
     }
 
@@ -117,27 +115,17 @@ const process_save = async (data) => {
     try {
         const { message_id, id, message, hash_folder_id, is_bot, is_include_groups, partner_url, exist_folder } = data;
         const reply_to_message_id = message.reply_to_message?.message_id;
+        const { photo, video, voice, document, entities, caption_entities } = message;
+        const { media, mime_type } = get_media_and_mime_type(photo, video, voice, document, true);
 
-        const media = message.photo
-            ? HQD_photo(message.photo)
-            : message.video
-                ? message.video
-                : message.voice
-                    ? message.voice
-                    : message.document
-                        ? message.document
-                        : "";
-
-        const _text = (message.entities && exist_folder
-            ? message.entities[0].url
-            : message.caption_entities[1].url)
+        const _text = (entities && exist_folder
+            ? entities[0].url
+            : caption_entities[1].url)
             .toString().replace(MINI_APP_LINK, '');
 
-        let agent_id;
-        let agent_name;
-        let chat_id;
-        let hash_id;
+        let agent_id, agent_name, chat_id, hash_id;
         let text_to_parse = decodeURI(_text);
+        let folder = {};
 
         if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);
@@ -157,32 +145,30 @@ const process_save = async (data) => {
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
                 if (!is_include_groups) {
-                    return (
+                    return return_success_condition({ c_chat_id, d, hash, v })/* (
                         c_chat_id === d.chat_id &&
                         hash === d.hash_id &&
                         v.data &&
                         v.data.length > 0
-                    );
+                    ); */
                 } else {
-                    return (
+                    return return_success_condition({ c_chat_id, d, hash, v, reply_to_message_id }) /* (
                         c_chat_id === d.chat_id &&
                         hash === d.hash_id &&
                         v.data &&
                         v.data.length > 0 &&
                         v.message_ids.some(id => id === reply_to_message_id)
-                    )
+                    ) */
                 }
             } else {
-                return (
+                return return_success_condition({ c_chat_id, chat_id, hash_id, v }) /* (
                     c_chat_id === chat_id &&
                     v.hash_id === hash_id &&
                     v.data &&
                     v.data.length > 0
-                );
+                ); */
             }
         });
-
-        let folder = {};
 
         if (hash_folder_id) {
             folder.id = hash_folder_id;
@@ -195,12 +181,7 @@ const process_save = async (data) => {
             );
         }
 
-        media_data = selectedData
-            ? selectedData[1].data
-            : [{
-                media: media.file_id,
-                mime_type: !media.mime_type ? "image/png" : media.mime_type,
-            }];
+        media_data = selectedData ? selectedData[1].data : [{ media, mime_type }];
 
         const fileUrls = await getTelegramFiles(media_data);
         const { success } = await save_media({ fileUrls, folder: folder.id });
@@ -213,8 +194,6 @@ const process_save = async (data) => {
 
             const chatId = !is_include_groups ? id : message.from.id;
             const message_text = success_save_messages[is_include_groups](agent_name, partner_url, folder);
-            // ? `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
-            // : `Медиа контент от Партнера [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``;
 
             await bot.sendMessage(chatId, message_text, options);
         }

@@ -126,7 +126,7 @@ bot.on("message", async (message) => {
       media_group_id,
       message,
       from_user: true,
-      row,
+      partner_url,
     });
     isProcessMessageRunning = false;
   }
