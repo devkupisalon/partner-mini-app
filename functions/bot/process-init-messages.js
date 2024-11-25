@@ -146,6 +146,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     // Путь к файлу в корневой папке
     const filePathInRoot = path.join(__dirname, 'photo.png');
+    logger.info(filePathInRoot);
 
     // Запись данных из Blob в файл
     await fs.writeFile(filePathInRoot, imageBuffer, 'binary', (err) => {
