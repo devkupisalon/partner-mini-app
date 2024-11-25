@@ -54,10 +54,24 @@ const process_calc = async (data) => {
     let agent_id, chat_id;
     let obj;
 
+    const chatId = !is_include_groups ? id : message.from.id;
+    const options = !is_include_groups
+        ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
+        : { parse_mode, disable_web_page_preview: true };
+
     obj = !is_include_groups
         ? await process_return_json(calc_data_obj_path)
         : prepare_calc(message.reply_to_message.text, is_include_groups);
-    const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
+
+    const is_pre_order_exist = !is_include_groups && !obj[hash];
+
+    if (is_pre_order_exist) {
+        await bot.sendMessage(chatId, `Расчет для этого клинета уже создан, смотрите выше`, options);
+        return;
+    }
+    const { phone, name, brand, model, gosnum } = !is_include_groups
+        ? obj[hash]
+        : obj;
 
     if (!is_include_groups) {
         const t = decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, ''));
@@ -81,10 +95,6 @@ const process_calc = async (data) => {
     });
 
     if (link) {
-        const options = !is_include_groups
-            ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
-            : { parse_mode, disable_web_page_preview: true };
-        const chatId = !is_include_groups ? id : message.from.id;
         const message_text = !is_include_groups
             ? `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
             : `Расчет для Партнера [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
@@ -135,9 +145,6 @@ const process_save = async (data) => {
             chat_id = d.chat_id;
             hash_id = d.hash_id;
         }
-
-        // logger.info(hash_id);
-        // logger.info(chat_id);
 
         const media_obj = await process_return_json(media_files_obj_path);
 
