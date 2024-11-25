@@ -143,13 +143,16 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBuffer = Buffer.from(b);
 
     // Создание Readable stream и передача файла в поток
-    const fileStream = new Readable({
-        read() {
-            this.push(photoBuffer);
-            this.push(null);
-        },
-        objectMode: false,
-    });
+    // const fileStream = new Readable({
+    //     read() {
+    //         this.push(photoBuffer);
+    //         this.push(null);
+    //     },
+    //     objectMode: false,
+    // });
+
+    const formData = new FormData();
+    formData.append('photo', photoBuffer, 'photo.png');
 
 
     // const b = await photoBlob.arrayBuffer();
@@ -169,12 +172,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     try {
         const result = await bot.setChatPhoto(chatId, fileStream);
-
-        if (result && result.ok) {
-            logger.info(`Photo set successfully`);
-        } else {
-            logger.error(`Error setting photo: Telegram API response not ok`);
-        }
+        logger.info(`Photo set successfully: ${result}`);
     } catch (error) {
         logger.error(`Error setting photo: ${error}`);
     }
