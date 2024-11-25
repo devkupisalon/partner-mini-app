@@ -290,7 +290,7 @@ const initialize_media_files_entry = (hash_id, hash_partner = null) => ({
  */
 const get_fast_partner_data = async (data) => {
   let { user_ID, message, calc, is_include_groups, is_manager } = data;
-  // let partner_id, partner_name, row, partner_folder;
+  let partner_id, partner_name, row, partner_folder;
   const calc_condition = message.entities && calc;
 
   // Check conditions to fetch partner data
@@ -298,14 +298,13 @@ const get_fast_partner_data = async (data) => {
     // Extract chatID based on conditions
     const chatID = calc_condition ? parse_text(decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, ''))).chat_id : user_ID;
     const partner_data = await get_partners_data(chatID);
-    // partner_id = p.partner_id;
-    // partner_name = p.partner_name;
-    // row = p.row;
-    // partner_folder = p.partner_folder;
-    return partner_data;
+    partner_id = p.partner_id;
+    partner_name = p.partner_name;
+    row = p.row;
+    partner_folder = p.partner_folder;
   }
 
-  // return { partner_id, partner_name, row, partner_folder };
+  return { partner_id, partner_name, row, partner_folder };
 };
 
 export {
