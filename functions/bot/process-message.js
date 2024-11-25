@@ -5,7 +5,7 @@ import { constants } from "../../constants.js";
 import { HQD_photo, prepare_calc, p_success, process_save_calc_data, parse_text } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
-let { GROUP_CHAT_ID, DBLINK, BOT_ID } = constants;
+let { GROUP_CHAT_ID, DBLINK, BOT_ID, MINI_APP_LINK } = constants;
 const { send_media_obj_path, agent_messages_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
@@ -37,7 +37,7 @@ const process_message = async (data) => {
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
-        ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)`
+        ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](${MINI_APP_LINK}${hash})`
         : text = text;
 
     if (from_user) {
