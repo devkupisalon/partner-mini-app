@@ -78,7 +78,7 @@ bot.on("message", async (message) => {
   logger.info(hash);
 
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
-  const is_title = reply_to_message?.chat?.title.includes(group_title);
+  const is_title = reply_to_message?.chat?.title?.includes(group_title);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row, partner_folder;
