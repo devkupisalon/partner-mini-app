@@ -37,6 +37,7 @@ const send_first_messages = async (
                             ? url(uid)
                             : url;
 
+                            logger.info(type);
                             logger.info(button_text);
                             logger.info(create_url);
 
