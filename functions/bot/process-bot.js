@@ -72,9 +72,10 @@ bot.on("message", async (message) => {
     ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
-  logger.info(hash);
   // const is_hash = is_manager && message.text && !is_include_groups && message.entities ? message.entities[1].url.match(/hash:(.*)/) : '';
   const hash = get_hash(message, is_manager, is_include_groups);
+
+  logger.info(hash);
 
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const is_title = reply_to_message?.chat?.title.includes(group_title);
