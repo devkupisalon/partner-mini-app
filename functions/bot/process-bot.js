@@ -41,6 +41,7 @@ bot.on("message", async (message) => {
   } = message;
 
   const { entities } = reply_to_message ? reply_to_message : '';
+  logger.info(reply_to_message);
 
   const from_id = message.from.id;
   const group_ids_obj = await get_all_groups_ids();
