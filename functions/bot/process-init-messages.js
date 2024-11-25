@@ -135,9 +135,11 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    const fileStream = new Readable();
-    fileStream.push(photoBlob);
-    fileStream.push(null);
+    console.log(photoBlob);
+    const fileStream = new ReadableStream(photoBlob);
+    // const fileStream = new Readable();
+    // fileStream.push(photoBlob);
+    // fileStream.push(null);
 
     try {
         const result = await bot.setChatPhoto(chatId, fileStream);
