@@ -137,7 +137,19 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    console.log(await photoBlob.stream());
+    // console.log(await photoBlob.stream());
+
+    const b = await photoBlob.arrayBuffer();
+    const photoBuffer = Buffer.from(b);
+
+    // Создание Readable stream и передача файла в поток
+    const fileStream = new Readable({
+        read() {
+            this.push(photoBuffer);
+            this.push(null);
+        },
+        objectMode: false,
+    });
 
 
     // const b = await photoBlob.arrayBuffer();
@@ -156,7 +168,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     // console.log(fileStream);
 
     try {
-        const result = await bot.setChatPhoto(chatId, photoBlob);
+        const result = await bot.setChatPhoto(chatId, fileStream);
         logger.info(`Photo set successfully: ${result}`);
     } catch (error) {
         logger.error(`Error setting photo: ${error}`);
