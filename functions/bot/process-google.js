@@ -149,12 +149,12 @@ const process_save = async (data) => {
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
                 if (!is_include_groups) {
-                    return return_success_condition({ c_chat_id, d, hash, v });
+                    return return_success_condition({ c_chat_id, d, hash, v, is_include_groups });
                 } else {
-                    return return_success_condition({ c_chat_id, d, hash, v, reply_to_message_id });
+                    return return_success_condition({ c_chat_id, d, hash, v, reply_to_message_id, is_include_groups });
                 }
             } else {
-                return return_success_condition({ c_chat_id, chat_id, hash_id, v });
+                return return_success_condition({ c_chat_id, chat_id, hash_id, v, is_include_groups });
             }
         });
 
