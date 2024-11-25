@@ -138,7 +138,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     bot.setChatPhoto(chatId, photoBlob).then((result) => {
         logger.info('Photo set successfully:', result);
     }).catch((error) => {
-        logger.error('Error setting photo:', error.response.body);
+        logger.error('Error setting photo:', error.stack);
     });
 };
 
