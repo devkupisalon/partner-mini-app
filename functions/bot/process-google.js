@@ -127,13 +127,15 @@ const process_save = async (data) => {
         let text_to_parse = decodeURI(_text);
         let folder = {};
 
-        if (text_to_parse && !is_include_groups) {
+        if ((text_to_parse || text_to_parse !== "") && !is_include_groups) {
             const d = parse_text(text_to_parse);
             agent_id = d.agent_id;
             agent_name = d.agent_name;
             chat_id = d.chat_id;
             hash_id = d.hash_id;
         }
+
+        logger.info(hash_id);
 
         const media_obj = await process_return_json(media_files_obj_path);
 
