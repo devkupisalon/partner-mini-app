@@ -95,7 +95,7 @@ bot.on("message", async (message) => {
   // let partner_name, partner_id, row, partner_folder;
 
   // Get partners/agents data from sheet
-  const { partner_name, partner_id, row, partner_folder } = get_fast_partner_data({ user_ID, message, calc, is_include_groups, is_manager });
+  const { partner_name, partner_id, row, partner_folder } = await get_fast_partner_data({ user_ID, message, calc, is_include_groups, is_manager });
   // if (!is_manager || (is_manager && is_include_groups)) {
   //   const p = await get_partners_data(user_ID);
   //   partner_id = p.partner_id;
