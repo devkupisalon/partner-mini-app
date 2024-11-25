@@ -140,9 +140,9 @@ bot.on("message", async (message) => {
     if ((is_managers_work_chat || is_include_groups) && is_manager) {
 
       if (reply_to_message && is_bot && is_title) {
-        const parse_text = entities[1].url.toString().replace(MINI_APP_LINK, '');
-        logger.info(parse_text);
-        const { agent_message_id, chat_id } = parse_text(parse_text);
+        const _text = decodeURI(entities[1].url.toString().replace(MINI_APP_LINK, ''));
+        logger.info(_text)
+        const { agent_message_id, chat_id } = parse_text(_text);
         isProcessMessageRunning = true;
         await process_message({
           text: message.text || message.caption || "",

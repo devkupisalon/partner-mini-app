@@ -120,7 +120,7 @@ const process_save = async (data) => {
         let agent_name;
         let chat_id;
         let hash_id;
-        let text_to_parse = message.entities[1].url.toString().replace(MINI_APP_LINK, '');
+        let text_to_parse = decodeURI(message.entities[1].url.toString().replace(MINI_APP_LINK, ''));
 
         logger.info(text_to_parse);
 
