@@ -30,7 +30,12 @@ const send_first_messages = async (
             const { link, to_pin } = messages_map[k];
             if (messages_map[k][type]) {
                 const { url, text, button_text } = messages_map[k][type];
-                const create_url = typeof url === "function" && k === 'helper_message' ? url(type) : url(uid)/*  : url */;
+                const create_url =
+                    typeof url === "function" && k === 'helper_message'
+                        ? url(type)
+                        : typeof url === "function"
+                            ? url(uid)
+                            : url;
 
                 const messageOptions = {
                     link: {
