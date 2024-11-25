@@ -140,4 +140,15 @@ const invite_texts_map = {
     },
 };
 
-export { messages_map, invite_texts_map, notify_manager_messages_map };
+/** SUCCESS CALC MESSAGES */
+const success_calc_messages = {
+    true: (name, brand, model, gosnum, link, hash_folder_id, partner_name, partner_url) => {
+        return `Расчет для Партнера [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\`\n\nИмя клиента: ${name}\nМарка и модель: ${brand} ${model}\nГосномер: ${gosnum}\n\n`
+    },
+    false: (name, brand, model, gosnum, link, hash_folder_id, partner_name, partner_url) => {
+        return `Расчет для Агента [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\`\n\nИмя клиента: ${name}\nМарка и модель: ${brand} ${model}\nГосномер: ${gosnum}\n\n`
+    },
+}
+
+    ;
+export { messages_map, invite_texts_map, notify_manager_messages_map, success_calc_messages };

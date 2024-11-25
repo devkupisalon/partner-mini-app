@@ -8,6 +8,7 @@ import { get_partners_data, do_calc } from "../google/sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
+import { success_calc_messages } from "./messages.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode, MINI_APP_LINK } = constants;
 
@@ -95,9 +96,9 @@ const process_calc = async (data) => {
     });
 
     if (link) {
-        const message_text = !is_include_groups
-            ? `Расчет создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
-            : `Расчет для Партнера [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
+        const message_text = success_calc_messages[is_include_groups](name, brand, model, gosnum, partner_name, partner_url);
+        // ? `Расчет для клиента:\n\nИмя: ${name}\nМарка и модель: ${brand} ${model}\nГосномер: ${gosnum}\n\nсоздан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``
+        // : `Расчет для Партнера [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\``;
         await bot.sendMessage(chatId, message_text, options);
     }
 
