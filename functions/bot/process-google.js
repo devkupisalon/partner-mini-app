@@ -118,10 +118,10 @@ const process_save = async (data) => {
         const { photo, video, voice, document, entities, caption_entities } = message;
         const { media, mime_type } = get_media_and_mime_type(photo, video, voice, document, true);
 
-        const _text = (entities && exist_folder
+        const _text = !is_include_groups ? (entities && exist_folder
             ? entities[0].url
             : caption_entities[1].url)
-            .toString().replace(MINI_APP_LINK, '');
+            .toString().replace(MINI_APP_LINK, '') : '';
 
         let agent_id, agent_name, chat_id, hash_id;
         let text_to_parse = decodeURI(_text);
