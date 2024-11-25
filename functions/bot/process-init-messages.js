@@ -160,7 +160,8 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     // });
     // const fileStream = new ReadableStream(photoBlob);
     // console.log(fileStream);
-    const photoBuffer = Buffer.from(photoBlob.arrayBuffer());
+    const b = await photoBlob.arrayBuffer();
+    const photoBuffer = Buffer.from(b);
 
     const fileStream = new Readable();
     fileStream.push(photoBuffer);
