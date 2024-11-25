@@ -72,40 +72,14 @@ bot.on("message", async (message) => {
     managers_map
   });
 
-  // const is_manager = Object.values(managers_map).find((k) => k === from_id)
-  //   ? true
-  //   : false;
-
-  // const is_group = ["group", "supergroup"].includes(type);
-  // const is_bot = reply_to_message?.from.is_bot || message.from.is_bot;
-  // const is_managers_work_chat = String(id) === GROUP_CHAT_ID; // main managers group
-
-  // const is_media =
-  //   photo ||
-  //   video ||
-  //   voice ||
-  //   document ||
-  //   media_group_id;
-
-  // const save = is_manager ? ['Сохранить', 'сохранить'].some(v => message.text?.includes(v)) : '';
-  // const calc = is_manager ? ['Расчет', 'расчет'].some(v => message.text?.includes(v)) : '';
-
-  const text_to_parse = reply_to_message && !calc
+  const text_to_parse = reply_to_message && !calc && !save
     ? (reply_to_message.entities
       ? reply_to_message.entities[1].url
       : reply_to_message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '')
     : '';
 
-  // const is_include_groups = group_ids_obj.hasOwnProperty(id);
-  // const is_hash_folder_id = is_manager && reply_to_message
-  //   ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
-  //   : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
-  // const is_hash = is_manager && message.text && !is_include_groups && message.entities ? message.entities[1].url.match(/hash:(.*)/) : '';
   const hash = get_hash(message, is_manager, is_include_groups);
-
-  logger.info(hash);
-  // const is_title = reply_to_message?.chat?.title?.includes(group_title);
 
   let text = message.text || message.caption || "";
   let partner_name, partner_id, row, partner_folder;
