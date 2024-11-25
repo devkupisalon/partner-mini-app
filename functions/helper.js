@@ -210,23 +210,24 @@ const return_conditions = (data) => {
  * @param {object} document - The document object.
  * @returns {object} An object containing the media and mime type.
  */
-const get_media_and_mime_type = (photo, video, voice, document, flag = false) => {
+const get_media_and_mime_type = (photo, video, voice, document,  flag = false, text = "") => {
   // Determine the media based on photo, video, voice, and document.
   const media = photo ? HQD_photo(photo).file_id :
-    video ? video.file_id :
-      voice ? voice.file_id :
-        document ? document.file_id : "";
+                video ? video.file_id :
+                voice ? voice.file_id :
+                document ? document.file_id : 
+                text !== "" ? text : "";
 
   // Determine the mime type based on the type of media.
   const mime_type = photo ? "image/png" :
-    video ? video.mime_type :
-      voice ? voice.mime_type :
-        document ? document.mime_type : "";
+                    video ? video.mime_type :
+                    voice ? voice.mime_type :
+                    document ? document.mime_type : "";
 
   const type_m = photo ? "photo" :
-    video ? "video" :
-      voice ? "voice" :
-        document ? "document" : "text";
+                 video ? "video" :
+                 voice ? "voice" :
+                 document ? "document" : "text";
 
   // Return the media and mime type as an object.
   return flag ? { media, mime_type } : { media, type_m };

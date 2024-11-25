@@ -55,7 +55,7 @@ const process_message = async (data) => {
 
     let CHAT_ID = from_user ? GROUP_CHAT_ID : chat_id;
 
-    const { media, type_m } = get_media_and_mime_type(photo, video, voice, document);
+    const { type_m, media } = get_media_and_mime_type(photo, video, voice, document, false, text)
 
     if (media_group_id) {
         let send_media_obj = await process_return_json(send_media_obj_path);
@@ -83,6 +83,7 @@ const process_message = async (data) => {
         };
 
         const mediaType = mediaTypeMap[type_m];
+
         if (mediaType) {
             send_media_obj[key].mediaFiles.push({ type: mediaType, media: media });
         }
@@ -111,8 +112,6 @@ const process_message = async (data) => {
 
     const default_options = default_options_map[from_user];
     const options = options_map[from_user];
-    logger.info(media);
-    logger.info(default_options);
 
     try {
         const data = await (type_m === "photo" ? bot.sendPhoto(CHAT_ID, media, options) :
