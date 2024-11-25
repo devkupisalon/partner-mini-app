@@ -135,6 +135,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
     const fileStream = new ReadableStream(photoBlob);
     logger.info(fileStream);
+    logger.info(photoBlob);
 
     bot.setChatPhoto(chatId, fileStream).then((result) => {
         logger.info('Photo set successfully:', result);
