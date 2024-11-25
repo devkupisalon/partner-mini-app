@@ -4,11 +4,11 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants } from "../../constants.js";
-import { append_json_file, process_return_json, deleteDataFromJson, process_write_json } from "../process-json.js";
+import { append_json_file, process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, p_success } from "../helper.js";
 
-let { GROUP_CHAT_ID, BOT_ID, MINI_APP_LINK } = constants;
-const { send_media_obj_path, media_files_obj_path, agent_messages_obj_path, parse_mode } = constants;
+let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
+const { send_media_obj_path, media_files_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 
@@ -37,14 +37,9 @@ const send_media_group = async () => {
                 } = currentMediaObj;
 
                 if (from_user) {
-                    // const json_data = await process_return_json(agent_messages_obj_path);
-                    // const key = `${BOT_ID}-${message_id}-${id}`;
                     const new_caption = caption ? `${caption.slice(0, -2)}:${hash_id}\`` : '';
-                    caption = new_caption
-                    // if (json_data[key] && caption) {
-                    //     json_data[key] = Object.assign(json_data[key], hash_id);
-                    //     await process_write_json(agent_messages_obj_path, json_data);
-                    // }
+                    const new_c = new_caption.replace(/hash:(.*)/, (match, p1) => `[hash](${MINI_APP_LINK}${p1})`);
+                    caption = new_c;
                 }
 
                 const mediaGroup = mediaFiles.map(({ type, media }, index) => {

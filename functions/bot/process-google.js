@@ -60,7 +60,8 @@ const process_calc = async (data) => {
     const { phone, name, brand, model, gosnum } = !is_include_groups ? obj[hash] : obj;
 
     if (!is_include_groups) {
-        const x = parse_text(message.text);
+        const t = decodeURI(message.entites[1].url.toString().replace(MINI_APP_LINK, ''));
+        const x = parse_text(t);
         agent_id = x.agent_id;
         chat_id = x.chat_id;
     } else {
@@ -121,8 +122,6 @@ const process_save = async (data) => {
         let chat_id;
         let hash_id;
         let text_to_parse = decodeURI(message.entities[1].url.toString().replace(MINI_APP_LINK, ''));
-
-        logger.info(text_to_parse);
 
         if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);

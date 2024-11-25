@@ -29,7 +29,7 @@ const constants = {
   WEBAPPURL: process.env.webappurl,
   GROUP_CHAT_ID: process.env.GROUP_CHAT_ID,
   MINI_APP_LINK: process.env.MINI_APP_LINK,
-  PDF_LINK: process.env.PDF_LINK,
+  PDF_LINK: (type) => { return type === 'Агент' ? process.env.GUIDE_AGENT_LINK : process.env.GUIDE_PARTNER_LINK },
   DBLINK: process.env.DBLINK,
   DOCUMENT_ID_PRIVATE_POLiCY: process.env.PRIVATE_POLICY_ID,
   HOME: `${__dirname}/html/mini-app-main.html`,
@@ -42,7 +42,6 @@ const constants = {
   media_files_obj_path: `${__dirname}/json/media_files_obj.json`,
   managers_map_obj_path: `${__dirname}/json/managers_ids.json`,
   calc_data_obj_path: `${__dirname}/json/calc_data_obj.json`,
-  agent_messages_obj_path: `${__dirname}/json/agent_messages_obj.json`,
   credentials_path: `${__dirname}/json/credentials.json`,
   parse_mode: "Markdown",
   DEV_MODE: process.env.DEV_MODE === 'false' ? false : true,
@@ -58,4 +57,4 @@ fs.readFile(constants.managers_map_obj_path, "utf8", (err, data) => {
   managers_map = jsonData;
 });
 
-export { constants, __dirname,  managers_map };
+export { constants, __dirname, managers_map };
