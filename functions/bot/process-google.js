@@ -136,6 +136,7 @@ const process_save = async (data) => {
         }
 
         logger.info(hash_id);
+        logger.info(reply_to_message_id);
 
         const media_obj = await process_return_json(media_files_obj_path);
 
@@ -146,6 +147,7 @@ const process_save = async (data) => {
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
+                logger.info({ agent_id, agent_name, chat_id });
                 if (!is_include_groups) {
                     return return_success_condition({ c_chat_id, d, hash, v });
                 } else {
