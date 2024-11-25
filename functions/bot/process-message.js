@@ -157,7 +157,7 @@ const process_message = async (data) => {
 const save_agent_message_to_json = async (data, hash) => {
     const { message_id, from: { id } } = data;
     const obj = {};
-    const key = `${BOT_ID}}-${message_id}-${id}`;
+    const key = `${BOT_ID}-${message_id}-${id}`;
     if (!obj[key]) obj[key] = hash;
     await append_json_file(agent_messages_obj_path, obj);
 };
