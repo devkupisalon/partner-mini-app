@@ -261,11 +261,7 @@ const do_calc = async (params) => {
     date,
   ];
 
-  logger.info(partner_folder);
-
   partner_folder = folderId ? folderId : partner_folder;
-
-  logger.info(partner_folder);
 
   try {
     const values = await get_data(MONITORSPREADSHEET, MONITORSHEETNAME);
