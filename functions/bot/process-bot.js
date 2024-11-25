@@ -160,6 +160,7 @@ bot.on("message", async (message) => {
           message,
           chat_id,
           reply_to_message_id: agent_message_id,
+          from_user: false,
         });
         isProcessMessageRunning = false
       }
