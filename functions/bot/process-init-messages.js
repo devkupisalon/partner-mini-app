@@ -169,7 +169,12 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     try {
         const result = await bot.setChatPhoto(chatId, fileStream);
-        logger.info(`Photo set successfully: ${result}`);
+
+        if (result && result.ok) {
+            logger.info(`Photo set successfully`);
+        } else {
+            logger.error(`Error setting photo: Telegram API response not ok`);
+        }
     } catch (error) {
         logger.error(`Error setting photo: ${error}`);
     }
