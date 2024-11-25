@@ -106,6 +106,13 @@ bot.on("message", async (message) => {
     partner_name = p.partner_name;
     row = p.row;
     partner_folder = p.partner_folder;
+  } else if (message.entities && calc) {
+    const { chat_id } = parse_text(decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, '')));
+    const x = await get_partners_data(chat_id);
+    partner_id = x.partner_id;
+    partner_name = x.partner_name;
+    row = x.row;
+    partner_folder = x.partner_folder;
   }
 
   const partner_url = `${DBLINK}&range=${row}:${row}`;

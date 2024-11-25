@@ -145,28 +145,12 @@ const process_save = async (data) => {
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
                 if (!is_include_groups) {
-                    return return_success_condition({ c_chat_id, d, hash, v })/* (
-                        c_chat_id === d.chat_id &&
-                        hash === d.hash_id &&
-                        v.data &&
-                        v.data.length > 0
-                    ); */
+                    return return_success_condition({ c_chat_id, d, hash, v });
                 } else {
-                    return return_success_condition({ c_chat_id, d, hash, v, reply_to_message_id }) /* (
-                        c_chat_id === d.chat_id &&
-                        hash === d.hash_id &&
-                        v.data &&
-                        v.data.length > 0 &&
-                        v.message_ids.some(id => id === reply_to_message_id)
-                    ) */
+                    return return_success_condition({ c_chat_id, d, hash, v, reply_to_message_id });
                 }
             } else {
-                return return_success_condition({ c_chat_id, chat_id, hash_id, v }) /* (
-                    c_chat_id === chat_id &&
-                    v.hash_id === hash_id &&
-                    v.data &&
-                    v.data.length > 0
-                ); */
+                return return_success_condition({ c_chat_id, chat_id, hash_id, v });
             }
         });
 
