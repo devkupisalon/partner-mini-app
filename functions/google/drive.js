@@ -191,12 +191,12 @@ const get_logo = async (root_chat_id) => {
       const { id } = files[0];
       logger.info(`Logo file found: ${id}`);
       // Get the file content as a Blob
-      const data = await drive.files.get({
+      const {data} = await drive.files.get({
         fileId: id,
         alt: 'media',
       });
 
-      logger.info(data);
+      console.log(data);
 
       const logoBlob = new Blob([data], { type: 'image/png' });
       logger.info("Logo Blob retrieved successfully.");
