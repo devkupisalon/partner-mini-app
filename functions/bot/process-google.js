@@ -8,7 +8,7 @@ import { get_partners_data, do_calc } from "../google/sheets.js";
 import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
-import { success_calc_messages } from "./messages.js";
+import { success_calc_messages, success_save_messages } from "./messages.js";
 
 const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode, MINI_APP_LINK } = constants;
 
@@ -197,12 +197,10 @@ const process_save = async (data) => {
 
         media_data = selectedData
             ? selectedData[1].data
-            : [
-                {
-                    media: media.file_id,
-                    mime_type: !media.mime_type ? "image/png" : media.mime_type,
-                },
-            ];
+            : [{
+                media: media.file_id,
+                mime_type: !media.mime_type ? "image/png" : media.mime_type,
+            }];
 
         const fileUrls = await getTelegramFiles(media_data);
         const { success } = await save_media({ fileUrls, folder: folder.id });
@@ -214,9 +212,9 @@ const process_save = async (data) => {
                 : { parse_mode, disable_web_page_preview: true };
 
             const chatId = !is_include_groups ? id : message.from.id;
-            const message_text = !is_include_groups
-                ? `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
-                : `Медиа контент от Партнера [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``;
+            const message_text = success_save_messages[is_include_groups](agent_name, partner_url, folder);
+            // ? `Медиа контент сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
+            // : `Медиа контент от Партнера [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``;
 
             await bot.sendMessage(chatId, message_text, options);
         }

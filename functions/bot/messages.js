@@ -148,7 +148,22 @@ const success_calc_messages = {
     false: (name, brand, model, gosnum, link, hash_folder_id, partner_name, partner_url) => {
         return `Расчет для Агента [${partner_name}](${partner_url}) создан, [открыть](${link})\n\n\`hash_folder:${hash_folder_id}\`\n\nИмя клиента: ${name}\nМарка и модель: ${brand} ${model}\nГосномер: ${gosnum}\n\n`
     },
-}
+};
 
-    ;
-export { messages_map, invite_texts_map, notify_manager_messages_map, success_calc_messages };
+/** SUCCESS SAVE MEDIA CONTENT MESSAGES */
+const success_save_messages = {
+    true: (agent_name, partner_url, folder) => {
+        return `Медиа контент от Партнера [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
+    },
+    false: (agent_name, partner_url, folder) => {
+        return `Медиа контент от Агента [${agent_name}](${partner_url}) сохранен в [папку](${folder.folderLink})\n\n\`hash_folder:${folder.id}\``
+    },
+};
+
+export {
+    messages_map,
+    invite_texts_map,
+    notify_manager_messages_map,
+    success_calc_messages,
+    success_save_messages
+};
