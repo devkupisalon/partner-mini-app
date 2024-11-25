@@ -4,7 +4,7 @@ import { append_json_file } from "./process-json.js";
 import { constants } from "../constants.js";
 import crypto from "crypto";
 
-const { calc_data_obj_path, MINI_APP_LINK } = constants;
+const { calc_data_obj_path } = constants;
 
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
@@ -123,6 +123,24 @@ const generateHexHash = () => {
   return crypto.createHash('md5').update(current_date + random).digest('hex');
 }
 
+/**
+ * Function to extract hash from a message based on certain conditions.
+ * 
+ * @param {Object} message - The message object containing text and entities.
+ * @param {boolean} is_manager - Flag indicating if the user is a manager.
+ * @param {boolean} is_include_groups - Flag indicating if groups are included in the message.
+ * @returns {string|null} - The extracted hash or null.
+ */
+const get_hash = (message, is_manager, is_include_groups) => {
+  const is_hash = is_manager && message.text && !is_include_groups && message.entities
+    ? decodeURI(message.entities[1].url.toString().replace(MINI_APP_LINK, '')).match(/hash:(.*)/)
+    : is_manager && message.text && !is_include_groups && !message.entities
+      ? message.text.match(/hash:(.*)/)
+      : '';
+  const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}` : '';
+  return hash ? hash : null;
+};
+
 export {
   numberToColumn,
   getColumnNumberByValue,
@@ -131,5 +149,6 @@ export {
   prepare_calc,
   p_success,
   process_save_calc_data,
-  generateHexHash
+  generateHexHash,
+  get_hash
 };

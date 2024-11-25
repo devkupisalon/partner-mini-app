@@ -5,7 +5,7 @@ import { constants } from "../../constants.js";
 import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../helper.js";
 import { append_json_file, process_return_json } from "../process-json.js";
 
-let { GROUP_CHAT_ID, DBLINK, BOT_ID, MINI_APP_LINK } = constants;
+let { GROUP_CHAT_ID, DBLINK, MINI_APP_LINK } = constants;
 const { send_media_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 

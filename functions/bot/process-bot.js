@@ -5,7 +5,7 @@ import logger from "../../logs/logger.js";
 
 import { constants, managers_map } from "../../constants.js";
 import { get_partners_data, get_all_groups_ids } from "../google/sheets.js";
-import { parse_text } from "../helper.js";
+import { parse_text, get_hash } from "../helper.js";
 import { process_save_media_to_obj, send_media_group } from "./process-media-group.js";
 import { process_message } from "./process-message.js";
 import { process_calc, process_save } from "./process-google.js";
@@ -71,8 +71,8 @@ bot.on("message", async (message) => {
     ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
-  const is_hash = is_manager && message.text && !is_include_groups ? message.text?.match(/hash:(.*)/) : '';
-  const hash = is_hash ? `${is_hash[1].replaceAll(':', '-')}\n` : '';
+  // const is_hash = is_manager && message.text && !is_include_groups && message.entities ? message.entities[1].url.match(/hash:(.*)/) : '';
+  const hash = get_hash(message, is_manager, is_include_groups);
 
   const group_title = !DEV_MODE ? `Купи салон Рабочая` : 'PARTNER_SERVICE';
   const is_title = reply_to_message?.chat?.title.includes(group_title);
