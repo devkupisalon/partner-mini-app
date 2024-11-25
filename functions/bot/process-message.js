@@ -37,8 +37,8 @@ const process_message = async (data) => {
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
-        ? (text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)`)
-        : (text = text);
+        ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)`
+        : text = text;
 
     if (from_user) {
         const { phone, name, brand, model, gosnum } = prepare_calc(text);
@@ -121,6 +121,8 @@ const process_message = async (data) => {
         await append_json_file(send_media_obj_path, send_media_obj);
         return;
     }
+
+    logger.info(text);
 
     const options = from_user
         ? { caption: text, parse_mode, disable_web_page_preview: true }
