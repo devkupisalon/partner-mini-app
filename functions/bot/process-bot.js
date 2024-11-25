@@ -108,7 +108,7 @@ bot.on("message", async (message) => {
   // const is_title = reply_to_message?.chat?.title?.includes(group_title);
 
   let text = message.text || message.caption || "";
-  let partner_name, partner_id, row;
+  let partner_name, partner_id, row, partner_folder;
 
   let user_ID =
     reply_to_message && is_manager && is_group
