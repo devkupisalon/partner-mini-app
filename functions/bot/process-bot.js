@@ -201,7 +201,7 @@ bot.on("message", async (message) => {
       id,
       is_include_groups,
       partner_url,
-      forward_from_id: forward_from?.id
+      forward_from_id: forward_from? forward_from.id : user_ID
     });
   }
 });
