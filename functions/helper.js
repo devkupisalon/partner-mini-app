@@ -4,7 +4,7 @@ import { append_json_file } from "./process-json.js";
 import { constants } from "../constants.js";
 import crypto from "crypto";
 
-const { calc_data_obj_path } = constants;
+const { calc_data_obj_path, MINI_APP_LINK } = constants;
 
 /**
  * Возвращает номер столбца, содержащего указанное значение, на указанном листе.
