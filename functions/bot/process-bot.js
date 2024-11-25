@@ -43,7 +43,9 @@ bot.on("message", async (message) => {
   const from_id = message.from.id;
   const group_ids_obj = await get_all_groups_ids();
   const text_to_parse = reply_to_message
-    ? (reply_to_message.entities ? reply_to_message.entities[1].url : reply_to_message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '')
+    ? (reply_to_message.entities
+      ? reply_to_message.entities[1].url
+      : reply_to_message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '')
     : '';
 
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
