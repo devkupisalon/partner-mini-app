@@ -105,7 +105,7 @@ const process_save = async (data) => {
 
     try {
         const { message_id, id, message, hash_folder_id, is_bot, is_include_groups, partner_url } = data;
-        const reply_to_message_id = message.reply_to_message.message_id;
+        const reply_to_message_id = message.reply_to_message?.message_id;
 
         const media = message.photo
             ? HQD_photo(message.photo)

@@ -142,7 +142,6 @@ bot.on("message", async (message) => {
 
       if (reply_to_message && is_bot && is_title) {
         const _text = decodeURI(text_to_parse[1].url.toString().replace(MINI_APP_LINK, ''));
-        logger.info(_text)
         const { agent_message_id, chat_id } = parse_text(_text);
         isProcessMessageRunning = true;
         await process_message({

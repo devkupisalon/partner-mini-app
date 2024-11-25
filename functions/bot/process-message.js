@@ -6,7 +6,7 @@ import { HQD_photo, prepare_calc, p_success, process_save_calc_data } from "../h
 import { append_json_file, process_return_json } from "../process-json.js";
 
 let { GROUP_CHAT_ID, DBLINK, BOT_ID, MINI_APP_LINK } = constants;
-const { send_media_obj_path, agent_messages_obj_path, parse_mode } = constants;
+const { send_media_obj_path, parse_mode } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
 
 /**
@@ -91,11 +91,7 @@ const process_message = async (data) => {
             send_media_obj[key].caption = from_user
                 ? `Агент [${partner_name}](${partner_url}):\n\n${message.caption}\n\n${hash}`
                 : text;
-        } /* else {
-            send_media_obj[key].text = from_user
-                ? `Агент [${partner_name}](${partner_url}):\n\n\`${hash}\``
-                : text;
-        } */
+        }
 
         const mediaTypeMap = {
             photo: "photo",
@@ -122,8 +118,6 @@ const process_message = async (data) => {
         return;
     }
 
-    logger.info(text);
-
     const options = from_user
         ? { caption: text, parse_mode, disable_web_page_preview: true }
         : { reply_to_message_id, caption: text, parse_mode };
@@ -143,7 +137,6 @@ const process_message = async (data) => {
                         : bot.sendMessage(CHAT_ID, media, default_options));
 
         if (data.message_id) {
-            // await save_agent_message_to_json(data, { partner_id, message_id, id, partner_name,  });
             p_success(type_m, message_id, id, GROUP_CHAT_ID);
         }
     } catch (error) {
