@@ -135,8 +135,8 @@ const process_save = async (data) => {
             hash_id = d.hash_id;
         }
 
-        logger.info(hash_id);
-        logger.info(chat_id);
+        // logger.info(hash_id);
+        // logger.info(chat_id);
 
         const media_obj = await process_return_json(media_files_obj_path);
 
@@ -164,7 +164,10 @@ const process_save = async (data) => {
                     )
                 }
             } else {
-                logger.info()
+                logger.info(c_chat_id === chat_id);
+                logger.info(`chat_id from obj = ${c_chat_id}, chat_id from parse = ${chat_id}`);
+                logger.info(v.hash_id === hash_id);
+                logger.info(`hash_id from obj = ${v.hash_id}, hash_id from parse = ${hash_id}`);
                 return (
                     c_chat_id === chat_id &&
                     v.hash_id === hash_id &&
