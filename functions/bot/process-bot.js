@@ -44,6 +44,8 @@ bot.on("message", async (message) => {
   const group_ids_obj = await get_all_groups_ids();
   const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
 
+  logger.info(reply_to_message);
+
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
     ? true
     : false;
