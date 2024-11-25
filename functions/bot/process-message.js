@@ -111,6 +111,8 @@ const process_message = async (data) => {
 
     const default_options = default_options_map[from_user];
     const options = options_map[from_user];
+    logger.info(media);
+    logger.info(default_options);
 
     try {
         const data = await (type_m === "photo" ? bot.sendPhoto(CHAT_ID, media, options) :
