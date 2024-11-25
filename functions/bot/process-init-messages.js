@@ -56,6 +56,8 @@ const send_first_messages = async (
                     messageOptions[messageType];
                 CHAT_ID = group_id ? `-100${group_id}` : chat_id;
 
+                logger.info(reply_markup);
+
                 if (type === "Партнер" && !is_invite_send) {
                     try {
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
