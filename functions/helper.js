@@ -164,7 +164,6 @@ const return_conditions = (data) => {
     group_ids_obj,
     GROUP_CHAT_ID,
     managers_map,
-    reply_markup,
     entities
   } = data;
 

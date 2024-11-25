@@ -38,7 +38,6 @@ bot.on("message", async (message) => {
     reply_to_message,
     message_id,
     forward_from,
-    reply_markup,
     entities
   } = message;
 
@@ -73,7 +72,6 @@ bot.on("message", async (message) => {
     group_ids_obj,
     GROUP_CHAT_ID,
     managers_map,
-    reply_markup,
     entities
   });
 
