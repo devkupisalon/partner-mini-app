@@ -135,6 +135,9 @@ const process_save = async (data) => {
             hash_id = d.hash_id;
         }
 
+        logger.info(hash_id);
+        logger.info(is_include_groups);
+
         const media_obj = await process_return_json(media_files_obj_path);
 
         const selectedData = Object.entries(media_obj).find(([k, v]) => {
@@ -161,6 +164,7 @@ const process_save = async (data) => {
                     )
                 }
             } else {
+                logger.info(v.hash_id);
                 return (
                     c_chat_id === chat_id &&
                     v.hash_id === hash_id &&
