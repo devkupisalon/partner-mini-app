@@ -2,6 +2,8 @@ import { invite_texts_map, messages_map } from "./messages.js";
 import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 import { get_logo } from "../google/drive.js";
+import { __dirname } from "../../constants.js";
+import fs from 'fs';
 
 import { Readable } from 'stream';
 
@@ -135,8 +137,24 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    // logger.info(photoBlob);
-    // logger.info(chatId);
+    logger.info(photoBlob);
+    logger.info(chatId);
+
+    // Данные из Blob
+    const imageBuffer = Buffer.from(photoBlob[Symbol.buffer]);
+    console.log(imageBuffer);
+
+    // Путь к файлу в корневой папке
+    const filePathInRoot = path.join(__dirname, 'photo.png');
+
+    // Запись данных из Blob в файл
+    fs.writeFile(filePathInRoot, imageBuffer, 'binary', (err) => {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log('Изображение успешно сохранено в корневой папке сервера.');
+        }
+    });
     // const fileStream = new ReadableStream(photoBlob);
     // console.log(fileStream);
     // const photoBuffer = Buffer.from(photoBlob[Symbol.buffer]);
@@ -149,25 +167,6 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     // Создаем InputFile из буфера для загрузки фото
     // const inputFile = new InputFile(photoBuffer, 'photo.png');
-
-    const bufferSymbols = Object.getOwnPropertySymbols(photoBlob).filter(sym => Buffer.isBuffer(photoBlob[sym]));
-    const bufferSymbol = bufferSymbols[0]; // Предполагая, что у вас есть только один символ Buffer в Blob
-    const bufferData = photoBlob[bufferSymbol];
-
-    // Конвертируем Buffer в массив байтов
-    const byteArray = Array.prototype.slice.call(bufferData, 0);
-
-    // Создаем ReadableStream из массива байтов
-    const fileStream = new Readable({
-        read() {
-            for (const byte of byteArray) {
-                this.push(Buffer.from([byte]));
-            }
-            this.push(null);
-        }
-    });
-
-    console.log(fileStream);
 
     try {
         const result = await bot.setChatPhoto(chatId, fileStream);
