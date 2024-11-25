@@ -33,7 +33,7 @@ const process_message = async (data) => {
         row,
     } = data;
 
-    const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}\n`;
+    const hash = `hash:${partner_id}:${message_id}:${id}:${partner_name}`;
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
