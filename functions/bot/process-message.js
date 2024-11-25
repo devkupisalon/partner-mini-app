@@ -37,7 +37,7 @@ const process_message = async (data) => {
     const partner_url = `${DBLINK}&range=${row}:${row}`;
 
     from_user
-        ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)\n`
+        ? text = `Агент [${partner_name}](${partner_url}):\n\n${text}\n\n[hash](https://${hash}.ru)`
         : text = text;
 
     if (from_user) {
