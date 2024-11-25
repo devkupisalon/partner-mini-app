@@ -153,6 +153,7 @@ const set_chat_photo = async (chatId, root_chat_id) => {
 
     const formData = new FormData();
     formData.append('photo', photoBlob, 'photo.png');
+    console.log(formData);
 
 
     // const b = await photoBlob.arrayBuffer();
