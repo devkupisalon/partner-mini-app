@@ -137,7 +137,7 @@ const set_chat_title = async (groupId, newTitle) => {
  */
 const set_chat_photo = async (chatId, root_chat_id) => {
     const photoBlob = await get_logo(root_chat_id);
-    console.log(photoBlob);
+    console.log(await photoBlob.stream());
 
 
     // const b = await photoBlob.arrayBuffer();
