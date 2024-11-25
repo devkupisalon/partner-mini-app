@@ -53,7 +53,7 @@ const send_first_messages = async (
                         await set_chat_title(CHAT_ID, `Рабочая группа с Партнером ${name}`);
                         await set_chat_photo(CHAT_ID, chat_id);
                     } catch (error) {
-                        logger.error(`Partner chat ID not found: ${error.message}`);
+                        logger.error(`Partner chat ID not found: ${error.stack}`);
                     }
 
                     await send_group_invite_link(
