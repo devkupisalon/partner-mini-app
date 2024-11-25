@@ -117,11 +117,13 @@ const process_save = async (data) => {
                         ? message.document
                         : "";
 
+        const _text = (message.entities[1].url || message.caption_entities[1].url).toString().replace(MINI_APP_LINK, '');
+
         let agent_id;
         let agent_name;
         let chat_id;
         let hash_id;
-        let text_to_parse = decodeURI(message.entities[1].url.toString().replace(MINI_APP_LINK, ''));
+        let text_to_parse = decodeURI(_text);
 
         if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);
