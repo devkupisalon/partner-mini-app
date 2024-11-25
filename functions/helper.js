@@ -253,6 +253,7 @@ const return_success_condition = (data) => {
         v.data.length > 0
       );
     } else {
+      logger.info({ c_chat_id, hash_id: v.hash_id, m: v.message_ids, hash, cond: v.message_ids.some(id => id === reply_to_message_id), d_h: d.hash_id });
       return (
         c_chat_id === d.chat_id &&
         hash === d.hash_id &&
