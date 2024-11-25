@@ -156,6 +156,8 @@ const process_save = async (data) => {
             }
         });
 
+        logger.info(selectedData);
+
         if (hash_folder_id) {
             folder.id = hash_folder_id;
             folder.folderLink = `https://drive.google.com/drive/folders/${folder.id}`;
