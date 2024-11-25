@@ -133,7 +133,7 @@ const generateHexHash = () => {
  */
 const get_hash = (message, is_manager, is_include_groups) => {
   const is_hash = is_manager && message.text && !is_include_groups && message.entities
-    ? decodeURI(message.entities[1].url.toString().replace(MINI_APP_LINK, '')).match(/hash:(.*)/)
+    ? decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, '')).match(/hash:(.*)/)
     : is_manager && message.text && !is_include_groups && !message.entities
       ? message.text.match(/hash:(.*)/)
       : '';
