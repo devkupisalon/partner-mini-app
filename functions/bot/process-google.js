@@ -9,7 +9,7 @@ import { constants } from "../../constants.js";
 import { process_return_json, deleteDataFromJson } from "../process-json.js";
 import { HQD_photo, parse_text, prepare_calc } from "../helper.js";
 
-const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode } = constants;
+const { BOT_TOKEN, media_files_obj_path, calc_data_obj_path, parse_mode, MINI_APP_LINK } = constants;
 
 /**
  * Retrieve file URLs from Telegram based on the provided files data.
@@ -120,7 +120,9 @@ const process_save = async (data) => {
         let agent_name;
         let chat_id;
         let hash_id;
-        let text_to_parse = message.text || message.caption;
+        let text_to_parse = message.entities[1].url.toString().replace(MINI_APP_LINK, '');
+
+        logger.info(text_to_parse);
 
         if (text_to_parse && !is_include_groups) {
             const d = parse_text(text_to_parse);
@@ -191,7 +193,7 @@ const process_save = async (data) => {
         const { success } = await save_media({ fileUrls, folder: folder.id });
 
         if (success) {
-            
+
             const options = !is_include_groups
                 ? { reply_to_message_id: message_id, parse_mode, disable_web_page_preview: true }
                 : { parse_mode, disable_web_page_preview: true };

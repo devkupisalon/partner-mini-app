@@ -13,7 +13,7 @@ import { deletePropertiesFromFile, process_return_json } from "../process-json.j
 
 const interval = 10000;
 
-let { GROUP_CHAT_ID } = constants;
+let { GROUP_CHAT_ID, MINI_APP_LINK } = constants;
 let isProcessMessageRunning;
 const { send_media_obj_path, DBLINK, DEV_MODE } = constants;
 GROUP_CHAT_ID = `-${GROUP_CHAT_ID}`;
@@ -140,7 +140,9 @@ bot.on("message", async (message) => {
     if ((is_managers_work_chat || is_include_groups) && is_manager) {
 
       if (reply_to_message && is_bot && is_title) {
-        const { agent_message_id, chat_id } = parse_text(entities[1].url);
+        const parse_text = entities[1].url.toString().replace(MINI_APP_LINK, '');
+        logger.info(parse_text);
+        const { agent_message_id, chat_id } = parse_text(parse_text);
         isProcessMessageRunning = true;
         await process_message({
           text: message.text || message.caption || "",
