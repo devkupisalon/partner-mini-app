@@ -40,12 +40,12 @@ bot.on("message", async (message) => {
     forward_from,
   } = message;
 
-  const { entities } = reply_to_message ? reply_to_message : '';
-  logger.info(reply_to_message);
+  // let { entities, caption_entities } = reply_to_message ? reply_to_message : '';
+  // entities = reply_to_message.caption ?  caption_entities : entities;
 
   const from_id = message.from.id;
   const group_ids_obj = await get_all_groups_ids();
-  // const text_to_parse = reply_to_message?.text || reply_to_message?.caption;
+  const text_to_parse = reply_to_message?.entities || reply_to_message?.caption_entities;
 
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
     ? true
@@ -141,7 +141,7 @@ bot.on("message", async (message) => {
     if ((is_managers_work_chat || is_include_groups) && is_manager) {
 
       if (reply_to_message && is_bot && is_title) {
-        const _text = decodeURI(entities[1].url.toString().replace(MINI_APP_LINK, ''));
+        const _text = decodeURI(text_to_parse[1].url.toString().replace(MINI_APP_LINK, ''));
         logger.info(_text)
         const { agent_message_id, chat_id } = parse_text(_text);
         isProcessMessageRunning = true;
