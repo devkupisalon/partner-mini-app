@@ -128,33 +128,4 @@ const process_message = async (data) => {
     }
 };
 
-/**
- * Function to save an agent message to a JSON file.
- * @param {object} data - The data containing the message information.
- * @param {object} hash - The hash value to be saved.
- */
-// const save_agent_message_to_json = async (data, hash) => {
-//     const { message_id, from: { id } } = data;
-//     const obj = {};
-//     const key = `${BOT_ID}-${message_id}-${id}`;
-//     if (!obj[key]) obj[key] = hash;
-//     await append_json_file(agent_messages_obj_path, obj);
-// };
-
-/**
- * Function to get the message properties from an object asynchronously.
- * This function retrieves message properties by processing a JSON object and extracting relevant information.
- * @returns {Object} - The message properties extracted based on partner information.
- */
-// const get_message_property = async (reply_to_message_id) => {
-//     const obj = await process_return_json(agent_messages_obj_path);
-//     Object.entries(obj).forEach(async ([k, v]) => {
-//         const { partner_id, message_id, id, partner_name, hash_id } = v;
-//         const key = `${BOT_ID}-${reply_to_message_id}-${id}`;
-//         if (key === k) {
-//             return { partner_id, message_id, id, partner_name, hash_id };
-//         }
-//     });
-// };
-
 export { process_message };

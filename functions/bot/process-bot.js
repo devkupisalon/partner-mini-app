@@ -4,7 +4,7 @@ import bot from "./init-bot.js";
 import logger from "../../logs/logger.js";
 
 import { constants, managers_map } from "../../constants.js";
-import { get_partners_data, get_all_groups_ids } from "../google/sheets.js";
+import { get_all_groups_ids } from "../google/sheets.js";
 import { parse_text, get_hash, return_conditions, get_fast_partner_data } from "../helper.js";
 import { process_save_media_to_obj, send_media_group } from "./process-media-group.js";
 import { process_message } from "./process-message.js";
@@ -75,6 +75,8 @@ bot.on("message", async (message) => {
     reply_markup
   });
 
+  logger.info(is_text_to_parse);
+
   const text_to_parse = is_text_to_parse
     ? (reply_to_message.entities
       ? reply_to_message.entities[1].url
@@ -95,27 +97,9 @@ bot.on("message", async (message) => {
 
   if (contact) return;
 
-  // let partner_name, partner_id, row, partner_folder;
-
   // Get partners/agents data from sheet
   const { partner_name, partner_id, row, partner_folder } = await get_fast_partner_data({ user_ID, message, calc, is_include_groups, is_manager });
-  // if (!is_manager || (is_manager && is_include_groups)) {
-  //   const p = await get_partners_data(user_ID);
-  //   partner_id = p.partner_id;
-  //   partner_name = p.partner_name;
-  //   row = p.row;
-  //   partner_folder = p.partner_folder;
-  // } else if (message.entities && calc) {
-  //   const { chat_id } = parse_text(decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, '')));
-  //   const x = await get_partners_data(chat_id);
-  //   partner_id = x.partner_id;
-  //   partner_name = x.partner_name;
-  //   row = x.row;
-  //   partner_folder = x.partner_folder;
-  // }
-
   const partner_url = `${DBLINK}&range=${row}:${row}`;
-  logger.info({ partner_name, partner_url, partner_id });
 
   // Process agent messages
   if (partner_name && partner_id && !is_group && !is_bot && !is_manager) {

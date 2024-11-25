@@ -86,6 +86,7 @@ const messages_map = {
     },
 };
 
+/** NOTIFY MANAGER MESSAGES */
 const notify_manager_messages_map = {
     "Партнер": (
         partner_manager_name,
