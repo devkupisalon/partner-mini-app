@@ -71,6 +71,7 @@ bot.on("message", async (message) => {
     ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
   const hash_folder_id = is_hash_folder_id ? is_hash_folder_id[1] : '';
+  logger.info(message);
   // const is_hash = is_manager && message.text && !is_include_groups && message.entities ? message.entities[1].url.match(/hash:(.*)/) : '';
   const hash = get_hash(message, is_manager, is_include_groups);
 
