@@ -166,7 +166,7 @@ const process_save = async (data) => {
             } else {
                 logger.info(c_chat_id === chat_id);
                 logger.info(`chat_id from obj = ${c_chat_id}, chat_id from parse = ${chat_id}`);
-                logger.info(v.hash_id === hash_id);
+                logger.info(v.hash_id.toString() === hash_id.toString());
                 logger.info(`hash_id from obj = ${v.hash_id}, hash_id from parse = ${hash_id}`);
                 return (
                     c_chat_id === chat_id &&
