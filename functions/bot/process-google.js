@@ -147,7 +147,7 @@ const process_save = async (data) => {
                 agent_id = d.agent_id;
                 agent_name = d.agent_name;
                 chat_id = d.chat_id;
-                logger.info({ agent_id, agent_name, chat_id, hash_id: v.hash_id, m: v.message_ids });
+                logger.info({ agent_id, agent_name, chat_id, hash_id: v.hash_id, m: v.message_ids, hash });
                 if (!is_include_groups) {
                     return return_success_condition({ c_chat_id, d, hash, v });
                 } else {
