@@ -2,6 +2,7 @@ import bot from "./bot/init-bot.js";
 import logger from "../logs/logger.js";
 import { append_json_file } from "./process-json.js";
 import { constants } from "../constants.js";
+import { get_partners_data } from "./google/sheets.js";
 import crypto from "crypto";
 
 const { calc_data_obj_path, MINI_APP_LINK } = constants;
@@ -210,24 +211,24 @@ const return_conditions = (data) => {
  * @param {object} document - The document object.
  * @returns {object} An object containing the media and mime type.
  */
-const get_media_and_mime_type = (photo, video, voice, document,  flag = false, text = "") => {
+const get_media_and_mime_type = (photo, video, voice, document, flag = false, text = "") => {
   // Determine the media based on photo, video, voice, and document.
   const media = photo ? HQD_photo(photo).file_id :
-                video ? video.file_id :
-                voice ? voice.file_id :
-                document ? document.file_id : 
-                text !== "" ? text : "";
+    video ? video.file_id :
+      voice ? voice.file_id :
+        document ? document.file_id :
+          text !== "" ? text : "";
 
   // Determine the mime type based on the type of media.
   const mime_type = photo ? "image/png" :
-                    video ? video.mime_type :
-                    voice ? voice.mime_type :
-                    document ? document.mime_type : "";
+    video ? video.mime_type :
+      voice ? voice.mime_type :
+        document ? document.mime_type : "";
 
   const type_m = photo ? "photo" :
-                 video ? "video" :
-                 voice ? "voice" :
-                 document ? "document" : "text";
+    video ? "video" :
+      voice ? "voice" :
+        document ? "document" : "text";
 
   // Return the media and mime type as an object.
   return flag ? { media, mime_type } : { media, type_m };
@@ -281,6 +282,31 @@ const initialize_media_files_entry = (hash_id, hash_partner = null) => ({
   hash_partner,
 });
 
+/**
+ * Retrieves partner data based on the provided parameters.
+ * 
+ * @param {object} data - An object containing userID, message, calc, and is_include_groups.
+ * @returns {object} - An object containing partner data: partner_id, partner_name, row, partner_folder.
+ */
+const get_fast_partner_data = async (data) => {
+  let { user_ID, message, calc, is_include_groups, is_manager } = data;
+  let partner_id, partner_name, row, partner_folder;
+  const calc_condition = message.entities && calc;
+
+  // Check conditions to fetch partner data
+  if (!is_manager || (is_manager && is_include_groups) || (calc_condition)) {
+    // Extract chatID based on conditions
+    const chatID = calc_condition ? parse_text(decodeURI(message.entities[0].url.toString().replace(MINI_APP_LINK, ''))).chat_id : user_ID;
+    const p = await get_partners_data(chatID);
+    partner_id = p.partner_id;
+    partner_name = p.partner_name;
+    row = p.row;
+    partner_folder = p.partner_folder;
+  }
+
+  return { partner_id, partner_name, row, partner_folder };
+};
+
 export {
   numberToColumn,
   getColumnNumberByValue,
@@ -294,5 +320,6 @@ export {
   return_conditions,
   get_media_and_mime_type,
   initialize_media_files_entry,
-  return_success_condition
+  return_success_condition,
+  get_fast_partner_data
 };
