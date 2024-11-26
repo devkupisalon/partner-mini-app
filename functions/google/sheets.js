@@ -458,9 +458,7 @@ const check_moderation = async (data) => {
       } = success_values;
 
       if (check_server === "TRUE") {
-        logger.info(
-          `Moderation for partner ${name} with id ${uid} and user_id ${user_id} is completed`
-        );
+        logger.info(`Moderation for partner ${name} with id ${uid} and user_id ${user_id} is completed`);
         return { true: true, uid };
       } else if (root_id && check === "FALSE") {
         logger.warn(`Moderation for root_user_id ${user_id} is not completed`);
