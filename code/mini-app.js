@@ -155,7 +155,7 @@ subscribe.addEventListener("click", function () {
 
 auth.addEventListener("click", function () {
   let href;
-  if (start_param !== null) {
+  if (start_param !== null && start_param !== undefined) {
     href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
   } else {
     href = `/registration?&user=${username}&id=${id}`;
