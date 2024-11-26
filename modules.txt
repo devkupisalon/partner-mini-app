@@ -5,12 +5,9 @@ express
 fs
 url
 node-telegram-bot
-babel-plugin-module-resolver
 pino
-inputmask
 uuid
 date-fns
 multer
 stream
 node-cron
-performance-now

@@ -181,31 +181,29 @@ const save_logo = async (params) => {
 const get_logo = async (root_chat_id) => {
   try {
     const { partner_folder } = await get_partners_data(root_chat_id);
-    logger.info(partner_folder);
     // Search for files with '_logo' in the name within the partner_folder
     const { data: { files } } = await drive.files.list({
       q: `'${partner_folder}' in parents and name contains '_logo'`,
     });
 
-    const url = (id) => `https://lh3.googleusercontent.com/d/${id}=w2000`;
-
     if (files.length > 0) {
       const { id } = files[0];
       logger.info(`Logo file found: ${id}`);
       // Get the file content as a Blob
-      const { data } = await drive.files.get({
-        fileId: id,
-        alt: 'media',
-      });
+      // const { data } = await drive.files.get({
+      //   fileId: id,
+      //   alt: 'media',
+      // });
 
-      const b = await data.arrayBuffer();
+      // const b = await data.arrayBuffer();
 
-      const logoBlob = new Blob([b], { type: 'image/png' });
-      console.log(logoBlob);
-      logger.info("Logo Blob retrieved successfully.");
-      return logoBlob;
+      // const logoBlob = new Blob([b], { type: 'image/png' });
+      // console.log(logoBlob);
+      // logger.info("Logo Blob retrieved successfully.");
+      return true;
     } else {
       logger.warn("Logo file not found in the partner_folder.");
+      return false;
     }
   } catch (error) {
     logger.error(`Error in get_logo: ${error.stack}`);

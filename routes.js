@@ -18,7 +18,7 @@ import {
 } from "./functions/google/sheets.js";
 
 import { getGoogleDocContent } from "./functions/google/docs.js";
-import { save_logo } from "./functions/google/drive.js";
+import { save_logo, get_logo } from "./functions/google/drive.js";
 import { verifyTelegramWebAppData } from "./functions/check/validate.js";
 import { constants, __dirname } from "./constants.js";
 
@@ -26,11 +26,12 @@ import "./functions/bot/process-bot.js";
 import "./functions/check/process-check-moderation.js";
 import "./logs/clean-logs.js";
 
-const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR, PRICE } = constants;
+const { BOT_TOKEN, HOME, AUTH, SETTINGS, PRE_CALC, REGISTR, PRICE, CONDITIONS_LINK, DOCUMENT_ID_PRIVATE_POLiCY } = constants;
 const app = express();
 const upload = multer();
 
 app.use(express.json());
+app.set('view engine', 'ejs');
 
 /** PATHS */
 const stylesPath = path.join(__dirname, "styles");
