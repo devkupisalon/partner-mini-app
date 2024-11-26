@@ -1,6 +1,6 @@
 const checkbox = document.getElementById('personal-data-checkbox');
 const label_personal_data = document.getElementById('personal-data-id');
-const privacy_policy_link = document.querySelector('a[href="ссылка_на_согласие"]');
+const privacy_policy_link = document.querySelector('a[href="ссылка_на_обработку"]');
 const condition_link = document.querySelector('a[href="ссылка_на_условия"]');
 const privacy_policy = "ссылка_на_обработку";
 const condition = "https://docs.google.com/document/d/15froq8rgY1NWQr4UatepF7qryptLViudE7S58tfAj-Q/edit?usp=sharing";
