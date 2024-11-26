@@ -42,6 +42,7 @@ start_param = calc
       ? String(start_param).replace("-price-true", "")
       : start_param;
 start_param = start_param !== undefined ? start_param : partner;
+console.log(start_param);
 
 /**
  * Установить галочку для элемента и отключить его
