@@ -10,10 +10,10 @@ condition_link.addEventListener('click', function (event) {
     tg.openLink(condition);
 });
 
-privacy_policy_link.addEventListener('click', function (event) {
-    event.preventDefault();
-    tg.openLink(privacy_policy);
-});
+// privacy_policy_link.addEventListener('click', function (event) {
+//     event.preventDefault();
+//     tg.openLink(privacy_policy);
+// });
 
 
 /** CHECKBOX CHANGE */
