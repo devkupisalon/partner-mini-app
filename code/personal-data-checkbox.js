@@ -5,6 +5,8 @@ const condition_link = document.getElementById("conditions");
 privacy_policy_link ? privacy_policy_link.href = "ссылка_на_обработку" : "";
 condition_link ? condition_link.href = "https://docs.google.com/document/d/15froq8rgY1NWQr4UatepF7qryptLViudE7S58tfAj-Q/edit?usp=sharing" : "";
 
+[condition_link, privacy_policy_link].forEach(l => l.setAttribute('target', '_blank'));
+
 /** CHECKBOX CHANGE */
 checkbox.addEventListener('change', function () {
     if (checkbox.checked) {
