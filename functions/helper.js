@@ -164,7 +164,6 @@ const return_conditions = (data) => {
     group_ids_obj,
     GROUP_CHAT_ID,
     managers_map,
-    entities
   } = data;
 
   const is_manager = Object.values(managers_map).find((k) => k === from_id)
@@ -189,7 +188,7 @@ const return_conditions = (data) => {
   const is_hash_folder_id = is_manager && reply_to_message
     ? (!is_include_groups ? reply_to_message : message).text?.match(/hash_folder:(.*)/)
     : '';
-  const is_text_to_parse = reply_to_message && !calc && !save && entities;
+  const is_text_to_parse = reply_to_message && !calc && !save && (message.entities || reply_to_message.entities || reply_to_message.caption_entities);
   logger.info({ reply_to_message, calc, save, reply_markup });
   logger.info(is_text_to_parse);
 
