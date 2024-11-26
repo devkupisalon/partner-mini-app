@@ -42,7 +42,6 @@ start_param = calc
       ? String(start_param).replace("-price-true", "")
       : start_param;
 start_param = start_param !== undefined ? start_param : partner;
-console.log(start_param);
 
 /**
  * Установить галочку для элемента и отключить его
@@ -156,9 +155,11 @@ subscribe.addEventListener("click", function () {
 
 auth.addEventListener("click", function () {
   let href;
-  if (start_param !== null && start_param !== undefined) {
+  if (start_param !== null) {
+    console.log(start_param);
     href = `/auth?partner=${start_param}&user=${username}&id=${id}`;
   } else {
+    console.log(start_param);
     href = `/registration?&user=${username}&id=${id}`;
   }
   window.location.href = href;
