@@ -1,7 +1,7 @@
 const checkbox = document.getElementById('personal-data-checkbox');
 const label_personal_data = document.getElementById('personal-data-id');
-const conditions_link = 'https://docs.google.com/document/d/15froq8rgY1NWQr4UatepF7qryptLViudE7S58tfAj-Q/edit?usp=sharing';
-const privacy_polyci_link = 
+document.getElementById("privacy-policy").href = "ссылка_на_обработку";
+document.getElementById("conditions").href = "https://docs.google.com/document/d/15froq8rgY1NWQr4UatepF7qryptLViudE7S58tfAj-Q/edit?usp=sharing";
 
 /** CHECKBOX CHANGE */
 checkbox.addEventListener('change', function () {
