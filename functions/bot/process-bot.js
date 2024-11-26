@@ -91,7 +91,7 @@ bot.on("message", async (message) => {
         ? from_id
         : id;
 
-  // if (contact) return;
+  if (contact) return;
 
   // Get partners/agents data from sheet
   const { partner_name, partner_id, row, partner_folder } = await get_fast_partner_data({ user_ID, message, calc, is_include_groups, is_manager });
