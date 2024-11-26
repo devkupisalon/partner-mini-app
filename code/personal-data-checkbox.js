@@ -5,15 +5,15 @@ const condition_link = document.querySelector('a[href="ссылка_на_усл�
 const privacy_policy = "ссылка_на_обработку";
 const condition = "https://docs.google.com/document/d/15froq8rgY1NWQr4UatepF7qryptLViudE7S58tfAj-Q/edit?usp=sharing";
 
-condition_link.addEventListener('click', function (event) {
+condition_link ? condition_link.addEventListener('click', function (event) {
     event.preventDefault();
     tg.openLink(condition);
-});
+}) : "";
 
-privacy_policy_link.addEventListener('click', function (event) {
+privacy_policy_link ? privacy_policy_link.addEventListener('click', function (event) {
     event.preventDefault();
     tg.openLink(privacy_policy);
-});
+}) : "";
 
 
 /** CHECKBOX CHANGE */
